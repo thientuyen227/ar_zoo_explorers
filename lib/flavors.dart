@@ -12,11 +12,11 @@ class F {
   static String get title {
     switch (appFlavor) {
       case Flavor.DEVELOP:
-        return 'SpeakEasyAI - AI Chatbot';
+        return 'AR Zoo Explorers';
       case Flavor.PRODUCTION:
-        return 'SpeakEasyAI - AI Chatbot';
+        return 'AR Zoo Explorers';
       case Flavor.STAGGING:
-        return 'SpeakEasyAI - AI Chatbot';
+        return 'AR Zoo Explorers';
       default:
         return 'title';
     }
