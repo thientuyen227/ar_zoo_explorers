@@ -5,6 +5,7 @@ class Routes {
   static const String home = "/home";
   static const String settings = "/settings";
   static const String splash = "/splash";
+  static const String camera = "/camera";
 
   static Route<T> fadeThrough<T>(RouteSettings settings, WidgetBuilder page,
       {int duration = 300}) {

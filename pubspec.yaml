@@ -69,6 +69,8 @@ dependencies:
   image_picker: ^1.0.4
   path_provider: ^2.1.1
   image_gallery_saver: ^2.0.3
+  injectable_generator: ^2.4.0
+  result_type: ^0.2.0
 
 dev_dependencies:
   flutter_test:
