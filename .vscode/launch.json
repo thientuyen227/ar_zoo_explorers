@@ -5,6 +5,10 @@
             "type": "dart",
             "request": "launch",
             "program": "lib/main_develop.dart",
+            "args": [
+                //"--flavor",
+                "develop"
+            ],
             "flutterMode": "debug"
         },
         {
