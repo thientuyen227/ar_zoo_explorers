@@ -5,6 +5,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
+List<CameraDescription>? cameras;
+
 @RoutePage()
 class CameraPage extends StatefulWidget {
   const CameraPage({
@@ -17,6 +19,9 @@ class CameraPage extends StatefulWidget {
 
 class _State extends BaseState<CameraState, CameraCubit, CameraPage> {
   CameraController? cameraController;
+  bool isRecoring = false;
+  bool flash = false;
+  bool isCameraFront = false;
 
   @override
   void initState() {
@@ -25,59 +30,95 @@ class _State extends BaseState<CameraState, CameraCubit, CameraPage> {
     _initCameraController();
   }
 
-  void _initCameraController() async {
+  void _initCameraController({bool isFront = false}) async {
     final cameras = await availableCameras();
-    final firstCamera = cameras.first;
-    cameraController = CameraController(firstCamera, ResolutionPreset.medium);
-    cameraController!.initialize().then((_) {
-      if (!mounted) {
-        return;
+    if (cameraController != null && cameraController!.value.isInitialized) {
+      await cameraController?.dispose();
+    }
+    cameraController = CameraController(
+        isFront ? cameras[1] : cameras.first, ResolutionPreset.medium);
+    try {
+      await cameraController!.initialize();
+      if (mounted) {
+        setState(() {});
       }
-      setState(() {});
-    }).catchError((Object e) {
+    } catch (e) {
       if (e is CameraException) {
         switch (e.code) {
           case 'CameraAccessDenied':
-            // Handle access errors here.
+            // Xử lý lỗi quyền truy cập ở đây.
             break;
           default:
-            // Handle other errors here.
+            // Xử lý các lỗi khác ở đây.
             break;
         }
       }
-    });
+    }
   }
 
   @override
   Widget buildByState(BuildContext context, CameraState state) {
-    if (cameraController?.value.isInitialized != true) {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text('Camera Page'),
-        ),
-        body: const Center(
+    if (cameraController == null || !cameraController!.value.isInitialized) {
+      return const Scaffold(
+        body: Center(
           child: CircularProgressIndicator(),
         ),
       );
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Camera Page'),
-      ),
-      body: Column(
+      body: Stack(
         children: [
-          Expanded(
-            child: Center(
-              child: CameraPreview(cameraController!),
-            ),
+          Stack(
+            children: [
+              CameraPreview(cameraController!),
+              Positioned(
+                top: 16,
+                left: 16,
+                child: IconButton(
+                  icon: Icon(
+                    flash ? Icons.flash_on : Icons.flash_off,
+                    color: Colors.white,
+                    size: 28,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      flash = !flash;
+                    });
+                    flash
+                        ? cameraController?.setFlashMode(FlashMode.torch)
+                        : cameraController?.setFlashMode(FlashMode.off);
+                  },
+                ),
+              ),
+            ],
           ),
-          ElevatedButton(
-            onPressed: () {
-              // Xử lý khi người dùng nhấn nút chụp ảnh
-              takePicture();
-            },
-            child: const Text('Chụp ảnh'),
+          Align(
+            alignment: AlignmentDirectional.bottomEnd,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: takePicture,
+                  child: const Text('Chụp ảnh'),
+                ),
+                const SizedBox.shrink(),
+                IconButton(
+                  icon: const Icon(
+                    Icons.flip_camera_ios,
+                    color: Colors.white,
+                    size: 28,
+                  ),
+                  onPressed: () {
+                    if (cameraController != null &&
+                        cameraController!.value.isInitialized) {
+                      isCameraFront = !isCameraFront;
+                      _initCameraController(isFront: isCameraFront);
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -85,15 +126,19 @@ class _State extends BaseState<CameraState, CameraCubit, CameraPage> {
   }
 
   void takePicture() async {
-    try {
-      final XFile picture = await cameraController!.takePicture();
-      if (picture != null) {
-        await cubit.saveImage(picture.path);
-      } else {
-        print('null');
+    if (cameraController != null && cameraController!.value.isInitialized) {
+      try {
+        final XFile picture = await cameraController!.takePicture();
+        if (picture != null) {
+          await cubit.saveImage(picture.path);
+        } else {
+          print('null');
+        }
+      } catch (e) {
+        print('Lỗi khi chụp ảnh: $e');
       }
-    } catch (e) {
-      print('Lỗi khi chụp ảnh: $e');
+    } else {
+      print('Camera không khởi tạo.');
     }
   }
 

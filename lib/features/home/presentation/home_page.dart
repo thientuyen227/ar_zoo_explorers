@@ -72,6 +72,28 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
               ],
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AppIconButton(
+                  onPressed: () {
+                    context.router.pushNamed(Routes.ar);
+                  },
+                  icon: const Icon(
+                    Icons.add_road,
+                    color: Colors.white,
+                  ),
+                  borderRadius: AppDimens.radius200,
+                  padding: const EdgeInsets.all(AppDimens.spacing5),
+                  width: AppDimens.size30.width,
+                  height: AppDimens.size30.height,
+                  backgroundColor: AppColorScheme.dark().cardColor,
+                ),
+              ],
+            ),
+          ),
         ],
       ),
       body: const Column(
