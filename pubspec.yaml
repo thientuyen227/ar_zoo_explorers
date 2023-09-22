@@ -75,6 +75,8 @@ dependencies:
     git:
       url: "https://github.com/thienquang199x/ar_flutter_plugin.git"
       ref: "6347521"
+  flutter_form_builder: ^9.1.0
+  form_builder_validators: ^9.0.0
 
 dev_dependencies:
   flutter_test:

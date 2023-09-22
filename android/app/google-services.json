@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "949816033893",
+    "project_id": "ar-zoo-explorers",
+    "storage_bucket": "ar-zoo-explorers.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:949816033893:android:528390d19257db1512fc8c",
+        "android_client_info": {
+          "package_name": "com.ttcompany.ar_zoo_explorers"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByKAjvUEBbxgZIB2vTNerXLUrpSH7okNY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
