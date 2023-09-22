@@ -41,7 +41,7 @@ class _MainPageState extends State<MainPage> {
       debugShowCheckedModeBanner: false,
       routerDelegate: appCubit.appRouter.delegate(),
       routeInformationParser: appCubit.appRouter.defaultRouteParser(),
-      theme: appCubit.state.appTheme.themeData,
+      //theme: appCubit.state.appTheme.themeData,
     );
   }
 }
