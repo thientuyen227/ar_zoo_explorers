@@ -31,6 +31,7 @@ class AppIcons {
 class AppImages {
   static const String imgHome = "assets/images/img_home.png";
   static const String imgAdvertisement = "assets/images/img_advertisement.png";
+  static const String imgAds1 = "assets/images/img_ads1.jpg";
 }
 
 class AppLotties {
