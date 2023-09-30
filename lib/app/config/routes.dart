@@ -6,6 +6,7 @@ class Routes {
   static const String settings = "/settings";
   static const String splash = "/splash";
   static const String ar = "/ar";
+  static const String login = "/login";
 
   static Route<T> fadeThrough<T>(RouteSettings settings, WidgetBuilder page,
       {int duration = 300}) {
