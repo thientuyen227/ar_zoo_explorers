@@ -26,28 +26,65 @@ import '../model/ar_item.dart';
 class ARCubit extends BaseCubit<ARState> {
   ARCubit() : super(ARState());
 
+  String? valueName;
+
   final List<ARItem> ARItems = [
     ARItem(
         type: ARType.Wolf,
         title: "Wolf",
         icon: AppIcons.icWolf,
         link:
-            "https://drive.google.com/uc?id=1oAkdlnVuJVXjp6egKyLJUXhvEhEt7Cnj&export=download",
+            "https://drive.google.com/uc?id=1L7dO0MQOA8HvhFKuwjlOGsex7NmmIj11&export=download",
         name: "Wolf"),
     ARItem(
         type: ARType.Dragon,
         title: "Dragon",
         icon: AppIcons.icDragon,
         link:
-            "https://drive.google.com/uc?id=1GCGbr_lBX1iV90yntCHa5gorwKNKjTh8&export=download",
+            "https://drive.google.com/uc?id=1L7dO0MQOA8HvhFKuwjlOGsex7NmmIj11&export=download",
         name: "Dragon"),
     ARItem(
         type: ARType.Shark,
         title: "Shark",
         icon: AppIcons.icShark,
         link:
-            "https://drive.google.com/uc?id=1yjDhj1i-mW_AvSTZ_YYs7c9a65kbQVVo&export=download",
+            "https://drive.google.com/uc?id=1DC2Ez1KVSOBSrMyGDa2Q8aoWdyArKfsp&export=download",
         name: "Shark"),
+    ARItem(
+        type: ARType.Dinosaur,
+        title: "Dinosaur",
+        icon: AppIcons.icTyrannosaurus,
+        link:
+            "https://drive.google.com/uc?id=1b4ZpjNt__RaJl-ebLSChnkoVdh20p85f&export=download",
+        name: "Dinosaur"),
+    ARItem(
+        type: ARType.Angelfish,
+        title: "AngelFish",
+        icon: AppIcons.icAngleFish,
+        link:
+            "https://drive.google.com/uc?id=1pnctRQiFSijnNmefxRSGsKT03ieaVIYr&export=download",
+        name: "AngelFish"),
+    ARItem(
+        type: ARType.Atolla,
+        title: "Atolla",
+        icon: AppIcons.icAngleFish,
+        link:
+            "https://drive.google.com/uc?id=1KKrwNUEMfcNpwiEq0owo_fyHkA2ZIDN7&export=download",
+        name: "Atolla"),
+    ARItem(
+        type: ARType.Baby_Turtule,
+        title: "Baby_Turtule",
+        icon: AppIcons.icAngleFish,
+        link:
+            "https://drive.google.com/uc?id=1-CZu1dsofprFBz9glRKjYWT2exzPFsWq&export=download",
+        name: "Baby_Turtule"),
+    ARItem(
+        type: ARType.BackwedgedButterflyfish,
+        title: "BackwedgedButterflyfish",
+        icon: AppIcons.icAngleFish,
+        link:
+            "https://drive.google.com/uc?id=1MExzBmHfgm6GczhoxA60GNDiQad1Evtz&export=download",
+        name: "BackwedgedButterflyfish"),
   ];
 
   ARSessionManager? arSessionManager;
@@ -102,7 +139,9 @@ class ARCubit extends BaseCubit<ARState> {
     this.arObjectManager!.onInitialize();
     httpClient = HttpClient();
 
-    this.arSessionManager!.onPlaneOrPointTap = onPlaneOrPointTapped;
+    this.arSessionManager!.onPlaneOrPointTap = (hitTestResults) {
+      onPlaneOrPointTapped(hitTestResults, valueName.toString());
+    };
     this.arObjectManager!.onPanStart = onPanStarted;
     this.arObjectManager!.onPanChange = onPanChanged;
     this.arObjectManager!.onPanEnd = onPanEnded;
@@ -122,7 +161,7 @@ class ARCubit extends BaseCubit<ARState> {
   }
 
   Future<void> onPlaneOrPointTapped(
-      List<ARHitTestResult> hitTestResults) async {
+      List<ARHitTestResult> hitTestResults, String name) async {
     // Bước 1: Tìm một kết quả hit test loại mặt phẳng đầu tiên.
     var singleHitTestResult = hitTestResults.firstWhere(
         (hitTestResult) => hitTestResult.type == ARHitTestResultType.plane);
@@ -139,8 +178,8 @@ class ARCubit extends BaseCubit<ARState> {
       anchors.add(newAnchor);
       // Bước 6: Tạo một đối tượng ARNode mới để đại diện cho đối tượng 3D.
       var newNode = ARNode(
-          type: NodeType.fileSystemAppFolderGLTF2,
-          uri: "wolf/Wolf-Blender-2.82a.gltf",
+          type: NodeType.fileSystemAppFolderGLB,
+          uri: '$name' ".glb",
           scale: Vector3(0.2, 0.2, 0.2),
           position: Vector3(0.0, 0.0, 0.0),
           rotation: Vector4(1.0, 0.0, 0.0, 0.0));
@@ -167,7 +206,6 @@ class ARCubit extends BaseCubit<ARState> {
 
   onPanStarted(String nodeName) {
     print("Started panning node $nodeName");
-    Fluttertoast.showToast(msg: "Thêm thành công");
   }
 
   onPanChanged(String nodeName) {

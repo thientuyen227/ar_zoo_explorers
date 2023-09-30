@@ -6,6 +6,7 @@ import 'package:ar_flutter_plugin/models/ar_anchor.dart';
 import 'package:ar_flutter_plugin/models/ar_node.dart';
 import 'package:ar_flutter_plugin/widgets/ar_view.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
+import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/features/ar/model/ar_item.dart';
 import 'package:ar_zoo_explorers/features/ar/presentation/ar_cubit.dart';
 import 'package:ar_zoo_explorers/features/ar/presentation/ar_state.dart';
@@ -32,6 +33,8 @@ class _State extends BaseState<ARState, ARCubit, ARPage> {
   List<ARNode> nodes = [];
   List<ARAnchor> anchors = [];
 
+  bool download = true;
+
   @override
   void dispose() {
     super.dispose();
@@ -48,7 +51,8 @@ class _State extends BaseState<ARState, ARCubit, ARPage> {
           planeDetectionConfig: PlaneDetectionConfig.horizontalAndVertical,
         ),
       ),
-      BottomAppBar(
+      Align(
+        alignment: Alignment.bottomCenter,
         child: Row(
           children: [
             IconButton(
@@ -62,7 +66,7 @@ class _State extends BaseState<ARState, ARCubit, ARPage> {
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: SizedBox(
-                  height: 60,
+                  height: 90,
                   width: MediaQuery.of(context).size.width,
                   child: ListView.separated(
                       shrinkWrap: true,
@@ -89,27 +93,47 @@ class _State extends BaseState<ARState, ARCubit, ARPage> {
       },
       child: Row(
         children: [
-          Center(
-            child: Column(
-              children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                          color: AppColor.blue.withOpacity(0.5), width: 2.0)),
-                  child: Center(
-                    child: Image.asset(
-                      item.icon!,
-                      height: 32,
-                      width: 32,
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Stack(children: [
+                    Container(
+                      width: 70,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                              color: AppColor.blue.withOpacity(0.5),
+                              width: 2.0)),
+                      child: Center(
+                        child: Image.asset(
+                          item.icon!,
+                          height: 45,
+                          width: 45,
+                        ),
+                      ),
                     ),
-                  ),
+                    if (download)
+                      Positioned(
+                        bottom: 3,
+                        right: 0,
+                        child: GestureDetector(
+                          child: Center(
+                            child: Image.asset(
+                              AppIcons.icDownload,
+                              height: 24,
+                              width: 24,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ]),
                 ),
-                Text(item.title),
-              ],
-            ),
+              ),
+              Text(item.title),
+            ],
           ),
           const SizedBox(
             width: 20,
@@ -123,11 +147,29 @@ class _State extends BaseState<ARState, ARCubit, ARPage> {
     switch (type) {
       case ARType.Wolf:
         cubit.downloadAndUnpack(link.toString(), name.toString());
+        cubit.valueName = name.toString();
         break;
       case ARType.Dragon:
         cubit.downloadAndUnpack(link.toString(), name.toString());
+        cubit.valueName = name.toString();
       case ARType.Shark:
         cubit.downloadAndUnpack(link.toString(), name.toString());
+        cubit.valueName = name.toString();
+      case ARType.Dinosaur:
+        cubit.downloadAndUnpack(link.toString(), name.toString());
+        cubit.valueName = name.toString();
+      case ARType.Angelfish:
+        cubit.downloadAndUnpack(link.toString(), name.toString());
+        cubit.valueName = name.toString();
+      case ARType.Baby_Turtule:
+        cubit.downloadAndUnpack(link.toString(), name.toString());
+        cubit.valueName = name.toString();
+      case ARType.BackwedgedButterflyfish:
+        cubit.downloadAndUnpack(link.toString(), name.toString());
+        cubit.valueName = name.toString();
+      case ARType.Atolla:
+        cubit.downloadAndUnpack(link.toString(), name.toString());
+        cubit.valueName = name.toString();
       default:
     }
   }

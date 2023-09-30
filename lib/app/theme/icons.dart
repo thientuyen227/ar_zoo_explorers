@@ -21,11 +21,15 @@ class AppIcons {
   static const String icFish = "assets/icons/ic_fish.png";
   static const String icDinosaurs = "assets/icons/ic_dinosaurs.png";
   static const String icHeart = "assets/icons/ic_heart.png";
+  static const String icDownload = "assets/icons/ic_download.png";
 
   //Icon animals
   static const String icWolf = "assets/icons/animals/wolf.png";
   static const String icDragon = "assets/icons/animals/dragon.png";
   static const String icShark = "assets/icons/animals/shark.png";
+  static const String icAngleFish = "assets/icons/Fish/angelfish.png";
+  static const String icTyrannosaurus =
+      "assets/icons/animals/tyrannosaurus.png";
 }
 
 class AppImages {
