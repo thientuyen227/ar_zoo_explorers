@@ -59,7 +59,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
                 children: [
                   AppIconButton(
                     onPressed: () {
-                      context.router.pushNamed(Routes.login);
+                      context.router.pushNamed(Routes.ar);
                     },
                     icon: const Icon(
                       Icons.camera_alt,
@@ -156,23 +156,23 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
 
   Widget _buildButtonObject(ButtonObject item) {
     return Container(
-      height: 150,
-      width: 150,
-      //color: Colors.blue,
-      decoration: BoxDecoration(
-        color: Colors.blue, // Màu nền của container
-        borderRadius: BorderRadius.circular(10), // Bo góc với bán kính là 10
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5), // Màu bóng đổ
-            spreadRadius: 2, // Bán kính lan truyền của bóng đổ
-            blurRadius: 5, // Độ mờ của bóng đổ
-            offset: const Offset(0, 3), // Độ tương phản và vị trí của bóng đổ
-          ),
-        ],
-      ),
-      child: Center(
-        child: SizedBox(
+        height: 150,
+        width: 150,
+        //color: Colors.blue,
+        decoration: BoxDecoration(
+          color: Colors.blue, // Màu nền của container
+          borderRadius: BorderRadius.circular(10), // Bo góc với bán kính là 10
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5), // Màu bóng đổ
+              spreadRadius: 2, // Bán kính lan truyền của bóng đổ
+              blurRadius: 5, // Độ mờ của bóng đổ
+              offset: const Offset(0, 3), // Độ tương phản và vị trí của bóng đổ
+            ),
+          ],
+        ),
+        child: Center(
+            child: SizedBox(
           height: 140,
           width: 140,
           child: ElevatedButton(
@@ -213,9 +213,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
               ],
             ),
           ),
-        ),
-      ),
-    );
+        )));
   }
 
   Widget _buildNullButtonObject() {

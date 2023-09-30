@@ -1,21 +1,20 @@
 import 'package:ar_flutter_plugin/datatypes/config_planedetection.dart';
-import 'package:ar_flutter_plugin/datatypes/hittest_result_types.dart';
-import 'package:ar_flutter_plugin/datatypes/node_types.dart';
 import 'package:ar_flutter_plugin/managers/ar_anchor_manager.dart';
-import 'package:ar_flutter_plugin/managers/ar_location_manager.dart';
 import 'package:ar_flutter_plugin/managers/ar_object_manager.dart';
 import 'package:ar_flutter_plugin/managers/ar_session_manager.dart';
 import 'package:ar_flutter_plugin/models/ar_anchor.dart';
-import 'package:ar_flutter_plugin/models/ar_hittest_result.dart';
 import 'package:ar_flutter_plugin/models/ar_node.dart';
 import 'package:ar_flutter_plugin/widgets/ar_view.dart';
+import 'package:ar_zoo_explorers/app/theme/colors.dart';
+import 'package:ar_zoo_explorers/features/ar/model/ar_item.dart';
 import 'package:ar_zoo_explorers/features/ar/presentation/ar_cubit.dart';
 import 'package:ar_zoo_explorers/features/ar/presentation/ar_state.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 import '../../../base/base_state.dart';
+import '../../../utils/widget/spacer_widget.dart';
+import '../model/ar_type.dart';
 
 @RoutePage()
 class ARPage extends StatefulWidget {
@@ -36,136 +35,100 @@ class _State extends BaseState<ARState, ARCubit, ARPage> {
   @override
   void dispose() {
     super.dispose();
-    arSessionManager!.dispose();
+    arSessionManager?.dispose();
   }
 
   @override
   Widget buildByState(BuildContext context, ARState arState) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Object Transformation Gestures'),
+        body: Column(children: [
+      Expanded(
+        child: ARView(
+          onARViewCreated: cubit.onARViewCreated,
+          planeDetectionConfig: PlaneDetectionConfig.horizontalAndVertical,
         ),
-        body: Container(
-            child: Stack(children: [
-          ARView(
-            onARViewCreated: onARViewCreated,
-            planeDetectionConfig: PlaneDetectionConfig.horizontalAndVertical,
+      ),
+      BottomAppBar(
+        child: Row(
+          children: [
+            IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: cubit.onRemoveEverything,
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: SizedBox(
+                  height: 60,
+                  width: MediaQuery.of(context).size.width,
+                  child: ListView.separated(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        final item = cubit.ARItems[index];
+                        return _buildARItem(item);
+                      },
+                      separatorBuilder: (context, index) => const VSpacing(),
+                      itemCount: cubit.ARItems.length),
+                ),
+              ),
+            ),
+          ],
+        ),
+      )
+    ]));
+  }
+
+  Widget _buildARItem(ARItem item) {
+    return GestureDetector(
+      onTap: () {
+        _onTapAR(item.type, item.link, item.name);
+      },
+      child: Row(
+        children: [
+          Center(
+            child: Column(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                          color: AppColor.blue.withOpacity(0.5), width: 2.0)),
+                  child: Center(
+                    child: Image.asset(
+                      item.icon!,
+                      height: 32,
+                      width: 32,
+                    ),
+                  ),
+                ),
+                Text(item.title),
+              ],
+            ),
           ),
-          Align(
-            alignment: FractionalOffset.bottomCenter,
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                      onPressed: onRemoveEverything,
-                      child: const Text("Remove Everything")),
-                ]),
+          const SizedBox(
+            width: 20,
           )
-        ])));
+        ],
+      ),
+    );
   }
 
-  void onARViewCreated(
-      ARSessionManager arSessionManager,
-      ARObjectManager arObjectManager,
-      ARAnchorManager arAnchorManager,
-      ARLocationManager arLocationManager) {
-    this.arSessionManager = arSessionManager;
-    this.arObjectManager = arObjectManager;
-    this.arAnchorManager = arAnchorManager;
-
-    this.arSessionManager!.onInitialize(
-          showFeaturePoints: false,
-          showPlanes: true,
-          customPlaneTexturePath: "Images/triangle.png",
-          showWorldOrigin: true,
-          handlePans: true,
-          handleRotation: true,
-        );
-    this.arObjectManager!.onInitialize();
-
-    this.arSessionManager!.onPlaneOrPointTap = onPlaneOrPointTapped;
-    this.arObjectManager!.onPanStart = onPanStarted;
-    this.arObjectManager!.onPanChange = onPanChanged;
-    this.arObjectManager!.onPanEnd = onPanEnded;
-    this.arObjectManager!.onRotationStart = onRotationStarted;
-    this.arObjectManager!.onRotationChange = onRotationChanged;
-    this.arObjectManager!.onRotationEnd = onRotationEnded;
-  }
-
-  Future<void> onRemoveEverything() async {
-    /*nodes.forEach((node) {
-      this.arObjectManager.removeNode(node);
-    });*/
-    for (var anchor in anchors) {
-      arAnchorManager!.removeAnchor(anchor);
+  Future<void> _onTapAR(ARType type, String? link, String name) async {
+    switch (type) {
+      case ARType.Wolf:
+        cubit.downloadAndUnpack(link.toString(), name.toString());
+        break;
+      case ARType.Dragon:
+        cubit.downloadAndUnpack(link.toString(), name.toString());
+      case ARType.Shark:
+        cubit.downloadAndUnpack(link.toString(), name.toString());
+      default:
     }
-    anchors = [];
-  }
-
-  Future<void> onPlaneOrPointTapped(
-      List<ARHitTestResult> hitTestResults) async {
-    var singleHitTestResult = hitTestResults.firstWhere(
-        (hitTestResult) => hitTestResult.type == ARHitTestResultType.plane);
-    var newAnchor =
-        ARPlaneAnchor(transformation: singleHitTestResult.worldTransform);
-    bool? didAddAnchor = await arAnchorManager!.addAnchor(newAnchor);
-    if (didAddAnchor!) {
-      anchors.add(newAnchor);
-      // Add note to anchor
-      var newNode = ARNode(
-          type: NodeType.webGLB,
-          uri:
-              "https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Duck/glTF-Binary/Duck.glb",
-          scale: Vector3(0.2, 0.2, 0.2),
-          position: Vector3(0.0, 0.0, 0.0),
-          rotation: Vector4(1.0, 0.0, 0.0, 0.0));
-      bool? didAddNodeToAnchor =
-          await arObjectManager!.addNode(newNode, planeAnchor: newAnchor);
-      if (didAddNodeToAnchor!) {
-        nodes.add(newNode);
-      } else {
-        arSessionManager!.onError("Adding Node to Anchor failed");
-      }
-    } else {
-      arSessionManager!.onError("Adding Anchor failed");
-    }
-  }
-
-  onPanStarted(String nodeName) {
-    print("Started panning node $nodeName");
-  }
-
-  onPanChanged(String nodeName) {
-    print("Continued panning node $nodeName");
-  }
-
-  onPanEnded(String nodeName, Matrix4 newTransform) {
-    print("Ended panning node $nodeName");
-    final pannedNode = nodes.firstWhere((element) => element.name == nodeName);
-
-    /*
-    * Uncomment the following command if you want to keep the transformations of the Flutter representations of the nodes up to date
-    * (e.g. if you intend to share the nodes through the cloud)
-    */
-    //pannedNode.transform = newTransform;
-  }
-
-  onRotationStarted(String nodeName) {
-    print("Started rotating node $nodeName");
-  }
-
-  onRotationChanged(String nodeName) {
-    print("Continued rotating node $nodeName");
-  }
-
-  onRotationEnded(String nodeName, Matrix4 newTransform) {
-    print("Ended rotating node $nodeName");
-    final rotatedNode = nodes.firstWhere((element) => element.name == nodeName);
-
-    /*
-    * Uncomment the following command if you want to keep the transformations of the Flutter representations of the nodes up to date
-    * (e.g. if you intend to share the nodes through the cloud)
-    */
-    //rotatedNode.transform = newTransform;
   }
 }

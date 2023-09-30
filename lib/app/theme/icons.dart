@@ -27,6 +27,11 @@ class AppIcons {
   static const String icConfirmPassword =
       "assets/icons/ic_confirm_password.png";
   static const String icEmail = "assets/icons/ic_email.png";
+
+  //Icon animals
+  static const String icWolf = "assets/icons/animals/wolf.png";
+  static const String icDragon = "assets/icons/animals/dragon.png";
+  static const String icShark = "assets/icons/animals/shark.png";
 }
 
 class AppImages {

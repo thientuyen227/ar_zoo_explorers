@@ -84,7 +84,11 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
                         hintText: "Tên đăng nhập",
-                        suffixIcon: Image.asset(AppIcons.icUser),
+                        prefixIcon: Image.asset(
+                          AppIcons.icUser,
+                          height: 20,
+                          width: 20,
+                        ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
