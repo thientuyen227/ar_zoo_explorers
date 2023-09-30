@@ -10,6 +10,10 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: SettingRoute.page, path: '/settings'),
         AutoRoute(page: AppRoute.page, initial: true),
         AutoRoute(page: SplashRoute.page, path: '/splash'),
-        AutoRoute(page: CameraRoute.page, path: '/camera')
+        AutoRoute(page: ARRoute.page, path: '/ar'),
+        AutoRoute(
+          page: LoginRoute.page,
+          path: '/login',
+        ),
       ];
 }

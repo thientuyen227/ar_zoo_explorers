@@ -59,7 +59,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
                 children: [
                   AppIconButton(
                     onPressed: () {
-                      context.router.pushNamed(Routes.camera);
+                      context.router.pushNamed(Routes.login);
                     },
                     icon: const Icon(
                       Icons.camera_alt,

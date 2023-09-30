@@ -12,12 +12,12 @@
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 
-import '../app/app/app_cubit.dart' as _i4;
-import '../app/config/app_config.dart' as _i3;
+import '../app/app/app_cubit.dart' as _i5;
+import '../app/config/app_config.dart' as _i4;
 import '../app/managers/recognize_voice_manager.dart' as _i9;
 import '../core/data/local_storage/local_storage.dart' as _i8;
 import '../core/network/gpt_service/gpt_service.dart' as _i6;
-import '../features/camera/presentation/camera_cubit.dart' as _i5;
+import '../features/ar/presentation/ar_cubit.dart' as _i3;
 import '../features/home/presentation/home_cubit.dart' as _i7;
 import '../features/setting/presentation/setting_cubit.dart' as _i10;
 
@@ -32,9 +32,9 @@ _i1.GetIt $initGetit(
     environment,
     environmentFilter,
   );
-  gh.singleton<_i3.AppConfig>(_i3.AppConfig());
-  gh.singleton<_i4.AppCubit>(_i4.AppCubit());
-  gh.factory<_i5.CameraCubit>(() => _i5.CameraCubit());
+  gh.factory<_i3.ARCubit>(() => _i3.ARCubit());
+  gh.singleton<_i4.AppConfig>(_i4.AppConfig());
+  gh.singleton<_i5.AppCubit>(_i5.AppCubit());
   gh.singleton<_i6.GptService>(_i6.GptService());
   gh.factory<_i7.HomeCubit>(() => _i7.HomeCubit());
   gh.singleton<_i8.LocalStorage>(_i8.LocalStorageImpl());
