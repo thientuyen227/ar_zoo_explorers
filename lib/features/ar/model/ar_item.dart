@@ -6,11 +6,13 @@ class ARItem {
   String? icon;
   String? link;
   String name;
+  bool? downloaded;
 
   ARItem(
       {required this.type,
       required this.title,
       this.icon,
       this.link,
-      required this.name});
+      required this.name,
+      this.downloaded});
 }

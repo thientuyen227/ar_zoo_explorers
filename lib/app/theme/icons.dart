@@ -21,16 +21,13 @@ class AppIcons {
   static const String icFish = "assets/icons/ic_fish.png";
   static const String icDinosaurs = "assets/icons/ic_dinosaurs.png";
   static const String icHeart = "assets/icons/ic_heart.png";
-<<<<<<< HEAD
   static const String icDownload = "assets/icons/ic_download.png";
-=======
   static const String icMail = "assets/icons/ic_mail.png";
   static const String icUser = "assets/icons/ic_user.png";
   static const String icPhone = "assets/icons/ic_phone.png";
   static const String icConfirmPassword =
       "assets/icons/ic_confirm_password.png";
   static const String icEmail = "assets/icons/ic_email.png";
->>>>>>> Home_Page
 
   //Icon animals
   static const String icWolf = "assets/icons/animals/wolf.png";

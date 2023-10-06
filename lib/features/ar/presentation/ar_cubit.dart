@@ -10,7 +10,6 @@ import 'package:ar_flutter_plugin/models/ar_anchor.dart';
 import 'package:ar_flutter_plugin/models/ar_hittest_result.dart';
 import 'package:ar_flutter_plugin/models/ar_node.dart';
 import 'package:ar_zoo_explorers/base/base_cubit.dart';
-import 'package:ar_zoo_explorers/features/ar/model/ar_type.dart';
 import 'package:ar_zoo_explorers/features/ar/presentation/ar_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_archive/flutter_archive.dart';
@@ -19,102 +18,49 @@ import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:vector_math/vector_math_64.dart';
 
-import '../../../app/theme/icons.dart';
-import '../model/ar_item.dart';
-
 @injectable
 class ARCubit extends BaseCubit<ARState> {
   ARCubit() : super(ARState());
 
   String? valueName;
 
-  final List<ARItem> ARItems = [
-    ARItem(
-        type: ARType.Wolf,
-        title: "Wolf",
-        icon: AppIcons.icWolf,
-        link:
-            "https://drive.google.com/uc?id=1L7dO0MQOA8HvhFKuwjlOGsex7NmmIj11&export=download",
-        name: "Wolf"),
-    ARItem(
-        type: ARType.Dragon,
-        title: "Dragon",
-        icon: AppIcons.icDragon,
-        link:
-            "https://drive.google.com/uc?id=1L7dO0MQOA8HvhFKuwjlOGsex7NmmIj11&export=download",
-        name: "Dragon"),
-    ARItem(
-        type: ARType.Shark,
-        title: "Shark",
-        icon: AppIcons.icShark,
-        link:
-            "https://drive.google.com/uc?id=1DC2Ez1KVSOBSrMyGDa2Q8aoWdyArKfsp&export=download",
-        name: "Shark"),
-    ARItem(
-        type: ARType.Dinosaur,
-        title: "Dinosaur",
-        icon: AppIcons.icTyrannosaurus,
-        link:
-            "https://drive.google.com/uc?id=1b4ZpjNt__RaJl-ebLSChnkoVdh20p85f&export=download",
-        name: "Dinosaur"),
-    ARItem(
-        type: ARType.Angelfish,
-        title: "AngelFish",
-        icon: AppIcons.icAngleFish,
-        link:
-            "https://drive.google.com/uc?id=1pnctRQiFSijnNmefxRSGsKT03ieaVIYr&export=download",
-        name: "AngelFish"),
-    ARItem(
-        type: ARType.Atolla,
-        title: "Atolla",
-        icon: AppIcons.icAngleFish,
-        link:
-            "https://drive.google.com/uc?id=1KKrwNUEMfcNpwiEq0owo_fyHkA2ZIDN7&export=download",
-        name: "Atolla"),
-    ARItem(
-        type: ARType.Baby_Turtule,
-        title: "Baby_Turtule",
-        icon: AppIcons.icAngleFish,
-        link:
-            "https://drive.google.com/uc?id=1-CZu1dsofprFBz9glRKjYWT2exzPFsWq&export=download",
-        name: "Baby_Turtule"),
-    ARItem(
-        type: ARType.BackwedgedButterflyfish,
-        title: "BackwedgedButterflyfish",
-        icon: AppIcons.icAngleFish,
-        link:
-            "https://drive.google.com/uc?id=1MExzBmHfgm6GczhoxA60GNDiQad1Evtz&export=download",
-        name: "BackwedgedButterflyfish"),
-  ];
-
   ARSessionManager? arSessionManager;
   ARObjectManager? arObjectManager;
   ARAnchorManager? arAnchorManager;
+
+  bool? downloaded = false;
 
   HttpClient? httpClient;
   List<ARNode> nodes = [];
   List<ARAnchor> anchors = [];
 
-  void downloadAndUnpack(String url, String filename) async {
-    var request = await httpClient!.getUrl(Uri.parse(url));
-    var response = await request.close();
-    var bytes = await consolidateHttpClientResponseBytes(response);
+  Future<Map<String, dynamic>> getFilePath(String filename) async {
     String dir = (await getApplicationDocumentsDirectory()).path;
-    File file = File('$dir/$filename');
-    await file.writeAsBytes(bytes);
-    Fluttertoast.showToast(
-        msg: "Downloading finished, path: " '$dir/$filename');
-    print("Downloading finished, path: " '$dir/$filename');
+    File file = File('$dir/$filename.glb');
+    return {'dir': dir, 'file': file};
+  }
 
-    // To print all files in the directory: print(Directory(dir).listSync());
-    try {
-      await ZipFile.extractToDirectory(
-          zipFile: File('$dir/$filename'), destinationDir: Directory(dir));
-      Fluttertoast.showToast(msg: "giải nén thành công");
-      print("Unzipping successful");
-    } catch (e) {
-      Fluttertoast.showToast(msg: "giải nén thất bại: " '$e');
-      print("Unzipping failed: $e");
+  void downloadAndUnpack(String id, String url, String filename) async {
+    Map<String, dynamic> filePathInfo = await getFilePath(filename);
+    String dir = filePathInfo['dir'];
+    File file = filePathInfo['file'];
+    bool filePath = await checkFileExits(file.path);
+    if (!filePath) {
+      var request = await httpClient!.getUrl(Uri.parse(url));
+      var response = await request.close();
+      var bytes = await consolidateHttpClientResponseBytes(response);
+      await file.writeAsBytes(bytes);
+      Fluttertoast.showToast(msg: "Downloading finished, path: " '$file');
+      // To print all files in the directory: print(Directory(dir).listSync());
+      try {
+        await ZipFile.extractToDirectory(
+            zipFile: file, destinationDir: Directory(dir));
+        Fluttertoast.showToast(msg: "giải nén thành công");
+        print("Unzipping successful");
+      } catch (e) {
+        Fluttertoast.showToast(msg: "giải nén thất bại: " '$e');
+        print("Unzipping failed: $e");
+      }
     }
   }
 
@@ -175,6 +121,7 @@ class ARCubit extends BaseCubit<ARState> {
     // Bước 4: Kiểm tra xem việc thêm anchor đã thành công hay không.
     if (didAddAnchor!) {
       // Bước 5: Nếu thành công, thêm mặt phẳng vào danh sách.
+
       anchors.add(newAnchor);
       // Bước 6: Tạo một đối tượng ARNode mới để đại diện cho đối tượng 3D.
       var newNode = ARNode(
@@ -194,7 +141,6 @@ class ARCubit extends BaseCubit<ARState> {
         nodes.add(newNode);
         Fluttertoast.showToast(msg: "Thêm thành công");
       } else {
-        Fluttertoast.showToast(msg: "Thêm thất bại");
         // Xử lý lỗi nếu việc thêm node vào anchor thất bại.
         arSessionManager!.onError("Adding Node to Anchor failed");
       }
@@ -240,5 +186,19 @@ class ARCubit extends BaseCubit<ARState> {
     * (e.g. if you intend to share the nodes through the cloud)
     */
     //rotatedNode.transform = newTransform;
+  }
+
+  Future<bool> checkFileExits(String name) async {
+    return File(name).exists();
+  }
+
+  Future<bool> downloadModel(String name) async {
+    Map<String, dynamic> filePathInfo = await getFilePath(name);
+    File file = filePathInfo['file'];
+    bool fileExits = await checkFileExits(file.path);
+    if (fileExits) {
+      return true;
+    }
+    return false;
   }
 }

@@ -234,6 +234,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
+  cloud_firestore:
+    dependency: "direct main"
+    description:
+      name: cloud_firestore
+      sha256: "50e1ffa143fc5c49db1800392f8d9524fd015f9d26a9e4fc01b5ddb1e603e01b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.9.2"
+  cloud_firestore_platform_interface:
+    dependency: transitive
+    description:
+      name: cloud_firestore_platform_interface
+      sha256: "150e603a40d52b3199e46b1e38d9f8ef8c2dee9e1fb2122d58d456c50015bf7c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.16.1"
+  cloud_firestore_web:
+    dependency: transitive
+    description:
+      name: cloud_firestore_web
+      sha256: f033aef13b13f94b0f361898df39307d8710859c8912626cfb08e439e350bd66
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.7.1"
   code_builder:
     dependency: transitive
     description:
@@ -298,6 +322,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.3"
+  dartz:
+    dependency: "direct main"
+    description:
+      name: dartz
+      sha256: e6acf34ad2e31b1eb00948692468c30ab48ac8250e0f0df661e29f12dd252168
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.10.1"
   dio:
     dependency: transitive
     description:
@@ -402,6 +434,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.5"
+  firebase_auth:
+    dependency: "direct main"
+    description:
+      name: firebase_auth
+      sha256: e7b7e2a08888cb8ef073a9b6d4df9039ea0ff07c920d4258fb4886c55fe2dbb6
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.10.0"
+  firebase_auth_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_auth_platform_interface
+      sha256: "4862bd649268e32ebd685a58abe1eb7ef13aef3f668ce9c56a7d283c971ec6ff"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.19.0"
+  firebase_auth_web:
+    dependency: transitive
+    description:
+      name: firebase_auth_web
+      sha256: "090d531cc0dcf1e39edc0d64cffa18ccc5745b1fd1081a13ee1bf42d861ff764"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.8.1"
   firebase_core:
     dependency: "direct main"
     description:
@@ -638,6 +694,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.6.6"
+  get_controller_plus:
+    dependency: "direct main"
+    description:
+      name: get_controller_plus
+      sha256: "03b60660a9dbabf0d931aa867986ecb569629909755c547bb97e8bd295ca1a41"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.1"
   get_it:
     dependency: "direct main"
     description:
