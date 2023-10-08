@@ -15,5 +15,13 @@ class AppRouter extends $AppRouter {
           page: LoginRoute.page,
           path: '/login',
         ),
+        AutoRoute(
+          page: RegisterRoute.page,
+          path: '/register',
+        ),
+        AutoRoute(
+          page: WelcomeRoute.page,
+          path: '/welcome',
+        ),
       ];
 }

@@ -19,8 +19,11 @@ import '../core/data/local_storage/local_storage.dart' as _i8;
 import '../core/network/gpt_service/gpt_service.dart' as _i6;
 import '../features/ar/presentation/ar_cubit.dart' as _i3;
 import '../features/authentication/login/presentation/login_cubit.dart' as _i9;
+import '../features/authentication/register/presentation/register_cubit.dart'
+    as _i11;
 import '../features/home/presentation/home_cubit.dart' as _i7;
-import '../features/setting/presentation/setting_cubit.dart' as _i11;
+import '../features/setting/presentation/setting_cubit.dart' as _i12;
+import '../features/welcome/presentation/welcome_cubit.dart' as _i13;
 
 // initializes the registration of main-scope dependencies inside of GetIt
 _i1.GetIt $initGetit(
@@ -41,6 +44,8 @@ _i1.GetIt $initGetit(
   gh.singleton<_i8.LocalStorage>(_i8.LocalStorageImpl());
   gh.factory<_i9.LoginCubit>(() => _i9.LoginCubit());
   gh.singleton<_i10.RecognizeVoiceManager>(_i10.RecognizeVoiceManager());
-  gh.factory<_i11.SettingCubit>(() => _i11.SettingCubit());
+  gh.factory<_i11.RegisterCubit>(() => _i11.RegisterCubit());
+  gh.factory<_i12.SettingCubit>(() => _i12.SettingCubit());
+  gh.factory<_i13.WelcomeCubit>(() => _i13.WelcomeCubit());
   return getIt;
 }
