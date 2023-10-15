@@ -44,54 +44,48 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   Widget buildByState(BuildContext context, HomeState state) {
     return Scaffold(
         appBar: AppBar(
-          centerTitle: true,
-          title: const Text("Home Page",
-              style: TextStyle(fontSize: 20, color: Colors.yellow)),
-          leading: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            centerTitle: true,
+            title: const Text("Home Page",
+                style: TextStyle(fontSize: 20, color: Colors.yellow)),
+            leading:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               AppIconButton(
-                onPressed: () {
-                  Navigator.of(context).push(PageRouteBuilder(
-                      opaque: false,
-                      pageBuilder: (BuildContext context, _, __) {
-                        return const AnimatedOpacity(
-                            duration: Duration(milliseconds: 500),
-                            opacity: 1.0, // Độ mờ 80%
-                            child: SettingPage());
-                      }));
-                },
-                icon: const Icon(Icons.settings, color: Colors.white),
-                borderRadius: AppDimens.radius200,
-                padding: const EdgeInsets.all(AppDimens.spacing5),
-                width: AppDimens.size30.width,
-                height: AppDimens.size30.height,
-                backgroundColor: AppColorScheme.dark().cardColor,
-              )
-            ],
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  AppIconButton(
-                    onPressed: () {
-                      context.router.pushNamed(Routes.ar);
-                    },
-                    icon: const Icon(Icons.camera_alt, color: Colors.white),
-                    borderRadius: AppDimens.radius200,
-                    padding: const EdgeInsets.all(AppDimens.spacing5),
-                    width: AppDimens.size30.width,
-                    height: AppDimens.size30.height,
-                    backgroundColor: AppColorScheme.dark().cardColor,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+                  onPressed: () {
+                    Navigator.of(context).push(PageRouteBuilder(
+                        opaque: false,
+                        pageBuilder: (BuildContext context, _, __) {
+                          return const AnimatedOpacity(
+                              duration: Duration(milliseconds: 500),
+                              opacity: 1.0, // Độ mờ 80%
+                              child: SettingPage());
+                        }));
+                  },
+                  icon: const Icon(Icons.settings, color: Colors.white),
+                  borderRadius: AppDimens.radius200,
+                  padding: const EdgeInsets.all(AppDimens.spacing5),
+                  width: AppDimens.size30.width,
+                  height: AppDimens.size30.height,
+                  backgroundColor: AppColorScheme.dark().cardColor)
+            ]),
+            actions: [
+              Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        AppIconButton(
+                            onPressed: () {
+                              context.router.pushNamed(Routes.ar);
+                            },
+                            icon: const Icon(Icons.camera_alt,
+                                color: Colors.white),
+                            borderRadius: AppDimens.radius200,
+                            padding: const EdgeInsets.all(AppDimens.spacing5),
+                            width: AppDimens.size30.width,
+                            height: AppDimens.size30.height,
+                            backgroundColor: AppColorScheme.dark().cardColor)
+                      ]))
+            ]),
         body: SingleChildScrollView(
             child: Container(
                 padding: const EdgeInsets.all(15),
@@ -136,7 +130,6 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
     return Container(
         height: 150,
         width: 150,
-        //color: Colors.blue,
         decoration: BoxDecoration(
             color: Colors.blue, // Màu nền của container
             borderRadius:
@@ -242,14 +235,14 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(items.length, (index) {
                 return Container(
-                  width: 10,
-                  height: 10,
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color:
-                          _adsCurrentPage == index ? Colors.blue : Colors.grey),
-                );
+                    width: 10,
+                    height: 10,
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: _adsCurrentPage == index
+                            ? Colors.blue
+                            : Colors.grey));
               }))),
       const SizedBox(height: 10)
     ]);

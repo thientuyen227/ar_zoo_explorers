@@ -21,22 +21,15 @@ class _State extends BaseState<WelcomeState, WelcomeCubit, WelcomePage> {
   @override
   Widget buildByState(BuildContext context, WelcomeState state) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Image.asset(AppImages.imgAppLogoBG,
-              width: double.infinity,
-              height: double.infinity,
-              fit: BoxFit.cover),
-          Center(
-            child: AnimatedOpacity(
+        body: Stack(children: [
+      Image.asset(AppImages.imgAppLogoBG,
+          width: double.infinity, height: double.infinity, fit: BoxFit.cover),
+      Center(
+          child: AnimatedOpacity(
               opacity: opacity,
               duration: const Duration(seconds: 1),
-              child: Image.asset(AppImages.imgAppLogo, width: 280),
-            ),
-          ),
-        ],
-      ),
-    );
+              child: Image.asset(AppImages.imgAppLogo, width: 280)))
+    ]));
   }
 
   @override

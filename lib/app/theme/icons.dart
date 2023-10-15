@@ -28,6 +28,12 @@ class AppIcons {
   static const String icFacebook = "assets/icons/ic_facebook.png";
   static const String icApple = "assets/icons/ic_apple.png";
   static const String icLoved = "assets/icons/ic_loved.png";
+  static const String icPhone = "assets/icons/ic_phone.png";
+  static const String icMail = "assets/icons/ic_mail.png";
+  static const String icCalendar = "assets/icons/ic_calendar.png";
+  static const String icAddress = "assets/icons/ic_address.png";
+  static const String icBack_png = "assets/icons/ic_back.png";
+  static const String icNext_png = "assets/icons/ic_next.png";
 
   //Icon animals
   static const String icWolf = "assets/icons/animals/wolf.png";

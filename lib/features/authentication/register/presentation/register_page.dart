@@ -214,7 +214,7 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
   Widget NextPageButton() {
     return ElevatedButton(
         onPressed: () {
-          //context.router.pushNamed(Routes.login);
+          context.router.pushNamed(Routes.information);
         },
         style: TextButton.styleFrom(
             minimumSize: const Size(160, 50),
