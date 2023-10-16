@@ -1,3 +1,4 @@
+import 'package:ar_zoo_explorers/features/authentication/termsofservice/presentation/termofservice_cubit.dart';
 import 'package:auto_route/auto_route.dart';
 
 import 'app_router.gr.dart';
@@ -11,9 +12,10 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: AppRoute.page, initial: true),
         AutoRoute(page: SplashRoute.page, path: '/splash'),
         AutoRoute(page: ARRoute.page, path: '/ar'),
-        AutoRoute(
-          page: LoginRoute.page,
-          path: '/login',
-        ),
+        AutoRoute(page: LoginRoute.page, path: '/login'),
+        AutoRoute(page: RegisterRoute.page, path: '/register'),
+        AutoRoute(page: WelcomeRoute.page, path: '/welcome'),
+        AutoRoute(page: InformationRoute.page, path: '/information'),
+        AutoRoute(page: TermOfServiceRoute.page, path: '/termofservice'),
       ];
 }

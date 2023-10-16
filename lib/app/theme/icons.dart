@@ -22,12 +22,28 @@ class AppIcons {
   static const String icDinosaurs = "assets/icons/ic_dinosaurs.png";
   static const String icHeart = "assets/icons/ic_heart.png";
   static const String icDownload = "assets/icons/ic_download.png";
+<<<<<<< HEAD
   static const String icMail = "assets/icons/ic_mail.png";
+=======
+>>>>>>> Dev_MinhTien
   static const String icUser = "assets/icons/ic_user.png";
+  static const String icLock = "assets/icons/ic_lock.png";
+  static const String icGMail = "assets/icons/ic_gmail.png";
+  static const String icFacebook = "assets/icons/ic_facebook.png";
+  static const String icApple = "assets/icons/ic_apple.png";
+  static const String icLoved = "assets/icons/ic_loved.png";
   static const String icPhone = "assets/icons/ic_phone.png";
+<<<<<<< HEAD
   static const String icConfirmPassword =
       "assets/icons/ic_confirm_password.png";
   static const String icEmail = "assets/icons/ic_email.png";
+=======
+  static const String icMail = "assets/icons/ic_mail.png";
+  static const String icCalendar = "assets/icons/ic_calendar.png";
+  static const String icAddress = "assets/icons/ic_address.png";
+  static const String icBack_png = "assets/icons/ic_back.png";
+  static const String icNext_png = "assets/icons/ic_next.png";
+>>>>>>> Dev_MinhTien
 
   //Icon animals
   static const String icWolf = "assets/icons/animals/wolf.png";

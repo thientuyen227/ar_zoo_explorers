@@ -81,9 +81,13 @@ dependencies:
   get_storage: ^2.1.1
   internationalization: ^4.0.1
   cloud_firestore: ^4.9.2
+<<<<<<< HEAD
   get_controller_plus: ^0.2.1
   dartz: ^0.10.1
   firebase_auth: ^4.10.0
+=======
+  mask_text_input_formatter: ^2.5.0
+>>>>>>> Dev_MinhTien
 
 dev_dependencies:
   flutter_test:

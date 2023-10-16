@@ -7,6 +7,10 @@ class Routes {
   static const String splash = "/splash";
   static const String ar = "/ar";
   static const String login = "/login";
+  static const String register = "/register";
+  static const String welcome = "/welcome";
+  static const String information = "/information";
+  static const String termofservice = "/termofservice";
 
   static Route<T> fadeThrough<T>(RouteSettings settings, WidgetBuilder page,
       {int duration = 300}) {
