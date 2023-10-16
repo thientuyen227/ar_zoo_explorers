@@ -126,7 +126,7 @@ class ARCubit extends BaseCubit<ARState> {
       // Bước 6: Tạo một đối tượng ARNode mới để đại diện cho đối tượng 3D.
       var newNode = ARNode(
           type: NodeType.fileSystemAppFolderGLB,
-          uri: '$name' ".glb",
+          uri: "Wolf/" '$name' ".glb",
           scale: Vector3(0.2, 0.2, 0.2),
           position: Vector3(0.0, 0.0, 0.0),
           rotation: Vector4(1.0, 0.0, 0.0, 0.0));

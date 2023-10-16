@@ -81,6 +81,7 @@ class _State extends BaseState<ARState, ARCubit, ARPage> {
           return ListView.separated(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.only(right: 50),
               separatorBuilder: (BuildContext context, int index) {
                 return const SizedBox(
                   height: 0,
@@ -94,7 +95,7 @@ class _State extends BaseState<ARState, ARCubit, ARPage> {
                     builder: (context, snapshot) {
                       final isDownload = snapshot.data;
                       return Padding(
-                        padding: const EdgeInsets.only(top: 15.0),
+                        padding: const EdgeInsets.only(top: 15.0, right: 10),
                         child: Column(
                           children: [
                             Stack(children: [
@@ -137,6 +138,9 @@ class _State extends BaseState<ARState, ARCubit, ARPage> {
                                     )),
                                   ),
                                 ),
+                              const SizedBox(
+                                height: 20,
+                              )
                             ]),
                             Text(template.title),
                           ],

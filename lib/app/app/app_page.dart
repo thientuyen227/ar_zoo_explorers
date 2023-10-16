@@ -1,9 +1,9 @@
-import 'package:ar_zoo_explorers/features/home/presentation/home_page.dart';
 import 'package:ar_zoo_explorers/features/splash/splash_page.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 import '../../base/base_state.dart';
+import '../../features/home/presentation/home_page.dart';
 import 'app_cubit.dart';
 import 'app_state.dart';
 
