@@ -1,5 +1,6 @@
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
+import 'package:ar_zoo_explorers/base/widgets/page_loading_indicator.dart';
 import 'package:ar_zoo_explorers/features/authentication/login/model/OthersLoginButton_Model.dart';
 import 'package:ar_zoo_explorers/features/authentication/login/presentation/login_cubit.dart';
 import 'package:ar_zoo_explorers/features/authentication/login/presentation/login_state.dart';
@@ -8,8 +9,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
 import '../../../../app/config/routes.dart';
+import '../../../../core/data/controller/auth_controller.dart';
 
 @RoutePage()
 class LoginPage extends StatefulWidget {
@@ -20,6 +23,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
+  final controller = AuthController();
+  final _formKey = GlobalKey<FormBuilderState>();
   String txtUsername = "";
   String txtPassword = "";
   bool isVisible = true;
@@ -48,61 +53,89 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
 
   @override
   Widget buildByState(BuildContext context, LoginState state) {
-    return Scaffold(
-        appBar: AppBar(
-            centerTitle: true,
-            title: const Text("Đăng nhập",
-                style: TextStyle(fontSize: 20, color: Colors.yellowAccent)),
-            leading: const Column(
-                mainAxisAlignment: MainAxisAlignment.center, children: [])),
-        body: SingleChildScrollView(
-            child: Container(
-                padding: const EdgeInsets.only(left: 20, right: 20, bottom: 25),
-                child: Column(children: [
-                  const SizedBox(height: 12),
-                  Transform.scale(
-                      scale: 1.5, // Điều chỉnh tỷ lệ biểu tượng ở đây
-                      child: Image.asset(AppImages.imgAppLogo, height: 250)),
-                  const SizedBox(height: 12),
-                  TextUserName(FormBuilderTextFieldModel(
-                      name: 'UserName',
-                      txtValue: txtUsername,
-                      hint_text: "Tên đăng nhập",
-                      icon_prefix: AppIcons.icUser,
-                      isObscured: false)),
-                  const SizedBox(height: 12),
-                  TextPassword(FormBuilderTextFieldModel(
-                      name: 'Password',
-                      txtValue: txtPassword,
-                      hint_text: 'Mật khẩu',
-                      icon_prefix: AppIcons.icLock,
-                      isObscured: isVisible)),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [RememberPass(), ForgotPassword()]),
-                  const SizedBox(height: 12),
-                  SubmitButton(),
-                  const SizedBox(height: 12),
-                  GoToSignUp(),
-                  const SizedBox(height: 15),
-                  const Text("Đăng nhập bằng cách khác?",
-                      style: TextStyle(fontSize: 20, color: Colors.black)),
-                  const SizedBox(height: 12),
-                  Container(
-                      padding: const EdgeInsets.all(15),
-                      decoration: BoxDecoration(
-                        color: Colors.white, // Màu nền của Container
-                        border: Border.all(
-                            color: Colors.grey, // Màu viền
-                            width: 1.5 // Độ dày của viền
+    return Obx(() => GestureDetector(
+          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+          child: PageLoadingIndicator(
+            future: controller.loginFuture.value,
+            scaffold: Scaffold(
+                appBar: AppBar(
+                    centerTitle: true,
+                    title: const Text("Đăng nhập",
+                        style: TextStyle(
+                            fontSize: 20, color: Colors.yellowAccent)),
+                    leading: const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [])),
+                body: FormBuilder(
+                  key: _formKey,
+                  child: SingleChildScrollView(
+                      child: Container(
+                          padding: const EdgeInsets.only(
+                              left: 20, right: 20, bottom: 25),
+                          child: Column(children: [
+                            const SizedBox(height: 12),
+                            Transform.scale(
+                                scale: 1.5, // Điều chỉnh tỷ lệ biểu tượng ở đây
+                                child: Image.asset(AppImages.imgAppLogo,
+                                    height: 250)),
+                            const SizedBox(height: 12),
+                            TextEmail(FormBuilderTextFieldModel(
+                                name: 'email',
+                                txtValue: txtUsername,
+                                hint_text: "Tên đăng nhập",
+                                icon_prefix: AppIcons.icUser,
+                                isObscured: false)),
+                            const SizedBox(height: 12),
+                            TextPassword(FormBuilderTextFieldModel(
+                                name: 'password',
+                                txtValue: txtPassword,
+                                hint_text: 'Mật khẩu',
+                                icon_prefix: AppIcons.icLock,
+                                isObscured: isVisible)),
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [RememberPass(), ForgotPassword()]),
+                            const SizedBox(height: 12),
+                            FutureBuilder(
+                              future: controller.loginFuture.value,
+                              builder: (context, snapshot) => Align(
+                                child: ElevatedButton(
+                                  onPressed: snapshot.connectionState !=
+                                          ConnectionState.waiting
+                                      ? _onLoginPressed
+                                      : null,
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.blue),
+                                  child: const Text("Đăng nhập"),
+                                ),
+                              ),
                             ),
-                        borderRadius: BorderRadius.circular(
-                            15.0), // Độ cong góc của Container
-                      ),
-                      child: Column(
-                          children:
-                              ListOthersLoginButton(listOthersLoginButton)))
-                ]))));
+                            const SizedBox(height: 12),
+                            GoToSignUp(),
+                            const SizedBox(height: 15),
+                            const Text("Đăng nhập bằng cách khác?",
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.black)),
+                            const SizedBox(height: 12),
+                            Container(
+                                padding: const EdgeInsets.all(15),
+                                decoration: BoxDecoration(
+                                  color: Colors.white, // Màu nền của Container
+                                  border: Border.all(
+                                      color: Colors.grey, // Màu viền
+                                      width: 1.5 // Độ dày của viền
+                                      ),
+                                  borderRadius: BorderRadius.circular(
+                                      15.0), // Độ cong góc của Container
+                                ),
+                                child: Column(
+                                    children: ListOthersLoginButton(
+                                        listOthersLoginButton)))
+                          ]))),
+                )),
+          ),
+        ));
   }
 
   Widget RememberPass() {
@@ -122,10 +155,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
 
   Widget SubmitButton() {
     return TextButton(
-        onPressed: () {
-          //context.router.pushNamed(Routes.home);
-          _login(context);
-        },
+        onPressed: () {},
         style: TextButton.styleFrom(
             minimumSize: const Size(200, 50),
             backgroundColor: Colors.blue, // Màu nền
@@ -138,17 +168,11 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
             style: TextStyle(fontSize: 20, color: Colors.white)));
   }
 
-  Widget TextUserName(FormBuilderTextFieldModel items) {
+  Widget TextEmail(FormBuilderTextFieldModel items) {
     return FormBuilderTextField(
       name: items.name,
       obscureText: items.isObscured,
       keyboardType: TextInputType.text,
-      onChanged: (value) {
-        // Lấy giá trị từ TextField khi nó thay đổi
-        setState(() {
-          txtUsername = value!;
-        });
-      },
       decoration: InputDecoration(
           hintText: items.hint_text,
           prefixIcon: Image.asset(
@@ -283,28 +307,6 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
     );
   }
 
-  void _login(BuildContext context) {
-    // Simulate a login request (replace with your actual authentication logic)
-    setState(() {
-      isLoading = true;
-    });
-
-    Future.delayed(const Duration(seconds: 0), () {
-      setState(() {
-        isLoading = false;
-      });
-
-      if (txtUsername == 'admin' && txtPassword == 'admin') {
-        // Đăng nhập thành công
-        _showSnackBar('Đăng nhập thành công!');
-        context.router.pushNamed(Routes.home);
-      } else {
-        // Đăng nhập thất bại
-        _showSnackBar('Đăng nhập thất bại. Vui lòng kiểm tra lại!');
-      }
-    });
-  }
-
   void _showSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -312,5 +314,14 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
         duration: const Duration(seconds: 2),
       ),
     );
+  }
+
+  void _onLoginPressed() {
+    if (_formKey.currentState!.validate()) {
+      controller.login(
+        email: _formKey.currentState!.fields['email']!.value,
+        password: _formKey.currentState!.fields['password']!.value,
+      );
+    }
   }
 }

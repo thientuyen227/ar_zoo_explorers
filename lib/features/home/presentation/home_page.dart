@@ -70,7 +70,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
             actions: [
               Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Column(
+                  child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         AppIconButton(
@@ -78,6 +78,17 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
                               context.router.pushNamed(Routes.ar);
                             },
                             icon: const Icon(Icons.camera_alt,
+                                color: Colors.white),
+                            borderRadius: AppDimens.radius200,
+                            padding: const EdgeInsets.all(AppDimens.spacing5),
+                            width: AppDimens.size30.width,
+                            height: AppDimens.size30.height,
+                            backgroundColor: AppColorScheme.dark().cardColor),
+                        AppIconButton(
+                            onPressed: () {
+                              context.router.pushNamed(Routes.testunity);
+                            },
+                            icon: const Icon(Icons.access_alarm,
                                 color: Colors.white),
                             borderRadius: AppDimens.radius200,
                             padding: const EdgeInsets.all(AppDimens.spacing5),

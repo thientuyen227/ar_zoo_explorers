@@ -1,13 +1,16 @@
+import 'package:ar_zoo_explorers/core/data/controller/auth_controller.dart';
 import 'package:ar_zoo_explorers/features/authentication/register/presentation/register_cubit.dart';
 import 'package:ar_zoo_explorers/features/authentication/register/presentation/register_state.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:get/get.dart';
 
 import '../../../../app/config/routes.dart';
 import '../../../../app/theme/icons.dart';
 import '../../../../base/base_state.dart';
+import '../../../../base/widgets/page_loading_indicator.dart';
 import '../../../../utils/widget/button_widget.dart';
 import '../../../base-model/FormBuilderTextField_Model.dart';
 
@@ -20,6 +23,9 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
+  final controller = AuthController();
+  final _formKey = GlobalKey<FormBuilderState>();
+  String txtFullname = "";
   String txtUsername = "";
   String txtPassword = "";
   String txtConfirmPassword = "";
@@ -28,61 +34,115 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
 
   @override
   Widget buildByState(BuildContext context, RegisterState state) {
-    return Scaffold(
-        appBar: AppBar(
-            centerTitle: true,
-            title: const Text("Đăng ký",
-                style: TextStyle(fontSize: 20, color: Colors.yellowAccent)),
-            leading:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              AppIconButton(
-                  onPressed: () {
-                    context.router.pushNamed(Routes.login);
-                  },
-                  icon: Transform.scale(
-                      scale: 1.5, // Điều chỉnh tỷ lệ biểu tượng ở đây
-                      child: Image.asset(AppImages.imgAppLogo, height: 55)))
-            ])),
-        body: SingleChildScrollView(
-            child: Container(
-                padding: const EdgeInsets.only(left: 20, right: 20, bottom: 25),
-                child: Column(children: [
-                  const SizedBox(height: 12),
-                  Transform.scale(
-                      scale: 1.5, // Điều chỉnh tỷ lệ biểu tượng ở đây
-                      child: Image.asset(AppImages.imgAppLogo, height: 250)),
-                  TextUserName(FormBuilderTextFieldModel(
-                      name: 'UserName',
-                      txtValue: txtUsername,
-                      hint_text: "Tên đăng nhập",
-                      icon_prefix: AppIcons.icUser,
-                      isObscured: false)),
-                  const SizedBox(height: 12),
-                  TextPassword(FormBuilderTextFieldModel(
-                      name: 'Password',
-                      txtValue: txtPassword,
-                      hint_text: 'Mật khẩu',
-                      icon_prefix: AppIcons.icLock,
-                      isObscured: isVisible)),
-                  const SizedBox(height: 12),
-                  ConfirmPassword(FormBuilderTextFieldModel(
-                      name: 'ConfirmPassword',
-                      txtValue: txtConfirmPassword,
-                      hint_text: 'Nhập lại mật khẩu',
-                      icon_prefix: AppIcons.icLock,
-                      isObscured: isConfirmVisible)),
-                  const SizedBox(height: 15),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [LoginButton(), NextPageButton()])
-                ]))));
+    return Obx(() => GestureDetector(
+          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+          child: PageLoadingIndicator(
+            future: controller.signUpFuture.value,
+            scaffold: Scaffold(
+                appBar: AppBar(
+                    centerTitle: true,
+                    title: const Text("Đăng ký",
+                        style: TextStyle(
+                            fontSize: 20, color: Colors.yellowAccent)),
+                    leading: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          AppIconButton(
+                              onPressed: () {
+                                context.router.pushNamed(Routes.login);
+                              },
+                              icon: Transform.scale(
+                                  scale:
+                                      1.5, // Điều chỉnh tỷ lệ biểu tượng ở đây
+                                  child: Image.asset(AppImages.imgAppLogo,
+                                      height: 55)))
+                        ])),
+                body: FormBuilder(
+                  key: _formKey,
+                  child: SingleChildScrollView(
+                      child: Container(
+                          padding: const EdgeInsets.only(
+                              left: 20, right: 20, bottom: 25),
+                          child: Column(children: [
+                            const SizedBox(height: 12),
+                            Transform.scale(
+                                scale: 1.5, // Điều chỉnh tỷ lệ biểu tượng ở đây
+                                child: Image.asset(AppImages.imgAppLogo,
+                                    height: 250)),
+                            TextFullName(FormBuilderTextFieldModel(
+                                name: 'fullname',
+                                hint_text: "Tên đăng nhập",
+                                icon_prefix: AppIcons.icUser,
+                                isObscured: false)),
+                            const SizedBox(height: 12),
+                            TextEmail(FormBuilderTextFieldModel(
+                                name: 'username',
+                                txtValue: txtUsername,
+                                hint_text: "Tên đăng nhập",
+                                icon_prefix: AppIcons.icUser,
+                                isObscured: false)),
+                            const SizedBox(height: 12),
+                            TextPassword(FormBuilderTextFieldModel(
+                                name: 'password',
+                                txtValue: txtPassword,
+                                hint_text: 'Mật khẩu',
+                                icon_prefix: AppIcons.icLock,
+                                isObscured: isVisible)),
+                            const SizedBox(height: 12),
+                            ConfirmPassword(FormBuilderTextFieldModel(
+                                name: 'confirmpassword',
+                                txtValue: txtConfirmPassword,
+                                hint_text: 'Nhập lại mật khẩu',
+                                icon_prefix: AppIcons.icLock,
+                                isObscured: isConfirmVisible)),
+                            const SizedBox(height: 15),
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [LoginButton(), NextPageButton()])
+                          ]))),
+                )),
+          ),
+        ));
   }
 
-  Widget TextUserName(FormBuilderTextFieldModel items) {
+  Widget TextFullName(FormBuilderTextFieldModel items) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       const Row(children: [
         SizedBox(width: 20),
-        Text("Tên đăng nhập",
+        Text("Họ và tên",
+            style: TextStyle(
+                fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold))
+      ]),
+      const SizedBox(height: 5),
+      FormBuilderTextField(
+          name: items.name,
+          obscureText: items.isObscured,
+          keyboardType: TextInputType.text,
+          onChanged: (value) {
+            // Lấy giá trị từ TextField khi nó thay đổi
+            setState(() {
+              txtUsername = value!;
+            });
+          },
+          decoration: InputDecoration(
+              hintText: items.hint_text,
+              prefixIcon: Image.asset(items.icon_prefix, height: 20, width: 20),
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+              contentPadding: const EdgeInsets.all(10)),
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          validator: FormBuilderValidators.compose([
+            FormBuilderValidators.required(errorText: ""),
+          ]))
+    ]);
+  }
+
+  Widget TextEmail(FormBuilderTextFieldModel items) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      const Row(children: [
+        SizedBox(width: 20),
+        Text("Email",
             style: TextStyle(
                 fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold))
       ]),
@@ -230,5 +290,17 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
           SizedBox(width: 5),
           Icon(Icons.arrow_forward, color: Colors.white)
         ]));
+  }
+
+  void _signUp() async {
+    if (_formKey.currentState!.validate()) {
+      controller.signUp(
+        fullname: _formKey.currentState!.fields['fullname']!.value,
+        email: _formKey.currentState!.fields['email']!.value,
+        // phone: _formKey.currentState!.fields['phone']!.value,
+        password: _formKey.currentState!.fields['password']!.value,
+        fromOnboard: Get.parameters['from_onboard']?.isEmpty ?? true,
+      );
+    }
   }
 }

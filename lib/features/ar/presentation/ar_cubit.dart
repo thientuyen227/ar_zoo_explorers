@@ -11,6 +11,7 @@ import 'package:ar_flutter_plugin/models/ar_hittest_result.dart';
 import 'package:ar_flutter_plugin/models/ar_node.dart';
 import 'package:ar_zoo_explorers/base/base_cubit.dart';
 import 'package:ar_zoo_explorers/features/ar/presentation/ar_state.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_archive/flutter_archive.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -23,6 +24,7 @@ class ARCubit extends BaseCubit<ARState> {
   ARCubit() : super(ARState());
 
   String? valueName;
+  FirebaseStorage storage = FirebaseStorage.instance;
 
   ARSessionManager? arSessionManager;
   ARObjectManager? arObjectManager;
@@ -45,13 +47,18 @@ class ARCubit extends BaseCubit<ARState> {
     String dir = filePathInfo['dir'];
     File file = filePathInfo['file'];
     bool filePath = await checkFileExits(file.path);
+    //get link download
+    String modelUrl = await storage
+        .ref()
+        .child("animal_models/" '$filename' ".zip")
+        .getDownloadURL();
+    Fluttertoast.showToast(msg: modelUrl);
     if (!filePath) {
-      var request = await httpClient!.getUrl(Uri.parse(url));
+      var request = await httpClient!.getUrl(Uri.parse(modelUrl));
       var response = await request.close();
       var bytes = await consolidateHttpClientResponseBytes(response);
       await file.writeAsBytes(bytes);
-      Fluttertoast.showToast(msg: "Downloading finished, path: " '$file');
-      // To print all files in the directory: print(Directory(dir).listSync());
+      Fluttertoast.showToast(msg: "Down" '$file');
       try {
         await ZipFile.extractToDirectory(
             zipFile: file, destinationDir: Directory(dir));
@@ -126,7 +133,7 @@ class ARCubit extends BaseCubit<ARState> {
       // Bước 6: Tạo một đối tượng ARNode mới để đại diện cho đối tượng 3D.
       var newNode = ARNode(
           type: NodeType.fileSystemAppFolderGLB,
-          uri: "Wolf/" '$name' ".glb",
+          uri: '$name/' 'source/' '$name' ".glb",
           scale: Vector3(0.2, 0.2, 0.2),
           position: Vector3(0.0, 0.0, 0.0),
           rotation: Vector4(1.0, 0.0, 0.0, 0.0));
