@@ -142,7 +142,7 @@ class _State extends BaseState<TermOfServiceState, TermOfServiceCubit,
         padding: const EdgeInsets.all(15),
         child: ElevatedButton(
             onPressed: () {
-              context.router.pushNamed(Routes.information);
+              context.router.pushNamed(Routes.userprofile);
             },
             style: TextButton.styleFrom(
                 minimumSize: const Size(160, 50),

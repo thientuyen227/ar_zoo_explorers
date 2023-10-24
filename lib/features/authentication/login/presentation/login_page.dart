@@ -11,6 +11,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 
 import '../../../../app/config/routes.dart';
 
+//FlutterToast
 @RoutePage()
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -53,6 +54,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
             centerTitle: true,
             title: const Text("Đăng nhập",
                 style: TextStyle(fontSize: 20, color: Colors.yellowAccent)),
+            actions: [RegisterButton()],
             leading: const Column(
                 mainAxisAlignment: MainAxisAlignment.center, children: [])),
         body: SingleChildScrollView(
@@ -82,23 +84,19 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
                       children: [RememberPass(), ForgotPassword()]),
                   const SizedBox(height: 12),
                   SubmitButton(),
-                  const SizedBox(height: 12),
-                  GoToSignUp(),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 20),
+                  Register(),
+                  const SizedBox(height: 25),
                   const Text("Đăng nhập bằng cách khác?",
-                      style: TextStyle(fontSize: 20, color: Colors.black)),
+                      style: TextStyle(fontSize: 18, color: Colors.black)),
                   const SizedBox(height: 12),
                   Container(
                       padding: const EdgeInsets.all(15),
                       decoration: BoxDecoration(
-                        color: Colors.white, // Màu nền của Container
-                        border: Border.all(
-                            color: Colors.grey, // Màu viền
-                            width: 1.5 // Độ dày của viền
-                            ),
-                        borderRadius: BorderRadius.circular(
-                            15.0), // Độ cong góc của Container
-                      ),
+                          color: Colors.white, // Màu nền của Container
+                          border: Border.all(
+                              color: Colors.grey, width: 1.5), // Viền Container
+                          borderRadius: BorderRadius.circular(15.0)),
                       child: Column(
                           children:
                               ListOthersLoginButton(listOthersLoginButton)))
@@ -123,8 +121,8 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
   Widget SubmitButton() {
     return TextButton(
         onPressed: () {
-          //context.router.pushNamed(Routes.home);
-          _login(context);
+          context.router.pushNamed(Routes.home);
+          //_login(context);
         },
         style: TextButton.styleFrom(
             minimumSize: const Size(200, 50),
@@ -151,11 +149,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
       },
       decoration: InputDecoration(
           hintText: items.hint_text,
-          prefixIcon: Image.asset(
-            items.icon_prefix,
-            height: 20,
-            width: 20,
-          ),
+          prefixIcon: Image.asset(items.icon_prefix, height: 20, width: 20),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
           contentPadding: const EdgeInsets.all(10)),
       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -166,27 +160,26 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
   }
 
   Widget ForgotPassword() {
-    return InkWell(
+    return GestureDetector(
         onTap: () {
-          //context.router.pushNamed(Routes.register);
           print("Chức năng này chưa có!");
         },
         child: const Text('Quên mật khẩu',
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontStyle: FontStyle.italic,
-                fontSize: 19,
+                fontSize: 18.5,
                 color: Colors.grey, // Màu chữ
                 decoration: TextDecoration.none // Gạch chân chữ
                 )));
   }
 
-  Widget GoToSignUp() {
+  Widget Register() {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       const Text("Bạn chưa có tài khoản?",
-          style: TextStyle(fontSize: 20, color: Colors.black)),
-      const SizedBox(width: 5),
-      InkWell(
+          style: TextStyle(fontSize: 18, color: Colors.black)),
+      const SizedBox(width: 7),
+      GestureDetector(
           onTap: () {
             context.router.pushNamed(Routes.register);
           },
@@ -194,7 +187,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontStyle: FontStyle.italic,
-                  fontSize: 20,
+                  fontSize: 18.5,
                   color: Colors.blue, // Màu chữ
                   decoration: TextDecoration.none // Gạch chân chữ
                   )))
@@ -212,13 +205,11 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
             style: ElevatedButton.styleFrom(
                 side: BorderSide(
                     width: 2, // Độ dày của viền
-                    color: items.bdColor // Màu của viền
-                    ),
+                    color: items.bdColor), // Màu của viền
                 backgroundColor: items.bgColor,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(
-                      20.0), // Bo góc với bán kính là 20.0
-                ),
+                    borderRadius:
+                        BorderRadius.circular(20.0)), // Bo góc bán kính: 20.0
                 shadowColor: Colors.grey), // Màu của bóng đổ
             // Các thuộc tính khác như backgroundColor, padding, textStyle, ...),
             child: Row(children: [
@@ -228,8 +219,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
                   decoration: BoxDecoration(
                       color: Colors.white, // Màu nền của container
                       borderRadius:
-                          BorderRadius.circular(10) // Bo góc với bán kính là 10
-                      ),
+                          BorderRadius.circular(10)), // Bo góc bán kính: 10
                   child: Image.asset(items.icon, scale: 0.9)),
               const SizedBox(width: 15),
               Text(items.content,
@@ -269,11 +259,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
                 });
               },
               icon: Icon(isVisible ? Icons.visibility_off : Icons.visibility)),
-          prefixIcon: Image.asset(
-            items.icon_prefix,
-            height: 20,
-            width: 20,
-          ),
+          prefixIcon: Image.asset(items.icon_prefix, height: 20, width: 20),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
           contentPadding: const EdgeInsets.all(10)),
       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -305,12 +291,26 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
     });
   }
 
+  Widget RegisterButton() {
+    return TextButton(
+        onPressed: () {
+          context.router.pushNamed(Routes.register);
+        },
+        child: Row(children: [
+          const Text('Đăng ký',
+              style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold)),
+          const SizedBox(width: 2),
+          Image.asset(AppIcons.icNext_png, height: 24)
+        ]));
+  }
+
   void _showSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        duration: const Duration(seconds: 2),
-      ),
-    );
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(message),
+      duration: const Duration(seconds: 2),
+    ));
   }
 }
