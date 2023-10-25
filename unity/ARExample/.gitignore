@@ -4,8 +4,12 @@ gradle-wrapper.jar
 /gradlew
 /gradlew.bat
 /local.properties
+/unityLibrary
 GeneratedPluginRegistrant.java
-
+# This .gitignore file should be placed at the root of your Unity project directory
+#
+# Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
+#
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/
@@ -67,7 +71,7 @@ sysinfo.txt
 
 # Crashlytics generated file
 crashlytics-build.properties
-
+Android_BackUpThisFolder_ButDontShipItWithYourGame/
 # Packed Addressables
 /[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
 
