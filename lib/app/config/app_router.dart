@@ -18,6 +18,5 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: TermOfServiceRoute.page, path: '/termofservice'),
         AutoRoute(page: AccountManagerRoute.page, path: '/accountmanager'),
         AutoRoute(page: TestUnity.page, path: '/testunity')
-
       ];
 }
