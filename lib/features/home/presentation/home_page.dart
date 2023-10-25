@@ -66,7 +66,8 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
             ProfileCustom()
           ],
           //toolbarHeight: 50,
-        ),
+        ),            
+
         body: SingleChildScrollView(
             child: Container(
                 padding: const EdgeInsets.all(15),

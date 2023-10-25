@@ -3,5 +3,6 @@
     "editor.codeActionsOnSave": {
         "source.organizeImports": true,
         "source.fixAll": true
-    }
+    },
+    "dart.flutterSdkPath": "D:\\Development\\Flutter\\flutter"
 }

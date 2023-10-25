@@ -43,7 +43,6 @@ dependencies:
   auto_route: ^7.8.2
   context_menus: ^1.0.2
   flutter_email_sender: ^6.0.1
-  in_app_purchase_storekit: ^0.3.6+5
   flutter_inappwebview: ^5.7.2+3
   flutter_svg: ^2.0.7
   fast_cached_network_image: ^1.2.0
@@ -59,7 +58,6 @@ dependencies:
   android_intent_plus: ^4.0.2
   intl: ^0.18.1
   analytics_app: ^0.2.1
-  flutter_js: ^0.8.0
   retrofit: ^4.0.1
   build_runner: ^2.4.6
   auto_route_generator: ^7.3.1
@@ -82,6 +80,18 @@ dependencies:
   internationalization: ^4.0.1
   cloud_firestore: ^4.9.2
   mask_text_input_formatter: ^2.5.0
+  dartz: ^0.10.1
+  firebase_auth: ^4.10.1
+  crypto: ^3.0.3
+  google_sign_in: ^6.1.5
+  # flutter_facebook_auth_platform_interface: ^5.0.0
+  # flutter_facebook_auth: ^6.0.2
+  loading_animation_widget: ^1.2.0+4
+  firebase_storage: ^11.3.0
+  flutter_smart_dialog: ^4.9.4
+  flutter_unity_widget: ^2022.2.0
+  flutter_facebook_auth: ^5.0.11
+  flutter_facebook_auth_platform_interface: ^4.1.1
 
 dev_dependencies:
   flutter_test:
