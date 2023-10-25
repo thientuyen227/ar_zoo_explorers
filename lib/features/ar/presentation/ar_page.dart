@@ -1,6 +1,3 @@
-import 'package:ar_flutter_plugin/datatypes/config_planedetection.dart';
-import 'package:ar_flutter_plugin/managers/ar_session_manager.dart';
-import 'package:ar_flutter_plugin/widgets/ar_view.dart';
 import 'package:ar_zoo_explorers/features/ar/presentation/ar_cubit.dart';
 import 'package:ar_zoo_explorers/features/ar/presentation/ar_state.dart';
 import 'package:auto_route/auto_route.dart';
@@ -21,34 +18,28 @@ class ARPage extends StatefulWidget {
 }
 
 class _State extends BaseState<ARState, ARCubit, ARPage> {
-  ARSessionManager? arSessionManager;
+  //ARSessionManager? arSessionManager;
 
   bool download = false;
-
-  @override
-  void dispose() {
-    super.dispose();
-    arSessionManager?.dispose();
-  }
 
   @override
   Widget buildByState(BuildContext context, ARState arState) {
     return Scaffold(
         body: Column(children: [
-      Expanded(
-        child: ARView(
-          onARViewCreated: cubit.onARViewCreated,
-          planeDetectionConfig: PlaneDetectionConfig.horizontalAndVertical,
-        ),
-      ),
+      // Expanded(
+      //   child: ARView(
+      //     onARViewCreated: cubit.onARViewCreated,
+      //     planeDetectionConfig: PlaneDetectionConfig.horizontalAndVertical,
+      //   ),
+      // ),
       Row(
         children: [
-          Center(
-            child: IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: cubit.onRemoveEverything,
-            ),
-          ),
+          // Center(
+          //   child: IconButton(
+          //     icon: const Icon(Icons.delete),
+          //     onPressed: cubit.onRemoveEverything,
+          //   ),
+          // ),
           Expanded(
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,

@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848409ee8ba454f42a5ddff137688a27, type: 3}
+  m_Name: ReferenceImageLibrary
+  m_EditorClassIdentifier: 
+  m_GuidLow: 5006437136571495701
+  m_GuidHigh: 6414917569890013597
+  m_DataStore:
+    m_Storage: []
+  m_Images:
+  - m_SerializedGuid:
+      m_GuidLow: 4781857202135735481
+      m_GuidHigh: 17087191401421508785
+    m_SerializedTextureGuid:
+      m_GuidLow: 2664945316405383279
+      m_GuidHigh: 11471888394980980155
+    m_Size: {x: 0.4, y: 0.2665}
+    m_SpecifySize: 1
+    m_Name: DSC02012_opt
+    m_Texture: {fileID: 0}
+  - m_SerializedGuid:
+      m_GuidLow: 4816896030934758201
+      m_GuidHigh: 4210722948026814620
+    m_SerializedTextureGuid:
+      m_GuidLow: 1586436722220022031
+      m_GuidHigh: 5347958127863955033
+    m_Size: {x: 0.4, y: 0.3011583}
+    m_SpecifySize: 1
+    m_Name: download
+    m_Texture: {fileID: 0}
