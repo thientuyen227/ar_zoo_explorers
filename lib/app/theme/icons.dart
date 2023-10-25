@@ -34,6 +34,11 @@ class AppIcons {
   static const String icAddress = "assets/icons/ic_address.png";
   static const String icBack_png = "assets/icons/ic_back.png";
   static const String icNext_png = "assets/icons/ic_next.png";
+  static const String icWhiteSubmit = "assets/icons/ic_white_submit.png";
+  static const String icDefaultUser = "assets/icons/ic_default_user.png";
+  static const String icLogout = "assets/icons/ic_logout.png";
+  static const String icTerm = "assets/icons/ic_term.png";
+  static const String icEvent = "assets/icons/ic_event.png";
 
   //Icon animals
   static const String icWolf = "assets/icons/animals/wolf.png";
@@ -50,6 +55,9 @@ class AppImages {
   static const String imgAds1 = "assets/images/img_ads1.jpg";
   static const String imgAppLogo = "assets/images/img_app_logo.png";
   static const String imgAppLogoBG = "assets/images/img_app_logo_bg.png";
+  static const String imgDefaultUser = "assets/images/img_default_user.png";
+  static const String imgProfile128x128 =
+      "assets/images/img_profile_128x128.png";
 }
 
 class AppLotties {

@@ -25,10 +25,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _State extends BaseState<HomeState, HomeCubit, HomePage> {
-  // Khởi tạo controller
   final PageController _adsController = PageController();
+  String urlAvatarUser = AppIcons.icDefaultUser;
   String txtSearch = "";
-  //bool isLoved = false;
   int _adsCurrentPage = 0;
   List<ButtonObject> listButtonObject = [
     ButtonObject(title: "Animal", icon: AppIcons.icAnimal),
@@ -44,59 +43,30 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   Widget buildByState(BuildContext context, HomeState state) {
     return Scaffold(
         appBar: AppBar(
-            centerTitle: true,
-            title: const Text("Home Page",
-                style: TextStyle(fontSize: 20, color: Colors.yellow)),
-            leading:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              AppIconButton(
-                  onPressed: () {
-                    Navigator.of(context).push(PageRouteBuilder(
-                        opaque: false,
-                        pageBuilder: (BuildContext context, _, __) {
-                          return const AnimatedOpacity(
-                              duration: Duration(milliseconds: 500),
-                              opacity: 1.0, // Độ mờ 80%
-                              child: SettingPage());
-                        }));
-                  },
-                  icon: const Icon(Icons.settings, color: Colors.white),
-                  borderRadius: AppDimens.radius200,
-                  padding: const EdgeInsets.all(AppDimens.spacing5),
-                  width: AppDimens.size30.width,
-                  height: AppDimens.size30.height,
-                  backgroundColor: AppColorScheme.dark().cardColor)
-            ]),
-            actions: [
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        AppIconButton(
-                            onPressed: () {
-                              context.router.pushNamed(Routes.ar);
-                            },
-                            icon: const Icon(Icons.camera_alt,
-                                color: Colors.white),
-                            borderRadius: AppDimens.radius200,
-                            padding: const EdgeInsets.all(AppDimens.spacing5),
-                            width: AppDimens.size30.width,
-                            height: AppDimens.size30.height,
-                            backgroundColor: AppColorScheme.dark().cardColor),
-                        AppIconButton(
-                            onPressed: () {
-                              context.router.pushNamed(Routes.testunity);
-                            },
-                            icon: const Icon(Icons.access_alarm,
-                                color: Colors.white),
-                            borderRadius: AppDimens.radius200,
-                            padding: const EdgeInsets.all(AppDimens.spacing5),
-                            width: AppDimens.size30.width,
-                            height: AppDimens.size30.height,
-                            backgroundColor: AppColorScheme.dark().cardColor)
-                      ]))
-            ]),
+          centerTitle: true,
+          title: const Text("Home Page",
+              style: TextStyle(fontSize: 20, color: Colors.yellow)),
+          leading:
+              Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            AppIconButton(
+                onPressed: () {
+                  _turnSettingPage();
+                },
+                icon: const Icon(Icons.settings, color: Colors.white),
+                borderRadius: AppDimens.radius200,
+                padding: const EdgeInsets.all(AppDimens.spacing5),
+                width: AppDimens.size30.width,
+                height: AppDimens.size30.height,
+                backgroundColor: AppColorScheme.dark().cardColor)
+          ]),
+          actions: [
+            const Center(
+                child: Text('Fullname',
+                    style: TextStyle(fontSize: 16, color: Colors.white))),
+            ProfileCustom()
+          ],
+          //toolbarHeight: 50,
+        ),
         body: SingleChildScrollView(
             child: Container(
                 padding: const EdgeInsets.all(15),
@@ -210,9 +180,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
                 onSearch();
               },
               icon: Image.asset(item.icon_suffix)),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
           contentPadding: const EdgeInsets.symmetric(
               vertical: 10, horizontal: 25)), // Điều chỉnh chiều cao ở đây
       style: const TextStyle(fontSize: 16),
@@ -238,8 +206,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
               itemBuilder: (context, index) {
                 return ClipRRect(
                     borderRadius: BorderRadius.circular(20.0),
-                    child: Image.asset(items.ads[index],
-                        fit: BoxFit.cover)); // Hiển thị hình ảnh từ URL
+                    child: Image.asset(items.ads[index], fit: BoxFit.cover));
               })),
       Center(
           child: Row(
@@ -259,6 +226,23 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
     ]);
   }
 
+  Widget ProfileCustom() {
+    return PopupMenuButton(
+      icon: Image.asset(urlAvatarUser, height: 24),
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          value: 1,
+          child: const Text("Trang cá nhân",
+              style: TextStyle(fontSize: 18, color: Colors.black87)),
+          onTap: () {
+            context.router.pushNamed(Routes.userprofile);
+          },
+        )
+      ],
+      offset: const Offset(0, kTextTabBarHeight),
+    );
+  }
+
   void _isLoved(int index) {
     setState(() {
       listButtonObject[index].isLoved = !listButtonObject[index].isLoved;
@@ -268,6 +252,17 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
 
   void onSearch() {
     print(txtSearch);
+  }
+
+  void _turnSettingPage() {
+    Navigator.of(context).push(PageRouteBuilder(
+        opaque: false,
+        pageBuilder: (BuildContext context, _, __) {
+          return const AnimatedOpacity(
+              duration: Duration(milliseconds: 500),
+              opacity: 1.0, // Độ mờ 80%
+              child: SettingPage());
+        }));
   }
 
   @override

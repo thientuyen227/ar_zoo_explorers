@@ -1,13 +1,13 @@
 import '../../../../app/app/app_state.dart';
 
-class InformationState {
+class UserProfileState {
   final PageStatus pageStatus;
-  InformationState({
+  UserProfileState({
     this.pageStatus = PageStatus.loading,
   });
 
-  InformationState copyWith({PageStatus? pageStatus}) {
-    return InformationState(
+  UserProfileState copyWith({PageStatus? pageStatus}) {
+    return UserProfileState(
       pageStatus: pageStatus ?? this.pageStatus,
     );
   }

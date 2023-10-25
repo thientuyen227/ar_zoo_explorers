@@ -1,1 +1,11 @@
-enum SettingType { title, termOfService, privacyPolicy, manageSubscription, rateUs, shareApp, ads, contactUs }
+enum SettingType {
+  title,
+  termOfService,
+  privacyPolicy,
+  manageSubscription,
+  rateUs,
+  shareApp,
+  ads,
+  contactUs,
+  accountmanager
+}

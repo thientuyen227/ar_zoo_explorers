@@ -9,9 +9,13 @@ class Routes {
   static const String login = "/login";
   static const String register = "/register";
   static const String welcome = "/welcome";
-  static const String information = "/information";
+  static const String userprofile = "/userprofile";
   static const String termofservice = "/termofservice";
+
+  static const String accountmanager = "/accountmanager";
+
   static const String testunity = "/testunity";
+
 
   static Route<T> fadeThrough<T>(RouteSettings settings, WidgetBuilder page,
       {int duration = 300}) {

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../../../app/config/routes.dart';
 import '../../../app/theme/dimens.dart';
 import '../../../base/base_state.dart';
 import '../../../utils/widget/spacer_widget.dart';
@@ -27,17 +28,16 @@ class _State extends BaseState<SettingState, SettingCubit, SettingPage> {
       Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          color: Colors.black.withOpacity(0.7)),
+          color: Colors.black.withOpacity(0.6)),
       SizedBox(
           width: MediaQuery.of(context).size.width * 0.8,
           child: Scaffold(
-            appBar: AppBar(
-              title: const Text("Settings",
-                  style: TextStyle(fontSize: 20, color: Colors.yellow)),
-              centerTitle: false,
-            ),
-            body: Column(
-              children: [
+              appBar: AppBar(
+                title: const Text("Settings",
+                    style: TextStyle(fontSize: 20, color: Colors.yellow)),
+                centerTitle: false,
+              ),
+              body: Column(children: [
                 const SizedBox(height: 20),
                 Expanded(
                     child: ListView.separated(
@@ -45,13 +45,10 @@ class _State extends BaseState<SettingState, SettingCubit, SettingPage> {
                           final item = cubit.settingItems[index];
                           return _buildSettingItem(item);
                         },
-                        separatorBuilder: (context, index) => const VSpacing(
-                              spacing: AppDimens.spacing24,
-                            ),
+                        separatorBuilder: (context, index) =>
+                            const VSpacing(spacing: AppDimens.spacing24),
                         itemCount: cubit.settingItems.length))
-              ],
-            ),
-          ))
+              ])))
     ]);
   }
 
@@ -61,49 +58,36 @@ class _State extends BaseState<SettingState, SettingCubit, SettingPage> {
         return const SizedBox.shrink();
       default:
         return GestureDetector(
-          onTap: () {
-            _onTapSettings(item.type);
-          },
-          child: Container(
-            width: double.infinity,
-            margin: const EdgeInsets.symmetric(horizontal: AppDimens.spacing24),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(AppDimens.radius20),
-              color: context.myTheme.colorScheme.cardColor,
-            ),
-            padding: const EdgeInsets.symmetric(
-                horizontal: AppDimens.spacing24, vertical: AppDimens.spacing24),
-            child: Row(
-              children: [
-                Container(
-                  width: 35,
-                  alignment: Alignment.center,
-                  decoration: const BoxDecoration(
-                      shape: BoxShape.circle, color: Colors.black54),
-                  padding: const EdgeInsets.all(AppDimens.spacing9),
-                  child: Image.asset(
-                    item.icon!,
-                    color: Colors.white,
-                    fit: BoxFit.scaleDown,
-                  ),
-                ),
-                const SizedBox(
-                  width: 18,
-                ),
-                Text(
-                  item.title,
-                  style: context.myTheme.textThemeT1.title
-                      .copyWith(fontSize: 14, fontWeight: FontWeight.w600),
-                ),
-                const Expanded(child: SizedBox.shrink()),
-                const Icon(
-                  Icons.arrow_forward_ios_outlined,
-                  size: AppDimens.icon18,
-                )
-              ],
-            ),
-          ),
-        );
+            onTap: () {
+              _onTapSettings(item.type);
+            },
+            child: Container(
+                width: double.infinity,
+                margin:
+                    const EdgeInsets.symmetric(horizontal: AppDimens.spacing24),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(AppDimens.radius20),
+                    color: context.myTheme.colorScheme.cardColor),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: AppDimens.spacing24,
+                    vertical: AppDimens.spacing24),
+                child: Row(children: [
+                  Container(
+                      width: 35,
+                      alignment: Alignment.center,
+                      decoration: const BoxDecoration(
+                          shape: BoxShape.circle, color: Colors.black54),
+                      padding: const EdgeInsets.all(AppDimens.spacing9),
+                      child: Image.asset(item.icon!,
+                          color: Colors.white, fit: BoxFit.scaleDown)),
+                  const SizedBox(width: 18),
+                  Text(item.title,
+                      style: context.myTheme.textThemeT1.title
+                          .copyWith(fontSize: 14, fontWeight: FontWeight.w600)),
+                  const Expanded(child: SizedBox.shrink()),
+                  const Icon(Icons.arrow_forward_ios_outlined,
+                      size: AppDimens.icon18)
+                ])));
     }
   }
 
@@ -121,6 +105,9 @@ class _State extends BaseState<SettingState, SettingCubit, SettingPage> {
         break;
       case SettingType.manageSubscription:
         cubit.openManageSubscription();
+        break;
+      case SettingType.accountmanager:
+        context.router.pushNamed(Routes.accountmanager);
         break;
       default:
     }
