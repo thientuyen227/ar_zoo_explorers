@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-=======
-// import 'package:ar_flutter_plugin/datatypes/config_planedetection.dart';
-// import 'package:ar_flutter_plugin/managers/ar_session_manager.dart';
-// import 'package:ar_flutter_plugin/widgets/ar_view.dart';
->>>>>>> Dev_MinhTien
 import 'package:ar_zoo_explorers/features/ar/presentation/ar_cubit.dart';
 import 'package:ar_zoo_explorers/features/ar/presentation/ar_state.dart';
 import 'package:auto_route/auto_route.dart';
@@ -24,23 +18,10 @@ class ARPage extends StatefulWidget {
 }
 
 class _State extends BaseState<ARState, ARCubit, ARPage> {
-<<<<<<< HEAD
   //ARSessionManager? arSessionManager;
 
   bool download = false;
 
-=======
-  // ARSessionManager? arSessionManager;
-
-  bool download = false;
-
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   arSessionManager?.dispose();
-  // }
-
->>>>>>> Dev_MinhTien
   @override
   Widget buildByState(BuildContext context, ARState arState) {
     return Scaffold(

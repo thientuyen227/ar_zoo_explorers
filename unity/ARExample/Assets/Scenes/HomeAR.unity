@@ -199,8 +199,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816b289ef451e094f9ae174fb4cf8db0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Camera: {fileID: 0}
+  m_CameraManager: {fileID: 0}
+  m_OcclusionManager: {fileID: 0}
   m_UseCustomMaterial: 0
   m_CustomMaterial: {fileID: 0}
+  m_DefaultMaterial: {fileID: 0}
+  m_BackgroundRenderingEnabled: 0
+  m_CommandBufferCullingState: 0
 --- !u!114 &282508985
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,6 +224,8 @@ MonoBehaviour:
   m_AutoFocus: 1
   m_LightEstimation: 0
   m_FacingDirection: 1
+  m_Camera: {fileID: 0}
+  m_PreRenderInvertCullingValue: 0
 --- !u!114 &282508986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -439,6 +447,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_CameraManager: {fileID: 282508985}
   m_BrightnessMod: 2
+  m_Light: {fileID: 0}
 --- !u!1 &1261917406
 GameObject:
   m_ObjectHideFlags: 0
@@ -484,6 +493,9 @@ MonoBehaviour:
   m_AttemptUpdate: 1
   m_MatchFrameRate: 1
   m_TrackingMode: 2
+  m_VSyncCount: 0
+  m_TargetFrameRate: 0
+  m_WasFrameRateSet: 0
 --- !u!4 &1261917409
 Transform:
   m_ObjectHideFlags: 0
@@ -737,7 +749,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_PlacedPrefab: {fileID: 175852, guid: f8243bb353e5cb74481bb26fe62fd298, type: 3}
+  placementUpdate:
+    m_PersistentCalls:
+      m_Calls: []
+    m_CallsDirty: 1
   visualObject: {fileID: 348371570}
+  <spawnedObject>k__BackingField: {fileID: 0}
+  m_RaycastManager: {fileID: 0}
 --- !u!114 &1507611061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -750,6 +768,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 728ad7fae8e460a4ba41265c7308d757, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <sessionOrigin>k__BackingField: {fileID: 0}
   m_AnchorPrefab: {fileID: 0}
 --- !u!114 &1507611062
 MonoBehaviour:
@@ -763,6 +782,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa17d122634046b4a8e23048891fafc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <sessionOrigin>k__BackingField: {fileID: 0}
   m_RaycastPrefab: {fileID: 0}
 --- !u!114 &1507611063
 MonoBehaviour:
@@ -776,6 +796,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1760703bbd54c04488a8d10600262ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <sessionOrigin>k__BackingField: {fileID: 0}
   m_PlanePrefab: {fileID: 4776765576899091622, guid: 5994f7dcc8ec6de43a5c48b5ef5d9faf,
     type: 3}
   m_DetectionMode: -1
@@ -792,6 +813,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Camera: {fileID: 282508983}
+  <trackablesParent>k__BackingField: {fileID: 0}
+  m_ContentOffsetGameObject: {fileID: 0}
 --- !u!4 &1507611065
 Transform:
   m_ObjectHideFlags: 0
@@ -836,5 +859,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ab0e80cee9cc1d44928bfe488dd1e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <sessionOrigin>k__BackingField: {fileID: 0}
   m_PointCloudPrefab: {fileID: 5706843430230825157, guid: c23139009eb0c7041ad2ccbbd27a6db7,
     type: 3}
