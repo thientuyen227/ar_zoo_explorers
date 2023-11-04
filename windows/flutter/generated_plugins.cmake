@@ -3,15 +3,12 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  cloud_firestore
   file_selector_windows
+  firebase_auth
   firebase_core
-<<<<<<< HEAD
   flutter_secure_storage_windows
   flutter_unity_widget
-=======
-  flutter_js
-  geolocator_windows
->>>>>>> Dev_MinhTien
   permission_handler_windows
   share_plus
   url_launcher_windows

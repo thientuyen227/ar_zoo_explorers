@@ -47,6 +47,8 @@ class AppIcons {
   static const String icAngleFish = "assets/icons/Fish/angelfish.png";
   static const String icTyrannosaurus =
       "assets/icons/animals/tyrannosaurus.png";
+
+  static const String icFeed = "assets/icons/ic_feeds.png";
 }
 
 class AppImages {

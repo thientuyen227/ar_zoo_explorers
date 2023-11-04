@@ -63,7 +63,12 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
             const Center(
                 child: Text('Fullname',
                     style: TextStyle(fontSize: 16, color: Colors.white))),
-            ProfileCustom()
+            ProfileCustom(),
+            IconButton(
+                onPressed: () {
+                  context.router.pushNamed(Routes.testunity);
+                },
+                icon: const Icon(Icons.ac_unit))
           ],
           //toolbarHeight: 50,
         ),

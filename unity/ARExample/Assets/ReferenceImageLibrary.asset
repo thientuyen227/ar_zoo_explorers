@@ -25,15 +25,15 @@ MonoBehaviour:
       m_GuidHigh: 11471888394980980155
     m_Size: {x: 0.4, y: 0.2665}
     m_SpecifySize: 1
-    m_Name: DSC02012_opt
-    m_Texture: {fileID: 0}
+    m_Name: humpback_whale_animation
+    m_Texture: {fileID: 2800000, guid: 522f106fc9a524fbbb75c4edb655349f, type: 3}
   - m_SerializedGuid:
       m_GuidLow: 4816896030934758201
       m_GuidHigh: 4210722948026814620
     m_SerializedTextureGuid:
       m_GuidLow: 1586436722220022031
       m_GuidHigh: 5347958127863955033
-    m_Size: {x: 0.4, y: 0.3011583}
+    m_Size: {x: 0.3, y: 0.22586873}
     m_SpecifySize: 1
-    m_Name: download
-    m_Texture: {fileID: 0}
+    m_Name: Bull
+    m_Texture: {fileID: 2800000, guid: 268f390f27cb1604597efe2495c3374a, type: 3}

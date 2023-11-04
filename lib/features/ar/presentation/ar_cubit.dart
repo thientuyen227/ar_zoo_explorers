@@ -1,14 +1,5 @@
 import 'dart:io';
 
-// import 'package:ar_flutter_plugin/datatypes/hittest_result_types.dart';
-// import 'package:ar_flutter_plugin/datatypes/node_types.dart';
-// import 'package:ar_flutter_plugin/managers/ar_anchor_manager.dart';
-// import 'package:ar_flutter_plugin/managers/ar_location_manager.dart';
-// import 'package:ar_flutter_plugin/managers/ar_object_manager.dart';
-// import 'package:ar_flutter_plugin/managers/ar_session_manager.dart';
-// import 'package:ar_flutter_plugin/models/ar_anchor.dart';
-// import 'package:ar_flutter_plugin/models/ar_hittest_result.dart';
-// import 'package:ar_flutter_plugin/models/ar_node.dart';
 import 'package:ar_zoo_explorers/base/base_cubit.dart';
 import 'package:ar_zoo_explorers/features/ar/presentation/ar_state.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -24,15 +15,7 @@ class ARCubit extends BaseCubit<ARState> {
   String? valueName;
   FirebaseStorage storage = FirebaseStorage.instance;
 
-  // ARSessionManager? arSessionManager;
-  // ARObjectManager? arObjectManager;
-  // ARAnchorManager? arAnchorManager;
-
-  bool? downloaded = false;
-
   HttpClient? httpClient;
-  // List<ARNode> nodes = [];
-  // List<ARAnchor> anchors = [];
 
   Future<Map<String, dynamic>> getFilePath(String filename) async {
     String dir = (await getApplicationDocumentsDirectory()).path;
@@ -56,16 +39,6 @@ class ARCubit extends BaseCubit<ARState> {
       var response = await request.close();
       var bytes = await consolidateHttpClientResponseBytes(response);
       await file.writeAsBytes(bytes);
-      // Fluttertoast.showToast(msg: "Down" '$file');
-      // try {
-      //   await ZipFile.extractToDirectory(
-      //       zipFile: file, destinationDir: Directory(dir));
-      //   Fluttertoast.showToast(msg: "giải nén thành công");
-      //   print("Unzipping successful");
-      // } catch (e) {
-      //   Fluttertoast.showToast(msg: "giải nén thất bại: " '$e');
-      //   print("Unzipping failed: $e");
-      // }
     }
   }
 
