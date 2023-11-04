@@ -65,6 +65,7 @@ public class ARUXAnimationManager : MonoBehaviour
     [Tooltip("Video player reference")]
     VideoPlayer m_VideoPlayer;
     
+    
     public VideoPlayer videoPlayer
     {
         get => m_VideoPlayer;
@@ -80,7 +81,7 @@ public class ARUXAnimationManager : MonoBehaviour
         get => m_RawImage;
         set => m_RawImage = value;
     }
-
+    
     [SerializeField]
     [Tooltip("time the UI takes to fade on")]
     float m_FadeOnDuration = 1.0f;
@@ -124,13 +125,10 @@ public class ARUXAnimationManager : MonoBehaviour
 
     void Update()
     {
-        if (m_VideoPlayer.isPlaying)
-        {
-            Debug.Log("Video is currently playing!");
-        }
+        Debug.Log(m_InstructionText);
+        Debug.Log(m_TapToPlaceClip.name);
         if (!m_VideoPlayer.isPrepared)
         {
-            Debug.Log("Video is not prepared!");
             return;
         }
 
@@ -190,6 +188,7 @@ public class ARUXAnimationManager : MonoBehaviour
     public void ShowTapToPlace()
     {
         m_VideoPlayer.clip = m_TapToPlaceClip;
+        Debug.Log(m_TapToPlaceClip.name);
         m_VideoPlayer.Play();
         // if (m_LocalizeText)
         // {
@@ -198,8 +197,9 @@ public class ARUXAnimationManager : MonoBehaviour
         // else
         // {
             m_InstructionText.text = k_TapToPlaceText;
+        Debug.Log(k_TapToPlaceText);
         // }
-        
+
         m_FadeOn = true;
     }
 
@@ -208,6 +208,7 @@ public class ARUXAnimationManager : MonoBehaviour
     public void ShowCrossPlatformFindAPlane()
     {
         m_VideoPlayer.clip = m_FindAPlaneClip;
+        Debug.Log(m_FindAPlaneClip.name);
         m_VideoPlayer.Play();
         // if (m_LocalizeText)
         // {
