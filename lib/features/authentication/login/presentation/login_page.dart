@@ -9,6 +9,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
 import '../../../../app/config/routes.dart';
@@ -66,7 +67,8 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
                             fontSize: 20, color: Colors.yellowAccent)),
                     leading: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [])),
+                        children: []),
+                    actions: [SignUpAction()]),
                 body: FormBuilder(
                   key: _formKey,
                   child: SingleChildScrollView(
@@ -332,6 +334,23 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
                   fontWeight: FontWeight.bold)),
           const SizedBox(width: 2),
           Image.asset(AppIcons.icNext_png, height: 24)
+        ]));
+  }
+
+  Widget SignUpAction() {
+    return ElevatedButton(
+        onPressed: () {
+          context.router.pushNamed(Routes.register);
+        },
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.blue),
+            elevation: MaterialStateProperty.all(0),
+            shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(0)))),
+        child: Row(children: [
+          const Text('Đăng ký ',
+              style: TextStyle(color: Colors.white, fontSize: 17)),
+          Image.asset(AppIcons.icNext_png)
         ]));
   }
 

@@ -3,7 +3,6 @@ import 'package:ar_zoo_explorers/features/authentication/termsofservice/presenta
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../app/config/routes.dart';
 import '../../../../app/theme/icons.dart';
 import '../../../../base/base_state.dart';
 
@@ -22,68 +21,51 @@ class _State extends BaseState<TermOfServiceState, TermOfServiceCubit,
     return Scaffold(
         appBar: AppBar(
             centerTitle: true,
-            title: Transform.scale(
-                scale: 1.5, // Điều chỉnh tỷ lệ biểu tượng ở đây
-                child: Image.asset(AppImages.imgAppLogo, height: 55)),
-            leading: ElevatedButton(
-                onPressed: () {
-                  context.router.pushNamed(Routes.login);
-                },
-                child: Image.asset(AppIcons.icBack_png, height: 40))),
-        body: SingleChildScrollView(
-            child: Center(
-                child: Container(
-                    padding:
-                        const EdgeInsets.only(left: 20, right: 20, bottom: 25),
-                    child: Column(children: [
-                      const SizedBox(height: 25),
-                      TitlePage(),
-                      const SizedBox(height: 20),
-                      ListTermsOfService(),
-                      const SizedBox(height: 5),
-                      SubmitButton()
-                    ])))));
-  }
-
-  Widget TitlePage() {
-    return Container(
-        width:
-            MediaQuery.of(context).size.width * 0.8, // Chiều ngang 80% màn hình
-        padding: const EdgeInsets.all(15),
-        decoration: BoxDecoration(
-          color: Colors.white, // Màu nền của Container
-          border: Border.all(
-              color: Colors.grey, // Màu viền
-              width: 1.5 // Độ dày của viền
-              ),
-          borderRadius:
-              BorderRadius.circular(15.0), // Độ cong góc của Container
-        ),
-        child: const Center(
-          child: Text("Điều khoản sử dụng",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25,
-                  color: Colors.blue,
-                  fontFamily: 'Times New Roman')),
-        ));
+            title: const Text("ĐIỀU KHOẢN SỬ DỤNG",
+                style: TextStyle(fontSize: 20, color: Colors.white)),
+            leading: const Column(children: [])),
+        body: Stack(children: [
+          ClipRect(
+              child: Image.asset(
+            AppImages.imgAppLogoBG,
+            width: MediaQuery.of(context).size.width,
+            fit: BoxFit.cover,
+          )),
+          Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              color: Colors.black.withOpacity(0.2)),
+          SingleChildScrollView(
+              child: Center(
+                  child: Container(
+                      padding: const EdgeInsets.only(
+                          left: 20, right: 20, bottom: 25),
+                      child: Column(children: [
+                        const SizedBox(height: 25),
+                        ListTermsOfService(),
+                        const SizedBox(height: 5),
+                        SubmitButton()
+                      ]))))
+        ]));
   }
 
   Widget ListTermsOfService() {
     return Container(
       padding: const EdgeInsets.all(10),
       width: MediaQuery.of(context).size.width * 0.8,
-      height: MediaQuery.of(context).size.width * 1,
+      height: MediaQuery.of(context).size.width * 1.2,
       decoration: BoxDecoration(
-        color: Colors.white, // Màu nền của Container
-        border: Border.all(
-            color: Colors.grey, // Màu viền
-            width: 1.5 // Độ dày của viền
-            ),
-        borderRadius: BorderRadius.circular(15.0), // Độ cong góc của Container
-      ),
+          color: Colors.white70,
+          border: Border.all(color: Colors.grey, width: 2),
+          borderRadius: BorderRadius.circular(15.0)),
       child: SingleChildScrollView(
           child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+        Align(
+            alignment: Alignment.center,
+            child: Transform.scale(
+                scale: 1.5,
+                child: Image.asset(AppImages.imgAppLogo, height: 200))),
+        const SizedBox(height: 12),
         TermItem("1. Chấp Nhận Điều Khoản:",
             "Trước khi sử dụng ứng dụng ArZoo, bạn cần đồng ý và tuân theo các điều khoản dưới đây."),
         TermItem("2. Sử Dụng Ứng Dụng:",
@@ -142,17 +124,15 @@ class _State extends BaseState<TermOfServiceState, TermOfServiceCubit,
         padding: const EdgeInsets.all(15),
         child: ElevatedButton(
             onPressed: () {
-              context.router.pushNamed(Routes.userprofile);
+              Navigator.of(context).pop();
             },
             style: TextButton.styleFrom(
                 minimumSize: const Size(160, 50),
-                backgroundColor: Colors.green, // Màu nền
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 15,
-                    vertical: 10), // Khoảng cách giữa chữ và nút
+                backgroundColor: const Color.fromARGB(255, 248, 133, 18),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30) // Đổ viền cho nút
-                    )),
+                    borderRadius: BorderRadius.circular(30))),
             child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
