@@ -125,8 +125,7 @@ public class ARUXAnimationManager : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(m_InstructionText);
-        Debug.Log(m_TapToPlaceClip.name);
+        Debug.Log(m_VideoPlayer);
         if (!m_VideoPlayer.isPrepared)
         {
             return;
@@ -188,17 +187,9 @@ public class ARUXAnimationManager : MonoBehaviour
     public void ShowTapToPlace()
     {
         m_VideoPlayer.clip = m_TapToPlaceClip;
-        Debug.Log(m_TapToPlaceClip.name);
+        Debug.Log(m_VideoPlayer.name);
         m_VideoPlayer.Play();
-        // if (m_LocalizeText)
-        // {
-        //     m_InstructionText.text = m_LocalizationManager.localizedTapToPlace;
-        // }
-        // else
-        // {
-            m_InstructionText.text = k_TapToPlaceText;
-        Debug.Log(k_TapToPlaceText);
-        // }
+        m_InstructionText.text = k_TapToPlaceText;
 
         m_FadeOn = true;
     }
@@ -208,16 +199,8 @@ public class ARUXAnimationManager : MonoBehaviour
     public void ShowCrossPlatformFindAPlane()
     {
         m_VideoPlayer.clip = m_FindAPlaneClip;
-        Debug.Log(m_FindAPlaneClip.name);
         m_VideoPlayer.Play();
-        // if (m_LocalizeText)
-        // {
-        //     m_InstructionText.text = m_LocalizationManager.localizedMoveDevice;
-        // }
-        // else
-        // {
-            m_InstructionText.text = k_MoveDeviceText;
-        // }
+        m_InstructionText.text = k_MoveDeviceText;
         m_FadeOn = true;
     }
 

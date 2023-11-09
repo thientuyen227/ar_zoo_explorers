@@ -104,7 +104,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
                                 child: ElevatedButton(
                                   onPressed: snapshot.connectionState !=
                                           ConnectionState.waiting
-                                      ? _onLoginPressed
+                                      ? () => _onLoginPressed(context)
                                       : null,
                                   style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.blue),
@@ -342,9 +342,10 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
     ));
   }
 
-  void _onLoginPressed() {
+  Future<void> _onLoginPressed(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       controller.login(
+        context: context,
         email: _formKey.currentState!.fields['email']!.value,
         password: _formKey.currentState!.fields['password']!.value,
       );

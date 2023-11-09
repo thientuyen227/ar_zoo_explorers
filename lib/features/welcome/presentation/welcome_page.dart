@@ -1,5 +1,6 @@
 import 'package:ar_zoo_explorers/app/config/routes.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
+import 'package:ar_zoo_explorers/core/data/controller/auth_controller.dart';
 import 'package:ar_zoo_explorers/features/welcome/presentation/welcome_cubit.dart';
 import 'package:ar_zoo_explorers/features/welcome/presentation/welcome_state.dart';
 import 'package:auto_route/auto_route.dart';
@@ -17,6 +18,7 @@ class WelcomePage extends StatefulWidget {
 
 class _State extends BaseState<WelcomeState, WelcomeCubit, WelcomePage> {
   double opacity = 0.0;
+  final controller = AuthController();
 
   @override
   Widget buildByState(BuildContext context, WelcomeState state) {
@@ -43,11 +45,8 @@ class _State extends BaseState<WelcomeState, WelcomeCubit, WelcomePage> {
     });
     // Chuyển trang sau 30 giây
     Future.delayed(const Duration(seconds: 3), () {
-      NextPage();
+      context.router.pushNamed(Routes.login);
     });
-  }
-
-  void NextPage() {
-    context.router.pushNamed(Routes.login);
+    controller.checkAuthState(context);
   }
 }

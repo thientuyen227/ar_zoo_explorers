@@ -18,7 +18,6 @@ class ControllerHelper extends GetxController {
     return await result.fold(
       (failure) async {
         if (onFailure != null) onFailure(failure);
-
         return Future.error(failure.message ?? "");
       },
       (success) async {

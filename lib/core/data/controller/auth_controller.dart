@@ -1,3 +1,4 @@
+import 'package:ar_zoo_explorers/app/config/app_router.gr.dart';
 import 'package:ar_zoo_explorers/app/config/routes.dart';
 import 'package:ar_zoo_explorers/core/data/models/user_model.dart';
 import 'package:ar_zoo_explorers/core/helpers/controller_helper.dart';
@@ -5,7 +6,10 @@ import 'package:ar_zoo_explorers/core/helpers/notification_helper.dart';
 import 'package:ar_zoo_explorers/core/repositories/auth_repository_implement.dart';
 import 'package:ar_zoo_explorers/domain/entities/user_entity.dart';
 import 'package:ar_zoo_explorers/domain/repositories/user_repository.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 class AuthController extends ControllerHelper {
@@ -43,50 +47,50 @@ class AuthController extends ControllerHelper {
             });
   }
 
-  Future<void> login({required String email, required String password}) async {
+  Future<void> login(
+      {required BuildContext context,
+      required String email,
+      required String password}) async {
     loginFuture.value = processRequest<UserEntity>(
         request: () => _authRepository.login(email: email, password: password),
-        onFailure: (failure) =>
-            NotificationHelper.showSnackBar(message: failure.message),
-        onSuccess: (success) => _onLoginSuccess(success.data));
+        onFailure: (failure) => NotificationHelper.showSnackBar(
+            message: "Tài khoản hoặc mật khẩu bị sai"),
+        onSuccess: (success) => _onLoginSuccess(context, success.data));
   }
 
-  Future<void> loginWithGoogle() async {
+  Future<void> loginWithGoogle(BuildContext context) async {
     loginFuture.value = processRequest<UserEntity>(
       request: () => _authRepository.loginWithGoogle(),
       onFailure: (failure) =>
           NotificationHelper.showSnackBar(message: failure.message),
-      onSuccess: (success) => _onLoginSuccess(success.data),
+      onSuccess: (success) => _onLoginSuccess(context, success.data),
     );
   }
 
-  chekcAuthState() {
+  checkAuthState(BuildContext context) {
     Future.delayed(const Duration(seconds: 3), () {
       try {
         User? user = FirebaseAuth.instance.currentUser;
 
         if (user != null) {
-          Get.offAllNamed(Routes.home);
+          context.router.pushAndPopUntil(
+            const HomeRoute(),
+            predicate: (route) => route.settings.name == '/home',
+          );
         } else {
-          Get.offAllNamed(Routes.welcome);
+          context.router.replace(const WelcomeRoute());
         }
       } catch (e) {
-        Get.offAllNamed(Routes.welcome);
+        context.router.replace(const WelcomeRoute());
       }
     });
   }
 
-  _onLoginSuccess(UserEntity user) {
+  _onLoginSuccess(BuildContext context, UserEntity user) {
+    Fluttertoast.showToast(msg: "đăng nhập thành công");
     currentUser.value = user;
     update();
-
-    Get.offAllNamed(Routes.home);
-  }
-
-  @override
-  void onInit() {
-    super.onInit();
-    chekcAuthState();
+    context.router.replace(const HomeRoute());
   }
 
   static AuthController get findOrInitialize {
