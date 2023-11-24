@@ -1,16 +1,13 @@
 import 'package:ar_zoo_explorers/features/account/userprofile/presentation/userprofile_cubit.dart';
 import 'package:ar_zoo_explorers/features/account/userprofile/presentation/userprofile_state.dart';
-import 'package:ar_zoo_explorers/features/base-model/FormBuilderTextField_Model.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../app/config/routes.dart';
 import '../../../../app/theme/icons.dart';
 import '../../../../base/base_state.dart';
+import '../../../../base/widgets/page_loading_indicator.dart';
+import '../../../../core/data/controller/auth_controller.dart';
 import '../../../../utils/widget/button_widget.dart';
 
 @RoutePage()
@@ -23,310 +20,181 @@ class UserProfilePage extends StatefulWidget {
 
 class _State
     extends BaseState<UserProfileState, UserProfileCubit, UserProfilePage> {
-  final TextEditingController dateController = TextEditingController();
-  List<String> listGender = ['Nam', 'Nữ'];
-  final FixedExtentScrollController scrollController =
-      FixedExtentScrollController(initialItem: 1);
-  String txtFullName = "";
-  String txtEmail = "";
-  String txtPhoneNumber = "";
-  String txtGender = "Nam";
-  DateTime dtBirthday = DateTime.now();
-  String txtAddress = "";
-  bool isApproved = false;
+  final controller = AuthController.findOrInitialize;
 
   @override
   Widget buildByState(BuildContext context, UserProfileState state) {
-    return Scaffold(
-        appBar: AppBar(
-            centerTitle: true,
-            title: SizedBox(
-                width: double.infinity,
-                child:
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Transform.scale(
+    return PageLoadingIndicator(
+        future: controller.getCurrentUser(context),
+        scaffold: Scaffold(
+          appBar: AppBar(
+              centerTitle: true,
+              title: const Text('Trang cá nhân',
+                  style: TextStyle(fontSize: 20, color: Colors.white)),
+              actions: const [SizedBox(width: 55)],
+              leading: AppIconButton(
+                  onPressed: () {
+                    context.router.pushNamed(Routes.home);
+                  },
+                  icon: Transform.scale(
                       scale: 1.5,
-                      child: Image.asset(AppImages.imgAppLogo, height: 45)),
-                  const SizedBox(width: 15),
-                  const Text('Trang cá nhân',
-                      style: TextStyle(fontSize: 20, color: Colors.white))
-                ])),
-            actions: const [SizedBox(width: 55)],
-            leading: AppIconButton(
-                onPressed: () {
-                  context.router.pushNamed(Routes.home);
-                },
-                icon: Transform.scale(
-                    scale: 1.5,
-                    child: Image.asset(AppIcons.icBack_png, height: 55)))),
-        body: SingleChildScrollView(
-            child: Column(children: [
-          ProfileHeader(),
-          Container(
-              padding: const EdgeInsets.only(left: 20, right: 20, bottom: 25),
-              child: Column(children: [
-                const SizedBox(height: 25),
-                TitlePage(),
-                const SizedBox(height: 20),
-                fbtfTextNormal(
-                    "Họ và tên*",
-                    FormBuilderTextFieldModel(
-                        name: "FullName",
-                        txtValue: txtFullName,
-                        hint_text: "Họ và tên đầy đủ",
-                        icon_prefix: AppIcons.icUser,
-                        isObscured: false,
-                        TIT: TextInputType.text)),
-                const SizedBox(height: 15),
-                fbtfTextNormal(
-                    "Số điện thoại*",
-                    FormBuilderTextFieldModel(
-                        name: "PhoneNumber",
-                        txtValue: txtPhoneNumber,
-                        hint_text: "Số điện thoại",
-                        icon_prefix: AppIcons.icPhone,
-                        isObscured: false,
-                        TIT: TextInputType.phone)),
-                const SizedBox(height: 15),
-                fbtfTextNormal(
-                    "Email*",
-                    FormBuilderTextFieldModel(
-                        name: "Email",
-                        txtValue: txtEmail,
-                        hint_text: "Địa chỉ Email",
-                        icon_prefix: AppIcons.icMail,
-                        isObscured: false,
-                        TIT: TextInputType.emailAddress)),
-                const SizedBox(height: 15),
-                fbtfTextNormal(
-                    "Địa chỉ*",
-                    FormBuilderTextFieldModel(
-                        name: "Address",
-                        txtValue: txtAddress,
-                        hint_text: "Địa chỉ",
-                        icon_prefix: AppIcons.icAddress,
-                        isObscured: false,
-                        TIT: TextInputType.text)),
-                const SizedBox(height: 15),
-                SelectBirthday(),
-                const SizedBox(height: 15),
-                SelectGender(),
-                const SizedBox(height: 25),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [SubmitButton(context)]),
-                const SizedBox(height: 25),
-              ]))
-        ])));
-  }
-
-  Widget fbtfTextNormal(String title, FormBuilderTextFieldModel items,
-      {BuildContext? context}) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Row(children: [
-        const SizedBox(width: 20),
-        Text(title,
-            style: const TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.bold))
-      ]),
-      const SizedBox(height: 5),
-      FormBuilderTextField(
-          name: items.name,
-          obscureText: items.isObscured,
-          keyboardType: items.TIT,
-          onChanged: (value) {
-            setState(() {
-              items.txtValue = value!;
-            });
-          },
-          decoration: InputDecoration(
-              hintText: items.hint_text,
-              prefixIcon: Image.asset(items.icon_prefix, height: 20, width: 20),
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-              contentPadding: const EdgeInsets.all(10)),
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          validator: FormBuilderValidators.compose(
-              [FormBuilderValidators.required(errorText: "")]))
-    ]);
-  }
-
-  Widget SubmitButton(BuildContext context) {
-    return ElevatedButton(
-        onPressed: () {
-          _showDialog(context);
-        },
-        style: TextButton.styleFrom(
-            minimumSize: const Size(180, 50),
-            backgroundColor: Colors.green, // Màu nền
-            padding: const EdgeInsets.symmetric(
-                horizontal: 15, vertical: 10), // Khoảng cách giữa chữ và nút
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30) // Đổ viền cho nút
-                )),
-        child: Row(children: [
-          const Text("Thay đổi thông tin",
-              style: TextStyle(fontSize: 20, color: Colors.white)),
-          const SizedBox(width: 5),
-          SizedBox(height: 24, child: Image.asset(AppIcons.icWhiteSubmit))
-        ]));
-  }
-
-  Widget SelectBirthday() {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      const Row(children: [
-        SizedBox(width: 20),
-        Text("Ngày sinh",
-            style: TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.bold))
-      ]),
-      const SizedBox(height: 5),
-      TextFormField(
-          readOnly: true, // Đánh dấu ô nhập liệu là chỉ đọc
-          controller: TextEditingController(
-              text: DateFormat('dd/MM/yyyy')
-                  .format(dtBirthday)), // Định dạng hiển thị
-          decoration: InputDecoration(
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-              hintText: 'Chọn ngày tháng',
-              prefixIcon: IconButton(
-                  icon: Image.asset(AppIcons.icCalendar),
-                  onPressed: () async {
-                    _selectDate(context);
-                  }),
-              contentPadding: const EdgeInsets.all(10)))
-    ]);
-  }
-
-  Widget TitlePage() {
-    return Container(
-        width: MediaQuery.of(context).size.width * 0.8,
-        padding: const EdgeInsets.all(15),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: Colors.grey, width: 1.5),
-            borderRadius: BorderRadius.circular(15.0)),
-        child: const Center(
-            child: Text("Thông tin cá nhân",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 25,
-                    color: Colors.blue,
-                    fontFamily: 'Times New Roman'))));
+                      child: Image.asset(AppIcons.icBack_png, height: 55)))),
+          body: SingleChildScrollView(
+            child: FutureBuilder(
+              future: controller.getCurrentUser(context),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  print("controller 3 ${controller.currentUser.value.email}");
+                  return Column(children: [
+                    ProfileHeader(),
+                    UserInformation(context),
+                  ]);
+                } else {
+                  return const CircularProgressIndicator();
+                }
+              },
+            ),
+          ),
+        ));
   }
 
   Widget ProfileHeader() {
     return Stack(children: [
-      SizedBox(width: MediaQuery.of(context).size.width, height: 150),
       SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height * 0.21,
+      ),
+      Container(
           width: MediaQuery.of(context).size.width,
-          height: 100,
-          child: ClipRect(
-              child: Image.asset(AppImages.imgAppLogoBG, fit: BoxFit.cover))),
+          height: MediaQuery.of(context).size.height * 0.16,
+          decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey, width: 2),
+              borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(15.0),
+                  bottomRight: Radius.circular(15.0)),
+              image: const DecorationImage(
+                  image: AssetImage(AppImages.imgAppLogoBG),
+                  fit: BoxFit.cover))),
       Positioned(
+          left: 0,
+          right: 0,
           bottom: 0,
-          left: 30,
-          child: Container(
-              width: 110,
-              height: 110,
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey, width: 2),
-                  borderRadius: BorderRadius.circular(10)),
-              child: ClipRect(
-                  child: Image.asset(AppImages.imgDefaultUser,
-                      fit: BoxFit.cover)))),
+          child: Center(
+              child: Container(
+                  width: MediaQuery.of(context).size.height * 0.15,
+                  height: MediaQuery.of(context).size.height * 0.15,
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white, width: 5),
+                      shape: BoxShape.circle,
+                      image: const DecorationImage(
+                          image: AssetImage(AppImages.imgProfile128x128),
+                          fit: BoxFit.cover))))),
     ]);
   }
 
-  Widget SelectGender() {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      const Row(children: [
-        SizedBox(width: 20),
-        Text("Giới tính",
-            style: TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.bold))
-      ]),
-      const SizedBox(height: 5),
-      CupertinoPicker(
-          itemExtent: 50.0,
-          scrollController: scrollController,
-          onSelectedItemChanged: (int index) {
-            setState(() {
-              txtGender = listGender[index];
-            });
-          },
-          children: listGender.map((String option) {
-            return Center(
-                child: Text(option, style: const TextStyle(fontSize: 20)));
-          }).toList())
+  Widget UserInformation(BuildContext context) {
+    return SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.35),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: const Offset(0, 3))
+              ],
+            ),
+            margin: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(15.0),
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              const Text(
+                "THÔNG TIN CÁ NHÂN",
+                style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 20),
+              UserInformationCustom(context),
+              Container(height: 2, width: double.infinity, color: Colors.grey),
+              UpdateInformation(),
+            ])));
+  }
+
+  Widget UserInformationCustom(BuildContext context) {
+    return Column(children: [
+      UserInformationItem(
+          context, "Họ và tên", controller.currentUser.value.fullname),
+      const SizedBox(height: 13),
+      UserInformationItem(
+          context, "Ngày sinh", controller.currentUser.value.birth),
+      const SizedBox(height: 13),
+      UserInformationItem(
+          context, "Địa chỉ email", controller.currentUser.value.email),
+      const SizedBox(height: 13),
+      UserInformationItem(
+          context, "Số điện thoại", controller.currentUser.value.phone),
+      const SizedBox(height: 13),
+      UserInformationItem(
+          context, "Địa chỉ", controller.currentUser.value.address),
+      const SizedBox(height: 13),
+      UserInformationItem(
+          context, "Công ty ", controller.currentUser.value.provider!),
+      const SizedBox(height: 13),
     ]);
   }
 
-  String formatDateString(String value) {
-    if (value.length == 8) {
-      return '${value.substring(0, 2)}/${value.substring(2, 4)}/${value.substring(4)}';
+  Widget UpdateInformation() {
+    return Center(
+        child: MaterialButton(
+            onPressed: () {
+              context.router.pushNamed(Routes.userinformation);
+            },
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              const Text("Thay đổi thông tin",
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black)),
+              ColorFiltered(
+                colorFilter:
+                    const ColorFilter.mode(Colors.black, BlendMode.srcIn),
+                child: Image.asset(AppIcons.icNext_png),
+              )
+            ])));
+  }
+
+  Widget UserInformationItem(
+      BuildContext context, String title, String content) {
+    String showContent = content;
+    if (content == '') {
+      showContent = "Chưa cập nhật";
     }
-    return value;
+    return Padding(
+        padding: const EdgeInsets.only(left: 15, right: 15),
+        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Expanded(
+            flex: 3,
+            child: SizedBox(
+              child: Text(title,
+                  style: TextStyle(
+                      fontSize: 17,
+                      color: Colors.grey[900],
+                      fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.start),
+            ),
+          ),
+          Expanded(
+              flex: 5,
+              child: Text(showContent,
+                  style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.grey[900],
+                      fontStyle: FontStyle.italic))),
+        ]));
   }
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: dtBirthday,
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != dtBirthday) {
-      setState(() {
-        dtBirthday = picked;
-      });
-    }
-  }
-
-  Future<void> _showDialog(BuildContext context) async {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-              title:
-                  const Text('Xác nhận thay đổi', textAlign: TextAlign.center),
-              content: const Text('Bạn đã chắc chắn với thông tin cập nhật?'),
-              actions: <Widget>[
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      TextButton(
-                          child: const Text('Không'),
-                          onPressed: () {
-                            context.router.pushNamed(Routes.home);
-                          }),
-                      TextButton(
-                          child: const Text('Có'),
-                          onPressed: () {
-                            context.router.pushNamed(Routes.userprofile);
-                          })
-                    ])
-              ]);
-        });
-  }
-
-  // void _TurnPage() {
-  //   Navigator.of(context).push(PageRouteBuilder(
-  //       opaque: false,
-  //       pageBuilder: (BuildContext context, _, __) {
-  //         return const AnimatedOpacity(
-  //             duration: Duration(milliseconds: 500),
-  //             opacity: 1.0,
-  //             child: HomePage());
-  //       }));
-  // }
 }

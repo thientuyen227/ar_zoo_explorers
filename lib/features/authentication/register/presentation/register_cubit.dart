@@ -17,6 +17,7 @@ class RegisterCubit extends BaseCubit<RegisterState> {
         name: 'email',
         hint_text: "Địa chỉ email",
         icon_prefix: AppIcons.icMail,
+        TIT: TextInputType.emailAddress,
         isObscured: false),
     FormBuilderTextFieldModel(
         name: 'fullname',
@@ -73,7 +74,7 @@ class RegisterCubit extends BaseCubit<RegisterState> {
 
   String? onCheckUsername(String? value) {
     if (value != null && value.isNotEmpty) {
-      final regex = RegExp(r'^[a-zA-Z]+$');
+      final regex = RegExp(r'^[a-zA-Z ]+$');
       if (!regex.hasMatch(value)) {
         return "Họ và tên không hợp lệ";
       }

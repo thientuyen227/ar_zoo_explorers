@@ -18,4 +18,17 @@ class UserEntity {
     required this.birth,
     required this.provider,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'fullname': fullname,
+      'email': email,
+      'phone': phone,
+      'address': address,
+      'birth': birth,
+      'avatarUrl': avatarUrl,
+      'provider': provider
+    };
+  }
 }

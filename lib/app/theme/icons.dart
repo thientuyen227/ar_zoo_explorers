@@ -36,9 +36,22 @@ class AppIcons {
   static const String icNext_png = "assets/icons/ic_next.png";
   static const String icWhiteSubmit = "assets/icons/ic_white_submit.png";
   static const String icDefaultUser = "assets/icons/ic_default_user.png";
-  static const String icLogout = "assets/icons/ic_logout.png";
   static const String icTerm = "assets/icons/ic_term.png";
+  static const String icFacebookCircle = "assets/icons/ic_facebook_circle.png";
+  static const String icGMailCircle = "assets/icons/ic_gmail_circle.png";
+  static const String icAppleCircle = "assets/icons/ic_apple_circle.png";
+  static const String icProvider = "assets/icons/ic_provider.png";
+
+  //Account Manager
+  static const String icUserProfile = "assets/icons/ic_userprofile.png";
+  static const String icChangePassword = "assets/icons/ic_changepassword.png";
+  static const String icTermsOfUse = "assets/icons/ic_termsofuse.png";
+  static const String icAnnouncement = "assets/icons/ic_announcement.png";
   static const String icEvent = "assets/icons/ic_event.png";
+  static const String icRating = "assets/icons/ic_rating.png";
+  static const String icLanguage = "assets/icons/ic_language.png";
+  static const String icHelp = "assets/icons/ic_help.png";
+  static const String icLogout = "assets/icons/ic_logout.png";
 
   //Icon animals
   static const String icWolf = "assets/icons/animals/wolf.png";

@@ -13,12 +13,12 @@ import 'app/app/app_cubit.dart';
 import 'di/injector.dart';
 
 Future<void> runMain() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  configureDependencies();
+  runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    configureDependencies();
 
-  await Firebase.initializeApp();
+    await Firebase.initializeApp();
 
-  runZonedGuarded(() {
     runApp(const MainPage());
   }, (error, stackTrace) {
     log("runZonedGuarded() $error", error: error, stackTrace: stackTrace);

@@ -1,13 +1,15 @@
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/base/widgets/page_loading_indicator.dart';
-import 'package:ar_zoo_explorers/features/authentication/login/model/OthersLoginButton_Model.dart';
 import 'package:ar_zoo_explorers/features/authentication/login/presentation/login_cubit.dart';
 import 'package:ar_zoo_explorers/features/authentication/login/presentation/login_state.dart';
 import 'package:ar_zoo_explorers/features/base-model/FormBuilderTextField_Model.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
@@ -25,76 +27,50 @@ class LoginPage extends StatefulWidget {
 }
 
 class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
-  final controller = AuthController();
+  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
+  final TextEditingController _textEditingController = TextEditingController();
+  final controller = AuthController.findOrInitialize;
   final _formKey = GlobalKey<FormBuilderState>();
-  String txtUsername = "";
-  String txtPassword = "";
-  bool isVisible = true;
-  bool isLoading = false;
-  bool isChecked = false;
-  List<OthersLoginButtonModel> listOthersLoginButton = [
-    OthersLoginButtonModel(
-        bgColor: Colors.red,
-        bdColor: Colors.red,
-        colorText: Colors.white,
-        icon: AppIcons.icGMail,
-        content: "Đăng nhập với GMail"),
-    OthersLoginButtonModel(
-        bgColor: Colors.blue,
-        bdColor: Colors.blue,
-        colorText: Colors.white,
-        icon: AppIcons.icFacebook,
-        content: "Đăng nhập với Facebook"),
-    OthersLoginButtonModel(
-        bgColor: Colors.white,
-        bdColor: Colors.grey,
-        colorText: Colors.black,
-        icon: AppIcons.icApple,
-        content: "Đăng nhập với ID Apple")
-  ];
 
   @override
   Widget buildByState(BuildContext context, LoginState state) {
     return Obx(() => GestureDetector(
-          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-          child: PageLoadingIndicator(
-            future: controller.loginFuture.value,
-            scaffold: Scaffold(
-                appBar: AppBar(
-                    centerTitle: true,
-                    title: const Text("Đăng nhập",
-                        style: TextStyle(
-                            fontSize: 20, color: Colors.yellowAccent)),
-                    leading: const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: []),
-                    actions: [SignUpAction()]),
-                body: FormBuilder(
-                  key: _formKey,
-                  child: SingleChildScrollView(
+        onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+        child: PageLoadingIndicator(
+          future: controller.loginFuture.value,
+          scaffold: Scaffold(
+            appBar: AppBar(
+                centerTitle: true,
+                title: const Text("ĐĂNG NHẬP",
+                    style: TextStyle(fontSize: 20, color: Colors.white)),
+                leading: const Column(children: []),
+                actions: [SignUpAction()]),
+            body: FormBuilder(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      color: Colors.blue[600],
                       child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.black.withOpacity(0.8),
+                                  spreadRadius: 5,
+                                  blurRadius: 7,
+                                  offset: const Offset(0, 3))
+                            ],
+                          ),
+                          margin: const EdgeInsets.all(20.0),
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, bottom: 25),
                           child: Column(children: [
                             const SizedBox(height: 12),
-                            Transform.scale(
-                                scale: 1.5, // Điều chỉnh tỷ lệ biểu tượng ở đây
-                                child: Image.asset(AppImages.imgAppLogo,
-                                    height: 250)),
-                            const SizedBox(height: 12),
-                            TextEmail(FormBuilderTextFieldModel(
-                                name: 'email',
-                                txtValue: txtUsername,
-                                hint_text: "Tên đăng nhập",
-                                icon_prefix: AppIcons.icUser,
-                                isObscured: false)),
-                            const SizedBox(height: 12),
-                            TextPassword(FormBuilderTextFieldModel(
-                                name: 'password',
-                                txtValue: txtPassword,
-                                hint_text: 'Mật khẩu',
-                                icon_prefix: AppIcons.icLock,
-                                isObscured: isVisible)),
+                            AppLogo(),
+                            EmailForm(cubit.ListFormItem[0]),
+                            PasswordForm(cubit.ListFormItem[1]),
                             Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
@@ -103,111 +79,142 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
                             FutureBuilder(
                               future: controller.loginFuture.value,
                               builder: (context, snapshot) => Align(
-                                child: ElevatedButton(
-                                  onPressed: snapshot.connectionState !=
-                                          ConnectionState.waiting
-                                      ? _onLoginPressed
-                                      : null,
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.blue),
-                                  child: const Text("Đăng nhập"),
-                                ),
+                                child: SubmitButton(context, snapshot),
                               ),
                             ),
-                            const SizedBox(height: 15),
-                            const Text("Đăng nhập bằng cách khác?",
-                                style: TextStyle(
-                                    fontSize: 20, color: Colors.black)),
-                            const SizedBox(height: 12),
-                            Container(
-                                padding: const EdgeInsets.all(15),
-                                decoration: BoxDecoration(
-                                  color: Colors.white, // Màu nền của Container
-                                  border: Border.all(
-                                      color: Colors.grey, // Màu viền
-                                      width: 1.5 // Độ dày của viền
-                                      ),
-                                  borderRadius: BorderRadius.circular(
-                                      15.0), // Độ cong góc của Container
-                                ),
-                                child: Column(
-                                    children: ListOthersLoginButton(
-                                        listOthersLoginButton)))
+                            const SizedBox(height: 25),
+                            Register(),
+                            const SizedBox(height: 20),
+                            ListOtherLoginButton(context),
                           ]))),
                 )),
           ),
-        ));
+        )));
+  }
+
+  Widget AppLogo() {
+    return Column(children: [
+      Transform.scale(
+          scale: 1.5, child: Image.asset(AppImages.imgAppLogo, height: 250)),
+      const SizedBox(height: 12)
+    ]);
+  }
+
+  Widget EmailForm(FormBuilderTextFieldModel items) {
+    return Column(children: [
+      FormBuilderTypeAhead(
+        name: items.name,
+        controller: _textEditingController,
+        onChanged: (value) {
+          List<String> filteredSuggestions = cubit.ListEmail;
+        },
+        itemBuilder: (context, suggestion) {
+          return ListTile(title: Text(suggestion));
+        },
+        suggestionsCallback: (pattern) async {
+          return cubit.ListEmail.where(
+              (suggestion) => suggestion.startsWith(pattern));
+        },
+        onSuggestionSelected: (suggestion) async {
+          _formKey.currentState?.patchValue(
+              {'password': await _secureStorage.read(key: suggestion ?? '')});
+        },
+        valueTransformer: (suggestion) => suggestion,
+        decoration: InputDecoration(
+            hintText: items.hint_text,
+            labelText: items.hint_text,
+            prefixIcon: Image.asset(items.icon_prefix, height: 20, width: 20),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+            contentPadding: const EdgeInsets.all(10)),
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        validator: FormBuilderValidators.compose([
+          FormBuilderValidators.required(errorText: "Hãy nhập email"),
+          FormBuilderValidators.email()
+        ]),
+      ),
+      const SizedBox(height: 12),
+    ]);
+  }
+
+  Widget PasswordForm(FormBuilderTextFieldModel items) {
+    int index = 1;
+    return Column(children: [
+      FormBuilderTextField(
+        name: items.name,
+        obscureText: items.isObscured,
+        keyboardType: TextInputType.text,
+        decoration: InputDecoration(
+            labelText: items.hint_text,
+            hintText: items.hint_text,
+            suffixIcon: IconButton(
+                onPressed: () {
+                  setState(() {
+                    cubit.onChangeObscuredStatus(index);
+                  });
+                },
+                icon: Icon(cubit.ListFormItem[index].isObscured
+                    ? Icons.visibility_off
+                    : Icons.visibility)),
+            prefixIcon: Image.asset(items.icon_prefix, height: 20, width: 20),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+            contentPadding: const EdgeInsets.all(10)),
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        validator: FormBuilderValidators.compose([
+          FormBuilderValidators.required(errorText: "Hãy nhập mật khẩu"),
+        ]),
+      ),
+      const SizedBox(height: 12),
+    ]);
+  }
+
+  Widget SubmitButton(BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+    return ElevatedButton(
+        onPressed: snapshot.connectionState != ConnectionState.waiting
+            ? () => _onLoginPressed(context)
+            : null,
+        style: ButtonStyle(
+            fixedSize: MaterialStateProperty.all(const Size(140, 50)),
+            backgroundColor: MaterialStateProperty.all(Colors.blue),
+            elevation: MaterialStateProperty.all(5),
+            shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20)))),
+        child: const Text("Submit",
+            style: TextStyle(fontSize: 20, color: Colors.white)));
   }
 
   Widget RememberPass() {
     return Row(children: [
       Checkbox(
-          value: isChecked,
+          value: cubit.isChecked,
           onChanged: (value) {
             setState(() {
-              isChecked = value!;
+              cubit.isChecked = value!;
             });
           }),
       const Text('Ghi nhớ mật khẩu',
-          style: TextStyle(color: Colors.black, fontSize: 17)),
+          style: TextStyle(color: Colors.black, fontSize: 16)),
       const SizedBox(width: 20)
     ]);
-  }
-
-  Widget SubmitButton() {
-    return TextButton(
-        onPressed: () {
-          context.router.pushNamed(Routes.home);
-          //_login(context);
-        },
-        style: TextButton.styleFrom(
-            minimumSize: const Size(200, 50),
-            backgroundColor: Colors.blue, // Màu nền
-            padding: const EdgeInsets.symmetric(
-                horizontal: 20, vertical: 10), // Khoảng cách giữa chữ và nút
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30), // Đổ viền cho nút
-            )),
-        child: const Text("Submit",
-            style: TextStyle(fontSize: 20, color: Colors.white)));
-  }
-
-  Widget TextEmail(FormBuilderTextFieldModel items) {
-    return FormBuilderTextField(
-      name: items.name,
-      obscureText: items.isObscured,
-      keyboardType: TextInputType.text,
-      decoration: InputDecoration(
-          hintText: items.hint_text,
-          prefixIcon: Image.asset(items.icon_prefix, height: 20, width: 20),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-          contentPadding: const EdgeInsets.all(10)),
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      validator: FormBuilderValidators.compose([
-        FormBuilderValidators.required(errorText: ""),
-      ]),
-    );
   }
 
   Widget ForgotPassword() {
     return GestureDetector(
         onTap: () {
-          print("Chức năng này chưa có!");
+          context.router.pushNamed(Routes.forgotpassword);
         },
         child: const Text('Quên mật khẩu',
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontStyle: FontStyle.italic,
-                fontSize: 18.5,
-                color: Colors.grey, // Màu chữ
-                decoration: TextDecoration.none // Gạch chân chữ
-                )));
+                fontSize: 17,
+                color: Colors.grey,
+                decoration: TextDecoration.none)));
   }
 
   Widget Register() {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       const Text("Bạn chưa có tài khoản?",
-          style: TextStyle(fontSize: 18, color: Colors.black)),
+          style: TextStyle(fontSize: 16.5, color: Colors.black)),
       const SizedBox(width: 7),
       GestureDetector(
           onTap: () {
@@ -217,126 +224,65 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontStyle: FontStyle.italic,
-                  fontSize: 18.5,
+                  fontSize: 17,
                   color: Colors.blue, // Màu chữ
                   decoration: TextDecoration.none // Gạch chân chữ
                   )))
     ]);
   }
 
-  Widget OhtersLoginButton(OthersLoginButtonModel items) {
-    return SizedBox(
-        height: 50,
-        //color: Colors.red,
-        child: ElevatedButton(
-            onPressed: () {
-              _showSnackBar('Chưa có!');
-            },
-            style: ElevatedButton.styleFrom(
-                side: BorderSide(
-                    width: 2, // Độ dày của viền
-                    color: items.bdColor), // Màu của viền
-                backgroundColor: items.bgColor,
-                shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(20.0)), // Bo góc bán kính: 20.0
-                shadowColor: Colors.grey), // Màu của bóng đổ
-            // Các thuộc tính khác như backgroundColor, padding, textStyle, ...),
-            child: Row(children: [
-              Container(
-                  height: 35,
-                  width: 35,
-                  decoration: BoxDecoration(
-                      color: Colors.white, // Màu nền của container
-                      borderRadius:
-                          BorderRadius.circular(10)), // Bo góc bán kính: 10
-                  child: Image.asset(items.icon, scale: 0.9)),
-              const SizedBox(width: 15),
-              Text(items.content,
-                  style: TextStyle(fontSize: 18, color: items.colorText))
-            ])));
-  }
-
-  List<Widget> ListOthersLoginButton(List<OthersLoginButtonModel> list) {
-    List<Widget> listWidget = [];
-    for (int i = 0; i < list.length; i++) {
-      listWidget.add(OhtersLoginButton(list[i]));
-      if (i < (list.length - 1)) {
-        listWidget.add(const SizedBox(height: 12));
-      }
-    }
-    return listWidget;
-  }
-
-  Widget TextPassword(FormBuilderTextFieldModel items) {
-    return FormBuilderTextField(
-      name: items.name,
-      obscureText: items.isObscured,
-      keyboardType: TextInputType.text,
-      onChanged: (value) {
-        // Lấy giá trị từ TextField khi nó thay đổi
-        setState(() {
-          txtPassword = value!;
-        });
-      },
-      decoration: InputDecoration(
-          hintText: items.hint_text,
-          suffixIcon: IconButton(
-              onPressed: () {
-                setState(() {
-                  isVisible = !isVisible;
-                  print(isVisible);
-                });
-              },
-              icon: Icon(isVisible ? Icons.visibility_off : Icons.visibility)),
-          prefixIcon: Image.asset(items.icon_prefix, height: 20, width: 20),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-          contentPadding: const EdgeInsets.all(10)),
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      validator: FormBuilderValidators.compose([
-        FormBuilderValidators.required(errorText: ""),
+  Widget ListOtherLoginButton(BuildContext context) {
+    return Column(children: [
+      OthersLoginTitle(),
+      const SizedBox(height: 15),
+      Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+        OtherLoginButton(context, 0),
+        OtherLoginButton(context, 1),
+        OtherLoginButton(context, 2)
       ]),
-    );
+      const SizedBox(height: 12),
+    ]);
   }
 
-  void _login(BuildContext context) {
-    // Simulate a login request (replace with your actual authentication logic)
-    setState(() {
-      isLoading = true;
-    });
-
-    Future.delayed(const Duration(seconds: 0), () {
-      setState(() {
-        isLoading = false;
-      });
-
-      if (txtUsername == 'admin' && txtPassword == 'admin') {
-        // Đăng nhập thành công
-        _showSnackBar('Đăng nhập thành công!');
-        context.router.pushNamed(Routes.home);
-      } else {
-        // Đăng nhập thất bại
-        _showSnackBar('Đăng nhập thất bại. Vui lòng kiểm tra lại!');
-      }
-    });
-  }
-
-  Widget RegisterButton() {
-    return TextButton(
-        onPressed: () {
-          context.router.pushNamed(Routes.register);
+  Widget OtherLoginButton(BuildContext context, int index) {
+    return GestureDetector(
+        onTap: () {
+          _onLoginWithOtherOptions(context, index);
         },
-        child: Row(children: [
-          const Text('Đăng ký',
-              style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold)),
-          const SizedBox(width: 2),
-          Image.asset(AppIcons.icNext_png, height: 24)
-        ]));
+        child: Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              //border: Border.all(color: Colors.grey, width: 2),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: ClipRect(
+                child: Image.asset(
+                    cubit.listOthersLoginButton[index].toString(),
+                    fit: BoxFit.cover))));
   }
 
+  Widget OthersLoginTitle() {
+    return Stack(alignment: Alignment.center, children: [
+      Container(height: 2, width: double.infinity, color: Colors.grey),
+      Container(
+          color: Colors.white,
+          padding: const EdgeInsets.all(8.0),
+          child: Text('Đăng nhập bằng cách khác',
+              style: TextStyle(fontSize: 15, color: Colors.grey[700]),
+              textAlign: TextAlign.center))
+    ]);
+  }
+
+  //NÚT ĐĂNG KÝ TRÊN THANH APPBAR
   Widget SignUpAction() {
     return ElevatedButton(
         onPressed: () {
@@ -354,19 +300,68 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
         ]));
   }
 
-  void _showSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(message),
-      duration: const Duration(seconds: 2),
-    ));
-  }
-
-  void _onLoginPressed() {
+  Future<void> _onLoginPressed(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
+      await _saveLastestUser(_formKey.currentState!.fields['email']!.value);
+      if (cubit.isChecked) {
+        await _savePassword(_formKey.currentState!.fields['email']!.value,
+            _formKey.currentState!.fields['password']!.value);
+      }
+      // ignore: use_build_context_synchronously
       controller.login(
+        context: context,
         email: _formKey.currentState!.fields['email']!.value,
         password: _formKey.currentState!.fields['password']!.value,
       );
     }
+  }
+
+  Future<void> _onLoginWithOtherOptions(BuildContext context, int index) async {
+    switch (index) {
+      case 0:
+        controller.loginWithFacebook(context);
+        break;
+      case 1:
+        controller.loginWithGoogle(context);
+        break;
+      case 2:
+        Fluttertoast.showToast(msg: "Tính năng sẽ cập nhật sau");
+        break;
+      default:
+        return;
+    }
+  }
+
+  Future<void> _savePassword(String email, String password) async {
+    await _secureStorage.write(key: email, value: password);
+  }
+
+  Future<void> _saveLastestUser(String email) async {
+    await _secureStorage.write(key: 'lastest', value: email);
+  }
+
+  Future<void> _loadListEmail() async {
+    Map<String, String> allValues = await _secureStorage.readAll();
+    if (allValues != null || allValues.isNotEmpty) {
+      cubit.ListEmail = allValues.keys.toList();
+    }
+  }
+
+  Future<void> _loadSavedPassword() async {
+    String? email = await _secureStorage.read(key: 'lastest' ?? '');
+    String? savedPassword = await _secureStorage.read(key: email ?? '');
+    if (savedPassword != null) {
+      _formKey.currentState?.patchValue({
+        'email': email,
+        'password': savedPassword,
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedPassword();
+    _loadListEmail();
   }
 }

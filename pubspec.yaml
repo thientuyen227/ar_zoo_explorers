@@ -92,6 +92,7 @@ dependencies:
   flutter_unity_widget: ^2022.2.0
   flutter_facebook_auth: ^5.0.11
   flutter_facebook_auth_platform_interface: ^4.1.1
+  form_builder_extra_fields: ^10.1.0
 
 dev_dependencies:
   flutter_test:

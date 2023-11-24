@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../app/config/routes.dart';
 import '../../../../app/theme/icons.dart';
+import '../../../../core/data/controller/auth_controller.dart';
 
 @RoutePage()
 class AccountManagerPage extends StatefulWidget {
@@ -20,124 +21,153 @@ class AccountManagerPage extends StatefulWidget {
 class _State extends BaseState<AccountManagerState, AccountManagerCubit,
     AccountManagerPage> {
   String urlAvatarUser = AppImages.imgProfile128x128;
+  final controller = AuthController.findOrInitialize;
+
   @override
   Widget buildByState(BuildContext context, AccountManagerState state) {
     return Scaffold(
         appBar: AppBar(
             centerTitle: true,
-            title: SizedBox(
-                width: double.infinity,
-                child:
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Transform.scale(
-                      scale: 1.5, // Điều chỉnh tỷ lệ biểu tượng ở đây
-                      child: Image.asset(AppImages.imgAppLogo, height: 45)),
-                  const SizedBox(width: 15),
-                  const Text('Quản lý tài khoản',
-                      style: TextStyle(fontSize: 20, color: Colors.white))
-                ])),
+            title: const Text('Quản lý tài khoản',
+                style: TextStyle(fontSize: 20, color: Colors.white)),
             actions: const [SizedBox(width: 45)],
-            leading: AppIconButton(
-                onPressed: () {
-                  context.router.pushNamed(Routes.home);
-                },
-                icon: Transform.scale(
-                    scale: 1.5,
-                    child: Image.asset(AppIcons.icBack_png, height: 55)))),
+            leading: TurnBack()),
         body: SingleChildScrollView(
             child: Container(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [AccountManagerTitle(), AccountManagerBody()]))));
+                child: Column(children: [
+          AccountManagerTitle(),
+          AccountManagerBody(context)
+        ]))));
   }
 
   Widget AccountManagerTitle() {
     return Container(
+        color: const Color.fromARGB(255, 228, 224, 224),
         width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.12,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey, width: 1.0),
-          color: Colors.lightBlue[50],
-          //borderRadius: BorderRadius.circular(5),
-        ),
+        height: MediaQuery.of(context).size.height * 0.22,
         child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Row(children: [
-              Transform.scale(
-                  scale: 1, child: Image.asset(urlAvatarUser, height: 65)),
-              const SizedBox(width: 20),
-              const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Nguyễn Văn A',
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold)),
-                    SizedBox(width: 10),
-                    Text('anguyenvan123@gmail.com',
-                        style: TextStyle(fontSize: 16, color: Colors.black))
-                  ])
-            ])));
+            padding: const EdgeInsets.all(15),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                      width: MediaQuery.of(context).size.height * 0.13,
+                      height: MediaQuery.of(context).size.height * 0.13,
+                      decoration: BoxDecoration(
+                          border:
+                              Border.all(color: Colors.blue.shade600, width: 5),
+                          shape: BoxShape.circle,
+                          image: const DecorationImage(
+                              image: AssetImage(AppImages.imgProfile128x128),
+                              fit: BoxFit.cover))),
+                  Text(controller.currentUser.value.fullname,
+                      style: const TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold))
+                ])));
   }
 
-  Widget AccountManagerBody() {
+  Widget AccountManagerBody(BuildContext context) {
     return Container(
         width: MediaQuery.of(context).size.width,
-        // constraints:
-        //     BoxConstraints(minHeight: MediaQuery.of(context).size.height * 0.4),
-        decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey, width: 1.0),
-            borderRadius: BorderRadius.circular(5)),
+        color: const Color.fromARGB(255, 228, 224, 224),
         child: SingleChildScrollView(
-            child: Column(children: [
-          OptionButton("Trang cá nhân", AppIcons.icDefaultUser,
-              AccountManagerType.UserProfilePage),
-          OptionButton("Đổi mật khẩu", AppIcons.icLock,
-              AccountManagerType.ChangePassword),
-          OptionButton("Điều khoản sử dụng", AppIcons.icTerm,
-              AccountManagerType.ViewTerm),
-          OptionButton("Sự kiện", AppIcons.icEvent, AccountManagerType.Event),
-          OptionButton(
-              "Đăng xuất", AppIcons.icLogout, AccountManagerType.Logout)
-        ])));
+            child: Padding(
+                padding: const EdgeInsets.only(right: 25, left: 25, bottom: 25),
+                child: Column(children: [
+                  OptionButton(context, "Trang cá nhân", AppIcons.icUserProfile,
+                      AccountManagerType.UserProfilePage),
+                  OptionButton(
+                      context,
+                      "Đổi mật khẩu",
+                      AppIcons.icChangePassword,
+                      AccountManagerType.ChangePassword),
+                  const SizedBox(height: 15),
+                  OptionButton(context, "Thông báo", AppIcons.icAnnouncement,
+                      AccountManagerType.Announcement),
+                  OptionButton(context, "Sự kiện", AppIcons.icEvent,
+                      AccountManagerType.Event),
+                  const SizedBox(height: 15),
+                  OptionButton(context, "Thay đổi ngôn ngữ",
+                      AppIcons.icLanguage, AccountManagerType.ChangeLanguage),
+                  OptionButton(context, "Điều khoản sử dụng",
+                      AppIcons.icTermsOfUse, AccountManagerType.ViewTerm),
+                  OptionButton(context, "Đánh giá ứng dụng", AppIcons.icRating,
+                      AccountManagerType.RatingApplication),
+                  OptionButton(context, "Trợ giúp cho bạn", AppIcons.icHelp,
+                      AccountManagerType.Assistance),
+                  const SizedBox(height: 15),
+                  OptionButton(context, "Đăng xuất", AppIcons.icLogout,
+                      AccountManagerType.Logout)
+                ]))));
   }
 
-  Widget OptionButton(
-      String optionContent, String optionIcon, AccountManagerType type) {
-    return Container(
-        decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey, width: 1.0),
-            borderRadius: BorderRadius.circular(10)),
-        height: 65,
-        child: TextButton(
-            onPressed: () {
-              _onTapSettings(type);
-            },
-            child: Row(children: [
-              const SizedBox(width: 15),
-              Image.asset(optionIcon, height: 24),
-              const SizedBox(width: 24),
-              Text(optionContent,
-                  style: TextStyle(fontSize: 18, color: Colors.grey[600]))
-            ])));
+  Widget OptionButton(BuildContext context, String optionContent,
+      String optionIcon, AccountManagerType type) {
+    return Column(children: [
+      SizedBox(
+          height: MediaQuery.of(context).size.height * 0.09,
+          child: ElevatedButton(
+              onPressed: () {
+                _onTapSettings(context, type);
+              },
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                      const Color.fromARGB(250, 250, 250, 250)),
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)))),
+              child: Row(children: [
+                Expanded(
+                    flex: 1,
+                    child: Transform.scale(
+                        scale: 1.25,
+                        child: Image.asset(optionIcon, height: 24))),
+                Expanded(
+                    flex: 5,
+                    child: Text(optionContent,
+                        style: const TextStyle(
+                            fontSize: 18, color: Colors.black))),
+                ColorFiltered(
+                  colorFilter:
+                      const ColorFilter.mode(Colors.black, BlendMode.srcIn),
+                  child: Transform.scale(
+                      scale: 1.15, child: Image.asset(AppIcons.icNext_png)),
+                )
+              ]))),
+      const SizedBox(height: 3)
+    ]);
   }
 
-  Future<void> _onTapSettings(AccountManagerType type) async {
+  Widget TurnBack() {
+    return AppIconButton(
+        onPressed: () {
+          context.router.pushNamed(Routes.home);
+        },
+        icon: Transform.scale(
+            scale: 1.5, child: Image.asset(AppIcons.icBack_png, height: 55)));
+  }
+
+  Future<void> _onTapSettings(
+      BuildContext context, AccountManagerType type) async {
     switch (type) {
       case AccountManagerType.UserProfilePage:
-        context.router.pushNamed(Routes.home);
+        context.router.pushNamed(Routes.userprofile);
         break;
       case AccountManagerType.Logout:
-        context.router.pushNamed(Routes.login);
+        controller.logout(context);
         break;
       case AccountManagerType.ChangePassword:
+        context.router.pushNamed(Routes.changepassword);
+      case AccountManagerType.Announcement:
         print("Chưa có");
+        break;
       case AccountManagerType.ViewTerm:
-        print("Chưa có");
+        context.router.pushNamed(Routes.termofservice);
+        break;
       case AccountManagerType.Event:
         print("Chưa có");
+        break;
       default:
     }
   }

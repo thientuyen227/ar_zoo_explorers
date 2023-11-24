@@ -46,58 +46,58 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
                 body: FormBuilder(
                     key: _formKey,
                     child: SingleChildScrollView(
-                        child: Stack(children: [
-                      Container(
-                          width: double.infinity,
-                          color: Colors.grey,
-                          child: Container(
-                              decoration: BoxDecoration(
+                        child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            color: Colors.blue[600],
+                            child: Container(
+                                decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(15),
                                   boxShadow: [
                                     BoxShadow(
-                                        color: Colors.black.withOpacity(0.1),
+                                        color: Colors.black.withOpacity(0.8),
                                         spreadRadius: 5,
                                         blurRadius: 7,
                                         offset: const Offset(0, 3))
-                                  ]),
-                              margin: const EdgeInsets.all(20.0),
-                              padding: const EdgeInsets.only(
-                                  left: 30, right: 30, bottom: 25),
-                              child: Column(children: [
-                                const SizedBox(height: 50),
-                                TextForm(cubit.ListFormItem[0],
-                                    TextInputType.emailAddress, 0),
-                                const SizedBox(height: 20),
-                                TextForm(cubit.ListFormItem[1],
-                                    TextInputType.text, 1),
-                                const SizedBox(height: 20),
-                                PasswordForm(cubit.ListFormItem[2], 2),
-                                const SizedBox(height: 20),
-                                PasswordForm(cubit.ListFormItem[3], 3),
-                                const SizedBox(height: 20),
-                                TermOfUse(),
-                                const SizedBox(height: 20),
-                                FutureBuilder(
-                                    future: controller.signUpFuture.value,
-                                    builder: (context, snapshot) =>
-                                        Align(child: SubmitButton(snapshot))),
-                                const SizedBox(height: 15),
-                                OthersLoginTitle(),
-                                const SizedBox(height: 15),
-                                Container(
-                                    padding: const EdgeInsets.all(15),
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        border: Border.all(
-                                            color: Colors.grey, width: 1.5),
-                                        borderRadius:
-                                            BorderRadius.circular(15.0)),
-                                    child: Column(
-                                        children: ListOthersLoginButton(
-                                            cubit.listOthersLoginButton)))
-                              ])))
-                    ])))))));
+                                  ],
+                                ),
+                                margin: const EdgeInsets.all(20.0),
+                                padding: const EdgeInsets.only(
+                                    left: 30, right: 30, bottom: 25),
+                                child: Column(children: [
+                                  const SizedBox(height: 50),
+                                  // ĐỊA CHỈ EMAIL
+                                  TextForm(cubit.ListFormItem[0],
+                                      TextInputType.emailAddress, 0),
+                                  // HỌ VÀ TÊN
+                                  TextForm(cubit.ListFormItem[1],
+                                      TextInputType.text, 1),
+                                  //NHẬP MẬT KHẨU
+                                  PasswordForm(cubit.ListFormItem[2], 2),
+                                  // NHẬP LẠI MẬT KHẨU
+                                  PasswordForm(cubit.ListFormItem[3], 3),
+                                  //ĐIỀU KHOẢN SỬ DỤNG
+                                  TermOfUse(),
+                                  const SizedBox(height: 20),
+                                  FutureBuilder(
+                                      future: controller.signUpFuture.value,
+                                      builder: (context, snapshot) =>
+                                          Align(child: SubmitButton(snapshot))),
+                                  const SizedBox(height: 15),
+                                  OthersLoginTitle(),
+                                  const SizedBox(height: 15),
+                                  Container(
+                                      padding: const EdgeInsets.all(15),
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                              color: Colors.grey, width: 1.5),
+                                          borderRadius:
+                                              BorderRadius.circular(15.0)),
+                                      child: Column(
+                                          children: ListOthersLoginButton(
+                                              cubit.listOthersLoginButton)))
+                                ])))))))));
   }
 
   Widget SubmitButton(AsyncSnapshot<dynamic> snapshot) {
@@ -119,50 +119,58 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
 
   Widget TextForm(
       FormBuilderTextFieldModel items, TextInputType type, int index) {
-    return FormBuilderTextField(
-        name: items.name,
-        obscureText: items.isObscured,
-        keyboardType: type,
-        decoration: InputDecoration(
-            hintText: items.hint_text,
-            prefixIcon: Image.asset(items.icon_prefix, height: 20, width: 20),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-            contentPadding: const EdgeInsets.all(10)),
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        validator: FormBuilderValidators.compose([
-          FormBuilderValidators.required(errorText: "Không thể để trống"),
-          (value) {
-            return _onHandleValidator(index, value);
-          }
-        ]));
+    return Column(children: [
+      FormBuilderTextField(
+          name: items.name,
+          obscureText: items.isObscured,
+          keyboardType: type,
+          decoration: InputDecoration(
+              hintText: items.hint_text,
+              prefixIcon: Image.asset(items.icon_prefix, height: 20, width: 20),
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+              contentPadding: const EdgeInsets.all(10)),
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          validator: FormBuilderValidators.compose([
+            FormBuilderValidators.required(errorText: "Không thể để trống"),
+            (value) {
+              return _onHandleValidator(index, value);
+            }
+          ])),
+      const SizedBox(height: 20),
+    ]);
   }
 
   Widget PasswordForm(FormBuilderTextFieldModel items, int index) {
-    return FormBuilderTextField(
-        name: items.name,
-        obscureText: items.isObscured,
-        keyboardType: TextInputType.text,
-        decoration: InputDecoration(
-            hintText: items.hint_text,
-            suffixIcon: IconButton(
-                onPressed: () {
-                  setState(() {
-                    cubit.onChangeObscuredStatus(index);
-                  });
-                },
-                icon: Icon(cubit.ListFormItem[index].isObscured
-                    ? Icons.visibility_off
-                    : Icons.visibility)),
-            prefixIcon: Image.asset(items.icon_prefix, height: 20, width: 20),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-            contentPadding: const EdgeInsets.all(10)),
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        validator: FormBuilderValidators.compose([
-          FormBuilderValidators.required(errorText: "Không thể để trống"),
-          (value) {
-            return _onHandleValidator(index, value);
-          }
-        ]));
+    return Column(children: [
+      FormBuilderTextField(
+          name: items.name,
+          obscureText: items.isObscured,
+          keyboardType: TextInputType.text,
+          decoration: InputDecoration(
+              hintText: items.hint_text,
+              suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      cubit.onChangeObscuredStatus(index);
+                    });
+                  },
+                  icon: Icon(cubit.ListFormItem[index].isObscured
+                      ? Icons.visibility_off
+                      : Icons.visibility)),
+              prefixIcon: Image.asset(items.icon_prefix, height: 20, width: 20),
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+              contentPadding: const EdgeInsets.all(10)),
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          validator: FormBuilderValidators.compose([
+            FormBuilderValidators.required(errorText: "Không thể để trống"),
+            (value) {
+              return _onHandleValidator(index, value);
+            }
+          ])),
+      const SizedBox(height: 20),
+    ]);
   }
 
   Widget TermOfUse() {
@@ -211,8 +219,7 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
                 backgroundColor: items.bgColor,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0)),
-                shadowColor: Colors.grey), // Màu của bóng đổ
-
+                shadowColor: Colors.grey),
             child: Row(children: [
               Container(
                   height: 35,
@@ -255,43 +262,28 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
     switch (index) {
       case 0:
         return cubit.onCheckEmail(value);
-        break;
       case 1:
         return cubit.onCheckUsername(value);
-        break;
       case 2:
         return cubit.onCheckPassword(value);
-        break;
       case 3:
         return cubit.onCheckConfirmPassword(value, confirmPassword);
-        break;
       default:
         return null;
-        break;
     }
   }
 
-  void _showToastMessage(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.CENTER_LEFT,
-      timeInSecForIosWeb: 1,
-      backgroundColor: Colors.grey[700],
-      textColor: Colors.white,
-      fontSize: 16.0,
-    );
-  }
-
   void _onSignUpPressed() {
-    if (!cubit.isChecked) {
-      _showToastMessage("Bạn chưa đồng ý với điều khoản!");
-    } else if (_formKey.currentState!.validate()) {
-      controller.signUp(
-          fullname: _formKey.currentState!.fields['fullname']!.value,
-          email: _formKey.currentState!.fields['email']!.value,
-          password: _formKey.currentState!.fields['password']!.value,
-          fromOnboard: true);
+    if (_formKey.currentState!.validate()) {
+      if (!cubit.isChecked) {
+        Fluttertoast.showToast(msg: "Bạn chưa đồng ý với điều khoản");
+      } else {
+        controller.signUp(
+            fullname: _formKey.currentState!.fields['fullname']!.value,
+            email: _formKey.currentState!.fields['email']!.value,
+            password: _formKey.currentState!.fields['password']!.value,
+            fromOnboard: true);
+      }
     }
   }
 }

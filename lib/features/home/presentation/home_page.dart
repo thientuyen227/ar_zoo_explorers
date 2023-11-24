@@ -14,6 +14,8 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 import '../../../app/config/routes.dart';
+import '../../../base/widgets/page_loading_indicator.dart';
+import '../../../core/data/controller/auth_controller.dart';
 import 'home_cubit.dart';
 
 @RoutePage()
@@ -26,6 +28,9 @@ class HomePage extends StatefulWidget {
 
 class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   final PageController _adsController = PageController();
+  final controller = AuthController.findOrInitialize;
+  final _formKey = GlobalKey<FormBuilderState>();
+
   String urlAvatarUser = AppIcons.icDefaultUser;
   String txtSearch = "";
   int _adsCurrentPage = 0;
@@ -41,49 +46,48 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
 
   @override
   Widget buildByState(BuildContext context, HomeState state) {
-    return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text("Home Page",
-              style: TextStyle(fontSize: 20, color: Colors.yellow)),
-          leading:
-              Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            AppIconButton(
-                onPressed: () {
-                  _turnSettingPage();
-                },
-                icon: const Icon(Icons.settings, color: Colors.white),
-                borderRadius: AppDimens.radius200,
-                padding: const EdgeInsets.all(AppDimens.spacing5),
-                width: AppDimens.size30.width,
-                height: AppDimens.size30.height,
-                backgroundColor: AppColorScheme.dark().cardColor)
-          ]),
-          actions: [
-            const Center(
-                child: Text('Fullname',
-                    style: TextStyle(fontSize: 16, color: Colors.white))),
-            ProfileCustom(),
-            IconButton(
-                onPressed: () {
-                  context.router.pushNamed(Routes.testunity);
-                },
-                icon: const Icon(Icons.ac_unit))
-          ],
-          //toolbarHeight: 50,
-        ),
-        body: SingleChildScrollView(
-            child: Container(
-                padding: const EdgeInsets.all(15),
-                child: Column(children: [
-                  const SizedBox(height: 12),
-                  _bulildSearchBar(FormBuilderTextFieldModel(
-                      name: "Search",
-                      hint_text: "search",
-                      icon_suffix: AppIcons.icSearch)),
-                  _buildSlider(context, listAdvertisement),
-                  _buildListArButton(listButtonObject)
-                ]))));
+    return PageLoadingIndicator(
+        future: controller.getCurrentUser(context),
+        scaffold: Scaffold(
+            appBar: AppBar(
+              centerTitle: true,
+              title: const Text("Home Page",
+                  style: TextStyle(fontSize: 20, color: Colors.yellow)),
+              leading: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AppIconButton(
+                        onPressed: () {
+                          _turnSettingPage();
+                        },
+                        icon: const Icon(Icons.settings, color: Colors.white),
+                        borderRadius: AppDimens.radius200,
+                        padding: const EdgeInsets.all(AppDimens.spacing5),
+                        width: AppDimens.size30.width,
+                        height: AppDimens.size30.height,
+                        backgroundColor: AppColorScheme.dark().cardColor)
+                  ]),
+              actions: [
+                ProfileCustom(),
+                IconButton(
+                    onPressed: () {
+                      context.router.pushNamed(Routes.testunity);
+                    },
+                    icon: const Icon(Icons.ac_unit))
+              ],
+            ),
+            body: SingleChildScrollView(
+                child: Container(
+                    padding: const EdgeInsets.all(15),
+                    child: Column(children: [
+                      const SizedBox(height: 12),
+                      _bulildSearchBar(FormBuilderTextFieldModel(
+                          name: "Search",
+                          hint_text: "search",
+                          icon_suffix: AppIcons.icSearch)),
+                      _buildSlider(context, listAdvertisement),
+                      _buildListArButton(listButtonObject)
+                    ])))));
   }
 
   Widget _buildListArButton(List<ButtonObject> list) {
@@ -232,20 +236,26 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   }
 
   Widget ProfileCustom() {
-    return PopupMenuButton(
-      icon: Image.asset(urlAvatarUser, height: 24),
-      itemBuilder: (context) => [
-        PopupMenuItem(
-          value: 1,
-          child: const Text("Trang cá nhân",
-              style: TextStyle(fontSize: 18, color: Colors.black87)),
-          onTap: () {
-            context.router.pushNamed(Routes.userprofile);
-          },
-        )
-      ],
-      offset: const Offset(0, kTextTabBarHeight),
-    );
+    //Sửa lại Thành AppIConButton
+    return ElevatedButton(
+        style: ButtonStyle(elevation: MaterialStateProperty.all(0)),
+        onPressed: () {
+          context.router.pushNamed(Routes.userprofile);
+        },
+        child: Row(children: [
+          Text(_nameCustom()),
+          const SizedBox(width: 5),
+          Image.asset(urlAvatarUser, height: 24, width: 24),
+        ]));
+  }
+
+  String _nameCustom() {
+    List<String> parts = controller.currentUser.value.fullname.split(" ");
+    String ten = parts.last;
+    if (ten.length > 8) {
+      ten = '${ten.substring(0, 5)}...';
+    }
+    return ten;
   }
 
   void _isLoved(int index) {
@@ -278,5 +288,6 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
         _adsCurrentPage = _adsController.page!.round();
       });
     });
+    controller.getCurrentUser(context);
   }
 }

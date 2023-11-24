@@ -3,5 +3,10 @@ enum AccountManagerType {
   Logout,
   ChangePassword,
   ViewTerm,
-  Event
+  Event,
+  ApplicationInformation,
+  ChangeLanguage,
+  RatingApplication,
+  Assistance,
+  Announcement
 }
