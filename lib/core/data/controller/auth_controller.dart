@@ -137,6 +137,33 @@ class AuthController extends ControllerHelper {
         onSuccess: (success) => {currentUser.value = success.data, update()});
   }
 
+  Future<UserEntity> updateUserProfile(
+    BuildContext context, {
+    required String id,
+    required String fullname,
+    required String phone,
+    required String avatarUrl,
+    required String address,
+    required String birth,
+    required String provider,
+  }) async {
+    return processRequest<UserEntity>(
+        request: () => _authRepository.updateUserProfile(
+            id: id,
+            fullname: fullname,
+            phone: phone,
+            avatarUrl: avatarUrl,
+            address: address,
+            birth: birth,
+            provider: provider),
+        onSuccess: (success) => {
+              _setCurrentUser(context, success.data),
+              Fluttertoast.showToast(msg: "Cập nhật thông tin thành công!")
+            },
+        onFailure: (failure) =>
+            Fluttertoast.showToast(msg: "Cập nhật thông tin thất bại!"));
+  }
+
   logout(BuildContext context) {
     _authRepository.logout();
     update();

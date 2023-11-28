@@ -3,6 +3,7 @@ import 'package:ar_zoo_explorers/features/account/userprofile/presentation/userp
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../app/config/app_router.gr.dart';
 import '../../../../app/config/routes.dart';
 import '../../../../app/theme/icons.dart';
 import '../../../../base/base_state.dart';
@@ -152,7 +153,7 @@ class _State
     return Center(
         child: MaterialButton(
             onPressed: () {
-              context.router.pushNamed(Routes.userinformation);
+              context.router.popAndPush(const UserInformationRoute());
             },
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               const Text("Thay đổi thông tin",

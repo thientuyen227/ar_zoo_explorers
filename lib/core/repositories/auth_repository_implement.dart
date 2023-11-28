@@ -128,4 +128,36 @@ class AuthRepositoryImplement implements AuthRepository {
           data: Fluttertoast.showToast(msg: "Gửi email thành công!"));
     });
   }
+
+  @override
+  Future<Either<Failure, Success<UserEntity>>> updateUserProfile(
+      {required String id,
+      required String fullname,
+      required String phone,
+      required String avatarUrl,
+      required String address,
+      required String birth,
+      required String provider}) {
+    return ResponseHandler.processResponse(() async {
+      return Success(
+        data: await _firestoreSource.updateUser(
+                id: id,
+                fullname: fullname,
+                phone: phone,
+                avatarUrl: avatarUrl,
+                address: address,
+                birth: birth,
+                provider: provider) ??
+            UserEntity(
+                id: '',
+                avatarUrl: '',
+                fullname: '',
+                email: '',
+                provider: '',
+                phone: '',
+                address: '',
+                birth: ''),
+      );
+    });
+  }
 }

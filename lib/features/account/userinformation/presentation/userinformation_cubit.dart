@@ -1,6 +1,7 @@
 import 'package:ar_zoo_explorers/features/account/userinformation/presentation/userinformation_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
+import 'package:internationalization/internationalization.dart';
 
 import '../../../../app/theme/icons.dart';
 import '../../../../base/base_cubit.dart';
@@ -9,6 +10,12 @@ import '../../../base-model/FormBuilderTextField_Model.dart';
 @injectable
 class UserInformationCubit extends BaseCubit<UserInformationState> {
   UserInformationCubit() : super(UserInformationState());
+
+  DateTime dtBirthday = DateTime.now();
+  DateFormat dateFormat = DateFormat("dd/MM/yyyy");
+  String userAvatar = "";
+  String userBackground = "";
+
   List<FormBuilderTextFieldModel> ListFormItem = [
     FormBuilderTextFieldModel(
         name: "fullname",
@@ -21,7 +28,7 @@ class UserInformationCubit extends BaseCubit<UserInformationState> {
         icon_prefix: AppIcons.icMail,
         TIT: TextInputType.emailAddress),
     FormBuilderTextFieldModel(
-        name: "phoneNumber",
+        name: "phone",
         hint_text: "Số điện thoại",
         icon_prefix: AppIcons.icPhone,
         TIT: TextInputType.phone),
@@ -36,4 +43,26 @@ class UserInformationCubit extends BaseCubit<UserInformationState> {
         icon_prefix: AppIcons.icProvider,
         TIT: TextInputType.text)
   ];
+
+  void setBirthday(String? date) {
+    if (date != "" && date != null) {
+      dtBirthday = dateFormat.parse(date);
+    }
+  }
+
+  void setUserAvatar(String? url) {
+    if (url != "" && url != null) {
+      userAvatar = url;
+    }
+  }
+
+  void setUserBackground(String? url) {
+    if (url != "" && url != null) {
+      userBackground = url;
+    }
+  }
+
+  String getBirthday() {
+    return dateFormat.format(dtBirthday);
+  }
 }

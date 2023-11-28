@@ -61,6 +61,26 @@ class FirebaseFirestoreSource {
         .update({"title": title, "icon": icon, "link": link, "name": name});
     return getAnimal(id);
   }
+
+  Future<UserModel?> updateUser({
+    required String id,
+    required String fullname,
+    required String phone,
+    required String avatarUrl,
+    required String address,
+    required String birth,
+    required String provider,
+  }) async {
+    await _userModelCollectionRef.doc(id).update({
+      'fullname': fullname,
+      'phone': phone,
+      'address': address,
+      'birth': birth,
+      'avatarUrl': avatarUrl,
+      'provider': provider
+    });
+    return getUser(id);
+  }
 }
 
 class FirebaseFirestoreLanguageKeys {
