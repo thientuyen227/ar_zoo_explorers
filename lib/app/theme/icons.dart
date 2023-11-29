@@ -41,6 +41,7 @@ class AppIcons {
   static const String icGMailCircle = "assets/icons/ic_gmail_circle.png";
   static const String icAppleCircle = "assets/icons/ic_apple_circle.png";
   static const String icProvider = "assets/icons/ic_provider.png";
+  static const String icProvincial = "assets/icons/ic_provincial.png";
 
   //Account Manager
   static const String icUserProfile = "assets/icons/ic_userprofile.png";

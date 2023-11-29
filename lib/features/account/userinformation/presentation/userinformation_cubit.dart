@@ -13,6 +13,8 @@ class UserInformationCubit extends BaseCubit<UserInformationState> {
 
   DateTime dtBirthday = DateTime.now();
   DateFormat dateFormat = DateFormat("dd/MM/yyyy");
+  String address = "";
+  String provincial = "An Giang";
   String userAvatar = "";
   String userBackground = "";
 
@@ -60,6 +62,12 @@ class UserInformationCubit extends BaseCubit<UserInformationState> {
     if (url != "" && url != null) {
       userBackground = url;
     }
+  }
+
+  void setAddress(String value) {
+    List<String> values = value.split(', ');
+    address = values[0].trim();
+    provincial = values[1].trim();
   }
 
   String getBirthday() {

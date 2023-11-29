@@ -1,10 +1,12 @@
 import 'package:ar_zoo_explorers/base/widgets/page_loading_indicator.dart';
+import 'package:ar_zoo_explorers/features/account/userinformation/model/provincial_name.dart';
 import 'package:ar_zoo_explorers/features/account/userinformation/presentation/userinformation_cubit.dart';
 import 'package:ar_zoo_explorers/features/account/userinformation/presentation/userinformation_state.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:internationalization/internationalization.dart';
@@ -54,19 +56,19 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
                           TextForm("Địa chỉ email", 1,
                               controller.currentUser.value.email),
                           DateForm(),
+                          RadioForm("Giới tính"),
                           TextForm("Số điện thoại", 2,
                               controller.currentUser.value.phone),
-                          TextForm("Địa chỉ", 3,
-                              controller.currentUser.value.address),
+                          DropdownForm("Tỉnh / Thành phố"),
+                          TextForm("Địa chỉ", 3, cubit.address),
                           TextForm("Công ty / Trường học", 4,
                               controller.currentUser.value.provider)
                         ])),
+                    const Divider(),
                     FutureBuilder(
-                      future: controller.getCurrentUser(context),
-                      builder: (context, snapshot) => Align(
-                        child: SubmitButton(context, snapshot),
-                      ),
-                    ),
+                        future: controller.getCurrentUser(context),
+                        builder: (context, snapshot) =>
+                            Align(child: SubmitButton(context, snapshot))),
                     const SizedBox(height: 20),
                   ]))),
             ))));
@@ -77,7 +79,7 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
       TitleForm(title),
       const SizedBox(height: 10),
       BodyForm(index, content),
-      const SizedBox(height: 12),
+      const SizedBox(height: 12)
     ]);
   }
 
@@ -100,7 +102,6 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
       enabled: (cubit.ListFormItem[index].name == 'email') ? false : true,
       decoration: InputDecoration(
           hintText: cubit.ListFormItem[index].hint_text,
-          labelText: cubit.ListFormItem[index].hint_text,
           prefixIcon: Image.asset(cubit.ListFormItem[index].icon_prefix,
               height: 20, width: 20),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
@@ -110,6 +111,44 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
         FormBuilderValidators.required(errorText: "Không thể để trống"),
       ]),
     );
+  }
+
+  Widget DropdownForm(String title) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      TitleForm(title),
+      const SizedBox(height: 10),
+      FormBuilderTypeAhead(
+          name: 'provincial',
+          decoration: InputDecoration(
+              hintText: 'Select Provincial',
+              prefixIcon:
+                  Image.asset(AppIcons.icProvincial, height: 20, width: 20),
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+              contentPadding: const EdgeInsets.all(10)),
+          itemBuilder: (context, suggestion) {
+            return ListTile(title: Text(suggestion));
+          },
+          controller: TextEditingController(),
+          suggestionsCallback: (pattern) async {
+            return Provincial()
+                .names
+                .where((city) =>
+                    city.toLowerCase().contains(pattern.toLowerCase()))
+                .toList();
+          },
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          validator: FormBuilderValidators.compose([
+            FormBuilderValidators.required(errorText: "Không thể để trống"),
+            (value) {
+              if (value != null && !Provincial().names.contains(value)) {
+                return 'Tỉnh/Thành phố không đúng!';
+              }
+              return null;
+            }
+          ])),
+      const SizedBox(height: 12)
+    ]);
   }
 
   Widget ProfileHeader() {
@@ -145,9 +184,8 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
         width: MediaQuery.of(context).size.height * 0.155,
         height: MediaQuery.of(context).size.height * 0.155,
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.white, width: 5),
-          shape: BoxShape.circle,
-        ),
+            border: Border.all(color: Colors.white, width: 5),
+            shape: BoxShape.circle),
         child: ClipOval(
           child: (cubit.userAvatar == "")
               ? Image.asset(AppImages.imgProfile128x128, fit: BoxFit.cover)
@@ -200,6 +238,32 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
     ]);
   }
 
+  Widget RadioForm(String title) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      TitleForm(title),
+      const SizedBox(height: 10),
+      FormBuilderRadioGroup(
+          name: 'gender',
+          wrapAlignment: WrapAlignment.spaceEvenly,
+          decoration: InputDecoration(
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+              contentPadding: const EdgeInsets.all(2)),
+          options: const [
+            FormBuilderFieldOption(
+                value: 'male',
+                child: Text('Nam', style: TextStyle(fontSize: 17))),
+            FormBuilderFieldOption(
+                value: 'female',
+                child: Text('Nữ', style: TextStyle(fontSize: 17))),
+          ],
+          validator: FormBuilderValidators.compose([
+            FormBuilderValidators.required(errorText: "Bạn chưa chọn giới tính")
+          ])),
+      const SizedBox(height: 12),
+    ]);
+  }
+
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
         context: context,
@@ -213,6 +277,12 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
     }
   }
 
+  String _getAddress() {
+    return _formKey.currentState!.fields['address']!.value +
+        ", " +
+        _formKey.currentState!.fields['provincial']!.value;
+  }
+
   Future<void> _onUpdatePressed(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       // ignore: use_build_context_synchronously
@@ -221,11 +291,18 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
           fullname: _formKey.currentState!.fields['fullname']!.value,
           phone: _formKey.currentState!.fields['phone']!.value,
           avatarUrl: '',
-          address: _formKey.currentState!.fields['address']!.value,
+          address: _getAddress(),
           birth: cubit.getBirthday(),
           provider: _formKey.currentState!.fields['provider']!.value);
       context.router.popAndPush(const UserProfileRoute());
     }
+  }
+
+  void setValueAddress(String address) {
+    cubit.setAddress(address);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _formKey.currentState?.patchValue({'provincial': cubit.provincial});
+    });
   }
 
   @override
@@ -233,5 +310,6 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
     super.initState();
     cubit.setBirthday(controller.currentUser.value.birth);
     cubit.setUserAvatar(controller.currentUser.value.avatarUrl);
+    setValueAddress(controller.currentUser.value.address);
   }
 }
