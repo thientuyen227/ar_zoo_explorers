@@ -160,4 +160,20 @@ class AuthRepositoryImplement implements AuthRepository {
       );
     });
   }
+
+  @override
+  Future<Either<Failure, Success>> changePassword(
+      String oldPassword, String newPassword) {
+    return ResponseHandler.processResponse(() async {
+      User? user = FirebaseAuth.instance.currentUser;
+      AuthCredential credential = EmailAuthProvider.credential(
+        email: user!.email!,
+        password: oldPassword,
+      );
+      await user.reauthenticateWithCredential(credential);
+      await user.updatePassword(newPassword);
+      return Success(
+          data: Fluttertoast.showToast(msg: "Đổi mật khẩu thành công!"));
+    });
+  }
 }

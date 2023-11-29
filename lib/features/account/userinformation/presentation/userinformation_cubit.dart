@@ -66,8 +66,11 @@ class UserInformationCubit extends BaseCubit<UserInformationState> {
 
   void setAddress(String value) {
     List<String> values = value.split(', ');
-    address = values[0].trim();
-    provincial = values[1].trim();
+    provincial = values[values.length - 1].trim();
+    address = values[0];
+    for (int i = 1; i < values.length - 1; i++) {
+      address = "$address, ${values[i]}";
+    }
   }
 
   String getBirthday() {

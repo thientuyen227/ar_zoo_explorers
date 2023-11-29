@@ -20,7 +20,11 @@ abstract class AuthRepository {
   Future<Either<Failure, Success<UserEntity>>> getUserProfileById(String uid);
 
   Future<Either<Failure, Success>> logout();
+
   Future<Either<Failure, Success>> sendPasswordResetEmail(String email);
+
+  Future<Either<Failure, Success>> changePassword(
+      String oldPassword, String newPassword);
 
   Future<Either<Failure, Success<UserEntity>>> updateUserProfile(
       {required String id,

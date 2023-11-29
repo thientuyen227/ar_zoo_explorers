@@ -253,17 +253,15 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
             width: 60,
             height: 60,
             decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              //border: Border.all(color: Colors.grey, width: 2),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
+                shape: BoxShape.circle,
+                //border: Border.all(color: Colors.grey, width: 2),
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: const Offset(0, 3)),
+                ]),
             child: ClipRect(
                 child: Image.asset(
                     cubit.listOthersLoginButton[index].toString(),

@@ -1,3 +1,4 @@
+import 'package:ar_zoo_explorers/app/config/app_router.gr.dart';
 import 'package:ar_zoo_explorers/base/widgets/page_loading_indicator.dart';
 import 'package:ar_zoo_explorers/features/account/userinformation/model/provincial_name.dart';
 import 'package:ar_zoo_explorers/features/account/userinformation/presentation/userinformation_cubit.dart';
@@ -11,7 +12,6 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:internationalization/internationalization.dart';
 
-import '../../../../app/config/app_router.gr.dart';
 import '../../../../app/theme/icons.dart';
 import '../../../../base/base_state.dart';
 import '../../../../core/data/controller/auth_controller.dart';
@@ -206,7 +206,10 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
     return TextButton(
         onPressed: snapshot.connectionState != ConnectionState.waiting
             ? () => _onUpdatePressed(context)
-            : () => Fluttertoast.showToast(msg: "Đang cập nhật!"),
+            : () => {
+                  Fluttertoast.showToast(msg: "Đang cập nhật!"),
+                  _onUpdatePressed(context)
+                },
         style: ButtonStyle(
             fixedSize: MaterialStateProperty.all(const Size(140, 43)),
             backgroundColor: MaterialStateProperty.all(Colors.blue),
@@ -286,7 +289,7 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
   Future<void> _onUpdatePressed(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       // ignore: use_build_context_synchronously
-      controller.updateUserProfile(context,
+      await controller.updateUserProfile(context,
           id: controller.currentUser.value.id,
           fullname: _formKey.currentState!.fields['fullname']!.value,
           phone: _formKey.currentState!.fields['phone']!.value,

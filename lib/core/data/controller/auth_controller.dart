@@ -179,6 +179,15 @@ class AuthController extends ControllerHelper {
         onSuccess: (success) => {context.router.pop()});
   }
 
+  Future<void> changePassword(
+      BuildContext context, String oldPassword, String newPassword) async {
+    return processRequest<void>(
+        request: () => _authRepository.changePassword(oldPassword, newPassword),
+        onSuccess: (success) => getCurrentUser(context),
+        onFailure: (failure) =>
+            {Fluttertoast.showToast(msg: "Thay đổi mật khẩu thất bại!")});
+  }
+
   static AuthController get findOrInitialize {
     try {
       return Get.find<AuthController>();

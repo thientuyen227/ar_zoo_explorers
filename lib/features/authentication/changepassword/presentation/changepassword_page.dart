@@ -3,6 +3,7 @@ import 'package:ar_zoo_explorers/features/authentication/changepassword/presenta
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
@@ -49,16 +50,15 @@ class _State extends BaseState<ChangePasswordState, ChangePasswordCubit,
                       color: Colors.blue[600],
                       child: Container(
                           decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.black.withOpacity(0.8),
-                                  spreadRadius: 5,
-                                  blurRadius: 7,
-                                  offset: const Offset(0, 3))
-                            ],
-                          ),
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(15),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.black.withOpacity(0.8),
+                                    spreadRadius: 5,
+                                    blurRadius: 7,
+                                    offset: const Offset(0, 3))
+                              ]),
                           margin: const EdgeInsets.all(20.0),
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, bottom: 25),
@@ -72,7 +72,12 @@ class _State extends BaseState<ChangePasswordState, ChangePasswordCubit,
                                 // NHẬP LẠI MẬT KHẨU MỚI
                                 PasswordForm(cubit.ListFormItem[2], 2),
                                 const SizedBox(height: 15),
-                                SubmitButton(),
+                                FutureBuilder(
+                                    future: null,
+                                    builder: (context, snapshot) => Align(
+                                          child:
+                                              SubmitButton(context, snapshot),
+                                        ))
                               ]))),
                 )),
           ),
@@ -124,11 +129,14 @@ class _State extends BaseState<ChangePasswordState, ChangePasswordCubit,
     ]);
   }
 
-  Widget SubmitButton() {
+  Widget SubmitButton(BuildContext context, AsyncSnapshot<dynamic> snapshot) {
     return ElevatedButton(
-        onPressed: () {
-          _onUpdatePassword();
-        },
+        onPressed: snapshot.connectionState != ConnectionState.waiting
+            ? () => _onUpdatePassword(context)
+            : () => {
+                  Fluttertoast.showToast(msg: "Đang cập nhật"),
+                  _onUpdatePassword(context)
+                },
         style: ButtonStyle(
             fixedSize: MaterialStateProperty.all(const Size(140, 50)),
             backgroundColor: MaterialStateProperty.all(Colors.blue),
@@ -141,8 +149,12 @@ class _State extends BaseState<ChangePasswordState, ChangePasswordCubit,
         ]));
   }
 
-  _onUpdatePassword() {
+  Future<void> _onUpdatePassword(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
+      await controller.changePassword(
+          context,
+          _formKey.currentState!.fields['oldPassword']?.value,
+          _formKey.currentState!.fields['password']?.value);
       context.router.pushNamed(Routes.home);
     }
   }
