@@ -33,8 +33,8 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
     return Obx(() => GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         child: PageLoadingIndicator(
-          future: controller.signUpFuture.value,
-          scaffold: Scaffold(
+            future: controller.signUpFuture.value,
+            scaffold: Scaffold(
               appBar: AppBar(
                   centerTitle: true,
                   title: const Text('CHỈNH SỬA THÔNG TIN',
@@ -68,8 +68,8 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
                       ),
                     ),
                     const SizedBox(height: 20),
-                  ])))),
-        )));
+                  ]))),
+            ))));
   }
 
   Widget TextForm(String title, int index, String? content) {
