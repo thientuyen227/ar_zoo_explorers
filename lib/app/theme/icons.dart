@@ -74,6 +74,17 @@ class AppImages {
   static const String imgDefaultUser = "assets/images/img_default_user.png";
   static const String imgProfile128x128 =
       "assets/images/img_profile_128x128.png";
+
+  //MODELS BUTTONS
+  static const String imgAmphibians =
+      "assets/images/model_type/img_amphibians.png";
+  static const String imgArthropods =
+      "assets/images/model_type/img_arthropods.png";
+  static const String imgBirds = "assets/images/model_type/img_birds.png";
+  static const String imgFishs = "assets/images/model_type/img_fishs.png";
+  static const String imgMammals = "assets/images/model_type/img_mammals.png";
+  static const String imgMollusks = "assets/images/model_type/img_mollusks.png";
+  static const String imgReptiles = "assets/images/model_type/img_reptiles.png";
 }
 
 class AppLotties {

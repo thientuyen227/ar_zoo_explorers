@@ -53,16 +53,15 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
                       color: Colors.blue[600],
                       child: Container(
                           decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.black.withOpacity(0.8),
-                                  spreadRadius: 5,
-                                  blurRadius: 7,
-                                  offset: const Offset(0, 3))
-                            ],
-                          ),
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(15),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.black.withOpacity(0.8),
+                                    spreadRadius: 5,
+                                    blurRadius: 7,
+                                    offset: const Offset(0, 3))
+                              ]),
                           margin: const EdgeInsets.all(20.0),
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, bottom: 25),
@@ -77,11 +76,10 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
                                 children: [RememberPass(), ForgotPassword()]),
                             const SizedBox(height: 12),
                             FutureBuilder(
-                              future: controller.loginFuture.value,
-                              builder: (context, snapshot) => Align(
-                                child: SubmitButton(context, snapshot),
-                              ),
-                            ),
+                                future: controller.loginFuture.value,
+                                builder: (context, snapshot) => Align(
+                                      child: SubmitButton(context, snapshot),
+                                    )),
                             const SizedBox(height: 25),
                             Register(),
                             const SizedBox(height: 20),

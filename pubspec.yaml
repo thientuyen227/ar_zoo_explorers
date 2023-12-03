@@ -124,6 +124,7 @@ flutter:
   assets:
     - assets/icons/
     - assets/images/
+    - assets/images/model_type/
     - assets/icons/animals/
     - assets/icons/Fish/
 

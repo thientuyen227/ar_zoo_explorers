@@ -25,10 +25,15 @@ class _State extends BaseState<SettingState, SettingCubit, SettingPage> {
   @override
   Widget buildByState(BuildContext context, SettingState state) {
     return Stack(children: [
-      Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          color: Colors.black.withOpacity(0.6)),
+      GestureDetector(
+        onTap: () {
+          context.router.pop();
+        },
+        child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            color: Colors.black.withOpacity(0.6)),
+      ),
       SizedBox(
           width: MediaQuery.of(context).size.width * 0.8,
           child: Scaffold(

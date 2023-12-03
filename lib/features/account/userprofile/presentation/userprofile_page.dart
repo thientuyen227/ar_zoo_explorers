@@ -142,10 +142,7 @@ class _State
       const SizedBox(height: 13),
       UserInformationItem(
           context, "Địa chỉ", controller.currentUser.value.address),
-      const SizedBox(height: 13),
-      UserInformationItem(
-          context, "Công ty ", controller.currentUser.value.provider!),
-      const SizedBox(height: 13),
+      const SizedBox(height: 13)
     ]);
   }
 

@@ -17,6 +17,7 @@ class UserInformationCubit extends BaseCubit<UserInformationState> {
   String provincial = "An Giang";
   String userAvatar = "";
   String userBackground = "";
+  String provider = "";
 
   List<FormBuilderTextFieldModel> ListFormItem = [
     FormBuilderTextFieldModel(
@@ -39,11 +40,6 @@ class UserInformationCubit extends BaseCubit<UserInformationState> {
         hint_text: "Địa chỉ",
         icon_prefix: AppIcons.icAddress,
         TIT: TextInputType.text),
-    FormBuilderTextFieldModel(
-        name: "provider",
-        hint_text: "Công ty/Trường học",
-        icon_prefix: AppIcons.icProvider,
-        TIT: TextInputType.text)
   ];
 
   void setBirthday(String? date) {
@@ -70,6 +66,12 @@ class UserInformationCubit extends BaseCubit<UserInformationState> {
     address = values[0];
     for (int i = 1; i < values.length - 1; i++) {
       address = "$address, ${values[i]}";
+    }
+  }
+
+  void setProvider(String? url) {
+    if (url != "" && url != null) {
+      provider = url;
     }
   }
 

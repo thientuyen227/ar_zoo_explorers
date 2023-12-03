@@ -35,7 +35,7 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
     return Obx(() => GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         child: PageLoadingIndicator(
-            future: controller.signUpFuture.value,
+            future: null,
             scaffold: Scaffold(
               appBar: AppBar(
                   centerTitle: true,
@@ -60,9 +60,7 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
                           TextForm("Số điện thoại", 2,
                               controller.currentUser.value.phone),
                           DropdownForm("Tỉnh / Thành phố"),
-                          TextForm("Địa chỉ", 3, cubit.address),
-                          TextForm("Công ty / Trường học", 4,
-                              controller.currentUser.value.provider)
+                          TextForm("Địa chỉ", 3, cubit.address)
                         ])),
                     const Divider(),
                     FutureBuilder(
@@ -296,7 +294,7 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
           avatarUrl: '',
           address: _getAddress(),
           birth: cubit.getBirthday(),
-          provider: _formKey.currentState!.fields['provider']!.value);
+          provider: cubit.provider);
       context.router.popAndPush(const UserProfileRoute());
     }
   }
@@ -313,6 +311,7 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
     super.initState();
     cubit.setBirthday(controller.currentUser.value.birth);
     cubit.setUserAvatar(controller.currentUser.value.avatarUrl);
+    cubit.setProvider(controller.currentUser.value.provider);
     setValueAddress(controller.currentUser.value.address);
   }
 }
