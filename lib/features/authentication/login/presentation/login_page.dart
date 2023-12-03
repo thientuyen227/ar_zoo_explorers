@@ -357,7 +357,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
   @override
   void initState() {
     super.initState();
-    _loadSavedPassword();
+    //_loadSavedPassword();
     _loadListEmail();
   }
 }

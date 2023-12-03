@@ -85,6 +85,58 @@ class AppImages {
   static const String imgMammals = "assets/images/model_type/img_mammals.png";
   static const String imgMollusks = "assets/images/model_type/img_mollusks.png";
   static const String imgReptiles = "assets/images/model_type/img_reptiles.png";
+
+  //BIRD
+  static const String imgChicken = "assets/images/birds/img_chicken.png";
+  static const String imgDuck = "assets/images/birds/img_duck.png";
+  static const String imgEagle = "assets/images/birds/img_eagle.png";
+
+  //FISHS
+  static const String imgAnglefish = "assets/images/fishs/img_anglefish.png";
+  static const String imgHammerShark =
+      "assets/images/fishs/img_hammer_shark.png";
+  static const String imgShark = "assets/images/fishs/img_shark.png";
+
+  //MAMMALS
+  static const String imgBat = "assets/images/mammals/img_bat.png";
+  static const String imgBuffalo = "assets/images/mammals/img_buffalo.png";
+
+  static const String imgCat = "assets/images/mammals/img_cat.png";
+  static const String imgCow = "assets/images/mammals/img_cow.png";
+
+  static const String imgDeer = "assets/images/mammals/img_deer.png";
+  static const String imgDog = "assets/images/mammals/img_dog.png";
+  static const String imgDolphin = "assets/images/mammals/img_dolphin.png";
+
+  static const String imgElephant = "assets/images/mammals/img_elephant.png";
+
+  static const String imgHippo = "assets/images/mammals/img_hippo.png";
+
+  static const String imgLeopard = "assets/images/mammals/img_leopard.png";
+  static const String imgLion = "assets/images/mammals/img_lion.png";
+
+  static const String imgMonkey = "assets/images/mammals/img_monkey.png";
+  static const String imgMouse = "assets/images/mammals/img_mouse.png";
+
+  static const String imgPig = "assets/images/mammals/img_pig.png";
+
+  static const String imgRabbit = "assets/images/mammals/img_rabbit.png";
+  static const String imgRhino = "assets/images/mammals/img_rhino.png";
+
+  static const String imgSheep = "assets/images/mammals/img_sheep.png";
+
+  static const String imgTiger = "assets/images/mammals/img_tiger.png";
+
+  static const String imgWhales = "assets/images/mammals/img_whales.png";
+  static const String imgWolf = "assets/images/mammals/img_wolf.png";
+
+  //REPTILES
+  static const String imgCrocodile = "assets/images/reptiles/img_crocodile.png";
+  static const String imgSnake = "assets/images/reptiles/img_snake.png";
+  static const String imgTurtle = "assets/images/reptiles/img_turtle.png";
+
+  //ARTHOPODS
+  static const String imgSpider = "assets/images/arthropods/img_spider.png";
 }
 
 class AppLotties {

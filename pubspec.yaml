@@ -123,10 +123,17 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/icons/
-    - assets/images/
-    - assets/images/model_type/
     - assets/icons/animals/
     - assets/icons/Fish/
+    - assets/images/
+    - assets/images/model_type/
+    - assets/images/amphibians/
+    - assets/images/arthropods/
+    - assets/images/birds/
+    - assets/images/fishs/
+    - assets/images/mammals/
+    - assets/images/mollusks/
+    - assets/images/reptiles/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

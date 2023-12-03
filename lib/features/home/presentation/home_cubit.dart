@@ -16,12 +16,12 @@ class HomeCubit extends BaseCubit<HomeState> {
 
   List<ButtonObject> listButtonObject = [
     ButtonObject(title: "Mammals", icon: AppImages.imgMammals),
-    ButtonObject(title: "Birds", icon: AppImages.imgBirds),
     ButtonObject(title: "Fishs", icon: AppImages.imgFishs),
-    ButtonObject(title: "Amphibians", icon: AppImages.imgAmphibians),
+    ButtonObject(title: "Birds", icon: AppImages.imgBirds),
     ButtonObject(title: "Reptiles", icon: AppImages.imgReptiles),
-    ButtonObject(title: "Mollusks", icon: AppImages.imgMollusks),
     ButtonObject(title: "Arthropods", icon: AppImages.imgArthropods),
+    ButtonObject(title: "Amphibians", icon: AppImages.imgAmphibians),
+    ButtonObject(title: "Mollusks", icon: AppImages.imgMollusks),
   ];
 
   AdvertisementObject listAdvertisement =
