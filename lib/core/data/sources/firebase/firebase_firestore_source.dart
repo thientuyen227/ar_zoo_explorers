@@ -9,15 +9,12 @@ class FirebaseFirestoreSource {
 
   final CollectionReference<Map<String, dynamic>> _animalModelCollectionRef =
       FirebaseFirestore.instance.collection('animal_models');
-
   Future<String> get generateUniqueAnimalModelId async =>
       _animalModelCollectionRef.add({}).then((value) => value.id);
 
   //User
-
   Future<UserModel?> getUser(String id) async {
     var document = await _userModelCollectionRef.doc(id).get();
-
     if (document.exists && document.data() != null) {
       return UserModel.fromMap(document.data()!);
     } else {
@@ -27,35 +24,28 @@ class FirebaseFirestoreSource {
 
   Future<UserModel> createUser(UserModel user) async {
     await _userModelCollectionRef.doc(user.id).set(user.toMap());
-
     return user;
   }
 
   //đưa danh sách các đối tượng vào firebase
-
   Future<bool> importAnimalModelList(List<AnimalModel> list) async {
     for (var model in list) {
       _animalModelCollectionRef.doc(model.id).set(model.toMap());
     }
-
     return true;
   }
 
   //lấy thông tin về một động vật
-
   Future<AnimalModel> getAnimal(String animalId) async {
     var document = await _animalModelCollectionRef.doc(animalId).get();
-
     return AnimalModel.fromMap(document.data()!);
   }
 
   // tạo một tài liệu mới trong Firestore
-
   Future<AnimalModel> createAnimal(AnimalModel animalModel) async {
     await _animalModelCollectionRef
         .doc(animalModel.id)
         .set(animalModel.toMap());
-
     return animalModel;
   }
 
@@ -63,14 +53,33 @@ class FirebaseFirestoreSource {
     required String id,
     required String title,
     required String icon,
-    required String type,
+    required String link,
     required String name,
   }) async {
     await _animalModelCollectionRef
         .doc(id)
-        .update({"title": title, "icon": icon, "type": type, "name": name});
-
+        .update({"title": title, "icon": icon, "link": link, "name": name});
     return getAnimal(id);
+  }
+
+  Future<UserModel?> updateUser({
+    required String id,
+    required String fullname,
+    required String phone,
+    required String avatarUrl,
+    required String address,
+    required String birth,
+    required String provider,
+  }) async {
+    await _userModelCollectionRef.doc(id).update({
+      'fullname': fullname,
+      'phone': phone,
+      'address': address,
+      'birth': birth,
+      'avatarUrl': avatarUrl,
+      'provider': provider
+    });
+    return getUser(id);
   }
 }
 

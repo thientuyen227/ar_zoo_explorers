@@ -18,7 +18,7 @@ class WelcomePage extends StatefulWidget {
 
 class _State extends BaseState<WelcomeState, WelcomeCubit, WelcomePage> {
   double opacity = 0.0;
-  final controller = AuthController();
+  final controller = AuthController.findOrInitialize;
 
   @override
   Widget buildByState(BuildContext context, WelcomeState state) {
@@ -37,16 +37,15 @@ class _State extends BaseState<WelcomeState, WelcomeCubit, WelcomePage> {
   @override
   void initState() {
     super.initState();
-    // Tăng độ mờ của logo từ 0.0 đến 1.0 trong vòng 30 giây
     Future.delayed(const Duration(seconds: 1), () {
       setState(() {
         opacity = 1.0;
       });
     });
-    // Chuyển trang sau 30 giây
     Future.delayed(const Duration(seconds: 3), () {
       context.router.pushNamed(Routes.login);
     });
-    controller.checkAuthState(context);
+    controller.getCurrentUser(context);
+    //controller.checkAuthState(context);
   }
 }

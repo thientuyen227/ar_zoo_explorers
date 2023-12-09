@@ -16,7 +16,7 @@ class SettingCubit extends BaseCubit<SettingState> {
     SettingItem(
         type: SettingType.accountmanager,
         title: "Account Manager",
-        icon: AppIcons.icDefaultUser),
+        icon: AppIcons.icUser),
     SettingItem(
         type: SettingType.contactUs,
         title: "Contact Us",

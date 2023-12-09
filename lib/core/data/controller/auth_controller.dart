@@ -67,12 +67,48 @@ class AuthController extends ControllerHelper {
     );
   }
 
+  Future<void> loginWithFacebook(BuildContext context) async {
+    loginFuture.value = processRequest<UserEntity>(
+      request: () => _authRepository.loginWithFacebook(),
+      onFailure: (failure) =>
+          NotificationHelper.showSnackBar(message: failure.message),
+      onSuccess: (success) => _onLoginSuccess(context, success.data),
+    );
+  }
+
+  User? getUser() {
+    User? user = FirebaseAuth.instance.currentUser;
+    return user;
+  }
+
+  Future<void> getCurrentUser(BuildContext context) async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null || currentUser.value.id != '') {
+        processRequest<UserEntity>(
+            request: () => _authRepository.getUserProfileById(user!.uid),
+            onFailure: (failure) => logout(context),
+            onSuccess: (success) => _setCurrentUser(context, success.data));
+      } else {
+        logout(context);
+      }
+      update();
+    } catch (e) {
+      logout(context);
+    }
+  }
+
+  _setCurrentUser(BuildContext context, UserEntity user) {
+    currentUser.value = user;
+    update();
+  }
+
   checkAuthState(BuildContext context) {
     Future.delayed(const Duration(seconds: 3), () {
       try {
         User? user = FirebaseAuth.instance.currentUser;
 
-        if (user != null) {
+        if (user != null || currentUser.value.id != '') {
           context.router.pushAndPopUntil(
             const HomeRoute(),
             predicate: (route) => route.settings.name == '/home',
@@ -91,6 +127,65 @@ class AuthController extends ControllerHelper {
     currentUser.value = user;
     update();
     context.router.replace(const HomeRoute());
+  }
+
+  Future<UserEntity> getUserProfileById(BuildContext context,
+      {required String uid}) async {
+    return processRequest<UserEntity>(
+        request: () => _authRepository.getUserProfileById(uid),
+        onFailure: (failure) => _authRepository.logout(),
+        onSuccess: (success) => {currentUser.value = success.data, update()});
+  }
+
+  Future<UserEntity> updateUserProfile(
+    BuildContext context, {
+    required String id,
+    required String fullname,
+    required String phone,
+    required String avatarUrl,
+    required String address,
+    required String birth,
+    required String provider,
+  }) async {
+    return processRequest<UserEntity>(
+        request: () => _authRepository.updateUserProfile(
+            id: id,
+            fullname: fullname,
+            phone: phone,
+            avatarUrl: avatarUrl,
+            address: address,
+            birth: birth,
+            provider: provider),
+        onSuccess: (success) => {
+              _setCurrentUser(context, success.data),
+              Fluttertoast.showToast(msg: "Cập nhật thông tin thành công!")
+            },
+        onFailure: (failure) =>
+            Fluttertoast.showToast(msg: "Cập nhật thông tin thất bại!"));
+  }
+
+  logout(BuildContext context) {
+    _authRepository.logout();
+    update();
+    context.router.replace(const LoginRoute());
+  }
+
+  Future<void> sendPasswordResetEmail(
+      BuildContext context, String email) async {
+    return processRequest<void>(
+        request: () => _authRepository.sendPasswordResetEmail(email),
+        onFailure: (failure) =>
+            Fluttertoast.showToast(msg: "Email không chính xác!"),
+        onSuccess: (success) => {context.router.pop()});
+  }
+
+  Future<void> changePassword(
+      BuildContext context, String oldPassword, String newPassword) async {
+    return processRequest<void>(
+        request: () => _authRepository.changePassword(oldPassword, newPassword),
+        onSuccess: (success) => getCurrentUser(context),
+        onFailure: (failure) =>
+            {Fluttertoast.showToast(msg: "Thay đổi mật khẩu thất bại!")});
   }
 
   static AuthController get findOrInitialize {

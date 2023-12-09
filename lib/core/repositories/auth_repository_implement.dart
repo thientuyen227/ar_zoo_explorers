@@ -9,6 +9,7 @@ import 'package:ar_zoo_explorers/domain/repositories/user_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:internationalization/internationalization.dart';
 
 class AuthRepositoryImplement implements AuthRepository {
@@ -98,6 +99,81 @@ class AuthRepositoryImplement implements AuthRepository {
   Future<Either<Failure, Success>> logout() {
     return ResponseHandler.processResponse(() async {
       return Success(data: _firebaseAuth.logout());
+    });
+  }
+
+  @override
+  Future<Either<Failure, Success<UserEntity>>> getUserProfileById(String uid) {
+    return ResponseHandler.processResponse(() async {
+      return Success(
+        data: await _firestoreSource.getUser(uid) ??
+            UserEntity(
+                id: '',
+                avatarUrl: '',
+                fullname: '',
+                email: '',
+                provider: '',
+                phone: '',
+                address: '',
+                birth: ''),
+      );
+    });
+  }
+
+  @override
+  Future<Either<Failure, Success>> sendPasswordResetEmail(String email) {
+    return ResponseHandler.processResponse(() async {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      return Success(
+          data: Fluttertoast.showToast(msg: "Gửi email thành công!"));
+    });
+  }
+
+  @override
+  Future<Either<Failure, Success<UserEntity>>> updateUserProfile(
+      {required String id,
+      required String fullname,
+      required String phone,
+      required String avatarUrl,
+      required String address,
+      required String birth,
+      required String provider}) {
+    return ResponseHandler.processResponse(() async {
+      return Success(
+        data: await _firestoreSource.updateUser(
+                id: id,
+                fullname: fullname,
+                phone: phone,
+                avatarUrl: avatarUrl,
+                address: address,
+                birth: birth,
+                provider: provider) ??
+            UserEntity(
+                id: '',
+                avatarUrl: '',
+                fullname: '',
+                email: '',
+                provider: '',
+                phone: '',
+                address: '',
+                birth: ''),
+      );
+    });
+  }
+
+  @override
+  Future<Either<Failure, Success>> changePassword(
+      String oldPassword, String newPassword) {
+    return ResponseHandler.processResponse(() async {
+      User? user = FirebaseAuth.instance.currentUser;
+      AuthCredential credential = EmailAuthProvider.credential(
+        email: user!.email!,
+        password: oldPassword,
+      );
+      await user.reauthenticateWithCredential(credential);
+      await user.updatePassword(newPassword);
+      return Success(
+          data: Fluttertoast.showToast(msg: "Đổi mật khẩu thành công!"));
     });
   }
 }

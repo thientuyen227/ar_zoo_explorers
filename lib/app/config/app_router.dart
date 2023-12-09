@@ -1,3 +1,5 @@
+import 'package:ar_zoo_explorers/core/data/models/animal_model.dart';
+import 'package:ar_zoo_explorers/features/modleldetail/presentation/modeldetail_page.dart';
 import 'package:auto_route/auto_route.dart';
 
 import 'app_router.gr.dart';
@@ -17,6 +19,12 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: UserProfileRoute.page, path: '/userprofile'),
         AutoRoute(page: TermOfServiceRoute.page, path: '/termofservice'),
         AutoRoute(page: AccountManagerRoute.page, path: '/accountmanager'),
-        AutoRoute(page: TestUnity.page, path: '/testunity')
+        AutoRoute(page: TestUnity.page, path: '/testunity'),
+        AutoRoute(page: UserInformationRoute.page, path: '/userinformation'),
+        AutoRoute(page: ForgotPasswordRoute.page, path: '/forgotpassword'),
+        AutoRoute(page: ResetPasswordRoute.page, path: '/resetpassword'),
+        AutoRoute(page: ChangePasswordRoute.page, path: '/changepassword'),
+        AutoRoute(page: AnimalModelsRoute.page, path: '/animalmodels'),
+        AutoRoute(page: ModelDetailRoute.page, path: '/modeldetail'),
       ];
 }

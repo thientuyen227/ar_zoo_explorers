@@ -17,5 +17,21 @@ abstract class AuthRepository {
 
   Future<Either<Failure, Success<UserEntity>>> loginWithFacebook();
 
+  Future<Either<Failure, Success<UserEntity>>> getUserProfileById(String uid);
+
   Future<Either<Failure, Success>> logout();
+
+  Future<Either<Failure, Success>> sendPasswordResetEmail(String email);
+
+  Future<Either<Failure, Success>> changePassword(
+      String oldPassword, String newPassword);
+
+  Future<Either<Failure, Success<UserEntity>>> updateUserProfile(
+      {required String id,
+      required String fullname,
+      required String phone,
+      required String avatarUrl,
+      required String address,
+      required String birth,
+      required String provider});
 }

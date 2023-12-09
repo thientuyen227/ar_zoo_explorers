@@ -5,11 +5,10 @@ class AnimalModel extends AnimalEntity {
       {required super.id,
       required super.title,
       required super.icon,
-      required super.type,
+      required super.link,
       required super.name});
-
   Map<String, dynamic> toMap() {
-    return {'id': id, 'title': title, 'icon': icon, 'type': type, 'name': name};
+    return {'id': id, 'title': title, 'icon': icon, 'link': link, 'name': name};
   }
 
   factory AnimalModel.fromMap(Map<String, dynamic> map) {
@@ -17,7 +16,7 @@ class AnimalModel extends AnimalEntity {
       id: map['id'] ?? '',
       title: map['title'] ?? '',
       icon: map['icon'] ?? '',
-      type: map['type'] ?? '',
+      link: map['link'] ?? '',
       name: map['name'] ?? '',
     );
   }

@@ -15,7 +15,7 @@ class AnimalRepositoryImplement implements AnimalRepository {
   Future<Either<Failure, Success<AnimalEntity>>> createAnimal({
     required String title,
     required String icon,
-    required String type,
+    required String link,
     required String name,
   }) {
     return ResponseHandler.processResponse(() async {
@@ -24,7 +24,7 @@ class AnimalRepositoryImplement implements AnimalRepository {
               id: await _firestoreSource.generateUniqueAnimalModelId,
               title: title,
               icon: icon,
-              type: type,
+              link: link,
               name: name)));
     });
   }
@@ -42,12 +42,12 @@ class AnimalRepositoryImplement implements AnimalRepository {
       {required String id,
       required String title,
       required String icon,
-      required String type,
+      required String link,
       required String name}) {
     return ResponseHandler.processResponse(() async {
       return Success(
           data: await _firestoreSource.updateAnimal(
-              id: id, title: title, icon: icon, type: type, name: name));
+              id: id, title: title, icon: icon, link: link, name: name));
     });
   }
 }

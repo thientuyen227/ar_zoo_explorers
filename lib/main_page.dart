@@ -18,6 +18,7 @@ Future<void> runMain() async {
     configureDependencies();
 
     await Firebase.initializeApp();
+
     runApp(const MainPage());
   }, (error, stackTrace) {
     log("runZonedGuarded() $error", error: error, stackTrace: stackTrace);

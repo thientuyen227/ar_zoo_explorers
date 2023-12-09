@@ -2,9 +2,9 @@ import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/dimens.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
-import 'package:ar_zoo_explorers/features/base-model/FormBuilderTextField_Model.dart';
+import 'package:ar_zoo_explorers/features/base-model/button_object.dart';
+import 'package:ar_zoo_explorers/features/base-model/form_builder_text_field_model.dart';
 import 'package:ar_zoo_explorers/features/home/model/advertisement_object.dart';
-import 'package:ar_zoo_explorers/features/home/model/button_object.dart';
 import 'package:ar_zoo_explorers/features/home/presentation/home_state.dart';
 import 'package:ar_zoo_explorers/features/setting/presentation/setting_page.dart';
 import 'package:ar_zoo_explorers/utils/widget/button_widget.dart';
@@ -12,8 +12,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
 import '../../../app/config/routes.dart';
+import '../../../base/widgets/page_loading_indicator.dart';
+import '../../../core/data/controller/auth_controller.dart';
 import 'home_cubit.dart';
 
 @RoutePage()
@@ -25,77 +28,60 @@ class HomePage extends StatefulWidget {
 }
 
 class _State extends BaseState<HomeState, HomeCubit, HomePage> {
-  final PageController _adsController = PageController();
+  final PageController advertisementController = PageController();
+  final controller = AuthController.findOrInitialize;
+  final _formKey = GlobalKey<FormBuilderState>();
+
   String urlAvatarUser = AppIcons.icDefaultUser;
   String txtSearch = "";
   int _adsCurrentPage = 0;
-  List<ButtonObject> listButtonObject = [
-    ButtonObject(title: "Animal", icon: AppIcons.icAnimal),
-    ButtonObject(title: "Reptiles", icon: AppIcons.icCrocodile),
-    ButtonObject(title: "Fish", icon: AppIcons.icFish),
-    ButtonObject(title: "Bird", icon: AppIcons.icBird),
-    ButtonObject(title: "Dinosaurs", icon: AppIcons.icDinosaurs)
-  ];
+
   AdvertisementObject listAdvertisement =
       AdvertisementObject([AppImages.imgAdvertisement, AppImages.imgAds1]);
 
   @override
   Widget buildByState(BuildContext context, HomeState state) {
-    return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text("Home Page",
-              style: TextStyle(fontSize: 20, color: Colors.yellow)),
-          leading:
-              Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            AppIconButton(
-                onPressed: () {
-                  _turnSettingPage();
-                },
-                icon: const Icon(Icons.settings, color: Colors.white),
-                borderRadius: AppDimens.radius200,
-                padding: const EdgeInsets.all(AppDimens.spacing5),
-                width: AppDimens.size30.width,
-                height: AppDimens.size30.height,
-                backgroundColor: AppColorScheme.dark().cardColor)
-          ]),
-          actions: [
-            const Center(
-                child: Text('Fullname',
-                    style: TextStyle(fontSize: 16, color: Colors.white))),
-            ProfileCustom(),
-            IconButton(
-                onPressed: () {
-                  context.router.pushNamed(Routes.ar);
-                },
-                icon: const Icon(Icons.ac_unit))
-          ],
-          //toolbarHeight: 50,
-        ),
-        body: SingleChildScrollView(
-            child: Container(
-                padding: const EdgeInsets.all(15),
-                child: Column(children: [
-                  const SizedBox(height: 12),
-                  _bulildSearchBar(FormBuilderTextFieldModel(
-                      name: "Search",
-                      hint_text: "search",
-                      icon_suffix: AppIcons.icSearch)),
-                  _buildSlider(context, listAdvertisement),
-                  _buildListArButton(listButtonObject)
-                ]))));
+    return Obx(() => GestureDetector(
+        onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+        child: PageLoadingIndicator(
+            future: null,
+            scaffold: Scaffold(
+                appBar: AppBar(
+                    centerTitle: true,
+                    title: const Text("Trang Chủ",
+                        style: TextStyle(fontSize: 20, color: Colors.white)),
+                    leading: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [SettingButton()]),
+                    actions: [
+                      ProfileCustom(),
+                      IconButton(
+                          onPressed: () {
+                            context.router.pushNamed(Routes.testunity);
+                          },
+                          icon: const Icon(Icons.ac_unit))
+                    ]),
+                body: FormBuilder(
+                    key: _formKey,
+                    child: SingleChildScrollView(
+                        child: Container(
+                            padding: const EdgeInsets.all(15),
+                            child: Column(children: [
+                              const SizedBox(height: 12),
+                              SearchBar(cubit.searchBar),
+                              CarouselSlider(context, listAdvertisement),
+                              ListModelButton(cubit.listButtonObject),
+                            ]))))))));
   }
 
-  Widget _buildListArButton(List<ButtonObject> list) {
+  // DANH SÁCH BUTTON MODEL
+  Widget ListModelButton(List<ButtonObject> list) {
     List<Widget> listRow = [];
     for (int i = 0; i < list.length - 1; i = i + 2) {
       listRow.add(Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround, // Căn đều 2 bên
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _buildButtonObject(listButtonObject[i], i),
-            _buildButtonObject(listButtonObject[i + 1], (i + 1))
-          ]));
+          children: [ModelButton(i), ModelButton(i + 1)]));
       listRow.add(const SizedBox(height: 20));
     }
     if ((list.length) % 2 != 0) {
@@ -103,77 +89,90 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
           mainAxisAlignment: MainAxisAlignment.spaceAround, // Căn đều 2 bên
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            _buildButtonObject(
-                listButtonObject[list.length - 1], (list.length - 1)),
-            _buildNullButtonObject()
+            ModelButton(list.length - 1),
+            const SizedBox(height: 150, width: 150)
           ]));
       listRow.add(const SizedBox(height: 20));
     }
     return Column(children: listRow);
   }
 
-  Widget _buildButtonObject(ButtonObject item, int index) {
-    return Container(
-        height: 150,
-        width: 150,
-        decoration: BoxDecoration(
-            color: Colors.blue, // Màu nền của container
-            borderRadius:
-                BorderRadius.circular(10), // Bo góc với bán kính là 10
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.grey.withOpacity(0.5), // Màu bóng đổ
-                  spreadRadius: 2, // Bán kính lan truyền của bóng đổ
-                  blurRadius: 5, // Độ mờ của bóng đổ
-                  offset:
-                      const Offset(0, 3)) // Độ tương phản và vị trí của bóng đổ
-            ]),
-        child: Center(
-            child: SizedBox(
-                height: 140,
-                width: 140,
-                child: ElevatedButton(
-                    onPressed: () {
-                      print("Chức năng tạm thời chưa có");
-                    },
-                    style:
-                        ElevatedButton.styleFrom(backgroundColor: Colors.white),
-                    // Đặt màu nền của ElevatedButton thành trắng
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(item.icon, scale: 0.5),
-                          Expanded(
-                              child: Center(
-                                  child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                //const SizedBox(width: 10),
-                                Text(item.title,
-                                    style:
-                                        const TextStyle(color: Colors.black)),
-                                SizedBox(
-                                    width: 40, // Đặt kích thước của SizedBox
-                                    height: 40,
-                                    child: IconButton(
-                                        onPressed: () {
-                                          _isLoved(index);
-                                        },
-                                        icon: Image.asset(
-                                            listButtonObject[index].isLoved
-                                                ? AppIcons.icLoved
-                                                : AppIcons.icHeart)))
-                              ])))
-                        ])))));
+  // MODEL BUTTON
+  Widget ModelButton(int index) {
+    return GestureDetector(
+        onTap: () => context.router.pushNamed(Routes.animalmodels),
+        child: Container(
+            width: MediaQuery.of(context).size.width * 0.4,
+            height: MediaQuery.of(context).size.width * 0.4,
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.blue, width: 7),
+                borderRadius: BorderRadius.circular(15.0),
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: const Offset(0, 3))
+                ]),
+            child: Column(children: [
+              ButtonImage(cubit.listButtonObject[index].icon),
+              Center(
+                  child: Stack(alignment: Alignment.center, children: [
+                ButtonTitle(cubit.listButtonObject[index].title),
+                LoveButton(index)
+              ]))
+            ])));
   }
 
-  Widget _bulildSearchBar(FormBuilderTextFieldModel item) {
+  // ẢNH ĐẠI DIỆN MODEL CỦA BUTTON
+  Widget ButtonImage(String url) {
+    return Container(
+        padding: const EdgeInsets.all(5.0),
+        width: MediaQuery.of(context).size.width * 0.28,
+        height: MediaQuery.of(context).size.width * 0.28,
+        decoration: BoxDecoration(
+          //border: Border.all(color: Colors.white, width: 3),
+          borderRadius: BorderRadius.circular(15.0),
+          color: Colors.white,
+          //image: DecorationImage(image: AssetImage(url), fit: BoxFit.cover),
+        ),
+        child: Image.asset(url, fit: BoxFit.cover));
+  }
+
+  // TÊN MODEL
+  Widget ButtonTitle(String title) {
+    return SizedBox(
+        width: 80,
+        child: Text(title,
+            style: const TextStyle(
+                color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
+            softWrap: true,
+            textAlign: TextAlign.center));
+  }
+
+  Widget LoveButton(int index) {
+    return Align(
+        alignment: Alignment.centerRight,
+        child: SizedBox(
+            width: 32,
+            height: 32,
+            child: IconButton(
+                onPressed: () {
+                  setState(() {
+                    cubit.isLoved(index);
+                  });
+                },
+                icon: Image.asset(cubit.listButtonObject[index].isLoved
+                    ? AppIcons.icLoved
+                    : AppIcons.icHeart))));
+  }
+
+  Widget SearchBar(FormBuilderTextFieldModel item) {
     return FormBuilderTextField(
       name: item.name,
       keyboardType: TextInputType.text,
       onChanged: (value) {
-        // Lấy giá trị từ TextField khi nó thay đổi
         setState(() {
           txtSearch = value!;
         });
@@ -182,81 +181,83 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
           hintText: item.hint_text,
           suffixIcon: IconButton(
               onPressed: () {
-                onSearch();
+                cubit.onSearch(_formKey.currentState!.fields['search']?.value);
               },
               icon: Image.asset(item.icon_suffix)),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-          contentPadding: const EdgeInsets.symmetric(
-              vertical: 10, horizontal: 25)), // Điều chỉnh chiều cao ở đây
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 10, horizontal: 25)),
       style: const TextStyle(fontSize: 16),
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      validator: FormBuilderValidators.compose(
-          [FormBuilderValidators.required(errorText: "")]),
+      validator: FormBuilderValidators.compose([]),
     );
   }
 
-  Widget _buildNullButtonObject() {
-    return const SizedBox(height: 150, width: 150);
-  }
-
-  Widget _buildSlider(BuildContext context, AdvertisementObject items) {
+  // SLIDER QUẢNG CÁO
+  Widget CarouselSlider(BuildContext context, AdvertisementObject items) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Container(
-          padding:
-              const EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
-          height: 200, // Độ cao của Slider
-          child: PageView.builder(
-              controller: _adsController,
-              itemCount: items.length, // Số lượng hình ảnh quảng cáo
-              itemBuilder: (context, index) {
-                return ClipRRect(
-                    borderRadius: BorderRadius.circular(20.0),
-                    child: Image.asset(items.ads[index], fit: BoxFit.cover));
-              })),
-      Center(
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(items.length, (index) {
-                return Container(
-                    width: 10,
-                    height: 10,
-                    margin: const EdgeInsets.symmetric(horizontal: 4),
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: _adsCurrentPage == index
-                            ? Colors.blue
-                            : Colors.grey));
-              }))),
+      AdvertisementImages(context, items),
+      AdvertisementIndicator(context, items),
       const SizedBox(height: 10)
     ]);
   }
 
+  // HÌNH ẢNH QUẢNG CÁO
+  Widget AdvertisementImages(BuildContext context, AdvertisementObject items) {
+    return Container(
+        padding:
+            const EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
+        height: 200,
+        child: PageView.builder(
+            controller: advertisementController,
+            itemCount: items.length,
+            itemBuilder: (context, index) {
+              return ClipRRect(
+                  borderRadius: BorderRadius.circular(20.0),
+                  child: Image.asset(items.ads[index], fit: BoxFit.cover));
+            }));
+  }
+
+  Widget AdvertisementIndicator(
+      BuildContext context, AdvertisementObject items) {
+    return Center(
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(items.length, (index) {
+              return Container(
+                  width: 10,
+                  height: 10,
+                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: _adsCurrentPage == index
+                          ? Colors.blue
+                          : Colors.grey));
+            })));
+  }
+
   Widget ProfileCustom() {
-    return PopupMenuButton(
-      icon: Image.asset(urlAvatarUser, height: 24),
-      itemBuilder: (context) => [
-        PopupMenuItem(
-          value: 1,
-          child: const Text("Trang cá nhân",
-              style: TextStyle(fontSize: 18, color: Colors.black87)),
-          onTap: () {
-            context.router.pushNamed(Routes.userprofile);
-          },
-        )
-      ],
-      offset: const Offset(0, kTextTabBarHeight),
-    );
+    return AppIconButton(
+        onPressed: () {
+          context.router.pushNamed(Routes.userprofile);
+        },
+        icon: Row(children: [
+          Text(cubit.nameCustom(controller.currentUser.value.fullname)),
+          const SizedBox(width: 5),
+          Image.asset(urlAvatarUser,
+              width: AppDimens.size30.width, height: AppDimens.size30.height)
+        ]));
   }
 
-  void _isLoved(int index) {
-    setState(() {
-      listButtonObject[index].isLoved = !listButtonObject[index].isLoved;
-    });
-    print(listButtonObject[index].isLoved);
-  }
-
-  void onSearch() {
-    print(txtSearch);
+  Widget SettingButton() {
+    return AppIconButton(
+        onPressed: () => {_turnSettingPage()},
+        icon: const Icon(Icons.settings, color: Colors.white),
+        borderRadius: AppDimens.radius200,
+        padding: const EdgeInsets.all(AppDimens.spacing5),
+        width: AppDimens.size30.width,
+        height: AppDimens.size30.height,
+        backgroundColor: AppColorScheme.dark().cardColor);
   }
 
   void _turnSettingPage() {
@@ -270,13 +271,18 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
         }));
   }
 
+  void _buildSlider() {
+    advertisementController.addListener(() {
+      setState(() {
+        _adsCurrentPage = advertisementController.page!.round();
+      });
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    _adsController.addListener(() {
-      setState(() {
-        _adsCurrentPage = _adsController.page!.round();
-      });
-    });
+    _buildSlider();
+    controller.getCurrentUser(context);
   }
 }

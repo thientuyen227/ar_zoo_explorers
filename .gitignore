@@ -32,7 +32,10 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
-
+/unity/
+unity/
+.unity/
+.unity
 # Symbolication related
 app.*.symbols
 
@@ -42,4 +45,6 @@ app.*.map.json
 # Android Studio will place build artifacts here
 /android/app/debug
 /android/app/profile
-/android/app/release
+/android/app/releaseS
+/ARExample/
+

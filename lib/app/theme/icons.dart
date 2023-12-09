@@ -36,9 +36,26 @@ class AppIcons {
   static const String icNext_png = "assets/icons/ic_next.png";
   static const String icWhiteSubmit = "assets/icons/ic_white_submit.png";
   static const String icDefaultUser = "assets/icons/ic_default_user.png";
-  static const String icLogout = "assets/icons/ic_logout.png";
   static const String icTerm = "assets/icons/ic_term.png";
+  static const String icFacebookCircle = "assets/icons/ic_facebook_circle.png";
+  static const String icGMailCircle = "assets/icons/ic_gmail_circle.png";
+  static const String icAppleCircle = "assets/icons/ic_apple_circle.png";
+  static const String icProvider = "assets/icons/ic_provider.png";
+  static const String icProvincial = "assets/icons/ic_provincial.png";
+  static const String icX = "assets/icons/ic_x.png";
+  static const String icCamera = "assets/icons/ic_camera.png";
+  static const String icEye = "assets/icons/ic_eye.png";
+
+  //Account Manager
+  static const String icUserProfile = "assets/icons/ic_userprofile.png";
+  static const String icChangePassword = "assets/icons/ic_changepassword.png";
+  static const String icTermsOfUse = "assets/icons/ic_termsofuse.png";
+  static const String icAnnouncement = "assets/icons/ic_announcement.png";
   static const String icEvent = "assets/icons/ic_event.png";
+  static const String icRating = "assets/icons/ic_rating.png";
+  static const String icLanguage = "assets/icons/ic_language.png";
+  static const String icHelp = "assets/icons/ic_help.png";
+  static const String icLogout = "assets/icons/ic_logout.png";
 
   //Icon animals
   static const String icWolf = "assets/icons/animals/wolf.png";
@@ -60,6 +77,72 @@ class AppImages {
   static const String imgDefaultUser = "assets/images/img_default_user.png";
   static const String imgProfile128x128 =
       "assets/images/img_profile_128x128.png";
+
+  //MODELS BUTTONS
+  static const String imgAmphibians =
+      "assets/images/model_category/img_amphibians.png";
+  static const String imgArthropods =
+      "assets/images/model_category/img_arthropods.png";
+  static const String imgBirds = "assets/images/model_category/img_birds.png";
+  static const String imgFishs = "assets/images/model_category/img_fishs.png";
+  static const String imgMammals =
+      "assets/images/model_category/img_mammals.png";
+  static const String imgMollusks =
+      "assets/images/model_category/img_mollusks.png";
+  static const String imgReptiles =
+      "assets/images/model_category/img_reptiles.png";
+
+  //BIRDS
+  static const String imgChicken = "assets/images/birds/img_chicken.png";
+  static const String imgDuck = "assets/images/birds/img_duck.png";
+  static const String imgEagle = "assets/images/birds/img_eagle.png";
+
+  //FISHES
+  static const String imgAngelfish = "assets/images/fishes/img_angelfish.png";
+  static const String imgHammerShark =
+      "assets/images/fishes/img_hammer_shark.png";
+  static const String imgShark = "assets/images/fishes/img_shark.png";
+
+  //MAMMALS
+  static const String imgBat = "assets/images/mammals/img_bat.png";
+  static const String imgBuffalo = "assets/images/mammals/img_buffalo.png";
+
+  static const String imgCat = "assets/images/mammals/img_cat.png";
+  static const String imgCow = "assets/images/mammals/img_cow.png";
+
+  static const String imgDeer = "assets/images/mammals/img_deer.png";
+  static const String imgDog = "assets/images/mammals/img_dog.png";
+  static const String imgDolphin = "assets/images/mammals/img_dolphin.png";
+
+  static const String imgElephant = "assets/images/mammals/img_elephant.png";
+
+  static const String imgHippo = "assets/images/mammals/img_hippo.png";
+
+  static const String imgLeopard = "assets/images/mammals/img_leopard.png";
+  static const String imgLion = "assets/images/mammals/img_lion.png";
+
+  static const String imgMonkey = "assets/images/mammals/img_monkey.png";
+  static const String imgMouse = "assets/images/mammals/img_mouse.png";
+
+  static const String imgPig = "assets/images/mammals/img_pig.png";
+
+  static const String imgRabbit = "assets/images/mammals/img_rabbit.png";
+  static const String imgRhino = "assets/images/mammals/img_rhino.png";
+
+  static const String imgSheep = "assets/images/mammals/img_sheep.png";
+
+  static const String imgTiger = "assets/images/mammals/img_tiger.png";
+
+  static const String imgWhale = "assets/images/mammals/img_whale.png";
+  static const String imgWolf = "assets/images/mammals/img_wolf.png";
+
+  //REPTILES
+  static const String imgCrocodile = "assets/images/reptiles/img_crocodile.png";
+  static const String imgSnake = "assets/images/reptiles/img_snake.png";
+  static const String imgTurtle = "assets/images/reptiles/img_turtle.png";
+
+  //ARTHOPODS
+  static const String imgSpider = "assets/images/arthropods/img_spider.png";
 }
 
 class AppLotties {
