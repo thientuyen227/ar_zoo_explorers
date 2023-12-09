@@ -6,8 +6,8 @@ class ForgotPasswordState {
     this.pageStatus = PageStatus.loading,
   });
 
-  // LoginState copyWith({PageStatus? pageStatus}) {
-  //   return LoginState(
+  // ForgotPasswordState copyWith({PageStatus? pageStatus}) {
+  //   return ForgotPasswordState(
   //     pageStatus: pageStatus ?? this.pageStatus,
   //   );
   // }

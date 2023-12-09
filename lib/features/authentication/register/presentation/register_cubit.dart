@@ -4,7 +4,7 @@ import 'package:injectable/injectable.dart';
 
 import '../../../../app/theme/icons.dart';
 import '../../../../base/base_cubit.dart';
-import '../../../base-model/FormBuilderTextField_Model.dart';
+import '../../../base-model/form_builder_text_field_model.dart';
 import '../../login/model/OthersLoginButton_Model.dart';
 
 @injectable

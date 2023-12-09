@@ -42,6 +42,9 @@ class AppIcons {
   static const String icAppleCircle = "assets/icons/ic_apple_circle.png";
   static const String icProvider = "assets/icons/ic_provider.png";
   static const String icProvincial = "assets/icons/ic_provincial.png";
+  static const String icX = "assets/icons/ic_x.png";
+  static const String icCamera = "assets/icons/ic_camera.png";
+  static const String icEye = "assets/icons/ic_eye.png";
 
   //Account Manager
   static const String icUserProfile = "assets/icons/ic_userprofile.png";
@@ -77,25 +80,28 @@ class AppImages {
 
   //MODELS BUTTONS
   static const String imgAmphibians =
-      "assets/images/model_type/img_amphibians.png";
+      "assets/images/model_category/img_amphibians.png";
   static const String imgArthropods =
-      "assets/images/model_type/img_arthropods.png";
-  static const String imgBirds = "assets/images/model_type/img_birds.png";
-  static const String imgFishs = "assets/images/model_type/img_fishs.png";
-  static const String imgMammals = "assets/images/model_type/img_mammals.png";
-  static const String imgMollusks = "assets/images/model_type/img_mollusks.png";
-  static const String imgReptiles = "assets/images/model_type/img_reptiles.png";
+      "assets/images/model_category/img_arthropods.png";
+  static const String imgBirds = "assets/images/model_category/img_birds.png";
+  static const String imgFishs = "assets/images/model_category/img_fishs.png";
+  static const String imgMammals =
+      "assets/images/model_category/img_mammals.png";
+  static const String imgMollusks =
+      "assets/images/model_category/img_mollusks.png";
+  static const String imgReptiles =
+      "assets/images/model_category/img_reptiles.png";
 
-  //BIRD
+  //BIRDS
   static const String imgChicken = "assets/images/birds/img_chicken.png";
   static const String imgDuck = "assets/images/birds/img_duck.png";
   static const String imgEagle = "assets/images/birds/img_eagle.png";
 
-  //FISHS
-  static const String imgAnglefish = "assets/images/fishs/img_anglefish.png";
+  //FISHES
+  static const String imgAngelfish = "assets/images/fishes/img_angelfish.png";
   static const String imgHammerShark =
-      "assets/images/fishs/img_hammer_shark.png";
-  static const String imgShark = "assets/images/fishs/img_shark.png";
+      "assets/images/fishes/img_hammer_shark.png";
+  static const String imgShark = "assets/images/fishes/img_shark.png";
 
   //MAMMALS
   static const String imgBat = "assets/images/mammals/img_bat.png";
@@ -127,7 +133,7 @@ class AppImages {
 
   static const String imgTiger = "assets/images/mammals/img_tiger.png";
 
-  static const String imgWhales = "assets/images/mammals/img_whales.png";
+  static const String imgWhale = "assets/images/mammals/img_whale.png";
   static const String imgWolf = "assets/images/mammals/img_wolf.png";
 
   //REPTILES

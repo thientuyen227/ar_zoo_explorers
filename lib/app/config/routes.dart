@@ -17,6 +17,8 @@ class Routes {
   static const String forgotpassword = "/forgotpassword";
   static const String resetpassword = "/resetpassword";
   static const String changepassword = "/changepassword";
+  static const String animalmodels = "/animalmodels";
+  static const String modeldetail = "/modeldetail";
 
   static Route<T> fadeThrough<T>(RouteSettings settings, WidgetBuilder page,
       {int duration = 300}) {

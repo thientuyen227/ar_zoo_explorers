@@ -3,7 +3,7 @@ import 'package:ar_zoo_explorers/features/authentication/login/presentation/logi
 import 'package:injectable/injectable.dart';
 
 import '../../../../app/theme/icons.dart';
-import '../../../base-model/FormBuilderTextField_Model.dart';
+import '../../../base-model/form_builder_text_field_model.dart';
 
 @injectable
 class LoginCubit extends BaseCubit<LoginState> {

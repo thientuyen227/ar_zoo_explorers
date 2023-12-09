@@ -5,7 +5,7 @@ import 'package:internationalization/internationalization.dart';
 
 import '../../../../app/theme/icons.dart';
 import '../../../../base/base_cubit.dart';
-import '../../../base-model/FormBuilderTextField_Model.dart';
+import '../../../base-model/form_builder_text_field_model.dart';
 
 @injectable
 class UserInformationCubit extends BaseCubit<UserInformationState> {

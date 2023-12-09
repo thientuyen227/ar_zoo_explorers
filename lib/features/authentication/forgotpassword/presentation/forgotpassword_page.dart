@@ -10,7 +10,7 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import '../../../../app/theme/icons.dart';
 import '../../../../base/widgets/page_loading_indicator.dart';
 import '../../../../core/data/controller/auth_controller.dart';
-import '../../../base-model/FormBuilderTextField_Model.dart';
+import '../../../base-model/form_builder_text_field_model.dart';
 
 @RoutePage()
 class ForgotPasswordPage extends StatefulWidget {

@@ -1,13 +1,5 @@
-import 'package:ar_zoo_explorers/app/theme/colors.dart';
-import 'package:ar_zoo_explorers/app/theme/dimens.dart';
-import 'package:ar_zoo_explorers/app/theme/icons.dart';
-import 'package:ar_zoo_explorers/base/base_state.dart';
-import 'package:ar_zoo_explorers/features/base-model/button_object.dart';
-import 'package:ar_zoo_explorers/features/base-model/form_builder_text_field_model.dart';
-import 'package:ar_zoo_explorers/features/home/model/advertisement_object.dart';
-import 'package:ar_zoo_explorers/features/home/presentation/home_state.dart';
-import 'package:ar_zoo_explorers/features/setting/presentation/setting_page.dart';
-import 'package:ar_zoo_explorers/utils/widget/button_widget.dart';
+import 'package:ar_zoo_explorers/features/animalmodels/presentation/animalmodels_cubit.dart';
+import 'package:ar_zoo_explorers/features/animalmodels/presentation/animalmodels_state.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -15,32 +7,33 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
 import '../../../app/config/routes.dart';
+import '../../../app/theme/dimens.dart';
+import '../../../app/theme/icons.dart';
+import '../../../base/base_state.dart';
 import '../../../base/widgets/page_loading_indicator.dart';
 import '../../../core/data/controller/auth_controller.dart';
-import 'home_cubit.dart';
+import '../../../utils/widget/button_widget.dart';
+import '../../base-model/button_object.dart';
+import '../../base-model/form_builder_text_field_model.dart';
 
 @RoutePage()
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class AnimalModelsPage extends StatefulWidget {
+  const AnimalModelsPage({super.key});
 
   @override
   State createState() => _State();
 }
 
-class _State extends BaseState<HomeState, HomeCubit, HomePage> {
-  final PageController advertisementController = PageController();
+class _State
+    extends BaseState<AnimalModelsState, AnimalModelsCubit, AnimalModelsPage> {
   final controller = AuthController.findOrInitialize;
   final _formKey = GlobalKey<FormBuilderState>();
 
   String urlAvatarUser = AppIcons.icDefaultUser;
   String txtSearch = "";
-  int _adsCurrentPage = 0;
-
-  AdvertisementObject listAdvertisement =
-      AdvertisementObject([AppImages.imgAdvertisement, AppImages.imgAds1]);
 
   @override
-  Widget buildByState(BuildContext context, HomeState state) {
+  Widget buildByState(BuildContext context, AnimalModelsState state) {
     return Obx(() => GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         child: PageLoadingIndicator(
@@ -48,18 +41,14 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
             scaffold: Scaffold(
                 appBar: AppBar(
                     centerTitle: true,
-                    title: const Text("Trang Chủ",
+                    title: const Text("Animal Models",
                         style: TextStyle(fontSize: 20, color: Colors.white)),
                     leading: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [SettingButton()]),
+                        children: [TurnBack()]),
                     actions: [
                       ProfileCustom(),
-                      IconButton(
-                          onPressed: () {
-                            context.router.pushNamed(Routes.testunity);
-                          },
-                          icon: const Icon(Icons.ac_unit))
+                      const SizedBox(width: 10),
                     ]),
                 body: FormBuilder(
                     key: _formKey,
@@ -69,7 +58,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
                             child: Column(children: [
                               const SizedBox(height: 12),
                               SearchBar(cubit.searchBar),
-                              CarouselSlider(context, listAdvertisement),
+                              const SizedBox(height: 20),
                               ListModelButton(cubit.listButtonObject),
                             ]))))))));
   }
@@ -100,23 +89,25 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   // MODEL BUTTON
   Widget ModelButton(int index) {
     return GestureDetector(
-        onTap: () => context.router.pushNamed(Routes.animalmodels),
+        onTap: () => context.router.pushNamed(Routes.modeldetail),
         child: Container(
             width: MediaQuery.of(context).size.width * 0.4,
             height: MediaQuery.of(context).size.width * 0.4,
             decoration: BoxDecoration(
-                border: Border.all(color: Colors.blue, width: 7),
+                border: Border.all(color: Colors.blue, width: 6),
                 borderRadius: BorderRadius.circular(15.0),
                 color: Colors.white,
                 boxShadow: [
                   BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
+                      color: Colors.grey.withOpacity(0.7),
                       spreadRadius: 2,
                       blurRadius: 5,
                       offset: const Offset(0, 3))
                 ]),
             child: Column(children: [
-              ButtonImage(cubit.listButtonObject[index].icon),
+              Padding(
+                  padding: const EdgeInsets.only(top: 5),
+                  child: ButtonImage(cubit.listButtonObject[index].icon)),
               Center(
                   child: Stack(alignment: Alignment.center, children: [
                 ButtonTitle(cubit.listButtonObject[index].title),
@@ -132,11 +123,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
         width: MediaQuery.of(context).size.width * 0.28,
         height: MediaQuery.of(context).size.width * 0.28,
         decoration: BoxDecoration(
-          //border: Border.all(color: Colors.white, width: 3),
-          borderRadius: BorderRadius.circular(15.0),
-          color: Colors.white,
-          //image: DecorationImage(image: AssetImage(url), fit: BoxFit.cover),
-        ),
+            borderRadius: BorderRadius.circular(15.0), color: Colors.grey[200]),
         child: Image.asset(url, fit: BoxFit.cover));
   }
 
@@ -193,49 +180,6 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
     );
   }
 
-  // SLIDER QUẢNG CÁO
-  Widget CarouselSlider(BuildContext context, AdvertisementObject items) {
-    return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      AdvertisementImages(context, items),
-      AdvertisementIndicator(context, items),
-      const SizedBox(height: 10)
-    ]);
-  }
-
-  // HÌNH ẢNH QUẢNG CÁO
-  Widget AdvertisementImages(BuildContext context, AdvertisementObject items) {
-    return Container(
-        padding:
-            const EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
-        height: 200,
-        child: PageView.builder(
-            controller: advertisementController,
-            itemCount: items.length,
-            itemBuilder: (context, index) {
-              return ClipRRect(
-                  borderRadius: BorderRadius.circular(20.0),
-                  child: Image.asset(items.ads[index], fit: BoxFit.cover));
-            }));
-  }
-
-  Widget AdvertisementIndicator(
-      BuildContext context, AdvertisementObject items) {
-    return Center(
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(items.length, (index) {
-              return Container(
-                  width: 10,
-                  height: 10,
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: _adsCurrentPage == index
-                          ? Colors.blue
-                          : Colors.grey));
-            })));
-  }
-
   Widget ProfileCustom() {
     return AppIconButton(
         onPressed: () {
@@ -249,40 +193,18 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
         ]));
   }
 
-  Widget SettingButton() {
+  Widget TurnBack() {
     return AppIconButton(
-        onPressed: () => {_turnSettingPage()},
-        icon: const Icon(Icons.settings, color: Colors.white),
-        borderRadius: AppDimens.radius200,
-        padding: const EdgeInsets.all(AppDimens.spacing5),
-        width: AppDimens.size30.width,
-        height: AppDimens.size30.height,
-        backgroundColor: AppColorScheme.dark().cardColor);
-  }
-
-  void _turnSettingPage() {
-    Navigator.of(context).push(PageRouteBuilder(
-        opaque: false,
-        pageBuilder: (BuildContext context, _, __) {
-          return const AnimatedOpacity(
-              duration: Duration(milliseconds: 500),
-              opacity: 1.0, // Độ mờ 80%
-              child: SettingPage());
-        }));
-  }
-
-  void _buildSlider() {
-    advertisementController.addListener(() {
-      setState(() {
-        _adsCurrentPage = advertisementController.page!.round();
-      });
-    });
+        onPressed: () {
+          context.router.pop();
+        },
+        icon: Image.asset(AppIcons.icBack_png, scale: 0.65));
   }
 
   @override
   void initState() {
     super.initState();
-    _buildSlider();
     controller.getCurrentUser(context);
+    cubit.listButtonObject = cubit.reptiles;
   }
 }

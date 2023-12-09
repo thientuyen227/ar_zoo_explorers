@@ -3,7 +3,7 @@ import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/base/widgets/page_loading_indicator.dart';
 import 'package:ar_zoo_explorers/features/authentication/login/presentation/login_cubit.dart';
 import 'package:ar_zoo_explorers/features/authentication/login/presentation/login_state.dart';
-import 'package:ar_zoo_explorers/features/base-model/FormBuilderTextField_Model.dart';
+import 'package:ar_zoo_explorers/features/base-model/form_builder_text_field_model.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
