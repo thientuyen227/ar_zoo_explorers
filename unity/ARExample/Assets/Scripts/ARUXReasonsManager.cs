@@ -12,7 +12,7 @@ public class ARUXReasonsManager : MonoBehaviour
 {
     [SerializeField]
     bool m_ShowNotTrackingReasons = true;
-    
+
     public bool showNotTrackingReasons
     {
         get => m_ShowNotTrackingReasons;
@@ -30,7 +30,7 @@ public class ARUXReasonsManager : MonoBehaviour
 
     [SerializeField]
     GameObject m_ReasonParent;
-    
+
     public GameObject reasonParent
     {
         get => m_ReasonParent;
@@ -39,7 +39,7 @@ public class ARUXReasonsManager : MonoBehaviour
 
     [SerializeField]
     Image m_ReasonIcon;
-    
+
     public Image reasonIcon
     {
         get => m_ReasonIcon;
@@ -109,7 +109,7 @@ public class ARUXReasonsManager : MonoBehaviour
     const string k_FeaturesText = "Look for more textures or details in the area.";
     const string k_UnsupportedText = "AR content is not supported.";
     const string k_NoneText = "Wait for tracking to begin.";
-    
+
     void OnEnable()
     {
         ARSession.stateChanged += ARSessionOnstateChanged;
@@ -192,5 +192,5 @@ public class ARUXReasonsManager : MonoBehaviour
         m_ReasonParent.SetActive(true);
         SetReason();
     }
-    
+
 }

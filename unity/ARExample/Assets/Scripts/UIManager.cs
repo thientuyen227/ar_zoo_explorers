@@ -22,14 +22,13 @@ public class UIManager : MonoBehaviour
 
     public bool startWithInstructionalUI
     {
-         get => m_StartWithInstructionalUI;
-         set => m_StartWithInstructionalUI = value;
+        get => m_StartWithInstructionalUI;
+        set => m_StartWithInstructionalUI = value;
     }
 
     public enum InstructionUI
     {
         CrossPlatformFindAPlane,
-        FindAFace,
         ARKitCoachingOverlay,
         TapToPlace,
         None
@@ -54,7 +53,7 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     InstructionGoals m_InstructionalGoal;
-    
+
     public InstructionGoals instructionalGoal
     {
         get => m_InstructionalGoal;
@@ -63,7 +62,7 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     bool m_ShowSecondaryInstructionalUI;
-    
+
     public bool showSecondaryInstructionalUI
     {
         get => m_ShowSecondaryInstructionalUI;
@@ -109,7 +108,7 @@ public class UIManager : MonoBehaviour
 
     Func<bool> m_GoalReached;
     bool m_SecondaryGoalReached;
-    
+
     Queue<UXHandle> m_UXOrderedQueue;
     UXHandle m_CurrentHandle;
     bool m_ProcessingInstructions;
@@ -117,11 +116,44 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     ARPlaneManager m_PlaneManager;
-    
+
     public ARPlaneManager planeManager
     {
         get => m_PlaneManager;
         set => m_PlaneManager = value;
+    }
+
+    [SerializeField]
+    ARFaceManager m_FaceManager;
+    public ARFaceManager faceManager
+    {
+        get => m_FaceManager;
+        set => m_FaceManager = value;
+    }
+
+    [SerializeField]
+    ARHumanBodyManager m_BodyManager;
+    public ARHumanBodyManager bodyManager
+    {
+        get => m_BodyManager;
+        set => m_BodyManager = value;
+    }
+
+    [SerializeField]
+    ARTrackedImageManager m_ImageManager;
+    public ARTrackedImageManager imageManager
+    {
+        get => m_ImageManager;
+        set => m_ImageManager = value;
+    }
+
+    [SerializeField]
+    ARTrackedObjectManager m_ObjectManager;
+
+    public ARTrackedObjectManager objectManager
+    {
+        get => m_ObjectManager;
+        set => m_ObjectManager = value;
     }
 
     [SerializeField]
@@ -134,7 +166,6 @@ public class UIManager : MonoBehaviour
     }
 
     bool m_FadedOff = false;
-
 
     void OnEnable()
     {
@@ -163,12 +194,11 @@ public class UIManager : MonoBehaviour
 
     void Update()
     {
-
         if (m_UXOrderedQueue.Count > 0 && !m_ProcessingInstructions)
         {
             // pop off
             m_CurrentHandle = m_UXOrderedQueue.Dequeue();
-            
+
             // exit instantly, if the goal is already met it will skip showing the first UI and move to the next in the queue 
             m_GoalReached = GetGoal(m_CurrentHandle.Goal);
             if (m_GoalReached.Invoke())
@@ -177,7 +207,7 @@ public class UIManager : MonoBehaviour
             }
 
             // fade on
-            // FadeOnInstructionalUI(m_CurrentHandle.InstructionalUI);
+            FadeOnInstructionalUI(m_CurrentHandle.InstructionalUI);
             m_ProcessingInstructions = true;
             m_FadedOff = false;
         }
@@ -205,9 +235,29 @@ public class UIManager : MonoBehaviour
             {
                 m_PlaneManager = arPlaneManager;
             }
+
+            if (m_ARSessionOrigin.TryGetComponent(out ARFaceManager arFaceManager))
+            {
+                m_FaceManager = arFaceManager;
+            }
+
+            if (m_ARSessionOrigin.TryGetComponent(out ARHumanBodyManager arHumanBodyManager))
+            {
+                m_BodyManager = arHumanBodyManager;
+            }
+
+            if (m_ARSessionOrigin.TryGetComponent(out ARTrackedImageManager arTrackedImageManager))
+            {
+                m_ImageManager = arTrackedImageManager;
+            }
+
+            if (m_ARSessionOrigin.TryGetComponent(out ARTrackedObjectManager arTrackedObjectManager))
+            {
+                m_ObjectManager = arTrackedObjectManager;
+            }
         }
     }
-    
+
     Func<bool> GetGoal(InstructionGoals goal)
     {
         switch (goal)
@@ -265,7 +315,14 @@ public class UIManager : MonoBehaviour
 
     bool MultiplePlanesFound() => m_PlaneManager && m_PlaneManager.trackables.count > 1;
 
-    
+    bool FaceFound() => m_FaceManager && m_FaceManager.trackables.count > 0;
+
+    bool BodyFound() => m_BodyManager && m_BodyManager.trackables.count > 0;
+
+    bool ImageFound() => m_ImageManager && m_ImageManager.trackables.count > 0;
+
+    bool ObjectFound() => m_ObjectManager && m_ObjectManager.trackables.count > 0;
+
     void FadeComplete()
     {
         m_ProcessingInstructions = false;

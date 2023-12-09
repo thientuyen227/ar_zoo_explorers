@@ -66,7 +66,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
             ProfileCustom(),
             IconButton(
                 onPressed: () {
-                  context.router.pushNamed(Routes.testunity);
+                  context.router.pushNamed(Routes.ar);
                 },
                 icon: const Icon(Icons.ac_unit))
           ],

@@ -1,6 +1,12 @@
-﻿using System;
+﻿using FlutterUnityIntegration;
+using Newtonsoft.Json;
+using Siccity.GLTFUtility;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
@@ -11,46 +17,44 @@ public class PlaceObjectsOnPlane : MonoBehaviour
     [Tooltip("Instantiates this prefab on a plane at the touch location.")]
     GameObject m_PlacedPrefab;
 
-    /// <summary>
-    /// The prefab to instantiate on touch.
-    /// </summary>
+    [SerializeField]
+    GameObject visualObject;
+
     public GameObject placedPrefab
     {
         get { return m_PlacedPrefab; }
         set { m_PlacedPrefab = value; }
     }
 
-    /// <summary>
-    /// The object instantiated as a result of a successful raycast intersection with a plane.
-    /// </summary>
     public GameObject spawnedObject { get; private set; }
-
-    /// <summary>
-    /// Invoked whenever an object is placed in on a plane.
-    /// </summary>
     public static event Action onPlacedObject;
 
     ARRaycastManager m_RaycastManager;
-
     static List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
-    
+
     [SerializeField]
     int m_MaxNumberOfObjectsToPlace = 1;
-
     int m_NumberOfPlacedObjects = 0;
 
     [SerializeField]
     bool m_CanReposition = true;
-
+    GameObject wrapper;
     public bool canReposition
     {
         get => m_CanReposition;
         set => m_CanReposition = value;
     }
 
+    string filePath;
+
     void Awake()
     {
         m_RaycastManager = GetComponent<ARRaycastManager>();
+        UnityMessageManager.Instance.OnMessage += onUnityMessage;
+        wrapper = new GameObject
+        {
+            name = "Model"
+        };
     }
 
     void Update()
@@ -67,8 +71,7 @@ public class PlaceObjectsOnPlane : MonoBehaviour
 
                     if (m_NumberOfPlacedObjects < m_MaxNumberOfObjectsToPlace)
                     {
-                        spawnedObject = Instantiate(m_PlacedPrefab, hitPose.position, hitPose.rotation);
-                        
+                        spawnedObject = LoadModel(filePath, hitPose.position, hitPose.rotation);
                         m_NumberOfPlacedObjects++;
                     }
                     else
@@ -78,12 +81,57 @@ public class PlaceObjectsOnPlane : MonoBehaviour
                             spawnedObject.transform.SetPositionAndRotation(hitPose.position, hitPose.rotation);
                         }
                     }
-                    
+
                     if (onPlacedObject != null)
                     {
                         onPlacedObject();
                     }
                 }
+            }
+        }
+    }
+
+    public void DiableVisual()
+    {
+        visualObject.SetActive(false);
+    }
+
+    void onUnityMessage(String message)
+    {
+        filePath = message;
+    }
+
+    private void OnDestroy()
+    {
+        UnityMessageManager.Instance.OnMessage -= onUnityMessage;
+    }
+
+    public void onFlutterMessage(string message)
+    {
+        UnityMessageManager.Instance.SendMessageToFlutter("QQQQQ1");
+    }
+
+    // Tích hợp logic của ModelLoader vào PlaceObjectsOnPlane
+    GameObject LoadModel(string path, Vector3 position, Quaternion rotation)
+    {
+        // Thêm logic của ModelLoader vào đây
+        ResetWrapper();
+        
+
+        GameObject model = Importer.LoadFromFile(path);
+        model.transform.SetParent(wrapper.transform);
+        model.transform.position = position;
+        model.transform.rotation = rotation;
+        return model;
+    }
+
+    void ResetWrapper()
+    {
+        if (wrapper != null)
+        {
+            foreach (Transform t in wrapper.transform)
+            {
+                Destroy(t.gameObject);
             }
         }
     }

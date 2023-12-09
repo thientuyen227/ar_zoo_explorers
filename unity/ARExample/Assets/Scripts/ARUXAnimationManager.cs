@@ -9,7 +9,7 @@ public class ARUXAnimationManager : MonoBehaviour
     [SerializeField]
     [Tooltip("Instructional test for visual UI")]
     TMP_Text m_InstructionText;
-    
+
     /// <summary>
     /// Get the <c>Instructional Text</c>
     /// </summary>
@@ -30,13 +30,12 @@ public class ARUXAnimationManager : MonoBehaviour
     {
         get => m_FindAPlaneClip;
         set => m_FindAPlaneClip = value;
-        
     }
 
     [SerializeField]
     [Tooltip("Tap to place animation")]
     VideoClip m_TapToPlaceClip;
-    
+
     /// <summary>
     /// Get the <c>Tap to place Clip</c>
     /// </summary>
@@ -45,8 +44,6 @@ public class ARUXAnimationManager : MonoBehaviour
         get => m_TapToPlaceClip;
         set => m_TapToPlaceClip = value;
     }
-
-
 
     [SerializeField]
     [Tooltip("ARKit Coaching overlay reference")]
@@ -64,8 +61,7 @@ public class ARUXAnimationManager : MonoBehaviour
     [SerializeField]
     [Tooltip("Video player reference")]
     VideoPlayer m_VideoPlayer;
-    
-    
+
     public VideoPlayer videoPlayer
     {
         get => m_VideoPlayer;
@@ -81,16 +77,16 @@ public class ARUXAnimationManager : MonoBehaviour
         get => m_RawImage;
         set => m_RawImage = value;
     }
-    
+
     [SerializeField]
     [Tooltip("time the UI takes to fade on")]
     float m_FadeOnDuration = 1.0f;
     [SerializeField]
     [Tooltip("time the UI takes to fade off")]
     float m_FadeOffDuration = 0.5f;
-    
-    Color m_AlphaWhite = new Color(1,1,1,0);
-    Color m_White = new Color(1,1,1,1);
+
+    Color m_AlphaWhite = new Color(1, 1, 1, 0);
+    Color m_White = new Color(1, 1, 1, 1);
 
     Color m_TargetColor;
     Color m_StartColor;
@@ -117,6 +113,7 @@ public class ARUXAnimationManager : MonoBehaviour
     }
 
     RenderTexture m_RenderTexture;
+
     void Start()
     {
         m_StartColor = m_AlphaWhite;
@@ -125,7 +122,6 @@ public class ARUXAnimationManager : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(m_VideoPlayer);
         if (!m_VideoPlayer.isPrepared)
         {
             return;
@@ -140,8 +136,8 @@ public class ARUXAnimationManager : MonoBehaviour
                 m_TweenDuration = m_FadeOnDuration;
                 m_FadeOff = false;
             }
-        
-            if(m_FadeOff)
+
+            if (m_FadeOff)
             {
                 m_StartColor = m_White;
                 m_TargetColor = m_AlphaWhite;
@@ -149,14 +145,14 @@ public class ARUXAnimationManager : MonoBehaviour
 
                 m_FadeOn = false;
             }
-            
+
             if (m_TweenTime < 1)
             {
                 m_TweenTime += Time.deltaTime / m_TweenDuration;
                 m_LerpingColor = Color.Lerp(m_StartColor, m_TargetColor, m_TweenTime);
                 m_RawImage.color = m_LerpingColor;
                 m_InstructionText.color = m_LerpingColor;
-                
+
                 m_Tweening = true;
             }
             else
@@ -165,7 +161,7 @@ public class ARUXAnimationManager : MonoBehaviour
                 m_FadeOff = false;
                 m_FadeOn = false;
                 m_Tweening = false;
- 
+
                 // was it a fade off?
                 if (m_TargetColor == m_AlphaWhite)
                 {
@@ -183,18 +179,14 @@ public class ARUXAnimationManager : MonoBehaviour
             }
         }
     }
-    
+
     public void ShowTapToPlace()
     {
         m_VideoPlayer.clip = m_TapToPlaceClip;
-        Debug.Log(m_VideoPlayer.name);
         m_VideoPlayer.Play();
         m_InstructionText.text = k_TapToPlaceText;
-
         m_FadeOn = true;
     }
-
-    
 
     public void ShowCrossPlatformFindAPlane()
     {
@@ -230,7 +222,7 @@ public class ARUXAnimationManager : MonoBehaviour
 
         return false;
     }
-    
+
     public void FadeOffCurrentUI()
     {
         // assumes coaching overlay is first in the order
@@ -246,7 +238,7 @@ public class ARUXAnimationManager : MonoBehaviour
             }
             m_FadeOff = true;
         }
-        
+
         if (m_VideoPlayer.clip != null)
         {
             // handle exiting fade out early if currently fading out another Clip
