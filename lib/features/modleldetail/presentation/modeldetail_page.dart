@@ -17,7 +17,7 @@ class ModelDetailPage extends StatefulWidget {
 
 class _State
     extends BaseState<ModelDetailState, ModelDetailCubit, ModelDetailPage> {
-  String imagePath = AppImages.imgElephant;
+  String imagePath = AppImages.imgAngelfish;
   @override
   Widget buildByState(BuildContext context, ModelDetailState state) {
     return Scaffold(
