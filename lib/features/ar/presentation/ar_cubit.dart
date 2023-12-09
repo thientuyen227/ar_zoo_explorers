@@ -17,15 +17,14 @@ class ARCubit extends BaseCubit<ARState> {
 
   HttpClient? httpClient;
 
-  Future<Map<String, dynamic>> getFilePath(String filename) async {
+  Future<Map<String, dynamic>> getFilePath(String filename, String type) async {
     String dir = (await getApplicationDocumentsDirectory()).path;
-    File file = File('$dir/$filename.glb');
+    File file = File('$dir/$filename.$type');
     return {'dir': dir, 'file': file};
   }
 
-  void downloadAndUnpack(String id, String url, String filename) async {
-    Map<String, dynamic> filePathInfo = await getFilePath(filename);
-    String dir = filePathInfo['dir'];
+  void downloadAndUnpack(String filename, String type) async {
+    Map<String, dynamic> filePathInfo = await getFilePath(filename, type);
     File file = filePathInfo['file'];
     bool filePath = await checkFileExits(file.path);
     //get link download
@@ -46,8 +45,8 @@ class ARCubit extends BaseCubit<ARState> {
     return File(name).exists();
   }
 
-  Future<bool> downloadModel(String name) async {
-    Map<String, dynamic> filePathInfo = await getFilePath(name);
+  Future<bool> downloadModel(String name, String type) async {
+    Map<String, dynamic> filePathInfo = await getFilePath(name, type);
     File file = filePathInfo['file'];
     bool fileExits = await checkFileExits(file.path);
     if (fileExits) {

@@ -53,12 +53,12 @@ class FirebaseFirestoreSource {
     required String id,
     required String title,
     required String icon,
-    required String link,
+    required String type,
     required String name,
   }) async {
     await _animalModelCollectionRef
         .doc(id)
-        .update({"title": title, "icon": icon, "link": link, "name": name});
+        .update({"title": title, "icon": icon, "type": type, "name": name});
     return getAnimal(id);
   }
 

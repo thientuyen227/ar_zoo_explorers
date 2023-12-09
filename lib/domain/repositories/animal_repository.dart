@@ -9,12 +9,12 @@ abstract class AnimalRepository {
   Future<Either<Failure, Success<AnimalEntity>>> createAnimal(
       {required String title,
       required String icon,
-      required String link,
+      required String type,
       required String name});
   Future<Either<Failure, Success<AnimalEntity>>> updateAnimal(
       {required String id,
       required String title,
       required String icon,
-      required String link,
+      required String type,
       required String name});
 }
