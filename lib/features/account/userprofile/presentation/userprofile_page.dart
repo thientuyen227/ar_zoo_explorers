@@ -77,19 +77,7 @@ class _State
                   image: AssetImage(AppImages.imgAppLogoBG),
                   fit: BoxFit.cover))),
       Positioned(
-          left: 0,
-          right: 0,
-          bottom: 0,
-          child: Center(
-              child: Container(
-                  width: MediaQuery.of(context).size.height * 0.15,
-                  height: MediaQuery.of(context).size.height * 0.15,
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white, width: 5),
-                      shape: BoxShape.circle,
-                      image: const DecorationImage(
-                          image: AssetImage(AppImages.imgProfile128x128),
-                          fit: BoxFit.cover))))),
+          left: 0, right: 0, bottom: 0, child: Center(child: UserAvatar())),
     ]);
   }
 
@@ -194,5 +182,25 @@ class _State
                       color: Colors.grey[900],
                       fontStyle: FontStyle.italic))),
         ]));
+  }
+
+  Widget UserAvatar() {
+    return Container(
+        width: MediaQuery.of(context).size.height * 0.155,
+        height: MediaQuery.of(context).size.height * 0.155,
+        decoration: BoxDecoration(
+            border: Border.all(color: Colors.white, width: 5),
+            shape: BoxShape.circle),
+        child: ClipOval(
+          child: (cubit.userAvatar == "")
+              ? Image.asset(AppImages.imgProfile128x128, fit: BoxFit.cover)
+              : Image.network(cubit.userAvatar, fit: BoxFit.cover),
+        ));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    cubit.setUserAvatar(controller.currentUser.value.avatarUrl);
   }
 }

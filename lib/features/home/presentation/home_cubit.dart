@@ -3,6 +3,7 @@ import 'package:ar_zoo_explorers/features/home/presentation/home_state.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../app/theme/icons.dart';
+import '../../../domain/entities/animal_category_entity.dart';
 import '../../base-model/button_object.dart';
 import '../../base-model/form_builder_text_field_model.dart';
 import '../model/advertisement_object.dart';
@@ -14,22 +15,23 @@ class HomeCubit extends BaseCubit<HomeState> {
   FormBuilderTextFieldModel searchBar = FormBuilderTextFieldModel(
       name: "search", hint_text: "search", icon_suffix: AppIcons.icSearch);
 
-  List<ButtonObject> listButtonObject = [
-    ButtonObject(title: "Mammals", icon: AppImages.imgMammals),
-    ButtonObject(title: "Fishs", icon: AppImages.imgFishs),
-    ButtonObject(title: "Birds", icon: AppImages.imgBirds),
-    ButtonObject(title: "Reptiles", icon: AppImages.imgReptiles),
-    ButtonObject(title: "Arthropods", icon: AppImages.imgArthropods),
-    ButtonObject(title: "Amphibians", icon: AppImages.imgAmphibians),
-    ButtonObject(title: "Mollusks", icon: AppImages.imgMollusks),
-  ];
+  List<ButtonObject> listAnimalCategory = [];
 
   AdvertisementObject listAdvertisement =
       AdvertisementObject([AppImages.imgAdvertisement, AppImages.imgAds1]);
 
+  void setListAnimalCategory(List<AnimalCategoryEntity> list) {
+    if (list.isNotEmpty) {
+      for (int i = 0; i < list.length; i++) {
+        listAnimalCategory.add(ButtonObject(
+            title: list[i].title, icon: list[i].imageUrl, id: list[i].id));
+      }
+    }
+  }
+
   void isLoved(int index) {
-    listButtonObject[index].isLoved = !listButtonObject[index].isLoved;
-    print(listButtonObject[index].isLoved);
+    listAnimalCategory[index].isLoved = !listAnimalCategory[index].isLoved;
+    print(listAnimalCategory[index].isLoved);
   }
 
   void onSearch(String? content) {

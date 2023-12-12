@@ -17,7 +17,7 @@ class ModelDetailPage extends StatefulWidget {
 
 class _State
     extends BaseState<ModelDetailState, ModelDetailCubit, ModelDetailPage> {
-  String imagePath = AppImages.imgAngelfish;
+  String imagePath = AppImages.imgElephant;
   @override
   Widget buildByState(BuildContext context, ModelDetailState state) {
     return Scaffold(
@@ -33,16 +33,12 @@ class _State
             actions: const []),
         body: Stack(children: [
           SizedBox(width: cubit.WIDTH, height: cubit.HEIGHT),
-          ModelDetail(context),
+          BackgroundPage(context),
           BackButton()
         ]));
   }
 
-  Widget ModelDetail(BuildContext context) {
-    return BackgroundPage();
-  }
-
-  Widget BackgroundPage() {
+  Widget BackgroundPage(BuildContext context) {
     return SingleChildScrollView(
         child: Stack(children: [
       Container(
@@ -104,7 +100,7 @@ class _State
                       height: cubit.WIDTH * 0.11,
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: cubit.backgroundColor)),
+                          color: Colors.black.withOpacity(0.6))),
                   ClipRect(
                       child: Image.asset(AppIcons.icX,
                           width: cubit.WIDTH * 0.1, fit: BoxFit.cover))

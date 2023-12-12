@@ -1,3 +1,4 @@
+import 'package:ar_zoo_explorers/core/data/models/animal_category_model.dart';
 import 'package:ar_zoo_explorers/core/data/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -9,6 +10,10 @@ class FirebaseFirestoreSource {
 
   final CollectionReference<Map<String, dynamic>> _animalModelCollectionRef =
       FirebaseFirestore.instance.collection('animal_models');
+
+  final CollectionReference<Map<String, dynamic>> _animalCategoryCollectionRef =
+      FirebaseFirestore.instance.collection('model_categories');
+
   Future<String> get generateUniqueAnimalModelId async =>
       _animalModelCollectionRef.add({}).then((value) => value.id);
 
@@ -25,6 +30,26 @@ class FirebaseFirestoreSource {
   Future<UserModel> createUser(UserModel user) async {
     await _userModelCollectionRef.doc(user.id).set(user.toMap());
     return user;
+  }
+
+  Future<UserModel?> updateUser({
+    required String id,
+    required String fullname,
+    required String phone,
+    required String avatarUrl,
+    required String address,
+    required String birth,
+    required String provider,
+  }) async {
+    await _userModelCollectionRef.doc(id).update({
+      'fullname': fullname,
+      'phone': phone,
+      'address': address,
+      'birth': birth,
+      'avatarUrl': avatarUrl,
+      'provider': provider
+    });
+    return getUser(id);
   }
 
   //đưa danh sách các đối tượng vào firebase
@@ -62,24 +87,26 @@ class FirebaseFirestoreSource {
     return getAnimal(id);
   }
 
-  Future<UserModel?> updateUser({
-    required String id,
-    required String fullname,
-    required String phone,
-    required String avatarUrl,
-    required String address,
-    required String birth,
-    required String provider,
-  }) async {
-    await _userModelCollectionRef.doc(id).update({
-      'fullname': fullname,
-      'phone': phone,
-      'address': address,
-      'birth': birth,
-      'avatarUrl': avatarUrl,
-      'provider': provider
-    });
-    return getUser(id);
+  //MODEL CATEGORY
+  Future<AnimalCategoryModel?> getAnimalCategoryModel(String id) async {
+    var document = await _animalCategoryCollectionRef.doc(id).get();
+    if (document.exists && document.data() != null) {
+      return AnimalCategoryModel.fromMap(document.data()!);
+    } else {
+      return null;
+    }
+  }
+
+  Future<List<AnimalCategoryModel>?> getAllAnimalCategories() async {
+    var querySnapshot = await _animalCategoryCollectionRef.get();
+    if (querySnapshot != null) {
+      List<AnimalCategoryModel> categories = querySnapshot.docs
+          .map((doc) => AnimalCategoryModel.fromMap(doc.data()))
+          .toList();
+      return categories;
+    } else {
+      return null;
+    }
   }
 }
 

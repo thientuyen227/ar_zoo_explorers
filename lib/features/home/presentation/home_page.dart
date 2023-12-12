@@ -2,6 +2,7 @@ import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/dimens.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
+import 'package:ar_zoo_explorers/core/data/controller/animal_category_controller.dart';
 import 'package:ar_zoo_explorers/features/base-model/button_object.dart';
 import 'package:ar_zoo_explorers/features/base-model/form_builder_text_field_model.dart';
 import 'package:ar_zoo_explorers/features/home/model/advertisement_object.dart';
@@ -30,6 +31,7 @@ class HomePage extends StatefulWidget {
 class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   final PageController advertisementController = PageController();
   final controller = AuthController.findOrInitialize;
+  final cateController = AnimalCategoryController.findOrInitialize;
   final _formKey = GlobalKey<FormBuilderState>();
 
   String urlAvatarUser = AppIcons.icDefaultUser;
@@ -70,7 +72,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
                               const SizedBox(height: 12),
                               SearchBar(cubit.searchBar),
                               CarouselSlider(context, listAdvertisement),
-                              ListModelButton(cubit.listButtonObject),
+                              ListModelButton(cubit.listAnimalCategory),
                             ]))))))));
   }
 
@@ -116,10 +118,10 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
                       offset: const Offset(0, 3))
                 ]),
             child: Column(children: [
-              ButtonImage(cubit.listButtonObject[index].icon),
+              ButtonImage(cubit.listAnimalCategory[index].icon),
               Center(
                   child: Stack(alignment: Alignment.center, children: [
-                ButtonTitle(cubit.listButtonObject[index].title),
+                ButtonTitle(cubit.listAnimalCategory[index].title),
                 LoveButton(index)
               ]))
             ])));
@@ -128,16 +130,20 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   // ẢNH ĐẠI DIỆN MODEL CỦA BUTTON
   Widget ButtonImage(String url) {
     return Container(
-        padding: const EdgeInsets.all(5.0),
-        width: MediaQuery.of(context).size.width * 0.28,
-        height: MediaQuery.of(context).size.width * 0.28,
-        decoration: BoxDecoration(
-          //border: Border.all(color: Colors.white, width: 3),
-          borderRadius: BorderRadius.circular(15.0),
-          color: Colors.white,
-          //image: DecorationImage(image: AssetImage(url), fit: BoxFit.cover),
-        ),
-        child: Image.asset(url, fit: BoxFit.cover));
+      padding: const EdgeInsets.all(5.0),
+      width: MediaQuery.of(context).size.width * 0.28,
+      height: MediaQuery.of(context).size.width * 0.28,
+      decoration: BoxDecoration(
+        //border: Border.all(color: Colors.white, width: 3),
+        borderRadius: BorderRadius.circular(15.0),
+        color: Colors.white,
+        //image: DecorationImage(image: AssetImage(url), fit: BoxFit.cover),
+      ),
+      //child: Image.asset(url, fit: BoxFit.cover)
+      child: (url == "")
+          ? Image.asset(AppImages.imgProfile128x128, fit: BoxFit.cover)
+          : Image.network(url, fit: BoxFit.cover),
+    );
   }
 
   // TÊN MODEL
@@ -146,7 +152,9 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
         width: 80,
         child: Text(title,
             style: const TextStyle(
-                color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
+                color: Colors.black,
+                fontSize: 11.5,
+                fontWeight: FontWeight.bold),
             softWrap: true,
             textAlign: TextAlign.center));
   }
@@ -163,7 +171,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
                     cubit.isLoved(index);
                   });
                 },
-                icon: Image.asset(cubit.listButtonObject[index].isLoved
+                icon: Image.asset(cubit.listAnimalCategory[index].isLoved
                     ? AppIcons.icLoved
                     : AppIcons.icHeart))));
   }
@@ -279,10 +287,20 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
     });
   }
 
+  void setAnimalCategory(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      cateController.getAllAnimalCategories(context);
+      setState(() {
+        cubit.setListAnimalCategory(cateController.listAnimalCategory.value);
+      });
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     _buildSlider();
     controller.getCurrentUser(context);
+    setAnimalCategory(context);
   }
 }
