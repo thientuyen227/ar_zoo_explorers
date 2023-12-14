@@ -27,15 +27,9 @@ class AnimalCategoryController extends ControllerHelper {
         request: () => _animalCategoryRepository.getAnimalCategoryModel(id),
         onSuccess: (success) => {
               _setCurrentAnimalCategory(context, success.data),
-              Fluttertoast.showToast(msg: "Truy cập thông tin thành công!")
             },
         onFailure: (failure) =>
             Fluttertoast.showToast(msg: "Truy cập thông tin thất bại!"));
-  }
-
-  _setCurrentAnimalCategory(BuildContext context, AnimalCategoryEntity entity) {
-    currentAnimalCategory.value = entity;
-    update();
   }
 
   Future<List<AnimalCategoryEntity>> getAllAnimalCategories(
@@ -46,7 +40,6 @@ class AnimalCategoryController extends ControllerHelper {
             Fluttertoast.showToast(msg: "Truy cập thông tin thất bại!"),
         onSuccess: (success) => {
               _setListAnimalCategory(context, success.data),
-              Fluttertoast.showToast(msg: "Truy cập thông tin thành công!")
             });
   }
 
@@ -54,6 +47,35 @@ class AnimalCategoryController extends ControllerHelper {
       BuildContext context, List<AnimalCategoryEntity> lstEntity) {
     listAnimalCategory.value = lstEntity;
     update();
+  }
+
+  Future<void> updateCurrentAnimalCategory(
+      BuildContext context, String id) async {
+    await processRequest<AnimalCategoryEntity>(
+        request: () async =>
+            await _animalCategoryRepository.getAnimalCategoryModel(id),
+        onSuccess: (success) =>
+            {_setCurrentAnimalCategory(context, success.data)},
+        onFailure: (failure) =>
+            Fluttertoast.showToast(msg: "Truy cập thông tin thất bại!"));
+  }
+
+  Future<void> _setCurrentAnimalCategory(
+      BuildContext context, AnimalCategoryEntity entity) async {
+    currentAnimalCategory.value = entity;
+
+    update();
+  }
+
+  Future<void> resetCurrentAnimalCategory(BuildContext context) async {
+    currentAnimalCategory.value = AnimalCategoryModel(
+      id: '',
+      name: '',
+      title: '',
+      imageUrl: '',
+      status: true,
+    );
+    update;
   }
 
   static AnimalCategoryController get findOrInitialize {

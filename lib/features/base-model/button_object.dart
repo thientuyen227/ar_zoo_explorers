@@ -5,5 +5,5 @@ class ButtonObject {
   bool isLoved;
 
   ButtonObject(
-      {required this.title, required this.icon, this.isLoved = false, id});
+      {required this.title, required this.icon, this.isLoved = false, this.id});
 }

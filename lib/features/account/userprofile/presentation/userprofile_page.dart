@@ -45,7 +45,6 @@ class _State
               future: controller.getCurrentUser(context),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
-                  print("controller 3 ${controller.currentUser.value.email}");
                   return Column(children: [
                     ProfileHeader(),
                     UserInformation(context),

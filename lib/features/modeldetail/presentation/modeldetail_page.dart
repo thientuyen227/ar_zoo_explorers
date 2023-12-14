@@ -1,11 +1,12 @@
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
-import 'package:ar_zoo_explorers/features/modleldetail/presentation/modeldetail_cubit.dart';
-import 'package:ar_zoo_explorers/features/modleldetail/presentation/modeldetail_state.dart';
+import 'package:ar_zoo_explorers/features/modeldetail/presentation/modeldetail_cubit.dart';
+import 'package:ar_zoo_explorers/features/modeldetail/presentation/modeldetail_state.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 import '../../../app/config/routes.dart';
 import '../../../base/base_state.dart';
+import '../../../core/data/controller/animal_controller.dart';
 
 @RoutePage()
 class ModelDetailPage extends StatefulWidget {
@@ -17,14 +18,15 @@ class ModelDetailPage extends StatefulWidget {
 
 class _State
     extends BaseState<ModelDetailState, ModelDetailCubit, ModelDetailPage> {
-  String imagePath = AppImages.imgElephant;
+  final animalController = AnimalController.findOrInitialize;
+
   @override
   Widget buildByState(BuildContext context, ModelDetailState state) {
     return Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
             centerTitle: true,
-            title: const Text("Model Detail",
+            title: const Text("THÔNG TIN CHI TIẾT",
                 style: TextStyle(fontSize: 20, color: Colors.white)),
             backgroundColor: Colors.transparent,
             elevation: 0,
@@ -50,7 +52,7 @@ class _State
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter)),
           child: WhiteLayoutPage()),
-      ModelImage(imagePath),
+      ModelImage(cubit.imagePath),
       CameraButton()
     ]));
   }
@@ -60,11 +62,18 @@ class _State
         left: 0,
         right: 0,
         top: cubit.HEIGHT * 0.1,
-        child: Align(
-            alignment: Alignment.center,
-            child: ClipRect(
-                child: Image.asset(url,
-                    width: cubit.WIDTH * 0.45, fit: BoxFit.cover))));
+        child: Align(alignment: Alignment.center, child: loadImage(url)));
+  }
+
+  Widget loadImage(String url) {
+    return Image.network(url, width: cubit.WIDTH * 0.45, fit: BoxFit.cover,
+        errorBuilder:
+            (BuildContext context, Object error, StackTrace? stackTrace) {
+      print("Load image from URL fail: $error");
+
+      return Image.asset(AppImages.imgAppLogo,
+          width: cubit.WIDTH * 0.45, fit: BoxFit.cover);
+    });
   }
 
   Widget WhiteLayoutPage() {
@@ -113,7 +122,7 @@ class _State
       Center(
           child: Stack(
               alignment: Alignment.center,
-              children: [ModelTitle("VOI"), Views(1000)])),
+              children: [ModelTitle(cubit.animalTitle), Views(1000)])),
       const SizedBox(height: 15),
       Container(height: 2, width: double.infinity, color: Colors.grey),
       const SizedBox(height: 15),
@@ -184,9 +193,16 @@ class _State
   }
 
   Future<void> setBackgroundColor(BuildContext context) async {
-    Color newColor = await cubit.getBlendedColorFromImage(imagePath);
+    Color newColor = await cubit.getBlendedColorFromImage(cubit.imagePath);
     setState(() {
       cubit.backgroundColor = newColor;
+    });
+  }
+
+  Future<void> setInformation(BuildContext context) async {
+    setState(() {
+      cubit.animalTitle = animalController.currentAnimal.value.title;
+      cubit.imagePath = animalController.currentAnimal.value.icon;
     });
   }
 
@@ -200,8 +216,8 @@ class _State
   @override
   void initState() {
     super.initState();
+    setInformation(context);
     setBackgroundColor(context);
-
     setDimension();
   }
 }

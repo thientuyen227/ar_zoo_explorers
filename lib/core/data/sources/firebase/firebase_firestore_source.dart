@@ -80,11 +80,30 @@ class FirebaseFirestoreSource {
     required String icon,
     required String type,
     required String name,
+    required String categoryId,
+    required bool status,
   }) async {
-    await _animalModelCollectionRef
-        .doc(id)
-        .update({"title": title, "icon": icon, "type": type, "name": name});
+    await _animalModelCollectionRef.doc(id).update({
+      "title": title,
+      "icon": icon,
+      "type": type,
+      "name": name,
+      "categoryId": categoryId,
+      "status": status
+    });
     return getAnimal(id);
+  }
+
+  Future<List<AnimalModel>?> getAllAnimals() async {
+    var querySnapshot = await _animalModelCollectionRef.get();
+    if (querySnapshot != null) {
+      List<AnimalModel> animals = querySnapshot.docs
+          .map((doc) => AnimalModel.fromMap(doc.data()))
+          .toList();
+      return animals;
+    } else {
+      return null;
+    }
   }
 
   //MODEL CATEGORY

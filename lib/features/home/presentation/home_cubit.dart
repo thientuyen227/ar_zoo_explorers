@@ -12,6 +12,9 @@ import '../model/advertisement_object.dart';
 class HomeCubit extends BaseCubit<HomeState> {
   HomeCubit() : super(HomeState());
 
+  String urlAvatarUser = AppIcons.icDefaultUser;
+  int adsCurrentPage = 0;
+
   FormBuilderTextFieldModel searchBar = FormBuilderTextFieldModel(
       name: "search", hint_text: "search", icon_suffix: AppIcons.icSearch);
 
@@ -32,10 +35,6 @@ class HomeCubit extends BaseCubit<HomeState> {
   void isLoved(int index) {
     listAnimalCategory[index].isLoved = !listAnimalCategory[index].isLoved;
     print(listAnimalCategory[index].isLoved);
-  }
-
-  void onSearch(String? content) {
-    print(content);
   }
 
   String nameCustom(String fullname) {
