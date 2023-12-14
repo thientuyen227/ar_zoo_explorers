@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "949816033893",
+    "firebase_url": "https://ar-zoo-explorers-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "ar-zoo-explorers",
     "storage_bucket": "ar-zoo-explorers.appspot.com"
   },
@@ -12,7 +13,20 @@
           "package_name": "com.ttcompany.ar_zoo_explorers"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "949816033893-afaqag9r8dk8mr88qpe6sidmco27b3lr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ttcompany.ar_zoo_explorers",
+            "certificate_hash": "4b434e9dc850d74d8599535f4eb6e22abfd41255"
+          }
+        },
+        {
+          "client_id": "949816033893-kq4tfccftftec3gkueaod3en1qltl9ef.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyByKAjvUEBbxgZIB2vTNerXLUrpSH7okNY"
@@ -20,7 +34,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "949816033893-kq4tfccftftec3gkueaod3en1qltl9ef.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

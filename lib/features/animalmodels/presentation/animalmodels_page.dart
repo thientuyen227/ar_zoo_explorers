@@ -216,11 +216,13 @@ class _State
   }
 
   void setAnimal(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      animalController.getAllAnimals(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await animalController.getAllAnimals(context);
       setState(() {
         cubit.setListAnimal(animalController.listAnimal.value,
             cateController.currentAnimalCategory.value.id);
+        print(animalController.listAnimal.value.length);
+        print(cateController.currentAnimalCategory.value.id);
       });
     });
   }
