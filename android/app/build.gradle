@@ -68,6 +68,11 @@ android {
             matchingFallbacks = ['debug', 'release']
         }
     }
+    aaptOptions {
+
+        noCompress = ['.resource']
+
+    }
 }
 
 flutter {

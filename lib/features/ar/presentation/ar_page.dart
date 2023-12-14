@@ -25,9 +25,7 @@ class _State extends BaseState<ARState, ARCubit, ARPage> {
 
   bool download = false;
 
-  String valueName = "";
-
-  String type = "";
+  UnityWidgetController? unityWidgetController;
 
   @override
   Widget buildByState(BuildContext context, ARState arState) {
@@ -41,25 +39,28 @@ class _State extends BaseState<ARState, ARCubit, ARPage> {
           Positioned(
               top: 0,
               right: 10,
-              child: Row(
-                children: [
-                  Column(
-                    children: [
-                      IconButton(
-                        onPressed: () {},
-                        icon: Image.asset(AppIcons.icFeed),
-                        iconSize: 40,
-                      ),
-                      const Text(
-                        "Feed",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16),
-                      )
-                    ],
-                  ),
-                ],
+              child: Container(
+                color: AppColor.blue,
+                child: Row(
+                  children: [
+                    Column(
+                      children: [
+                        IconButton(
+                          onPressed: () {},
+                          icon: Image.asset(AppIcons.icFeed),
+                          iconSize: 40,
+                        ),
+                        const Text(
+                          "Feed",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
               )),
           Positioned(
               right: 0,
@@ -67,7 +68,9 @@ class _State extends BaseState<ARState, ARCubit, ARPage> {
               child: Column(
                 children: [
                   IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        // sendMessageToUnity("StartAnimation");
+                      },
                       icon: const Icon(Icons.push_pin),
                       color: Colors.white,
                       iconSize: 40),
@@ -141,12 +144,11 @@ class _State extends BaseState<ARState, ARCubit, ARPage> {
                                           width: 2.0)),
                                   child: GestureDetector(
                                     onTap: () {
-                                      valueName = template.name;
-
-                                      type = template.type;
+                                      sendMessageToUnity(
+                                          template.name, template.type);
                                     },
                                     child: Center(
-                                        child: Image.asset(
+                                        child: Image.network(
                                       template.icon,
                                       height: 45,
                                       width: 45,
@@ -164,10 +166,6 @@ class _State extends BaseState<ARState, ARCubit, ARPage> {
                                         onPressed: () {
                                           cubit.downloadAndUnpack(
                                               template.name, template.type);
-
-                                          valueName = template.name;
-
-                                          type = template.type;
                                         },
                                         icon: Image.asset(
                                           AppIcons.icDownload,
@@ -194,18 +192,24 @@ class _State extends BaseState<ARState, ARCubit, ARPage> {
   Future<void> onUnityCreated(UnityWidgetController controller) async {
     print("QQQQQQQ3");
 
-    // Map<String, dynamic> url = {"file": File("/data/data/com.ttcompany.ar_zoo_explorers/files/BlackCat.glb")};
+    unityWidgetController = controller;
 
-    Map<String, dynamic> url = await cubit.getFilePath(valueName, type);
-
-    File filePath = url['file'];
-
-    print("mylink: ${filePath.path}");
-
-    controller.postMessage("AICamera", "onFlutterMessage", filePath.path);
+    unityWidgetController?.postMessage(
+        "AICamera", "onFlutterMessage", "ResetModel");
   }
 
   void onUnityMessage(dynamic data) {
     print("QQQQQQ $data");
+  }
+
+  Future<void> sendMessageToUnity(String valueName, String type) async {
+    Map<String, dynamic> url = await cubit.getFilePath(valueName, type);
+
+    File filePath = url['file'];
+
+    print("TTTT: ${filePath.path}");
+
+    unityWidgetController?.postMessage(
+        "AICamera", "onFlutterMessage", "FilePath: ${filePath.path}");
   }
 }
