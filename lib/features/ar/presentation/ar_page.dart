@@ -196,57 +196,7 @@ class _State extends BaseState<ARState, ARCubit, ARPage> {
 
     // Map<String, dynamic> url = {"file": File("/data/data/com.ttcompany.ar_zoo_explorers/files/BlackCat.glb")};
 
-    // Map<String, dynamic> url = {"file": File("/data/data/com.ttcompany.ar_zoo_explorers/files/Carp.glb")};
-
-    // Map<String, dynamic> url = {"file": File("/data/data/com.ttcompany.ar_zoo_explorers/files/Kill_Whale.glb")};
-
-    // Map<String, dynamic> url = {"file": File("/data/data/com.ttcompany.ar_zoo_explorers/files/AngelFish.glb")};
-
-    // Map<String, dynamic> url = {"file": File("/data/data/com.ttcompany.ar_zoo_explorers/files/Baby_Turtule.glb")};
-
-    // Map<String, dynamic> url = {"file": File("/data/data/com.ttcompany.ar_zoo_explorers/files/BackwedgedButterflyfish.glb")};
-
-    // Map<String, dynamic> url = {"file": File("/data/data/com.ttcompany.ar_zoo_explorers/files/DevilRay.glb")};
-
-    // Map<String, dynamic> url = {"file": File("/data/data/com.ttcompany.ar_zoo_explorers/files/Dolphin.glb")};
-
-    // Map<String, dynamic> url = {"file": File("/data/data/com.ttcompany.ar_zoo_explorers/files/HumpBack.glb")};
-
-    // Map<String, dynamic> url = {"file": File("/data/data/com.ttcompany.ar_zoo_explorers/files/JohnDory.glb")};
-
-    // Map<String, dynamic> url = {"file": File("/data/data/com.ttcompany.ar_zoo_explorers/files/PufferFish.glb")};
-
-    // Map<String, dynamic> url = {"file": File("/data/data/com.ttcompany.ar_zoo_explorers/files/Fawn.glb")};
-
-    // Map<String, dynamic> url = {"file": File("/data/data/com.ttcompany.ar_zoo_explorers/files/Elephant.glb")};
-
-    // Map<String, dynamic> url = {"file": File("/data/data/com.ttcompany.ar_zoo_explorers/files/Spider.glb")};
-
-    // Map<String, dynamic> url = {"file": File("/data/data/com.ttcompany.ar_zoo_explorers/files/Unicorn.glb")};
-
-    // Map<String, dynamic> url = {"file": File("/data/data/com.ttcompany.ar_zoo_explorers/files/Bird.glb")};
-
-    // Map<String, dynamic> url = {"file": File("/data/data/com.ttcompany.ar_zoo_explorers/files/Sunfish.glb")};
-
-    // Map<String, dynamic> url = {"file": File("/data/data/com.ttcompany.ar_zoo_explorers/files/SpermWhale.glb")};
-
-    // Map<String, dynamic> url = {"file": File("/data/data/com.ttcompany.ar_zoo_explorers/files/Hammerhead.glb")};
-
-    // Map<String, dynamic> url = {"file": File("/data/data/com.ttcompany.ar_zoo_explorers/files/Chimaera.glb")};
-
-    // Map<String, dynamic> url = {"file": File("/data/data/com.ttcompany.ar_zoo_explorers/files/Anglerfishes.glb")};
-
-    // Map<String, dynamic> url = await cubit.getFilePath('Whale', '.gltf');
-
-    // Map<String, dynamic> url = await cubit.getFilePath('Price', '.glb'); //Loadmodel fail
-
-    // Map<String, dynamic> url = await cubit.getFilePath('BoxVertexColors', '.gltf'); //Model test của web
-
-    // Map<String, dynamic> url = await cubit.getFilePath('HammerheadShark', '.glb'); //Không load được
-
     Map<String, dynamic> url = await cubit.getFilePath(valueName, type);
-
-    //link Web: https://theslidefactory.com/loading-3d-models-from-the-web-at-runtime-in-unity/ link model
 
     File filePath = url['file'];
 
@@ -257,15 +207,5 @@ class _State extends BaseState<ARState, ARCubit, ARPage> {
 
   void onUnityMessage(dynamic data) {
     print("QQQQQQ $data");
-
-    // Map<String, dynamic> message = jsonDecode(data);
-
-    // Fluttertoast.showToast(msg: "Message from Unity: $message");
-
-    // Future.delayed(const Duration(seconds: 1), () {
-
-    //   Navigator.of(context).pop();
-
-    // });
   }
 }

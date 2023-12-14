@@ -7,8 +7,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
-// import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-// import 'package:firebase_core/firebase_core.dart';
 import 'app/app/app_cubit.dart';
 import 'di/injector.dart';
 
