@@ -19,9 +19,9 @@ import '../core/data/local_storage/local_storage.dart' as _i11;
 import '../features/account/accountmanager/presentation/accountmanager_cubit.dart'
     as _i4;
 import '../features/account/userinformation/presentation/userinformation_cubit.dart'
-    as _i19;
-import '../features/account/userprofile/presentation/userprofile_cubit.dart'
     as _i20;
+import '../features/account/userprofile/presentation/userprofile_cubit.dart'
+    as _i21;
 import '../features/animalmodels/presentation/animalmodels_cubit.dart' as _i5;
 import '../features/ar/presentation/ar_cubit.dart' as _i3;
 import '../features/authentication/changepassword/presentation/changepassword_cubit.dart'
@@ -34,11 +34,12 @@ import '../features/authentication/register/presentation/register_cubit.dart'
 import '../features/authentication/resetpassword/presentation/resetpassword_cubit.dart'
     as _i16;
 import '../features/authentication/termsofservice/presentation/termofservice_cubit.dart'
-    as _i18;
+    as _i19;
 import '../features/home/presentation/home_cubit.dart' as _i10;
-import '../features/modleldetail/presentation/modeldetail_cubit.dart' as _i13;
-import '../features/setting/presentation/setting_cubit.dart' as _i17;
-import '../features/welcome/presentation/welcome_cubit.dart' as _i21;
+import '../features/modeldetail/presentation/modeldetail_cubit.dart' as _i13;
+import '../features/searchmodel/presentation/searchmodel_cubit.dart' as _i17;
+import '../features/setting/presentation/setting_cubit.dart' as _i18;
+import '../features/welcome/presentation/welcome_cubit.dart' as _i22;
 
 // initializes the registration of main-scope dependencies inside of GetIt
 _i1.GetIt $initGetit(
@@ -65,10 +66,11 @@ _i1.GetIt $initGetit(
   gh.singleton<_i14.RecognizeVoiceManager>(_i14.RecognizeVoiceManager());
   gh.factory<_i15.RegisterCubit>(() => _i15.RegisterCubit());
   gh.factory<_i16.ResetPasswordCubit>(() => _i16.ResetPasswordCubit());
-  gh.factory<_i17.SettingCubit>(() => _i17.SettingCubit());
-  gh.factory<_i18.TermOfServiceCubit>(() => _i18.TermOfServiceCubit());
-  gh.factory<_i19.UserInformationCubit>(() => _i19.UserInformationCubit());
-  gh.factory<_i20.UserProfileCubit>(() => _i20.UserProfileCubit());
-  gh.factory<_i21.WelcomeCubit>(() => _i21.WelcomeCubit());
+  gh.factory<_i17.SearchModelCubit>(() => _i17.SearchModelCubit());
+  gh.factory<_i18.SettingCubit>(() => _i18.SettingCubit());
+  gh.factory<_i19.TermOfServiceCubit>(() => _i19.TermOfServiceCubit());
+  gh.factory<_i20.UserInformationCubit>(() => _i20.UserInformationCubit());
+  gh.factory<_i21.UserProfileCubit>(() => _i21.UserProfileCubit());
+  gh.factory<_i22.WelcomeCubit>(() => _i22.WelcomeCubit());
   return getIt;
 }

@@ -24,5 +24,6 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: ChangePasswordRoute.page, path: '/changepassword'),
         AutoRoute(page: AnimalModelsRoute.page, path: '/animalmodels'),
         AutoRoute(page: ModelDetailRoute.page, path: '/modeldetail'),
+        AutoRoute(page: SearchModelRoute.page, path: '/searchmodel'),
       ];
 }

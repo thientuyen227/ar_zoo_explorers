@@ -291,7 +291,7 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
           id: controller.currentUser.value.id,
           fullname: _formKey.currentState!.fields['fullname']!.value,
           phone: _formKey.currentState!.fields['phone']!.value,
-          avatarUrl: '',
+          avatarUrl: cubit.userAvatar,
           address: _getAddress(),
           birth: cubit.getBirthday(),
           provider: cubit.provider);

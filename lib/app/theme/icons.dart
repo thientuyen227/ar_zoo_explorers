@@ -84,7 +84,7 @@ class AppImages {
   static const String imgArthropods =
       "assets/images/model_category/img_arthropods.png";
   static const String imgBirds = "assets/images/model_category/img_birds.png";
-  static const String imgFishs = "assets/images/model_category/img_fishs.png";
+  static const String imgFishes = "assets/images/model_category/img_fishes.png";
   static const String imgMammals =
       "assets/images/model_category/img_mammals.png";
   static const String imgMollusks =

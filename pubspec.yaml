@@ -94,6 +94,7 @@ dependencies:
   flutter_facebook_auth_platform_interface: ^4.1.1
   form_builder_extra_fields: ^10.1.0
   palette_generator: ^0.3.3+3
+  http: ^0.13.6
  
 
 dev_dependencies:

@@ -2,6 +2,7 @@ import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/dimens.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
+import 'package:ar_zoo_explorers/core/data/controller/animal_category_controller.dart';
 import 'package:ar_zoo_explorers/features/base-model/button_object.dart';
 import 'package:ar_zoo_explorers/features/base-model/form_builder_text_field_model.dart';
 import 'package:ar_zoo_explorers/features/home/model/advertisement_object.dart';
@@ -16,6 +17,7 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
 import '../../../app/config/routes.dart';
 import '../../../base/widgets/page_loading_indicator.dart';
+import '../../../core/data/controller/animal_controller.dart';
 import '../../../core/data/controller/auth_controller.dart';
 import 'home_cubit.dart';
 
@@ -30,14 +32,10 @@ class HomePage extends StatefulWidget {
 class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   final PageController advertisementController = PageController();
   final controller = AuthController.findOrInitialize;
+  final animalController = AnimalController.findOrInitialize;
+  final cateController = AnimalCategoryController.findOrInitialize;
+
   final _formKey = GlobalKey<FormBuilderState>();
-
-  String urlAvatarUser = AppIcons.icDefaultUser;
-  String txtSearch = "";
-  int _adsCurrentPage = 0;
-
-  AdvertisementObject listAdvertisement =
-      AdvertisementObject([AppImages.imgAdvertisement, AppImages.imgAds1]);
 
   @override
   Widget buildByState(BuildContext context, HomeState state) {
@@ -69,8 +67,8 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
                             child: Column(children: [
                               const SizedBox(height: 12),
                               SearchBar(cubit.searchBar),
-                              CarouselSlider(context, listAdvertisement),
-                              ListModelButton(cubit.listButtonObject),
+                              CarouselSlider(context, cubit.listAdvertisement),
+                              ListModelButton(cubit.listAnimalCategory),
                             ]))))))));
   }
 
@@ -100,7 +98,10 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   // MODEL BUTTON
   Widget ModelButton(int index) {
     return GestureDetector(
-        onTap: () => context.router.pushNamed(Routes.animalmodels),
+        onTap: () async => {
+              await setCurrentCategory(index),
+              context.router.pushNamed(Routes.animalmodels)
+            },
         child: Container(
             width: MediaQuery.of(context).size.width * 0.4,
             height: MediaQuery.of(context).size.width * 0.4,
@@ -116,10 +117,10 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
                       offset: const Offset(0, 3))
                 ]),
             child: Column(children: [
-              ButtonImage(cubit.listButtonObject[index].icon),
+              ButtonImage(cubit.listAnimalCategory[index].icon),
               Center(
                   child: Stack(alignment: Alignment.center, children: [
-                ButtonTitle(cubit.listButtonObject[index].title),
+                ButtonTitle(cubit.listAnimalCategory[index].title),
                 LoveButton(index)
               ]))
             ])));
@@ -128,16 +129,20 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   // ẢNH ĐẠI DIỆN MODEL CỦA BUTTON
   Widget ButtonImage(String url) {
     return Container(
-        padding: const EdgeInsets.all(5.0),
-        width: MediaQuery.of(context).size.width * 0.28,
-        height: MediaQuery.of(context).size.width * 0.28,
-        decoration: BoxDecoration(
-          //border: Border.all(color: Colors.white, width: 3),
-          borderRadius: BorderRadius.circular(15.0),
-          color: Colors.white,
-          //image: DecorationImage(image: AssetImage(url), fit: BoxFit.cover),
-        ),
-        child: Image.asset(url, fit: BoxFit.cover));
+      padding: const EdgeInsets.all(5.0),
+      width: MediaQuery.of(context).size.width * 0.28,
+      height: MediaQuery.of(context).size.width * 0.28,
+      decoration: BoxDecoration(
+        //border: Border.all(color: Colors.white, width: 3),
+        borderRadius: BorderRadius.circular(15.0),
+        color: Colors.white,
+        //image: DecorationImage(image: AssetImage(url), fit: BoxFit.cover),
+      ),
+      //child: Image.asset(url, fit: BoxFit.cover)
+      child: (url == "")
+          ? Image.asset(AppImages.imgProfile128x128, fit: BoxFit.cover)
+          : Image.network(url, fit: BoxFit.cover),
+    );
   }
 
   // TÊN MODEL
@@ -146,7 +151,9 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
         width: 80,
         child: Text(title,
             style: const TextStyle(
-                color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
+                color: Colors.black,
+                fontSize: 11.5,
+                fontWeight: FontWeight.bold),
             softWrap: true,
             textAlign: TextAlign.center));
   }
@@ -163,7 +170,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
                     cubit.isLoved(index);
                   });
                 },
-                icon: Image.asset(cubit.listButtonObject[index].isLoved
+                icon: Image.asset(cubit.listAnimalCategory[index].isLoved
                     ? AppIcons.icLoved
                     : AppIcons.icHeart))));
   }
@@ -172,16 +179,11 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
     return FormBuilderTextField(
       name: item.name,
       keyboardType: TextInputType.text,
-      onChanged: (value) {
-        setState(() {
-          txtSearch = value!;
-        });
-      },
       decoration: InputDecoration(
           hintText: item.hint_text,
           suffixIcon: IconButton(
-              onPressed: () {
-                cubit.onSearch(_formKey.currentState!.fields['search']?.value);
+              onPressed: () async {
+                await onSearch(_formKey.currentState!.fields['search']?.value);
               },
               icon: Image.asset(item.icon_suffix)),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
@@ -230,7 +232,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
                   margin: const EdgeInsets.symmetric(horizontal: 4),
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: _adsCurrentPage == index
+                      color: cubit.adsCurrentPage == index
                           ? Colors.blue
                           : Colors.grey));
             })));
@@ -244,7 +246,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
         icon: Row(children: [
           Text(cubit.nameCustom(controller.currentUser.value.fullname)),
           const SizedBox(width: 5),
-          Image.asset(urlAvatarUser,
+          Image.asset(cubit.urlAvatarUser,
               width: AppDimens.size30.width, height: AppDimens.size30.height)
         ]));
   }
@@ -274,9 +276,33 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   void _buildSlider() {
     advertisementController.addListener(() {
       setState(() {
-        _adsCurrentPage = advertisementController.page!.round();
+        cubit.adsCurrentPage = advertisementController.page!.round();
       });
     });
+  }
+
+  void setAnimalCategory(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      cateController.getAllAnimalCategories(context);
+      setState(() {
+        cubit.setListAnimalCategory(cateController.listAnimalCategory.value);
+      });
+    });
+  }
+
+  setCurrentCategory(int index) async {
+    await cateController.updateCurrentAnimalCategory(
+        context, cubit.listAnimalCategory[index].id!);
+  }
+
+  Future<void> onSearch(String? value) async {
+    if (value != null) {
+      value = value.trim();
+    } else {
+      value = "";
+    }
+    animalController.searchValue(value);
+    context.router.pushNamed(Routes.searchmodel);
   }
 
   @override
@@ -284,5 +310,6 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
     super.initState();
     _buildSlider();
     controller.getCurrentUser(context);
+    setAnimalCategory(context);
   }
 }
