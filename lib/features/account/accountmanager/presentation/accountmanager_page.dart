@@ -31,16 +31,16 @@ class _State extends BaseState<AccountManagerState, AccountManagerCubit,
             title: const Text('Quản lý tài khoản',
                 style: TextStyle(fontSize: 20, color: Colors.white)),
             actions: const [SizedBox(width: 45)],
-            leading: TurnBack()),
+            leading: turnBack()),
         body: SingleChildScrollView(
             child: Container(
                 child: Column(children: [
-          AccountManagerTitle(),
-          AccountManagerBody(context)
+          accountManagerTitle(),
+          accountManagerBody(context)
         ]))));
   }
 
-  Widget AccountManagerTitle() {
+  Widget accountManagerTitle() {
     return Container(
         color: const Color.fromARGB(255, 228, 224, 224),
         width: MediaQuery.of(context).size.width,
@@ -51,15 +51,13 @@ class _State extends BaseState<AccountManagerState, AccountManagerCubit,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                      width: MediaQuery.of(context).size.height * 0.13,
-                      height: MediaQuery.of(context).size.height * 0.13,
+                      width: MediaQuery.of(context).size.height * 0.135,
+                      height: MediaQuery.of(context).size.height * 0.135,
                       decoration: BoxDecoration(
                           border:
                               Border.all(color: Colors.blue.shade600, width: 5),
-                          shape: BoxShape.circle,
-                          image: const DecorationImage(
-                              image: AssetImage(AppImages.imgProfile128x128),
-                              fit: BoxFit.cover))),
+                          shape: BoxShape.circle),
+                      child: userAvatar()),
                   Text(controller.currentUser.value.fullname,
                       style: const TextStyle(
                           fontSize: 18,
@@ -68,7 +66,22 @@ class _State extends BaseState<AccountManagerState, AccountManagerCubit,
                 ])));
   }
 
-  Widget AccountManagerBody(BuildContext context) {
+  Widget userAvatar() {
+    return Container(
+        width: MediaQuery.of(context).size.height * 0.155,
+        height: MediaQuery.of(context).size.height * 0.155,
+        decoration: BoxDecoration(
+            border: Border.all(color: Colors.white, width: 5),
+            shape: BoxShape.circle),
+        child: ClipOval(
+          child: (controller.currentUser.value.avatarUrl == "")
+              ? Image.asset(AppImages.imgProfile128x128, fit: BoxFit.cover)
+              : Image.network(controller.currentUser.value.avatarUrl,
+                  fit: BoxFit.cover),
+        ));
+  }
+
+  Widget accountManagerBody(BuildContext context) {
     return Container(
         width: MediaQuery.of(context).size.width,
         color: const Color.fromARGB(255, 228, 224, 224),
@@ -76,34 +89,34 @@ class _State extends BaseState<AccountManagerState, AccountManagerCubit,
             child: Padding(
                 padding: const EdgeInsets.only(right: 25, left: 25, bottom: 25),
                 child: Column(children: [
-                  OptionButton(context, "Trang cá nhân", AppIcons.icUserProfile,
+                  optionButton(context, "Trang cá nhân", AppIcons.icUserProfile,
                       AccountManagerType.UserProfilePage),
-                  OptionButton(
+                  optionButton(
                       context,
                       "Đổi mật khẩu",
                       AppIcons.icChangePassword,
                       AccountManagerType.ChangePassword),
                   const SizedBox(height: 15),
-                  OptionButton(context, "Thông báo", AppIcons.icAnnouncement,
+                  optionButton(context, "Thông báo", AppIcons.icAnnouncement,
                       AccountManagerType.Announcement),
-                  OptionButton(context, "Sự kiện", AppIcons.icEvent,
+                  optionButton(context, "Sự kiện", AppIcons.icEvent,
                       AccountManagerType.Event),
                   const SizedBox(height: 15),
-                  OptionButton(context, "Thay đổi ngôn ngữ",
+                  optionButton(context, "Thay đổi ngôn ngữ",
                       AppIcons.icLanguage, AccountManagerType.ChangeLanguage),
-                  OptionButton(context, "Điều khoản sử dụng",
+                  optionButton(context, "Điều khoản sử dụng",
                       AppIcons.icTermsOfUse, AccountManagerType.ViewTerm),
-                  OptionButton(context, "Đánh giá ứng dụng", AppIcons.icRating,
+                  optionButton(context, "Đánh giá ứng dụng", AppIcons.icRating,
                       AccountManagerType.RatingApplication),
-                  OptionButton(context, "Trợ giúp cho bạn", AppIcons.icHelp,
+                  optionButton(context, "Trợ giúp cho bạn", AppIcons.icHelp,
                       AccountManagerType.Assistance),
                   const SizedBox(height: 15),
-                  OptionButton(context, "Đăng xuất", AppIcons.icLogout,
+                  optionButton(context, "Đăng xuất", AppIcons.icLogout,
                       AccountManagerType.Logout)
                 ]))));
   }
 
-  Widget OptionButton(BuildContext context, String optionContent,
+  Widget optionButton(BuildContext context, String optionContent,
       String optionIcon, AccountManagerType type) {
     return Column(children: [
       SizedBox(
@@ -139,7 +152,7 @@ class _State extends BaseState<AccountManagerState, AccountManagerCubit,
     ]);
   }
 
-  Widget TurnBack() {
+  Widget turnBack() {
     return AppIconButton(
         onPressed: () {
           context.router.pushNamed(Routes.home);
@@ -160,13 +173,11 @@ class _State extends BaseState<AccountManagerState, AccountManagerCubit,
       case AccountManagerType.ChangePassword:
         context.router.pushNamed(Routes.changepassword);
       case AccountManagerType.Announcement:
-        print("Chưa có");
         break;
       case AccountManagerType.ViewTerm:
         context.router.pushNamed(Routes.termofservice);
         break;
       case AccountManagerType.Event:
-        print("Chưa có");
         break;
       default:
     }

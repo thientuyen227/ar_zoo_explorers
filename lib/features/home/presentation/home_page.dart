@@ -50,15 +50,8 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
                         style: TextStyle(fontSize: 20, color: Colors.white)),
                     leading: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [SettingButton()]),
-                    actions: [
-                      ProfileCustom(),
-                      IconButton(
-                          onPressed: () {
-                            context.router.pushNamed(Routes.testunity);
-                          },
-                          icon: const Icon(Icons.ac_unit))
-                    ]),
+                        children: [settingButton()]),
+                    actions: [profileCustom(), const SizedBox(width: 15)]),
                 body: FormBuilder(
                     key: _formKey,
                     child: SingleChildScrollView(
@@ -66,20 +59,20 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
                             padding: const EdgeInsets.all(15),
                             child: Column(children: [
                               const SizedBox(height: 12),
-                              SearchBar(cubit.searchBar),
-                              CarouselSlider(context, cubit.listAdvertisement),
-                              ListModelButton(cubit.listAnimalCategory),
+                              searchBar(cubit.searchBar),
+                              carouselSlider(context, cubit.listAdvertisement),
+                              listModelButton(cubit.listAnimalCategory),
                             ]))))))));
   }
 
   // DANH SÁCH BUTTON MODEL
-  Widget ListModelButton(List<ButtonObject> list) {
+  Widget listModelButton(List<ButtonObject> list) {
     List<Widget> listRow = [];
     for (int i = 0; i < list.length - 1; i = i + 2) {
       listRow.add(Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround, // Căn đều 2 bên
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [ModelButton(i), ModelButton(i + 1)]));
+          children: [modelButton(i), modelButton(i + 1)]));
       listRow.add(const SizedBox(height: 20));
     }
     if ((list.length) % 2 != 0) {
@@ -87,7 +80,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
           mainAxisAlignment: MainAxisAlignment.spaceAround, // Căn đều 2 bên
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ModelButton(list.length - 1),
+            modelButton(list.length - 1),
             const SizedBox(height: 150, width: 150)
           ]));
       listRow.add(const SizedBox(height: 20));
@@ -96,7 +89,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   }
 
   // MODEL BUTTON
-  Widget ModelButton(int index) {
+  Widget modelButton(int index) {
     return GestureDetector(
         onTap: () async => {
               await setCurrentCategory(index),
@@ -117,36 +110,33 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
                       offset: const Offset(0, 3))
                 ]),
             child: Column(children: [
-              ButtonImage(cubit.listAnimalCategory[index].icon),
+              buttonImage(cubit.listAnimalCategory[index].icon),
               Center(
                   child: Stack(alignment: Alignment.center, children: [
-                ButtonTitle(cubit.listAnimalCategory[index].title),
-                LoveButton(index)
+                buttonTitle(cubit.listAnimalCategory[index].title),
+                loveButton(index)
               ]))
             ])));
   }
 
   // ẢNH ĐẠI DIỆN MODEL CỦA BUTTON
-  Widget ButtonImage(String url) {
+  Widget buttonImage(String url) {
     return Container(
-      padding: const EdgeInsets.all(5.0),
-      width: MediaQuery.of(context).size.width * 0.28,
-      height: MediaQuery.of(context).size.width * 0.28,
-      decoration: BoxDecoration(
-        //border: Border.all(color: Colors.white, width: 3),
-        borderRadius: BorderRadius.circular(15.0),
-        color: Colors.white,
-        //image: DecorationImage(image: AssetImage(url), fit: BoxFit.cover),
-      ),
-      //child: Image.asset(url, fit: BoxFit.cover)
-      child: (url == "")
-          ? Image.asset(AppImages.imgProfile128x128, fit: BoxFit.cover)
-          : Image.network(url, fit: BoxFit.cover),
-    );
+        padding: const EdgeInsets.all(5.0),
+        width: MediaQuery.of(context).size.width * 0.28,
+        height: MediaQuery.of(context).size.width * 0.28,
+        decoration: BoxDecoration(
+            //border: Border.all(color: Colors.white, width: 3),
+            //image: DecorationImage(image: AssetImage(url), fit: BoxFit.cover),
+            borderRadius: BorderRadius.circular(15.0),
+            color: Colors.white),
+        child: (url == "")
+            ? Image.asset(AppImages.imgProfile128x128, fit: BoxFit.cover)
+            : Image.network(url, fit: BoxFit.cover));
   }
 
   // TÊN MODEL
-  Widget ButtonTitle(String title) {
+  Widget buttonTitle(String title) {
     return SizedBox(
         width: 80,
         child: Text(title,
@@ -158,7 +148,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
             textAlign: TextAlign.center));
   }
 
-  Widget LoveButton(int index) {
+  Widget loveButton(int index) {
     return Align(
         alignment: Alignment.centerRight,
         child: SizedBox(
@@ -175,37 +165,37 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
                     : AppIcons.icHeart))));
   }
 
-  Widget SearchBar(FormBuilderTextFieldModel item) {
+  Widget searchBar(FormBuilderTextFieldModel item) {
     return FormBuilderTextField(
-      name: item.name,
-      keyboardType: TextInputType.text,
-      decoration: InputDecoration(
-          hintText: item.hint_text,
-          suffixIcon: IconButton(
-              onPressed: () async {
-                await onSearch(_formKey.currentState!.fields['search']?.value);
-              },
-              icon: Image.asset(item.icon_suffix)),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 10, horizontal: 25)),
-      style: const TextStyle(fontSize: 16),
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      validator: FormBuilderValidators.compose([]),
-    );
+        name: item.name,
+        keyboardType: TextInputType.text,
+        decoration: InputDecoration(
+            hintText: item.hint_text,
+            suffixIcon: IconButton(
+                onPressed: () async {
+                  await onSearch(
+                      _formKey.currentState!.fields['search']?.value);
+                },
+                icon: Image.asset(item.icon_suffix)),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 10, horizontal: 25)),
+        style: const TextStyle(fontSize: 16),
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        validator: FormBuilderValidators.compose([]));
   }
 
   // SLIDER QUẢNG CÁO
-  Widget CarouselSlider(BuildContext context, AdvertisementObject items) {
+  Widget carouselSlider(BuildContext context, AdvertisementObject items) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      AdvertisementImages(context, items),
-      AdvertisementIndicator(context, items),
+      advertisementImages(context, items),
+      advertisementIndicator(context, items),
       const SizedBox(height: 10)
     ]);
   }
 
   // HÌNH ẢNH QUẢNG CÁO
-  Widget AdvertisementImages(BuildContext context, AdvertisementObject items) {
+  Widget advertisementImages(BuildContext context, AdvertisementObject items) {
     return Container(
         padding:
             const EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
@@ -220,7 +210,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
             }));
   }
 
-  Widget AdvertisementIndicator(
+  Widget advertisementIndicator(
       BuildContext context, AdvertisementObject items) {
     return Center(
         child: Row(
@@ -238,20 +228,30 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
             })));
   }
 
-  Widget ProfileCustom() {
+  Widget profileCustom() {
     return AppIconButton(
-        onPressed: () {
-          context.router.pushNamed(Routes.userprofile);
-        },
+        onPressed: () => context.router.pushNamed(Routes.userprofile),
         icon: Row(children: [
           Text(cubit.nameCustom(controller.currentUser.value.fullname)),
           const SizedBox(width: 5),
-          Image.asset(cubit.urlAvatarUser,
-              width: AppDimens.size30.width, height: AppDimens.size30.height)
+          userImage()
         ]));
   }
 
-  Widget SettingButton() {
+  Widget userImage() {
+    return ClipOval(
+        child: (controller.currentUser.value.avatarUrl == "")
+            ? Image.asset(AppImages.imgProfile128x128,
+                fit: BoxFit.cover,
+                width: AppDimens.size30.width,
+                height: AppDimens.size30.height)
+            : Image.network(controller.currentUser.value.avatarUrl,
+                fit: BoxFit.cover,
+                width: AppDimens.size30.width,
+                height: AppDimens.size30.height));
+  }
+
+  Widget settingButton() {
     return AppIconButton(
         onPressed: () => {_turnSettingPage()},
         icon: const Icon(Icons.settings, color: Colors.white),
@@ -281,9 +281,9 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
     });
   }
 
-  void setAnimalCategory(BuildContext context) {
+  void setAnimalCategory(BuildContext context) async {
+    await cateController.getAllAnimalCategories(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      cateController.getAllAnimalCategories(context);
       setState(() {
         cubit.setListAnimalCategory(cateController.listAnimalCategory.value);
       });

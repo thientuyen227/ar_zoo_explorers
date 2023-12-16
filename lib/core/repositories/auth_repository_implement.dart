@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ar_zoo_explorers/core/data/models/user_model.dart';
 import 'package:ar_zoo_explorers/core/data/sources/firebase/firebase_auth_source.dart';
 import 'package:ar_zoo_explorers/core/data/sources/firebase/firebase_firestore_source.dart';
@@ -9,6 +11,7 @@ import 'package:ar_zoo_explorers/domain/repositories/user_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:internationalization/internationalization.dart';
 
@@ -17,7 +20,13 @@ class AuthRepositoryImplement implements AuthRepository {
   final FirebaseFirestoreSource _firestoreSource = FirebaseFirestoreSource();
 
   Future<UserModel> getUserOrCreateUser(UserCredential userCredential,
-      {String? fullname, String? phone, String? address, String? birth}) async {
+      {String? fullname,
+      String? phone,
+      String? address,
+      String? birth,
+      String? gender,
+      String? role,
+      bool? status}) async {
     UserModel? user = await _firestoreSource.getUser(userCredential.user!.uid);
     if (user != null) {
       Timestamp timestamp = Timestamp.now();
@@ -42,7 +51,10 @@ class AuthRepositoryImplement implements AuthRepository {
           fullname: fullname,
           phone: phone,
           address: address,
-          birth: birth));
+          birth: birth,
+          gender: gender,
+          role: role,
+          status: status));
     }
   }
 
@@ -115,7 +127,10 @@ class AuthRepositoryImplement implements AuthRepository {
                 provider: '',
                 phone: '',
                 address: '',
-                birth: ''),
+                birth: '',
+                gender: '',
+                role: '',
+                status: true),
       );
     });
   }
@@ -137,7 +152,10 @@ class AuthRepositoryImplement implements AuthRepository {
       required String avatarUrl,
       required String address,
       required String birth,
-      required String provider}) {
+      required String provider,
+      required String gender,
+      required String role,
+      required bool status}) {
     return ResponseHandler.processResponse(() async {
       return Success(
         data: await _firestoreSource.updateUser(
@@ -147,7 +165,10 @@ class AuthRepositoryImplement implements AuthRepository {
                 avatarUrl: avatarUrl,
                 address: address,
                 birth: birth,
-                provider: provider) ??
+                provider: provider,
+                gender: gender,
+                role: role,
+                status: status) ??
             UserEntity(
                 id: '',
                 avatarUrl: '',
@@ -156,7 +177,10 @@ class AuthRepositoryImplement implements AuthRepository {
                 provider: '',
                 phone: '',
                 address: '',
-                birth: ''),
+                birth: '',
+                gender: '',
+                role: '',
+                status: true),
       );
     });
   }
@@ -174,6 +198,21 @@ class AuthRepositoryImplement implements AuthRepository {
       await user.updatePassword(newPassword);
       return Success(
           data: Fluttertoast.showToast(msg: "Đổi mật khẩu thành công!"));
+    });
+  }
+
+  @override
+  Future<Either<Failure, Success<String>>> uploadImageToFirebase(
+      String imagePath, String imageName) async {
+    return ResponseHandler.processResponse(() async {
+      File imageFile = File(imagePath);
+      String storagePath = 'user_images/$imageName';
+      Reference storageReference =
+          FirebaseStorage.instance.ref().child(storagePath);
+      await storageReference.putFile(imageFile);
+      String downloadURL = await storageReference.getDownloadURL();
+      downloadURL ??= "";
+      return Success(data: downloadURL);
     });
   }
 }

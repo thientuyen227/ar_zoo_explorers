@@ -37,7 +37,7 @@ class _State extends BaseState<ChangePasswordState, ChangePasswordCubit,
                 centerTitle: true,
                 title: const Text("NHẬP MẬT KHẨU MỚI",
                     style: TextStyle(fontSize: 18, color: Colors.white)),
-                leading: Column(children: [TurnBack()]),
+                leading: Column(children: [turnBack()]),
                 actions: const []),
             body: FormBuilder(
                 key: _formKey,
@@ -66,17 +66,17 @@ class _State extends BaseState<ChangePasswordState, ChangePasswordCubit,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 //NHẬP MẬT KHẨU CŨ
-                                PasswordForm(cubit.ListFormItem[0], 0),
+                                passwordForm(cubit.ListFormItem[0], 0),
                                 // NHẬP MẬT KHẨU MỚI
-                                PasswordForm(cubit.ListFormItem[1], 1),
+                                passwordForm(cubit.ListFormItem[1], 1),
                                 // NHẬP LẠI MẬT KHẨU MỚI
-                                PasswordForm(cubit.ListFormItem[2], 2),
+                                passwordForm(cubit.ListFormItem[2], 2),
                                 const SizedBox(height: 15),
                                 FutureBuilder(
                                     future: null,
                                     builder: (context, snapshot) => Align(
                                           child:
-                                              SubmitButton(context, snapshot),
+                                              submitButton(context, snapshot),
                                         ))
                               ]))),
                 )),
@@ -84,7 +84,7 @@ class _State extends BaseState<ChangePasswordState, ChangePasswordCubit,
         )));
   }
 
-  Widget TurnBack() {
+  Widget turnBack() {
     return ElevatedButton(
         onPressed: () {
           context.router.pop();
@@ -97,7 +97,7 @@ class _State extends BaseState<ChangePasswordState, ChangePasswordCubit,
         child: Image.asset(AppIcons.icBack_png));
   }
 
-  Widget PasswordForm(FormBuilderTextFieldModel items, int index) {
+  Widget passwordForm(FormBuilderTextFieldModel items, int index) {
     return Column(children: [
       FormBuilderTextField(
           name: items.name,
@@ -129,7 +129,7 @@ class _State extends BaseState<ChangePasswordState, ChangePasswordCubit,
     ]);
   }
 
-  Widget SubmitButton(BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+  Widget submitButton(BuildContext context, AsyncSnapshot<dynamic> snapshot) {
     return ElevatedButton(
         onPressed: snapshot.connectionState != ConnectionState.waiting
             ? () => _onUpdatePassword(context)

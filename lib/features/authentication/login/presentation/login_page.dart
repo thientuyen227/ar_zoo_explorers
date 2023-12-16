@@ -44,7 +44,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
                 title: const Text("ĐĂNG NHẬP",
                     style: TextStyle(fontSize: 20, color: Colors.white)),
                 leading: const Column(children: []),
-                actions: [SignUpAction()]),
+                actions: [signUpAction()]),
             body: FormBuilder(
                 key: _formKey,
                 child: SingleChildScrollView(
@@ -67,30 +67,29 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
                               left: 20, right: 20, bottom: 25),
                           child: Column(children: [
                             const SizedBox(height: 12),
-                            AppLogo(),
-                            EmailForm(cubit.ListFormItem[0]),
-                            PasswordForm(cubit.ListFormItem[1]),
+                            appLogo(),
+                            emailForm(cubit.ListFormItem[0]),
+                            passwordForm(cubit.ListFormItem[1]),
                             Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
-                                children: [RememberPass(), ForgotPassword()]),
+                                children: [rememberPass(), forgotPassword()]),
                             const SizedBox(height: 12),
                             FutureBuilder(
                                 future: controller.loginFuture.value,
                                 builder: (context, snapshot) => Align(
-                                      child: SubmitButton(context, snapshot),
-                                    )),
+                                    child: submitButton(context, snapshot))),
                             const SizedBox(height: 25),
-                            Register(),
+                            register(),
                             const SizedBox(height: 20),
-                            ListOtherLoginButton(context),
+                            listOtherLoginButton(context),
                           ]))),
                 )),
           ),
         )));
   }
 
-  Widget AppLogo() {
+  Widget appLogo() {
     return Column(children: [
       Transform.scale(
           scale: 1.5, child: Image.asset(AppImages.imgAppLogo, height: 250)),
@@ -98,7 +97,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
     ]);
   }
 
-  Widget EmailForm(FormBuilderTextFieldModel items) {
+  Widget emailForm(FormBuilderTextFieldModel items) {
     return Column(children: [
       FormBuilderTypeAhead(
         name: items.name,
@@ -110,6 +109,8 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
           return ListTile(title: Text(suggestion));
         },
         suggestionsCallback: (pattern) async {
+          _formKey.currentState!.fields['email']!
+              .setValue(_textEditingController.text);
           return cubit.ListEmail.where(
               (suggestion) => suggestion.startsWith(pattern));
         },
@@ -134,7 +135,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
     ]);
   }
 
-  Widget PasswordForm(FormBuilderTextFieldModel items) {
+  Widget passwordForm(FormBuilderTextFieldModel items) {
     int index = 1;
     return Column(children: [
       FormBuilderTextField(
@@ -165,7 +166,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
     ]);
   }
 
-  Widget SubmitButton(BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+  Widget submitButton(BuildContext context, AsyncSnapshot<dynamic> snapshot) {
     return ElevatedButton(
         onPressed: snapshot.connectionState != ConnectionState.waiting
             ? () => _onLoginPressed(context)
@@ -180,7 +181,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
             style: TextStyle(fontSize: 20, color: Colors.white)));
   }
 
-  Widget RememberPass() {
+  Widget rememberPass() {
     return Row(children: [
       Checkbox(
           value: cubit.isChecked,
@@ -195,7 +196,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
     ]);
   }
 
-  Widget ForgotPassword() {
+  Widget forgotPassword() {
     return GestureDetector(
         onTap: () {
           context.router.pushNamed(Routes.forgotpassword);
@@ -209,7 +210,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
                 decoration: TextDecoration.none)));
   }
 
-  Widget Register() {
+  Widget register() {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       const Text("Bạn chưa có tài khoản?",
           style: TextStyle(fontSize: 16.5, color: Colors.black)),
@@ -229,24 +230,22 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
     ]);
   }
 
-  Widget ListOtherLoginButton(BuildContext context) {
+  Widget listOtherLoginButton(BuildContext context) {
     return Column(children: [
-      OthersLoginTitle(),
+      otherLoginTitle(),
       const SizedBox(height: 15),
       Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-        OtherLoginButton(context, 0),
-        OtherLoginButton(context, 1),
-        OtherLoginButton(context, 2)
+        otherLoginButton(context, 0),
+        otherLoginButton(context, 1),
+        otherLoginButton(context, 2)
       ]),
       const SizedBox(height: 12),
     ]);
   }
 
-  Widget OtherLoginButton(BuildContext context, int index) {
+  Widget otherLoginButton(BuildContext context, int index) {
     return GestureDetector(
-        onTap: () {
-          _onLoginWithOtherOptions(context, index);
-        },
+        onTap: () => _onLoginWithOtherOptions(context, index),
         child: Container(
             width: 60,
             height: 60,
@@ -258,7 +257,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
                       color: Colors.black.withOpacity(0.3),
                       spreadRadius: 2,
                       blurRadius: 5,
-                      offset: const Offset(0, 3)),
+                      offset: const Offset(0, 3))
                 ]),
             child: ClipRect(
                 child: Image.asset(
@@ -266,7 +265,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
                     fit: BoxFit.cover))));
   }
 
-  Widget OthersLoginTitle() {
+  Widget otherLoginTitle() {
     return Stack(alignment: Alignment.center, children: [
       Container(height: 2, width: double.infinity, color: Colors.grey),
       Container(
@@ -279,11 +278,9 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
   }
 
   //NÚT ĐĂNG KÝ TRÊN THANH APPBAR
-  Widget SignUpAction() {
+  Widget signUpAction() {
     return ElevatedButton(
-        onPressed: () {
-          context.router.pushNamed(Routes.register);
-        },
+        onPressed: () => context.router.pushNamed(Routes.register),
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.blue),
             elevation: MaterialStateProperty.all(0),
@@ -298,12 +295,10 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
 
   Future<void> _onLoginPressed(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
-      await _saveLastestUser(_formKey.currentState!.fields['email']!.value);
       if (cubit.isChecked) {
         await _savePassword(_formKey.currentState!.fields['email']!.value,
             _formKey.currentState!.fields['password']!.value);
       }
-      // ignore: use_build_context_synchronously
       controller.login(
         context: context,
         email: _formKey.currentState!.fields['email']!.value,
@@ -332,32 +327,29 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
     await _secureStorage.write(key: email, value: password);
   }
 
-  Future<void> _saveLastestUser(String email) async {
-    await _secureStorage.write(key: 'lastest', value: email);
-  }
-
   Future<void> _loadListEmail() async {
     Map<String, String> allValues = await _secureStorage.readAll();
     if (allValues != null || allValues.isNotEmpty) {
       cubit.ListEmail = allValues.keys.toList();
+    } else {
+      cubit.ListEmail = [];
     }
   }
 
-  Future<void> _loadSavedPassword() async {
-    String? email = await _secureStorage.read(key: 'lastest' ?? '');
-    String? savedPassword = await _secureStorage.read(key: email ?? '');
-    if (savedPassword != null) {
-      _formKey.currentState?.patchValue({
-        'email': email,
-        'password': savedPassword,
-      });
-    }
-  }
+  // Future<void> _loadSavedPassword() async {
+  //   String? email = await _secureStorage.read(key: 'lastest' ?? '');
+  //   String? savedPassword = await _secureStorage.read(key: email ?? '');
+  //   if (savedPassword != null) {
+  //     _formKey.currentState?.patchValue({
+  //       'email': email,
+  //       'password': savedPassword,
+  //     });
+  //   }
+  // }
 
   @override
   void initState() {
     super.initState();
-    //_loadSavedPassword();
     _loadListEmail();
   }
 }

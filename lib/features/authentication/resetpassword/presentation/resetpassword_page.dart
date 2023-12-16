@@ -36,7 +36,7 @@ class _State extends BaseState<ResetPasswordState, ResetPasswordCubit,
                 centerTitle: true,
                 title: const Text("NHẬP MẬT KHẨU MỚI",
                     style: TextStyle(fontSize: 18, color: Colors.white)),
-                leading: Column(children: [TurnBack()]),
+                leading: Column(children: [turnBack()]),
                 actions: const []),
             body: FormBuilder(
                 key: _formKey,
@@ -66,22 +66,20 @@ class _State extends BaseState<ResetPasswordState, ResetPasswordCubit,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 //NHẬP MẬT KHẨU MỚI
-                                PasswordForm(cubit.ListFormItem[0], 0),
+                                passwordForm(cubit.ListFormItem[0], 0),
                                 // NHẬP LẠI MẬT KHẨU
-                                PasswordForm(cubit.ListFormItem[1], 1),
+                                passwordForm(cubit.ListFormItem[1], 1),
                                 const SizedBox(height: 15),
-                                SubmitButton(),
+                                submitButton()
                               ]))),
                 )),
           ),
         )));
   }
 
-  Widget TurnBack() {
+  Widget turnBack() {
     return ElevatedButton(
-        onPressed: () {
-          context.router.pop();
-        },
+        onPressed: () => context.router.pop(),
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.blue),
             elevation: MaterialStateProperty.all(0),
@@ -90,7 +88,7 @@ class _State extends BaseState<ResetPasswordState, ResetPasswordCubit,
         child: Image.asset(AppIcons.icBack_png));
   }
 
-  Widget PasswordForm(FormBuilderTextFieldModel items, int index) {
+  Widget passwordForm(FormBuilderTextFieldModel items, int index) {
     return Column(children: [
       FormBuilderTextField(
           name: items.name,
@@ -118,11 +116,11 @@ class _State extends BaseState<ResetPasswordState, ResetPasswordCubit,
               return _onHandleValidator(index, value);
             }
           ])),
-      const SizedBox(height: 20),
+      const SizedBox(height: 20)
     ]);
   }
 
-  Widget SubmitButton() {
+  Widget submitButton() {
     return ElevatedButton(
         onPressed: () {
           _onUpdatePassword();

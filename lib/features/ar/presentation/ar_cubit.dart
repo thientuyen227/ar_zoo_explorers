@@ -33,6 +33,9 @@ class ARCubit extends BaseCubit<ARState> {
         .child("animal_models/" '$filename' ".zip")
         .getDownloadURL();
     Fluttertoast.showToast(msg: modelUrl);
+
+    httpClient = HttpClient();
+
     if (!filePath) {
       var request = await httpClient!.getUrl(Uri.parse(modelUrl));
       var response = await request.close();

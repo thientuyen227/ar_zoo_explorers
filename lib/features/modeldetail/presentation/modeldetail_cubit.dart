@@ -1,10 +1,16 @@
+import 'dart:io';
+
 import 'package:ar_zoo_explorers/features/modeldetail/model/image_argb.dart';
 import 'package:ar_zoo_explorers/features/modeldetail/presentation/modeldetail_state.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as img;
 import 'package:injectable/injectable.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../../base/base_cubit.dart';
 
@@ -20,6 +26,10 @@ class ModelDetailCubit extends BaseCubit<ModelDetailState> {
   double HEIGHT = 0;
   Color backgroundColor = Colors.white;
   ARGBImage listBlenderColor = ARGBImage();
+
+  FirebaseStorage storage = FirebaseStorage.instance;
+
+  HttpClient? httpClient;
 
   Future<img.Image> getImageFromNetwork(String imageUrl) async {
     final response = await http.get(Uri.parse(imageUrl));
@@ -64,5 +74,48 @@ class ModelDetailCubit extends BaseCubit<ModelDetailState> {
         listBlenderColor.add(image.getPixel(dWidth * i, dHeight * j));
       }
     }
+  }
+
+  // DOWNLOAD MODEL
+  Future<Map<String, dynamic>> getFilePath(String filename, String type) async {
+    String dir = (await getApplicationDocumentsDirectory()).path;
+    File file = File('$dir/$filename.$type');
+    return {'dir': dir, 'file': file};
+  }
+
+  Future<bool> checkFileExits(String name) async {
+    return File(name).exists();
+  }
+
+  Future<void> downloadAndUnpack(String filename, String type) async {
+    Map<String, dynamic> filePathInfo = await getFilePath(filename, type);
+    File file = filePathInfo['file'];
+    bool filePath = await checkFileExits(file.path);
+    //get link download
+    String modelUrl = await storage
+        .ref()
+        .child("animal_models/" '$filename.$type')
+        .getDownloadURL();
+    //Fluttertoast.showToast(msg: modelUrl);
+    httpClient = HttpClient();
+
+    if (!filePath) {
+      var request = await httpClient!.getUrl(Uri.parse(modelUrl));
+      var response = await request.close();
+      var bytes = await consolidateHttpClientResponseBytes(response);
+      await file.writeAsBytes(bytes);
+    }
+
+    Fluttertoast.showToast(msg: "Download thành công!");
+  }
+
+  Future<bool> downloadModel(String name, String type) async {
+    Map<String, dynamic> filePathInfo = await getFilePath(name, type);
+    File file = filePathInfo['file'];
+    bool fileExits = await checkFileExits(file.path);
+    if (fileExits) {
+      return true;
+    }
+    return false;
   }
 }

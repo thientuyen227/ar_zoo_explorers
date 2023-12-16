@@ -32,22 +32,27 @@ class FirebaseFirestoreSource {
     return user;
   }
 
-  Future<UserModel?> updateUser({
-    required String id,
-    required String fullname,
-    required String phone,
-    required String avatarUrl,
-    required String address,
-    required String birth,
-    required String provider,
-  }) async {
+  Future<UserModel?> updateUser(
+      {required String id,
+      required String fullname,
+      required String phone,
+      required String avatarUrl,
+      required String address,
+      required String birth,
+      required String provider,
+      required String gender,
+      required String role,
+      required bool status}) async {
     await _userModelCollectionRef.doc(id).update({
       'fullname': fullname,
       'phone': phone,
       'address': address,
       'birth': birth,
       'avatarUrl': avatarUrl,
-      'provider': provider
+      'provider': provider,
+      'gender': gender,
+      'role': role,
+      'status': status
     });
     return getUser(id);
   }
