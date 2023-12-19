@@ -18,6 +18,13 @@ import '../../../base/base_cubit.dart';
 class ModelDetailCubit extends BaseCubit<ModelDetailState> {
   ModelDetailCubit() : super(ModelDetailState());
 
+  String description = ""; // Mô tả
+  String classification = ""; // Phân loại sinh học
+  String conservation = ""; // Tình trạng bảo tồn
+  String reproduction = ""; // Sinh sản
+  String culturalFigure = ""; // Hình tượng trong văn hóa
+  int views = 0; // Lượt xem
+
   String imagePath =
       "https://firebasestorage.googleapis.com/v0/b/ar-zoo-explorers.appspot.com/o/user_images%2Fphoto-1-15951447028491980490713.jpeg?alt=media&token=501bd427-ec2f-4ae9-b4c6-a9bb30cd6a9a";
   String animalTitle = "default";
@@ -105,7 +112,7 @@ class ModelDetailCubit extends BaseCubit<ModelDetailState> {
       var bytes = await consolidateHttpClientResponseBytes(response);
       await file.writeAsBytes(bytes);
     }
-
+    print("TTTT model: ${file.path}");
     Fluttertoast.showToast(msg: "Download thành công!");
   }
 

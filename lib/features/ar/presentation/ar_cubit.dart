@@ -20,6 +20,7 @@ class ARCubit extends BaseCubit<ARState> {
   Future<Map<String, dynamic>> getFilePath(String filename, String type) async {
     String dir = (await getApplicationDocumentsDirectory()).path;
     File file = File('$dir/$filename.$type');
+    print("TTTT ${file.path}");
     return {'dir': dir, 'file': file};
   }
 
@@ -30,7 +31,7 @@ class ARCubit extends BaseCubit<ARState> {
     //get link download
     String modelUrl = await storage
         .ref()
-        .child("animal_models/" '$filename' ".zip")
+        .child("animal_models/" '$filename.$type')
         .getDownloadURL();
     Fluttertoast.showToast(msg: modelUrl);
 

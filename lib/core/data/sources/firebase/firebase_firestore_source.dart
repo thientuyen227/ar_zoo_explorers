@@ -2,6 +2,7 @@ import 'package:ar_zoo_explorers/core/data/models/animal_category_model.dart';
 import 'package:ar_zoo_explorers/core/data/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../models/animal_detail_model.dart';
 import '../../models/animal_model.dart';
 
 class FirebaseFirestoreSource {
@@ -13,6 +14,9 @@ class FirebaseFirestoreSource {
 
   final CollectionReference<Map<String, dynamic>> _animalCategoryCollectionRef =
       FirebaseFirestore.instance.collection('model_categories');
+
+  final CollectionReference<Map<String, dynamic>> _animalDetailCollectionRef =
+      FirebaseFirestore.instance.collection('model_details');
 
   Future<String> get generateUniqueAnimalModelId async =>
       _animalModelCollectionRef.add({}).then((value) => value.id);
@@ -131,6 +135,53 @@ class FirebaseFirestoreSource {
     } else {
       return null;
     }
+  }
+
+  // ANIMAL DETAILS
+  Future<AnimalDetailModel?> getAnimalDetailModel(String id) async {
+    var document = await _animalDetailCollectionRef.doc(id).get();
+    if (document.exists && document.data() != null) {
+      return AnimalDetailModel.fromMap(document.data()!);
+    } else {
+      return null;
+    }
+  }
+
+  Future<List<AnimalDetailModel>?> getAllAnimalDetails() async {
+    var querySnapshot = await _animalDetailCollectionRef.get();
+    if (querySnapshot != null) {
+      List<AnimalDetailModel> modelDetails = querySnapshot.docs
+          .map((doc) => AnimalDetailModel.fromMap(doc.data()))
+          .toList();
+      return modelDetails;
+    } else {
+      return null;
+    }
+  }
+
+  Future<AnimalDetailModel?> getAnimalDetailModelByModelId(
+      String modelId) async {
+    var querySnapshot = await _animalDetailCollectionRef
+        .where('modelId', isEqualTo: modelId)
+        .get();
+    if (querySnapshot != null) {
+      List<AnimalDetailModel> modelDetails = querySnapshot.docs
+          .map((doc) => AnimalDetailModel.fromMap(doc.data()))
+          .toList();
+      return modelDetails.first;
+    } else {
+      return null;
+    }
+  }
+
+  Future<AnimalDetailModel?> updateViewsAnimalDetail({
+    required String id,
+    required int views,
+  }) async {
+    await _animalDetailCollectionRef.doc(id).update({
+      "views": views,
+    });
+    return getAnimalDetailModel(id);
   }
 }
 

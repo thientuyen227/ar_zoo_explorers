@@ -8,6 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../../../app/config/routes.dart';
 import '../../../base/base_state.dart';
 import '../../../core/data/controller/animal_controller.dart';
+import '../../../core/data/controller/animal_detail_controller.dart';
 
 @RoutePage()
 class ModelDetailPage extends StatefulWidget {
@@ -20,6 +21,7 @@ class ModelDetailPage extends StatefulWidget {
 class _State
     extends BaseState<ModelDetailState, ModelDetailCubit, ModelDetailPage> {
   final animalController = AnimalController.findOrInitialize;
+  final detailController = AnimalDetailController.findOrInitialize;
 
   bool download = false;
 
@@ -128,20 +130,15 @@ class _State
       Center(
           child: Stack(
               alignment: Alignment.center,
-              children: [modelTitle(cubit.animalTitle), views(1000)])),
+              children: [modelTitle(cubit.animalTitle), views(cubit.views)])),
       const SizedBox(height: 15),
       Container(height: 2, width: double.infinity, color: Colors.grey),
       const SizedBox(height: 15),
-      informationRow("Mô Tả:",
-          "Voi là một loài động vật lớn, có vú và sống chủ yếu ở châu Phi và châu Á. Chúng thuộc họ Elephantidae."),
-      informationRow("Phân Loại Sinh Học:", "Động vật có vú."),
-      informationRow("Tình Trạng Bảo Tồn:",
-          "Tình trạng bảo tồn: Tùy thuộc vào loài, tình trạng bảo tồn của voi có thể là 'Nguy cấp' đến 'An toàn."),
-      informationRow("Thời Kỳ Sinh Sản và Phương Tiện Sinh Sản:",
-          "Voi sinh sản bằng cách đẻ con và thời kỳ sinh sản thường diễn ra trong mùa khô."),
-      informationRow("Các Sự Kiện Nổi Bật:",
-          "Voi thường xuất hiện trong văn hóa và tôn giáo của nhiều dân tộc ở châu Phi và châu Á."),
-      informationRow("Link Tài Liệu Hoặc Video:", "Xem thêm về Voi tại đây"),
+      informationRow("Mô Tả:", cubit.description),
+      informationRow("Phân Loại Sinh Học:", cubit.classification),
+      informationRow("Tình Trạng Bảo Tồn:", cubit.conservation),
+      informationRow("Thời Kỳ Sinh Sản :", cubit.reproduction),
+      informationRow("Hình tượng văn hóa:", cubit.culturalFigure),
       const SizedBox(height: 50)
     ]);
   }
@@ -260,10 +257,31 @@ class _State
     });
   }
 
-  Future<void> setInformation(BuildContext context) async {
+  Future<void> setLayout(BuildContext context) async {
     setState(() {
       cubit.animalTitle = animalController.currentAnimal.value.title;
       cubit.imagePath = animalController.currentAnimal.value.icon;
+    });
+  }
+
+  Future<void> setInformation(BuildContext context) async {
+    await detailController.getAnimalCategoryModelByModelId(context,
+        modelId: animalController.currentAnimal.value.id);
+    await detailController.updateViewsAnimalModel(context,
+        id: detailController.currentAnimalDetail.value.id,
+        views: (detailController.currentAnimalDetail.value.views + 1));
+    setState(() {
+      cubit.description =
+          detailController.currentAnimalDetail.value.description;
+      cubit.classification = detailController
+          .currentAnimalDetail.value.classification; // Phân loại sinh học
+      cubit.conservation = detailController
+          .currentAnimalDetail.value.conservation; // Tình trạng bảo tồn
+      cubit.reproduction =
+          detailController.currentAnimalDetail.value.reproduction; // Sinh sản
+      cubit.culturalFigure = detailController
+          .currentAnimalDetail.value.culturalFigure; // Hình tượng trong văn hóa
+      cubit.views = detailController.currentAnimalDetail.value.views;
     });
   }
 
@@ -277,8 +295,11 @@ class _State
   @override
   void initState() {
     super.initState();
-    setInformation(context);
+
+    setLayout(context);
     setBackgroundColor(context);
+
+    setInformation(context);
     setDimension();
   }
 }

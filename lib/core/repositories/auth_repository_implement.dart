@@ -52,9 +52,9 @@ class AuthRepositoryImplement implements AuthRepository {
           phone: phone,
           address: address,
           birth: birth,
-          gender: gender,
-          role: role,
-          status: status));
+          gender: 'male',
+          role: 'customer',
+          status: true));
     }
   }
 
@@ -103,7 +103,7 @@ class AuthRepositoryImplement implements AuthRepository {
 
       UserModel user =
           await getUserOrCreateUser(userCredential, fullname: fullname);
-      return Success(data: user, message: "Đăng nhập thành công");
+      return Success(data: user, message: "Đăng ký thành công");
     });
   }
 
