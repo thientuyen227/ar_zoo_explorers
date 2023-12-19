@@ -185,7 +185,7 @@ class _State
         right: 10,
         child: MaterialButton(
             onPressed: () {
-              context.router.pushNamed(Routes.testunity);
+              context.router.pushNamed(Routes.ar);
             },
             child: ClipRect(
                 child: Image.asset(AppIcons.icCamera,
