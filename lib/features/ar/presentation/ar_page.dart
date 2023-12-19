@@ -111,15 +111,4 @@ class _State extends BaseState<ARState, ARCubit, ARPage> {
   void onUnityMessage(dynamic data) {
     print("QQQQQQ $data");
   }
-
-  Future<void> sendMessageToUnity(String valueName, String type) async {
-    Map<String, dynamic> url = await cubit.getFilePath(valueName, type);
-
-    File filePath = url['file'];
-
-    print("TTTT: ${filePath.path}");
-
-    unityWidgetController?.postMessage(
-        "AICamera", "onFlutterMessage", "FilePath: ${filePath.path}");
-  }
 }
