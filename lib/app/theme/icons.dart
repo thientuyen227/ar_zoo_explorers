@@ -45,6 +45,7 @@ class AppIcons {
   static const String icX = "assets/icons/ic_x.png";
   static const String icCamera = "assets/icons/ic_camera.png";
   static const String icEye = "assets/icons/ic_eye.png";
+  static const String icWhiteDownload = "assets/icons/ic_whiteDownload.png";
 
   //Account Manager
   static const String icUserProfile = "assets/icons/ic_userprofile.png";

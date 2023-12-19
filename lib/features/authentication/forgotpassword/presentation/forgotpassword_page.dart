@@ -36,7 +36,7 @@ class _State extends BaseState<ForgotPasswordState, ForgotPasswordCubit,
                 centerTitle: true,
                 title: const Text("QUÊN MẬT KHẨU",
                     style: TextStyle(fontSize: 18, color: Colors.white)),
-                leading: Column(children: [TurnBack()]),
+                leading: Column(children: [turnBack()]),
                 actions: const []),
             body: FormBuilder(
                 key: _formKey,
@@ -66,20 +66,20 @@ class _State extends BaseState<ForgotPasswordState, ForgotPasswordCubit,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 const SizedBox(height: 10),
-                                EmailForm(FormBuilderTextFieldModel(
+                                emailForm(FormBuilderTextFieldModel(
                                     name: 'email',
                                     hint_text: "user123@gmail.com",
                                     icon_prefix: AppIcons.icUser,
                                     isObscured: false)),
                                 const SizedBox(height: 20),
-                                SendEmailButton(context)
+                                sendEmailButton(context)
                               ]))),
                 )),
           ),
         )));
   }
 
-  Widget EmailForm(FormBuilderTextFieldModel items) {
+  Widget emailForm(FormBuilderTextFieldModel items) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       const Row(children: [
         SizedBox(width: 15),
@@ -110,7 +110,7 @@ class _State extends BaseState<ForgotPasswordState, ForgotPasswordCubit,
     ]);
   }
 
-  Widget SendEmailButton(BuildContext context) {
+  Widget sendEmailButton(BuildContext context) {
     return TextButton(
         onPressed: () {
           _resetPassword(context);
@@ -126,7 +126,7 @@ class _State extends BaseState<ForgotPasswordState, ForgotPasswordCubit,
             style: TextStyle(fontSize: 16, color: Colors.white)));
   }
 
-  Widget TurnBack() {
+  Widget turnBack() {
     return ElevatedButton(
         onPressed: () {
           context.router.pop();

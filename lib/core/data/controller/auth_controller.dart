@@ -26,7 +26,10 @@ class AuthController extends ControllerHelper {
       avatarUrl: '',
       address: '',
       birth: '',
-      provider: ''));
+      provider: '',
+      gender: '',
+      role: '',
+      status: true));
 
   signUp(
       {required String fullname,
@@ -137,16 +140,17 @@ class AuthController extends ControllerHelper {
         onSuccess: (success) => {currentUser.value = success.data, update()});
   }
 
-  Future<UserEntity> updateUserProfile(
-    BuildContext context, {
-    required String id,
-    required String fullname,
-    required String phone,
-    required String avatarUrl,
-    required String address,
-    required String birth,
-    required String provider,
-  }) async {
+  Future<UserEntity> updateUserProfile(BuildContext context,
+      {required String id,
+      required String fullname,
+      required String phone,
+      required String avatarUrl,
+      required String address,
+      required String birth,
+      required String provider,
+      required String gender,
+      required String role,
+      required bool status}) async {
     return processRequest<UserEntity>(
         request: () => _authRepository.updateUserProfile(
             id: id,
@@ -155,7 +159,10 @@ class AuthController extends ControllerHelper {
             avatarUrl: avatarUrl,
             address: address,
             birth: birth,
-            provider: provider),
+            provider: provider,
+            gender: gender,
+            role: role,
+            status: status),
         onSuccess: (success) => {
               _setCurrentUser(context, success.data),
               Fluttertoast.showToast(msg: "Cập nhật thông tin thành công!")
@@ -167,7 +174,8 @@ class AuthController extends ControllerHelper {
   logout(BuildContext context) {
     _authRepository.logout();
     update();
-    context.router.replace(const LoginRoute());
+    Navigator.of(context).popUntil((route) => route.isFirst);
+    context.router.replace(const WelcomeRoute());
   }
 
   Future<void> sendPasswordResetEmail(
@@ -186,6 +194,16 @@ class AuthController extends ControllerHelper {
         onSuccess: (success) => getCurrentUser(context),
         onFailure: (failure) =>
             {Fluttertoast.showToast(msg: "Thay đổi mật khẩu thất bại!")});
+  }
+
+  Future<String> uploadAvatar(
+      BuildContext context, String imagePath, String imageName) async {
+    return processRequest<String>(
+        request: () =>
+            _authRepository.uploadImageToFirebase(imagePath, imageName),
+        onSuccess: (success) => {success.data},
+        onFailure: (failure) =>
+            {Fluttertoast.showToast(msg: "Upload hình ảnh không thành công!")});
   }
 
   static AuthController get findOrInitialize {

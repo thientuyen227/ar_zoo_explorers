@@ -55,9 +55,9 @@ class _State
                             padding: const EdgeInsets.all(15),
                             child: Column(children: [
                               const SizedBox(height: 12),
-                              SearchBar(cubit.searchBar),
+                              searchBar(cubit.searchBar),
                               const SizedBox(height: 20),
-                              ListModelButton(cubit.listSearchAnimal),
+                              listModelButton(cubit.listSearchAnimal),
                               const SizedBox(height: 20),
                             ]))))))));
   }
@@ -71,35 +71,34 @@ class _State
         icon: Image.asset(AppIcons.icBack_png, scale: 0.65));
   }
 
-  Widget SearchBar(FormBuilderTextFieldModel item) {
+  Widget searchBar(FormBuilderTextFieldModel item) {
     return FormBuilderTextField(
-      name: item.name,
-      keyboardType: TextInputType.text,
-      decoration: InputDecoration(
-          hintText: item.hint_text,
-          suffixIcon: IconButton(
-              onPressed: () async {
-                onSearch(_formKey.currentState!.fields['search']?.value);
-              },
-              icon: Image.asset(item.icon_suffix)),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 10, horizontal: 25)),
-      initialValue: animalController.searchValue.value,
-      style: const TextStyle(fontSize: 16),
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      validator: FormBuilderValidators.compose([]),
-    );
+        name: item.name,
+        keyboardType: TextInputType.text,
+        decoration: InputDecoration(
+            hintText: item.hint_text,
+            suffixIcon: IconButton(
+                onPressed: () async {
+                  onSearch(_formKey.currentState!.fields['search']?.value);
+                },
+                icon: Image.asset(item.icon_suffix)),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 10, horizontal: 25)),
+        initialValue: animalController.searchValue.value,
+        style: const TextStyle(fontSize: 16),
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        validator: FormBuilderValidators.compose([]));
   }
 
   // DANH SÁCH BUTTON MODEL
-  Widget ListModelButton(List<ButtonObject> list) {
+  Widget listModelButton(List<ButtonObject> list) {
     List<Widget> listRow = [];
     for (int i = 0; i < list.length - 1; i = i + 2) {
       listRow.add(Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround, // Căn đều 2 bên
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [ModelButton(i), ModelButton(i + 1)]));
+          children: [modelButton(i), modelButton(i + 1)]));
       listRow.add(const SizedBox(height: 20));
     }
     if ((list.length) % 2 != 0) {
@@ -107,7 +106,7 @@ class _State
           mainAxisAlignment: MainAxisAlignment.spaceAround, // Căn đều 2 bên
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ModelButton(list.length - 1),
+            modelButton(list.length - 1),
             const SizedBox(height: 150, width: 150)
           ]));
       listRow.add(const SizedBox(height: 20));
@@ -116,7 +115,7 @@ class _State
   }
 
   // MODEL BUTTON
-  Widget ModelButton(int index) {
+  Widget modelButton(int index) {
     return GestureDetector(
         onTap: () async => {
               await setCurrentAnimal(index),
@@ -139,31 +138,30 @@ class _State
             child: Column(children: [
               Padding(
                   padding: const EdgeInsets.only(top: 5),
-                  child: ButtonImage(cubit.listSearchAnimal[index].icon)),
+                  child: buttonImage(cubit.listSearchAnimal[index].icon)),
               Center(
                   child: Stack(alignment: Alignment.center, children: [
-                ButtonTitle(cubit.listSearchAnimal[index].title),
-                LoveButton(index)
+                buttonTitle(cubit.listSearchAnimal[index].title),
+                loveButton(index)
               ]))
             ])));
   }
 
   // ẢNH ĐẠI DIỆN MODEL CỦA BUTTON
-  Widget ButtonImage(String url) {
+  Widget buttonImage(String url) {
     return Container(
-      padding: const EdgeInsets.all(5.0),
-      width: MediaQuery.of(context).size.width * 0.27,
-      height: MediaQuery.of(context).size.width * 0.27,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15.0), color: Colors.grey[200]),
-      child: (url == "")
-          ? Image.asset(AppImages.imgProfile128x128, fit: BoxFit.cover)
-          : Image.network(url, fit: BoxFit.cover),
-    );
+        padding: const EdgeInsets.all(5.0),
+        width: MediaQuery.of(context).size.width * 0.27,
+        height: MediaQuery.of(context).size.width * 0.27,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15.0), color: Colors.grey[200]),
+        child: (url == "")
+            ? Image.asset(AppImages.imgProfile128x128, fit: BoxFit.cover)
+            : Image.network(url, fit: BoxFit.cover));
   }
 
   // TÊN MODEL
-  Widget ButtonTitle(String title) {
+  Widget buttonTitle(String title) {
     return SizedBox(
         width: 80,
         child: Text(title,
@@ -175,7 +173,7 @@ class _State
             textAlign: TextAlign.center));
   }
 
-  Widget LoveButton(int index) {
+  Widget loveButton(int index) {
     return Align(
         alignment: Alignment.centerRight,
         child: SizedBox(

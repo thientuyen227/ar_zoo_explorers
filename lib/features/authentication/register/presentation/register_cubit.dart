@@ -73,14 +73,14 @@ class RegisterCubit extends BaseCubit<RegisterState> {
   }
 
   String? onCheckUsername(String? value) {
-    if (value != null && value.isNotEmpty) {
-      final regex = RegExp(r'^[a-zA-Z ]+$');
-      if (!regex.hasMatch(value)) {
-        return "Họ và tên không hợp lệ";
-      }
-    } else {
-      return null;
-    }
+    // if (value != null && value.isNotEmpty) {
+    //   final regex = RegExp(r'^[a-zA-Z ]+$');
+    //   if (!regex.hasMatch(value)) {
+    //     return "Họ và tên không hợp lệ";
+    //   }
+    // } else {
+    //   return null;
+    // }
     return null;
   }
 

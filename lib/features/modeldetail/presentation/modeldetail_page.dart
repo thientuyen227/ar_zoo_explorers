@@ -3,10 +3,12 @@ import 'package:ar_zoo_explorers/features/modeldetail/presentation/modeldetail_c
 import 'package:ar_zoo_explorers/features/modeldetail/presentation/modeldetail_state.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../app/config/routes.dart';
 import '../../../base/base_state.dart';
 import '../../../core/data/controller/animal_controller.dart';
+import '../../../core/data/controller/animal_detail_controller.dart';
 
 @RoutePage()
 class ModelDetailPage extends StatefulWidget {
@@ -19,6 +21,13 @@ class ModelDetailPage extends StatefulWidget {
 class _State
     extends BaseState<ModelDetailState, ModelDetailCubit, ModelDetailPage> {
   final animalController = AnimalController.findOrInitialize;
+  final detailController = AnimalDetailController.findOrInitialize;
+
+  bool download = false;
+
+  String valueName = "";
+
+  String type = "";
 
   @override
   Widget buildByState(BuildContext context, ModelDetailState state) {
@@ -35,12 +44,12 @@ class _State
             actions: const []),
         body: Stack(children: [
           SizedBox(width: cubit.WIDTH, height: cubit.HEIGHT),
-          BackgroundPage(context),
-          BackButton()
+          backgroundPage(context),
+          backButton()
         ]));
   }
 
-  Widget BackgroundPage(BuildContext context) {
+  Widget backgroundPage(BuildContext context) {
     return SingleChildScrollView(
         child: Stack(children: [
       Container(
@@ -51,13 +60,13 @@ class _State
                   colors: [cubit.backgroundColor.withOpacity(0.5), Colors.blue],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter)),
-          child: WhiteLayoutPage()),
-      ModelImage(cubit.imagePath),
-      CameraButton()
+          child: whiteLayoutPage()),
+      loadArButton(),
+      modelImage(cubit.imagePath),
     ]));
   }
 
-  Widget ModelImage(String url) {
+  Widget modelImage(String url) {
     return Positioned(
         left: 0,
         right: 0,
@@ -70,13 +79,12 @@ class _State
         errorBuilder:
             (BuildContext context, Object error, StackTrace? stackTrace) {
       print("Load image from URL fail: $error");
-
       return Image.asset(AppImages.imgAppLogo,
           width: cubit.WIDTH * 0.45, fit: BoxFit.cover);
     });
   }
 
-  Widget WhiteLayoutPage() {
+  Widget whiteLayoutPage() {
     return Container(
         decoration: BoxDecoration(
             color: Colors.white,
@@ -91,10 +99,10 @@ class _State
         margin: EdgeInsets.only(
             top: cubit.HEIGHT * 0.3, left: 20, right: 20, bottom: 25),
         padding: const EdgeInsets.only(left: 20, right: 20, bottom: 25),
-        child: ModelInformation());
+        child: modelInformation());
   }
 
-  Widget BackButton() {
+  Widget backButton() {
     return Positioned(
         left: 0,
         right: 0,
@@ -116,37 +124,32 @@ class _State
                 ]))));
   }
 
-  Widget ModelInformation() {
+  Widget modelInformation() {
     return Column(children: [
       SizedBox(height: cubit.HEIGHT * 0.07),
       Center(
           child: Stack(
               alignment: Alignment.center,
-              children: [ModelTitle(cubit.animalTitle), Views(1000)])),
+              children: [modelTitle(cubit.animalTitle), views(cubit.views)])),
       const SizedBox(height: 15),
       Container(height: 2, width: double.infinity, color: Colors.grey),
       const SizedBox(height: 15),
-      InformationRow("Mô Tả:",
-          "Voi là một loài động vật lớn, có vú và sống chủ yếu ở châu Phi và châu Á. Chúng thuộc họ Elephantidae."),
-      InformationRow("Phân Loại Sinh Học:", "Động vật có vú."),
-      InformationRow("Tình Trạng Bảo Tồn:",
-          "Tình trạng bảo tồn: Tùy thuộc vào loài, tình trạng bảo tồn của voi có thể là 'Nguy cấp' đến 'An toàn."),
-      InformationRow("Thời Kỳ Sinh Sản và Phương Tiện Sinh Sản:",
-          "Voi sinh sản bằng cách đẻ con và thời kỳ sinh sản thường diễn ra trong mùa khô."),
-      InformationRow("Các Sự Kiện Nổi Bật:",
-          "Voi thường xuất hiện trong văn hóa và tôn giáo của nhiều dân tộc ở châu Phi và châu Á."),
-      InformationRow("Link Tài Liệu Hoặc Video:", "Xem thêm về Voi tại đây"),
+      informationRow("Mô Tả:", cubit.description),
+      informationRow("Phân Loại Sinh Học:", cubit.classification),
+      informationRow("Tình Trạng Bảo Tồn:", cubit.conservation),
+      informationRow("Thời Kỳ Sinh Sản :", cubit.reproduction),
+      informationRow("Hình tượng văn hóa:", cubit.culturalFigure),
       const SizedBox(height: 50)
     ]);
   }
 
-  Widget ModelTitle(String title) {
+  Widget modelTitle(String title) {
     return Text(title,
         style: const TextStyle(
             fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black));
   }
 
-  Widget Views(int views) {
+  Widget views(int views) {
     return Align(
         alignment: Alignment.centerRight,
         child: Column(children: [
@@ -158,7 +161,7 @@ class _State
         ]));
   }
 
-  Widget InformationRow(String title, String content) {
+  Widget informationRow(String title, String content) {
     return Column(children: [
       Row(mainAxisAlignment: MainAxisAlignment.start, children: [
         Text(title,
@@ -179,17 +182,72 @@ class _State
     ]);
   }
 
-  Widget CameraButton() {
+  Widget loadArButton() {
+    return FutureBuilder(
+        future: cubit.downloadModel(animalController.currentAnimal.value.name,
+            animalController.currentAnimal.value.type),
+        builder: (context, snapshot) {
+          final isDownload = snapshot.data;
+          return arButton(isDownload ?? false);
+        });
+  }
+
+  Widget arButton(bool isDownload) {
+    if (isDownload == false) {
+      return downloadButton();
+    } else {
+      return cameraButton();
+    }
+  }
+
+  Widget cameraButton() {
     return Positioned(
         top: cubit.HEIGHT * 0.15,
-        right: 10,
-        child: MaterialButton(
-            onPressed: () {
-              context.router.pushNamed(Routes.ar);
+        right: cubit.WIDTH * 0.05,
+        child: GestureDetector(
+            onTap: () => context.router.pushNamed(Routes.ar),
+            child: Stack(alignment: Alignment.center, children: [
+              Container(
+                  width: cubit.WIDTH * 0.11,
+                  height: cubit.WIDTH * 0.11,
+                  decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.5),
+                      shape: BoxShape.circle)),
+              ClipRect(
+                  child: Image.asset(AppIcons.icCamera,
+                      width: cubit.WIDTH * 0.08, fit: BoxFit.cover))
+            ])));
+  }
+
+  Widget downloadButton() {
+    return Positioned(
+        top: cubit.HEIGHT * 0.15,
+        right: cubit.WIDTH * 0.05,
+        child: GestureDetector(
+            onTap: () async {
+              Fluttertoast.showToast(msg: "Downloading animal!");
+              downloadAndUnpack();
             },
-            child: ClipRect(
-                child: Image.asset(AppIcons.icCamera,
-                    width: cubit.WIDTH * 0.11, fit: BoxFit.cover))));
+            child: Stack(alignment: Alignment.center, children: [
+              Container(
+                  width: cubit.WIDTH * 0.11,
+                  height: cubit.WIDTH * 0.11,
+                  decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.5),
+                      shape: BoxShape.circle)),
+              ClipRect(
+                  child: Image.asset(AppIcons.icWhiteDownload,
+                      width: cubit.WIDTH * 0.07, fit: BoxFit.cover))
+            ])));
+  }
+
+  void downloadAndUnpack() async {
+    await cubit.downloadAndUnpack(animalController.currentAnimal.value.name,
+        animalController.currentAnimal.value.type);
+    setState(() {
+      valueName = animalController.currentAnimal.value.name;
+      type = animalController.currentAnimal.value.type;
+    });
   }
 
   Future<void> setBackgroundColor(BuildContext context) async {
@@ -199,10 +257,31 @@ class _State
     });
   }
 
-  Future<void> setInformation(BuildContext context) async {
+  Future<void> setLayout(BuildContext context) async {
     setState(() {
       cubit.animalTitle = animalController.currentAnimal.value.title;
       cubit.imagePath = animalController.currentAnimal.value.icon;
+    });
+  }
+
+  Future<void> setInformation(BuildContext context) async {
+    await detailController.getAnimalCategoryModelByModelId(context,
+        modelId: animalController.currentAnimal.value.id);
+    await detailController.updateViewsAnimalModel(context,
+        id: detailController.currentAnimalDetail.value.id,
+        views: (detailController.currentAnimalDetail.value.views + 1));
+    setState(() {
+      cubit.description =
+          detailController.currentAnimalDetail.value.description;
+      cubit.classification = detailController
+          .currentAnimalDetail.value.classification; // Phân loại sinh học
+      cubit.conservation = detailController
+          .currentAnimalDetail.value.conservation; // Tình trạng bảo tồn
+      cubit.reproduction =
+          detailController.currentAnimalDetail.value.reproduction; // Sinh sản
+      cubit.culturalFigure = detailController
+          .currentAnimalDetail.value.culturalFigure; // Hình tượng trong văn hóa
+      cubit.views = detailController.currentAnimalDetail.value.views;
     });
   }
 
@@ -216,8 +295,11 @@ class _State
   @override
   void initState() {
     super.initState();
-    setInformation(context);
+
+    setLayout(context);
     setBackgroundColor(context);
+
+    setInformation(context);
     setDimension();
   }
 }

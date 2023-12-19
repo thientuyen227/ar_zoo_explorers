@@ -33,5 +33,11 @@ abstract class AuthRepository {
       required String avatarUrl,
       required String address,
       required String birth,
-      required String provider});
+      required String provider,
+      required String gender,
+      required String role,
+      required bool status});
+
+  Future<Either<Failure, Success<String>>> uploadImageToFirebase(
+      String imagePath, String imageName);
 }

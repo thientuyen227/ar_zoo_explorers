@@ -46,8 +46,8 @@ class _State
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   return Column(children: [
-                    ProfileHeader(),
-                    UserInformation(context),
+                    profileHeader(),
+                    userInformation(context),
                   ]);
                 } else {
                   return const CircularProgressIndicator();
@@ -58,7 +58,7 @@ class _State
         ));
   }
 
-  Widget ProfileHeader() {
+  Widget profileHeader() {
     return Stack(children: [
       SizedBox(
         width: MediaQuery.of(context).size.width,
@@ -76,11 +76,11 @@ class _State
                   image: AssetImage(AppImages.imgAppLogoBG),
                   fit: BoxFit.cover))),
       Positioned(
-          left: 0, right: 0, bottom: 0, child: Center(child: UserAvatar())),
+          left: 0, right: 0, bottom: 0, child: Center(child: userAvatar())),
     ]);
   }
 
-  Widget UserInformation(BuildContext context) {
+  Widget userInformation(BuildContext context) {
     return SizedBox(
         width: MediaQuery.of(context).size.width,
         child: Container(
@@ -107,33 +107,36 @@ class _State
                     fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 20),
-              UserInformationCustom(context),
+              userInformationCustom(context),
               Container(height: 2, width: double.infinity, color: Colors.grey),
-              UpdateInformation(),
+              updateInformation(),
             ])));
   }
 
-  Widget UserInformationCustom(BuildContext context) {
+  Widget userInformationCustom(BuildContext context) {
     return Column(children: [
-      UserInformationItem(
+      userInformationItem(
           context, "Họ và tên", controller.currentUser.value.fullname),
       const SizedBox(height: 13),
-      UserInformationItem(
+      userInformationItem(
           context, "Ngày sinh", controller.currentUser.value.birth),
       const SizedBox(height: 13),
-      UserInformationItem(
+      userInformationItem(context, "Giới tính",
+          cubit.getGender(controller.currentUser.value.gender)),
+      const SizedBox(height: 13),
+      userInformationItem(
           context, "Địa chỉ email", controller.currentUser.value.email),
       const SizedBox(height: 13),
-      UserInformationItem(
+      userInformationItem(
           context, "Số điện thoại", controller.currentUser.value.phone),
       const SizedBox(height: 13),
-      UserInformationItem(
+      userInformationItem(
           context, "Địa chỉ", controller.currentUser.value.address),
       const SizedBox(height: 13)
     ]);
   }
 
-  Widget UpdateInformation() {
+  Widget updateInformation() {
     return Center(
         child: MaterialButton(
             onPressed: () {
@@ -153,7 +156,7 @@ class _State
             ])));
   }
 
-  Widget UserInformationItem(
+  Widget userInformationItem(
       BuildContext context, String title, String content) {
     String showContent = content;
     if (content == '') {
@@ -183,7 +186,7 @@ class _State
         ]));
   }
 
-  Widget UserAvatar() {
+  Widget userAvatar() {
     return Container(
         width: MediaQuery.of(context).size.height * 0.155,
         height: MediaQuery.of(context).size.height * 0.155,

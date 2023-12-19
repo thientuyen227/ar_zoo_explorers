@@ -15,7 +15,12 @@ class AnimalModelsCubit extends BaseCubit<AnimalModelsState> {
   FormBuilderTextFieldModel searchBar = FormBuilderTextFieldModel(
       name: "search", hint_text: "search", icon_suffix: AppIcons.icSearch);
 
-  List<ButtonObject> listButtonObject = [];
+  List<ButtonObject> listSearchAnimal = [];
+
+  List<ButtonObject> listFullAnimal = [];
+
+  double WIDTH = 0;
+  double HEIGHT = 0;
 
   // List<ButtonObject> mammals = [
   //   ButtonObject(title: 'Bat', icon: AppImages.imgBat),
@@ -69,12 +74,8 @@ class AnimalModelsCubit extends BaseCubit<AnimalModelsState> {
       AdvertisementObject([AppImages.imgAdvertisement, AppImages.imgAds1]);
 
   void isLoved(int index) {
-    listButtonObject[index].isLoved = !listButtonObject[index].isLoved;
-    print(listButtonObject[index].isLoved);
-  }
-
-  void onSearch(String? content) {
-    print(content);
+    listSearchAnimal[index].isLoved = !listSearchAnimal[index].isLoved;
+    print(listSearchAnimal[index].isLoved);
   }
 
   String nameCustom(String fullname) {
@@ -90,9 +91,26 @@ class AnimalModelsCubit extends BaseCubit<AnimalModelsState> {
     if (list.isNotEmpty) {
       for (int i = 0; i < list.length; i++) {
         if (list[i].categoryId == cateId) {
-          listButtonObject.add(ButtonObject(
+          listFullAnimal.add(ButtonObject(
+              title: list[i].title, icon: list[i].icon, id: list[i].id));
+          listSearchAnimal.add(ButtonObject(
               title: list[i].title, icon: list[i].icon, id: list[i].id));
         }
+      }
+    }
+  }
+
+  void onSearch(String searchValue) {
+    listSearchAnimal = [];
+    for (int i = 0; i < listFullAnimal.length; i++) {
+      if (listFullAnimal[i]
+          .title
+          .toLowerCase()
+          .contains(searchValue.trim().toLowerCase())) {
+        listSearchAnimal.add(ButtonObject(
+            title: listFullAnimal[i].title,
+            icon: listFullAnimal[i].icon,
+            id: listFullAnimal[i].id));
       }
     }
   }

@@ -42,7 +42,7 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
                         style: TextStyle(fontSize: 20, color: Colors.white)),
                     leading: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [TurnBack()])),
+                        children: [turnBack()])),
                 body: FormBuilder(
                     key: _formKey,
                     child: SingleChildScrollView(
@@ -67,24 +67,24 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
                                 child: Column(children: [
                                   const SizedBox(height: 50),
                                   // ĐỊA CHỈ EMAIL
-                                  TextForm(cubit.ListFormItem[0],
+                                  textForm(cubit.ListFormItem[0],
                                       TextInputType.emailAddress, 0),
                                   // HỌ VÀ TÊN
-                                  TextForm(cubit.ListFormItem[1],
+                                  textForm(cubit.ListFormItem[1],
                                       TextInputType.text, 1),
                                   //NHẬP MẬT KHẨU
-                                  PasswordForm(cubit.ListFormItem[2], 2),
+                                  passwordForm(cubit.ListFormItem[2], 2),
                                   // NHẬP LẠI MẬT KHẨU
-                                  PasswordForm(cubit.ListFormItem[3], 3),
+                                  passwordForm(cubit.ListFormItem[3], 3),
                                   //ĐIỀU KHOẢN SỬ DỤNG
-                                  TermOfUse(),
+                                  termsOfUse(),
                                   const SizedBox(height: 20),
                                   FutureBuilder(
                                       future: controller.signUpFuture.value,
                                       builder: (context, snapshot) =>
-                                          Align(child: SubmitButton(snapshot))),
+                                          Align(child: submitButton(snapshot))),
                                   const SizedBox(height: 15),
-                                  OthersLoginTitle(),
+                                  otherLoginTitle(),
                                   const SizedBox(height: 15),
                                   Container(
                                       padding: const EdgeInsets.all(15),
@@ -95,12 +95,12 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
                                           borderRadius:
                                               BorderRadius.circular(15.0)),
                                       child: Column(
-                                          children: ListOthersLoginButton(
+                                          children: listOtherLoginButton(
                                               cubit.listOthersLoginButton)))
                                 ])))))))));
   }
 
-  Widget SubmitButton(AsyncSnapshot<dynamic> snapshot) {
+  Widget submitButton(AsyncSnapshot<dynamic> snapshot) {
     return ElevatedButton(
         onPressed: snapshot.connectionState != ConnectionState.waiting
             ? _onSignUpPressed
@@ -117,7 +117,7 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
         ]));
   }
 
-  Widget TextForm(
+  Widget textForm(
       FormBuilderTextFieldModel items, TextInputType type, int index) {
     return Column(children: [
       FormBuilderTextField(
@@ -141,7 +141,7 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
     ]);
   }
 
-  Widget PasswordForm(FormBuilderTextFieldModel items, int index) {
+  Widget passwordForm(FormBuilderTextFieldModel items, int index) {
     return Column(children: [
       FormBuilderTextField(
           name: items.name,
@@ -173,7 +173,7 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
     ]);
   }
 
-  Widget TermOfUse() {
+  Widget termsOfUse() {
     return Row(children: [
       Checkbox(
           value: cubit.isChecked,
@@ -196,11 +196,9 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
     ]);
   }
 
-  Widget TurnBack() {
+  Widget turnBack() {
     return ElevatedButton(
-        onPressed: () {
-          context.router.pushNamed(Routes.login);
-        },
+        onPressed: () => context.router.pushNamed(Routes.login),
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.blue),
             elevation: MaterialStateProperty.all(0),
@@ -209,7 +207,7 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
         child: Image.asset(AppIcons.icBack_png));
   }
 
-  Widget OhtersLoginButton(OthersLoginButtonModel items) {
+  Widget otherLoginButton(OthersLoginButtonModel items) {
     return SizedBox(
         height: 50,
         child: ElevatedButton(
@@ -234,10 +232,10 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
             ])));
   }
 
-  List<Widget> ListOthersLoginButton(List<OthersLoginButtonModel> list) {
+  List<Widget> listOtherLoginButton(List<OthersLoginButtonModel> list) {
     List<Widget> listWidget = [];
     for (int i = 0; i < list.length; i++) {
-      listWidget.add(OhtersLoginButton(list[i]));
+      listWidget.add(otherLoginButton(list[i]));
       if (i < (list.length - 1)) {
         listWidget.add(const SizedBox(height: 12));
       }
@@ -245,7 +243,7 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
     return listWidget;
   }
 
-  Widget OthersLoginTitle() {
+  Widget otherLoginTitle() {
     return Stack(alignment: Alignment.center, children: [
       Container(height: 2, width: double.infinity, color: Colors.grey),
       Container(

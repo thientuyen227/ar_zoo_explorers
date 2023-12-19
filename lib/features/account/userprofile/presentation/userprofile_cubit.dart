@@ -13,4 +13,14 @@ class UserProfileCubit extends BaseCubit<UserProfileState> {
       userAvatar = url;
     }
   }
+
+  String getGender(String gender) {
+    if (gender == '') {
+      return "Chưa cập nhật";
+    } else if (gender == 'male') {
+      return "Nam";
+    } else {
+      return "Nữ";
+    }
+  }
 }
