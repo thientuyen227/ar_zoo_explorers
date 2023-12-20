@@ -8,12 +8,16 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
+import '../../../app/config/app_router.gr.dart';
 import '../../../app/config/routes.dart';
 import '../../../app/theme/dimens.dart';
 import '../../../app/theme/icons.dart';
 import '../../../base/base_state.dart';
 import '../../../base/widgets/page_loading_indicator.dart';
+import '../../../core/data/controller/animal_detail_controller.dart';
 import '../../../core/data/controller/auth_controller.dart';
+import '../../../core/data/controller/user_animal_controller.dart';
+import '../../../domain/entities/animal_detail_entity.dart';
 import '../../../utils/widget/button_widget.dart';
 import '../../base-model/button_object.dart';
 import '../../base-model/form_builder_text_field_model.dart';
@@ -28,6 +32,8 @@ class AnimalModelsPage extends StatefulWidget {
 
 class _State
     extends BaseState<AnimalModelsState, AnimalModelsCubit, AnimalModelsPage> {
+  final userAnimalController = UserAnimalController.findOrInitialize;
+  final detailController = AnimalDetailController.findOrInitialize;
   final controller = AuthController.findOrInitialize;
   final cateController = AnimalCategoryController.findOrInitialize;
   final animalController = AnimalController.findOrInitialize;
@@ -120,7 +126,8 @@ class _State
               Center(
                   child: Stack(alignment: Alignment.center, children: [
                 buttonTitle(cubit.listSearchAnimal[index].title),
-                loveButton(index)
+                loveButton(index),
+                views(index)
               ]))
             ])));
   }
@@ -157,10 +164,11 @@ class _State
             width: 32,
             height: 32,
             child: IconButton(
-                onPressed: () {
+                onPressed: () async {
                   setState(() {
                     cubit.isLoved(index);
                   });
+                  await _updateLoveButton(context, index);
                 },
                 icon: Image.asset(cubit.listSearchAnimal[index].isLoved
                     ? AppIcons.icLoved
@@ -213,11 +221,27 @@ class _State
                 height: AppDimens.size30.height));
   }
 
+  Widget views(int index) {
+    return Align(
+        alignment: Alignment.centerLeft,
+        child: Padding(
+            padding: const EdgeInsets.all(2),
+            child: SizedBox(
+                width: 28,
+                height: 28,
+                child: Column(children: [
+                  Image.asset(AppIcons.icEye24, scale: 1.6),
+                  Text(cubit.listSearchAnimal[index].views.toString(),
+                      style: const TextStyle(fontSize: 10, color: Colors.black))
+                ]))));
+  }
+
   Widget turnBack() {
     return AppIconButton(
         onPressed: () async {
           await cateController.resetCurrentAnimalCategory(context);
-          context.router.pop();
+          //context.router.pop();
+          context.router.popAndPush(const HomeRoute());
         },
         icon: Image.asset(AppIcons.icBack_png, scale: 0.65));
   }
@@ -228,6 +252,10 @@ class _State
       setState(() {
         cubit.setListAnimal(animalController.listAnimal.value,
             cateController.currentAnimalCategory.value.id);
+        for (int i = 0; i < cubit.listFullAnimal.length; i++) {
+          _getIsLoved(controller.currentUser.value.id, i);
+          _getViews(detailController.listAnimalDetail.value, i);
+        }
       });
     });
   }
@@ -248,6 +276,39 @@ class _State
       cubit.WIDTH = MediaQuery.of(context).size.width;
       cubit.HEIGHT = MediaQuery.of(context).size.height;
     });
+  }
+
+  _getIsLoved(String userId, int index) async {
+    bool status = await userAnimalController.getUserAnimalIsLoved(
+        userId, cubit.listFullAnimal[index].id!);
+    setState(() {
+      cubit.listFullAnimal[index].isLoved = status;
+      cubit.listSearchAnimal[index].isLoved = status;
+    });
+  }
+
+  _updateLoveButton(BuildContext context, int index) async {
+    var tempObject = await userAnimalController.getUserAnimalByUserIdAndModelId(
+        context,
+        userId: controller.currentUser.value.id,
+        modelId: cubit.listFullAnimal[index].id!);
+    await userAnimalController.updateUserAnimal(context,
+        id: tempObject.id,
+        userId: controller.currentUser.value.id,
+        modelId: cubit.listSearchAnimal[index].id!,
+        isLoved: cubit.listSearchAnimal[index].isLoved);
+  }
+
+  _getViews(List<AnimalDetailEntity> lst, int index) {
+    for (int i = 0; i < lst.length; i++) {
+      cubit.listFullAnimal[index].views = 0;
+      cubit.listSearchAnimal[index].views = 0;
+      if (cubit.listFullAnimal[index].id == lst[i].modelId) {
+        cubit.listFullAnimal[index].views = lst[i].views;
+        cubit.listSearchAnimal[index].views = lst[i].views;
+        break;
+      }
+    }
   }
 
   @override

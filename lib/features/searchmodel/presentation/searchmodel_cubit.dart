@@ -19,7 +19,6 @@ class SearchModelCubit extends BaseCubit<SearchModelState> {
 
   void isLoved(int index) {
     listSearchAnimal[index].isLoved = !listSearchAnimal[index].isLoved;
-    print(listSearchAnimal[index].isLoved);
   }
 
   void setListAnimal(List<AnimalEntity> list, String searchValue) {
@@ -45,7 +44,9 @@ class SearchModelCubit extends BaseCubit<SearchModelState> {
         listSearchAnimal.add(ButtonObject(
             title: listFullAnimal[i].title,
             icon: listFullAnimal[i].icon,
-            id: listFullAnimal[i].id));
+            id: listFullAnimal[i].id,
+            isLoved: listFullAnimal[i].isLoved,
+            views: listFullAnimal[i].views));
       }
     }
   }
