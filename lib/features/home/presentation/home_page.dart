@@ -18,6 +18,7 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import '../../../app/config/routes.dart';
 import '../../../base/widgets/page_loading_indicator.dart';
 import '../../../core/data/controller/animal_controller.dart';
+import '../../../core/data/controller/animal_detail_controller.dart';
 import '../../../core/data/controller/auth_controller.dart';
 import 'home_cubit.dart';
 
@@ -31,6 +32,7 @@ class HomePage extends StatefulWidget {
 
 class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   final PageController advertisementController = PageController();
+  final detailController = AnimalDetailController.findOrInitialize;
   final controller = AuthController.findOrInitialize;
   final animalController = AnimalController.findOrInitialize;
   final cateController = AnimalCategoryController.findOrInitialize;
@@ -111,11 +113,9 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
                 ]),
             child: Column(children: [
               buttonImage(cubit.listAnimalCategory[index].icon),
-              Center(
-                  child: Stack(alignment: Alignment.center, children: [
-                buttonTitle(cubit.listAnimalCategory[index].title),
-                loveButton(index)
-              ]))
+              Padding(
+                  padding: const EdgeInsets.only(top: 5),
+                  child: buttonTitle(cubit.listAnimalCategory[index].title)),
             ])));
   }
 
@@ -146,23 +146,6 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
                 fontWeight: FontWeight.bold),
             softWrap: true,
             textAlign: TextAlign.center));
-  }
-
-  Widget loveButton(int index) {
-    return Align(
-        alignment: Alignment.centerRight,
-        child: SizedBox(
-            width: 32,
-            height: 32,
-            child: IconButton(
-                onPressed: () {
-                  setState(() {
-                    cubit.isLoved(index);
-                  });
-                },
-                icon: Image.asset(cubit.listAnimalCategory[index].isLoved
-                    ? AppIcons.icLoved
-                    : AppIcons.icHeart))));
   }
 
   Widget searchBar(FormBuilderTextFieldModel item) {
@@ -303,6 +286,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
     }
     animalController.searchValue(value);
     context.router.pushNamed(Routes.searchmodel);
+    //context.router.replace(const SearchModelRoute());
   }
 
   @override
@@ -310,6 +294,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
     super.initState();
     _buildSlider();
     controller.getCurrentUser(context);
+    detailController.getAllAnimalDetails(context);
     setAnimalCategory(context);
   }
 }

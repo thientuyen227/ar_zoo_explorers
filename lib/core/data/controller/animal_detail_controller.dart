@@ -22,7 +22,9 @@ class AnimalDetailController extends ControllerHelper {
       culturalFigure: '',
       views: 0));
 
-  Future<AnimalDetailEntity> getAnimalCategoryModel(BuildContext context,
+  Rx<List<AnimalDetailEntity>> listAnimalDetail = Rx([]);
+
+  Future<AnimalDetailEntity> getAnimalDetail(BuildContext context,
       {required String id}) {
     return processRequest<AnimalDetailEntity>(
         request: () => _animalDetailRepository.getAnimalDetailModel(id),
@@ -31,6 +33,22 @@ class AnimalDetailController extends ControllerHelper {
             },
         onFailure: (failure) =>
             Fluttertoast.showToast(msg: "Truy cập thông tin thất bại!"));
+  }
+
+  Future<List<AnimalDetailEntity>> getAllAnimalDetails(BuildContext context) {
+    return processRequest<List<AnimalDetailEntity>>(
+        request: () => _AnimalDetailRepository.getAllAnimalDetails(),
+        onFailure: (failure) =>
+            Fluttertoast.showToast(msg: "Truy cập thông tin thất bại!"),
+        onSuccess: (success) => {
+              _setListAnimalDetail(context, success.data),
+            });
+  }
+
+  _setListAnimalDetail(
+      BuildContext context, List<AnimalDetailEntity> lstEntity) {
+    listAnimalDetail.value = lstEntity;
+    update();
   }
 
   Future<AnimalDetailEntity> getAnimalCategoryModelByModelId(
