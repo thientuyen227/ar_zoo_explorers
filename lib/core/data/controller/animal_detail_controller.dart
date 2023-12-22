@@ -9,7 +9,7 @@ import '../../repositories/animal_detail_repository_implement.dart';
 import '../models/animal_detail_model.dart';
 
 class AnimalDetailController extends ControllerHelper {
-  final AnimalDetailRepository _AnimalDetailRepository =
+  final AnimalDetailRepository _animalDetailRepository =
       AnimalDetailRepositoryImplement();
 
   Rx<AnimalDetailEntity> currentAnimalDetail = Rx(AnimalDetailModel(
@@ -25,7 +25,7 @@ class AnimalDetailController extends ControllerHelper {
   Future<AnimalDetailEntity> getAnimalCategoryModel(BuildContext context,
       {required String id}) {
     return processRequest<AnimalDetailEntity>(
-        request: () => _AnimalDetailRepository.getAnimalDetailModel(id),
+        request: () => _animalDetailRepository.getAnimalDetailModel(id),
         onSuccess: (success) => {
               _setCurrentAnimalDetail(context, success.data),
             },
@@ -38,7 +38,7 @@ class AnimalDetailController extends ControllerHelper {
       {required String modelId}) {
     return processRequest<AnimalDetailEntity>(
         request: () =>
-            _AnimalDetailRepository.getAnimalDetailModelByModelId(modelId),
+            _animalDetailRepository.getAnimalDetailModelByModelId(modelId),
         onSuccess: (success) => {
               _setCurrentAnimalDetail(context, success.data),
             },
@@ -49,7 +49,7 @@ class AnimalDetailController extends ControllerHelper {
   Future<AnimalDetailEntity> updateViewsAnimalModel(BuildContext context,
       {required String id, required int views}) {
     return processRequest<AnimalDetailEntity>(
-        request: () => _AnimalDetailRepository.updateViewAnimalDetail(
+        request: () => _animalDetailRepository.updateViewAnimalDetail(
             id: id, views: views),
         onSuccess: (success) => {
               _setCurrentAnimalDetail(context, success.data),

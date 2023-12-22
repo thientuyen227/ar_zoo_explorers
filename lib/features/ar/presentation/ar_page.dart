@@ -33,56 +33,6 @@ class _State extends BaseState<ARState, ARCubit, ARPage> {
             onUnityCreated: onUnityCreated,
             onUnityMessage: onUnityMessage,
           ),
-          // Positioned(
-          //     top: 0,
-          //     right: 10,
-          //     child: Container(
-          //       color: AppColor.blue,
-          //       child: Row(
-          //         children: [
-          //           Column(
-          //             children: [
-          //               IconButton(
-          //                 onPressed: () {},
-          //                 icon: Image.asset(AppIcons.icFeed),
-          //                 iconSize: 40,
-          //               ),
-          //               const Text(
-          //                 "Feed",
-          //                 style: TextStyle(
-          //                     color: Colors.white,
-          //                     fontWeight: FontWeight.bold,
-          //                     fontSize: 16),
-          //               )
-          //             ],
-          //           ),
-          //         ],
-          //       ),
-          //     )),
-          // Positioned(
-          //     right: 0,
-          //     bottom: 25,
-          //     child: Column(
-          //       children: [
-          //         IconButton(
-          //             onPressed: () {
-          //               // sendMessageToUnity("StartAnimation");
-          //             },
-          //             icon: const Icon(Icons.push_pin),
-          //             color: Colors.white,
-          //             iconSize: 40),
-          //         IconButton(
-          //             onPressed: () {},
-          //             icon: const Icon(Icons.volume_up),
-          //             color: Colors.white,
-          //             iconSize: 40),
-          //         IconButton(
-          //             onPressed: () {},
-          //             icon: const Icon(Icons.lock_open_outlined),
-          //             color: Colors.white,
-          //             iconSize: 40)
-          //       ],
-          //     )),
         ]),
       ),
     );
