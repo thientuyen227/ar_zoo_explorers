@@ -7,7 +7,6 @@ import 'package:ar_zoo_explorers/features/base-model/button_object.dart';
 import 'package:ar_zoo_explorers/features/base-model/form_builder_text_field_model.dart';
 import 'package:ar_zoo_explorers/features/home/model/advertisement_object.dart';
 import 'package:ar_zoo_explorers/features/home/presentation/home_state.dart';
-import 'package:ar_zoo_explorers/features/setting/presentation/setting_page.dart';
 import 'package:ar_zoo_explorers/utils/widget/button_widget.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +19,7 @@ import '../../../base/widgets/page_loading_indicator.dart';
 import '../../../core/data/controller/animal_controller.dart';
 import '../../../core/data/controller/animal_detail_controller.dart';
 import '../../../core/data/controller/auth_controller.dart';
+import '../../account/accountmanager/presentation/accountmanager_page.dart';
 import 'home_cubit.dart';
 
 @RoutePage()
@@ -48,7 +48,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
             scaffold: Scaffold(
                 appBar: AppBar(
                     centerTitle: true,
-                    title: const Text("Trang Chủ",
+                    title: const Text("Home",
                         style: TextStyle(fontSize: 20, color: Colors.white)),
                     leading: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -250,9 +250,11 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
         opaque: false,
         pageBuilder: (BuildContext context, _, __) {
           return const AnimatedOpacity(
-              duration: Duration(milliseconds: 500),
-              opacity: 1.0, // Độ mờ 80%
-              child: SettingPage());
+            duration: Duration(milliseconds: 500),
+            opacity: 1.0, // Độ mờ 80%
+            //child: SettingPage(),
+            child: AccountManagerPage(),
+          );
         }));
   }
 
