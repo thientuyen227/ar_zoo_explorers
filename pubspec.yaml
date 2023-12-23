@@ -95,6 +95,7 @@ dependencies:
   form_builder_extra_fields: ^10.1.0
   palette_generator: ^0.3.3+3
   http: ^0.13.6
+  flutter_html: ^3.0.0-beta.2
  
 
 dev_dependencies:

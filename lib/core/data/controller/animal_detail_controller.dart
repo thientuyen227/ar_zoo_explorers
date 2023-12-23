@@ -37,7 +37,7 @@ class AnimalDetailController extends ControllerHelper {
 
   Future<List<AnimalDetailEntity>> getAllAnimalDetails(BuildContext context) {
     return processRequest<List<AnimalDetailEntity>>(
-        request: () => _AnimalDetailRepository.getAllAnimalDetails(),
+        request: () => _animalDetailRepository.getAllAnimalDetails(),
         onFailure: (failure) =>
             Fluttertoast.showToast(msg: "Truy cập thông tin thất bại!"),
         onSuccess: (success) => {
