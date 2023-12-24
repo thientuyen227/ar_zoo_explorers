@@ -38,7 +38,7 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
             scaffold: Scaffold(
                 appBar: AppBar(
                     centerTitle: true,
-                    title: const Text("ĐĂNG KÝ TÀI KHOẢN",
+                    title: const Text("Sign Up",
                         style: TextStyle(fontSize: 20, color: Colors.white)),
                     leading: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -113,7 +113,7 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
                 borderRadius: BorderRadius.circular(20)))),
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Image.asset(AppIcons.icWhiteSubmit),
-          const Text("Đăng ký", style: TextStyle(fontSize: 18))
+          const Text("Sign up", style: TextStyle(fontSize: 18))
         ]));
   }
 
@@ -132,7 +132,7 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
               contentPadding: const EdgeInsets.all(10)),
           autovalidateMode: AutovalidateMode.onUserInteraction,
           validator: FormBuilderValidators.compose([
-            FormBuilderValidators.required(errorText: "Không thể để trống"),
+            FormBuilderValidators.required(errorText: "Field cannot be empty"),
             (value) {
               return _onHandleValidator(index, value);
             }
@@ -164,7 +164,7 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
               contentPadding: const EdgeInsets.all(10)),
           autovalidateMode: AutovalidateMode.onUserInteraction,
           validator: FormBuilderValidators.compose([
-            FormBuilderValidators.required(errorText: "Không thể để trống"),
+            FormBuilderValidators.required(errorText: "Field cannot be empty"),
             (value) {
               return _onHandleValidator(index, value);
             }
@@ -182,15 +182,15 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
               cubit.isChecked = value!;
             });
           }),
-      Text("Tôi đồng ý với ",
-          style: TextStyle(fontSize: 16, color: Colors.grey[700])),
+      Text("I agree to the ",
+          style: TextStyle(fontSize: 15.5, color: Colors.grey[700])),
       GestureDetector(
           onTap: () {
             context.router.pushNamed(Routes.termofservice);
           },
-          child: Text("Điều Khoản Sử Dụng",
+          child: Text("Terms of Use",
               style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 15.5,
                   color: Colors.blue[700],
                   fontWeight: FontWeight.bold)))
     ]);
@@ -207,11 +207,13 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
         child: Image.asset(AppIcons.icBack_png));
   }
 
-  Widget otherLoginButton(OthersLoginButtonModel items) {
+  Widget otherLoginButton(OthersLoginButtonModel items, int index) {
     return SizedBox(
         height: 50,
         child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () async {
+              await _onOthersLogin(index);
+            },
             style: ElevatedButton.styleFrom(
                 side: BorderSide(width: 2, color: items.bdColor),
                 backgroundColor: items.bgColor,
@@ -235,7 +237,7 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
   List<Widget> listOtherLoginButton(List<OthersLoginButtonModel> list) {
     List<Widget> listWidget = [];
     for (int i = 0; i < list.length; i++) {
-      listWidget.add(otherLoginButton(list[i]));
+      listWidget.add(otherLoginButton(list[i], i));
       if (i < (list.length - 1)) {
         listWidget.add(const SizedBox(height: 12));
       }
@@ -249,7 +251,7 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
       Container(
           color: Colors.white,
           padding: const EdgeInsets.all(8.0),
-          child: Text('Đăng nhập bằng cách khác',
+          child: Text('Or',
               style: TextStyle(fontSize: 18, color: Colors.grey[700]),
               textAlign: TextAlign.center))
     ]);
@@ -271,10 +273,26 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
     }
   }
 
+  Future<void> _onOthersLogin(index) async {
+    switch (index) {
+      case 0:
+        await controller.loginWithGoogle(context);
+        break;
+      case 1:
+        await controller.loginWithFacebook(context);
+        break;
+      case 2:
+        Fluttertoast.showToast(msg: "The feature will be updated later.");
+        break;
+      default:
+        return;
+    }
+  }
+
   void _onSignUpPressed() {
     if (_formKey.currentState!.validate()) {
       if (!cubit.isChecked) {
-        Fluttertoast.showToast(msg: "Bạn chưa đồng ý với điều khoản");
+        Fluttertoast.showToast(msg: "You have not agreed to the terms!");
       } else {
         controller.signUp(
             fullname: _formKey.currentState!.fields['fullname']!.value,

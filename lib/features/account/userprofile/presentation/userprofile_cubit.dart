@@ -16,11 +16,11 @@ class UserProfileCubit extends BaseCubit<UserProfileState> {
 
   String getGender(String gender) {
     if (gender == '') {
-      return "Chưa cập nhật";
+      return "Not updated";
     } else if (gender == 'male') {
-      return "Nam";
+      return "Male";
     } else {
-      return "Nữ";
+      return "Female";
     }
   }
 }

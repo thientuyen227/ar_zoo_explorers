@@ -19,18 +19,20 @@ class _State extends BaseState<TermOfServiceState, TermOfServiceCubit,
   @override
   Widget buildByState(BuildContext context, TermOfServiceState state) {
     return Scaffold(
+        extendBodyBehindAppBar: true,
         appBar: AppBar(
             centerTitle: true,
-            title: const Text("ĐIỀU KHOẢN SỬ DỤNG",
+            backgroundColor: Colors.black.withOpacity(0),
+            title: const Text("Terms Of Service",
                 style: TextStyle(fontSize: 20, color: Colors.white)),
             leading: const Column(children: [])),
         body: Stack(children: [
           ClipRect(
               child: Image.asset(AppImages.imgAppLogoBG,
-                  width: MediaQuery.of(context).size.width, fit: BoxFit.cover)),
+                  width: cubit.WIDTH, height: cubit.HEIGHT, fit: BoxFit.cover)),
           Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
+              width: cubit.WIDTH,
+              height: cubit.HEIGHT,
               color: Colors.black.withOpacity(0.2)),
           SingleChildScrollView(
               child: Center(
@@ -38,7 +40,7 @@ class _State extends BaseState<TermOfServiceState, TermOfServiceCubit,
                       padding: const EdgeInsets.only(
                           left: 20, right: 20, bottom: 25),
                       child: Column(children: [
-                        const SizedBox(height: 25),
+                        SizedBox(height: cubit.HEIGHT * 0.13),
                         listTermsOfService(),
                         const SizedBox(height: 5),
                         submitButton()
@@ -49,8 +51,8 @@ class _State extends BaseState<TermOfServiceState, TermOfServiceCubit,
   Widget listTermsOfService() {
     return Container(
       padding: const EdgeInsets.all(10),
-      width: MediaQuery.of(context).size.width * 0.8,
-      height: MediaQuery.of(context).size.width * 1.2,
+      width: cubit.WIDTH * 0.85,
+      height: cubit.WIDTH * 1.2,
       decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.85),
           border: Border.all(color: Colors.grey, width: 2),
@@ -99,13 +101,13 @@ class _State extends BaseState<TermOfServiceState, TermOfServiceCubit,
 
   Widget submitButton() {
     return Container(
-        width: MediaQuery.of(context).size.width * 0.5,
-        height: MediaQuery.of(context).size.width * 0.2,
+        width: cubit.WIDTH * 0.5,
+        height: cubit.WIDTH * 0.2,
         padding: const EdgeInsets.all(15),
         child: ElevatedButton(
             onPressed: () => Navigator.of(context).pop(),
             style: TextButton.styleFrom(
-                minimumSize: const Size(160, 50),
+                minimumSize: const Size(140, 50),
                 backgroundColor: const Color.fromARGB(255, 248, 133, 18),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
@@ -114,8 +116,23 @@ class _State extends BaseState<TermOfServiceState, TermOfServiceCubit,
             child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Quay lại",
+                  Text("Back",
                       style: TextStyle(fontSize: 20, color: Colors.white)),
                 ])));
+  }
+
+  void setDimension() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        cubit.WIDTH = MediaQuery.of(context).size.width;
+        cubit.HEIGHT = MediaQuery.of(context).size.height;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setDimension();
   }
 }

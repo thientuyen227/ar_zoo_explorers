@@ -35,7 +35,7 @@ class _State extends BaseState<ChangePasswordState, ChangePasswordCubit,
           scaffold: Scaffold(
             appBar: AppBar(
                 centerTitle: true,
-                title: const Text("NHẬP MẬT KHẨU MỚI",
+                title: const Text("Change Password",
                     style: TextStyle(fontSize: 18, color: Colors.white)),
                 leading: Column(children: [turnBack()]),
                 actions: const []),
@@ -44,8 +44,7 @@ class _State extends BaseState<ChangePasswordState, ChangePasswordCubit,
                 child: SingleChildScrollView(
                   child: Container(
                       constraints: BoxConstraints(
-                        minHeight: MediaQuery.of(context).size.height,
-                      ),
+                          minHeight: MediaQuery.of(context).size.height),
                       width: MediaQuery.of(context).size.width,
                       color: Colors.blue[600],
                       child: Container(
@@ -120,7 +119,7 @@ class _State extends BaseState<ChangePasswordState, ChangePasswordCubit,
               contentPadding: const EdgeInsets.all(10)),
           autovalidateMode: AutovalidateMode.onUserInteraction,
           validator: FormBuilderValidators.compose([
-            FormBuilderValidators.required(errorText: "Không thể để trống"),
+            FormBuilderValidators.required(errorText: "Required field"),
             (value) {
               return _onHandleValidator(index, value);
             }
@@ -134,7 +133,7 @@ class _State extends BaseState<ChangePasswordState, ChangePasswordCubit,
         onPressed: snapshot.connectionState != ConnectionState.waiting
             ? () => _onUpdatePassword(context)
             : () => {
-                  Fluttertoast.showToast(msg: "Đang cập nhật"),
+                  Fluttertoast.showToast(msg: "Updating"),
                   _onUpdatePassword(context)
                 },
         style: ButtonStyle(
@@ -145,7 +144,7 @@ class _State extends BaseState<ChangePasswordState, ChangePasswordCubit,
                 borderRadius: BorderRadius.circular(20)))),
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Image.asset(AppIcons.icWhiteSubmit),
-          const Text("Thay đổi", style: TextStyle(fontSize: 18))
+          const Text("Change", style: TextStyle(fontSize: 18))
         ]));
   }
 

@@ -30,7 +30,7 @@ class _State
         scaffold: Scaffold(
           appBar: AppBar(
               centerTitle: true,
-              title: const Text('Trang cá nhân',
+              title: const Text('User Profile',
                   style: TextStyle(fontSize: 20, color: Colors.white)),
               actions: const [SizedBox(width: 55)],
               leading: AppIconButton(
@@ -45,10 +45,21 @@ class _State
               future: controller.getCurrentUser(context),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
-                  return Column(children: [
-                    profileHeader(),
-                    userInformation(context),
-                  ]);
+                  return Container(
+                      constraints: BoxConstraints(
+                          minHeight: MediaQuery.of(context).size.height),
+                      decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                              colors: [
+                            Color.fromARGB(255, 255, 255, 255),
+                            Color.fromARGB(255, 0, 128, 255)
+                          ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter)),
+                      child: Column(children: [
+                        profileHeader(),
+                        userInformation(context),
+                      ]));
                 } else {
                   return const CircularProgressIndicator();
                 }
@@ -100,7 +111,7 @@ class _State
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               const Text(
-                "THÔNG TIN CÁ NHÂN",
+                "User Information",
                 style: TextStyle(
                     fontSize: 18,
                     color: Colors.black,
@@ -116,22 +127,22 @@ class _State
   Widget userInformationCustom(BuildContext context) {
     return Column(children: [
       userInformationItem(
-          context, "Họ và tên", controller.currentUser.value.fullname),
+          context, "Full Name", controller.currentUser.value.fullname),
       const SizedBox(height: 13),
       userInformationItem(
-          context, "Ngày sinh", controller.currentUser.value.birth),
+          context, "Birthday", controller.currentUser.value.birth),
       const SizedBox(height: 13),
-      userInformationItem(context, "Giới tính",
+      userInformationItem(context, "Gender",
           cubit.getGender(controller.currentUser.value.gender)),
       const SizedBox(height: 13),
       userInformationItem(
-          context, "Địa chỉ email", controller.currentUser.value.email),
+          context, "Email Address", controller.currentUser.value.email),
       const SizedBox(height: 13),
       userInformationItem(
-          context, "Số điện thoại", controller.currentUser.value.phone),
+          context, "Phone Number", controller.currentUser.value.phone),
       const SizedBox(height: 13),
       userInformationItem(
-          context, "Địa chỉ", controller.currentUser.value.address),
+          context, "Address", controller.currentUser.value.address),
       const SizedBox(height: 13)
     ]);
   }
@@ -143,7 +154,7 @@ class _State
               context.router.popAndPush(const UserInformationRoute());
             },
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              const Text("Thay đổi thông tin",
+              const Text("Update Information",
                   style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,

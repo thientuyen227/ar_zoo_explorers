@@ -11,17 +11,17 @@ class ChangePasswordCubit extends BaseCubit<ChangePasswordState> {
   List<FormBuilderTextFieldModel> ListFormItem = [
     FormBuilderTextFieldModel(
         name: 'oldPassword',
-        hint_text: 'Nhập mật khẩu cũ',
+        hint_text: 'Enter the old password',
         icon_prefix: AppIcons.icLock,
         isObscured: true),
     FormBuilderTextFieldModel(
         name: 'password',
-        hint_text: 'Nhập mật khẩu mới',
+        hint_text: 'Enter the new password',
         icon_prefix: AppIcons.icLock,
         isObscured: true),
     FormBuilderTextFieldModel(
         name: 'confirmPassword',
-        hint_text: 'Nhập lại mật khẩu mới',
+        hint_text: 'Re-enter the new password',
         icon_prefix: AppIcons.icLock,
         isObscured: true)
   ];
@@ -37,15 +37,15 @@ class ChangePasswordCubit extends BaseCubit<ChangePasswordState> {
       final regex3 = RegExp(r'[A-Z]');
       final regex4 = RegExp(r'[@*&^]');
       if (value.length < 8) {
-        return "Mật khẩu tối thiểu 8 ký tự";
+        return "At least 8 characters.";
       } else if (!regex1.hasMatch(value)) {
-        return "Mật khẩu thiếu ký tự thường";
+        return "Missing lowercase character.";
       } else if (!regex2.hasMatch(value)) {
-        return "Mật khẩu thiếu ký tự hoa";
+        return "Missing uppercase character.";
       } else if (!regex3.hasMatch(value)) {
-        return "Mật khẩu phải có chữ số";
+        return "Must include a number.";
       } else if (!regex4.hasMatch(value)) {
-        return "Mật khẩu phải chữ ký tự @*&^";
+        return "Must include special characters @*&^.";
       }
     } else {
       return null;
@@ -59,7 +59,7 @@ class ChangePasswordCubit extends BaseCubit<ChangePasswordState> {
         confirmPassword != null &&
         confirmPassword.isNotEmpty) {
       if (!(password.compareTo(confirmPassword) == 0)) {
-        return "Nhập lại mật khẩu không trùng khớp";
+        return "Password confirmation does not match.";
       }
     } else {
       return null;

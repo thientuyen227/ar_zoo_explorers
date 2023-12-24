@@ -17,12 +17,12 @@ class LoginCubit extends BaseCubit<LoginState> {
   List<FormBuilderTextFieldModel> ListFormItem = [
     FormBuilderTextFieldModel(
         name: 'email',
-        hint_text: "Địa chỉ email",
+        hint_text: "Email address",
         icon_prefix: AppIcons.icUser,
         isObscured: false),
     FormBuilderTextFieldModel(
         name: 'password',
-        hint_text: 'Mật khẩu',
+        hint_text: 'Password',
         icon_prefix: AppIcons.icLock,
         isObscured: true)
   ];

@@ -15,23 +15,23 @@ class RegisterCubit extends BaseCubit<RegisterState> {
   List<FormBuilderTextFieldModel> ListFormItem = [
     FormBuilderTextFieldModel(
         name: 'email',
-        hint_text: "Địa chỉ email",
+        hint_text: "Email address",
         icon_prefix: AppIcons.icMail,
         TIT: TextInputType.emailAddress,
         isObscured: false),
     FormBuilderTextFieldModel(
         name: 'fullname',
-        hint_text: "Họ và tên",
+        hint_text: "Full name",
         icon_prefix: AppIcons.icUser,
         isObscured: false),
     FormBuilderTextFieldModel(
         name: 'password',
-        hint_text: 'Mật khẩu',
+        hint_text: 'Password',
         icon_prefix: AppIcons.icLock,
         isObscured: true),
     FormBuilderTextFieldModel(
         name: 'confirmPassword',
-        hint_text: 'Nhập lại mật khẩu',
+        hint_text: 'Confirm password',
         icon_prefix: AppIcons.icLock,
         isObscured: true)
   ];
@@ -42,19 +42,19 @@ class RegisterCubit extends BaseCubit<RegisterState> {
         bdColor: Colors.red,
         colorText: Colors.white,
         icon: AppIcons.icGMail,
-        content: "Đăng nhập với GMail"),
+        content: "Login with Gmail"),
     OthersLoginButtonModel(
         bgColor: Colors.blue,
         bdColor: Colors.blue,
         colorText: Colors.white,
         icon: AppIcons.icFacebook,
-        content: "Đăng nhập với Facebook"),
+        content: "Login with Facebook"),
     OthersLoginButtonModel(
         bgColor: Colors.white,
         bdColor: Colors.grey,
         colorText: Colors.black,
         icon: AppIcons.icApple,
-        content: "Đăng nhập với ID Apple")
+        content: "Login with ID Apple")
   ];
 
   void onChangeObscuredStatus(int index) {
@@ -64,7 +64,7 @@ class RegisterCubit extends BaseCubit<RegisterState> {
   String? onCheckEmail(String? value) {
     if (value != null && value.isNotEmpty) {
       if (!value.contains("@") || !value.contains(".")) {
-        return "Địa chỉ email không hợp lệ";
+        return "The email address is invalid!";
       }
     } else {
       return null;
@@ -91,15 +91,15 @@ class RegisterCubit extends BaseCubit<RegisterState> {
       final regex3 = RegExp(r'[A-Z]');
       final regex4 = RegExp(r'[@*&^]');
       if (value.length < 8) {
-        return "Mật khẩu tối thiểu 8 ký tự";
+        return "Minimum 8 characters!";
       } else if (!regex1.hasMatch(value)) {
-        return "Mật khẩu thiếu ký tự thường";
+        return "Missing lowercase character!";
       } else if (!regex2.hasMatch(value)) {
-        return "Mật khẩu thiếu ký tự hoa";
+        return "Missing uppercase character!";
       } else if (!regex3.hasMatch(value)) {
-        return "Mật khẩu phải có chữ số";
+        return "Password must include a number!";
       } else if (!regex4.hasMatch(value)) {
-        return "Mật khẩu phải chữ ký tự @*&^";
+        return "Must include special characters @*&^";
       }
     } else {
       return null;
@@ -113,7 +113,7 @@ class RegisterCubit extends BaseCubit<RegisterState> {
         confirmPassword != null &&
         confirmPassword.isNotEmpty) {
       if (!(password.compareTo(confirmPassword) == 0)) {
-        return "Nhập lại mật khẩu không trùng khớp";
+        return "Password confirmation does not match!";
       }
     } else {
       return null;

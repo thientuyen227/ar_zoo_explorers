@@ -57,7 +57,7 @@ class AuthController extends ControllerHelper {
     loginFuture.value = processRequest<UserEntity>(
         request: () => _authRepository.login(email: email, password: password),
         onFailure: (failure) => NotificationHelper.showSnackBar(
-            message: "Tài khoản hoặc mật khẩu bị sai"),
+            message: "Email or password is incorrect!"),
         onSuccess: (success) => _onLoginSuccess(context, success.data));
   }
 
@@ -126,7 +126,7 @@ class AuthController extends ControllerHelper {
   }
 
   _onLoginSuccess(BuildContext context, UserEntity user) {
-    Fluttertoast.showToast(msg: "đăng nhập thành công");
+    Fluttertoast.showToast(msg: "Login successful!");
     currentUser.value = user;
     update();
     context.router.replace(const HomeRoute());
@@ -165,10 +165,10 @@ class AuthController extends ControllerHelper {
             status: status),
         onSuccess: (success) => {
               _setCurrentUser(context, success.data),
-              Fluttertoast.showToast(msg: "Cập nhật thông tin thành công!")
+              Fluttertoast.showToast(msg: "Information updated successfully!")
             },
         onFailure: (failure) =>
-            Fluttertoast.showToast(msg: "Cập nhật thông tin thất bại!"));
+            Fluttertoast.showToast(msg: "Failed to update information!"));
   }
 
   logout(BuildContext context) {
@@ -182,8 +182,7 @@ class AuthController extends ControllerHelper {
       BuildContext context, String email) async {
     return processRequest<void>(
         request: () => _authRepository.sendPasswordResetEmail(email),
-        onFailure: (failure) =>
-            Fluttertoast.showToast(msg: "Email không chính xác!"),
+        onFailure: (failure) => Fluttertoast.showToast(msg: "Incorrect email!"),
         onSuccess: (success) => {context.router.pop()});
   }
 
@@ -193,7 +192,7 @@ class AuthController extends ControllerHelper {
         request: () => _authRepository.changePassword(oldPassword, newPassword),
         onSuccess: (success) => getCurrentUser(context),
         onFailure: (failure) =>
-            {Fluttertoast.showToast(msg: "Thay đổi mật khẩu thất bại!")});
+            {Fluttertoast.showToast(msg: "Password change failed!")});
   }
 
   Future<String> uploadAvatar(
@@ -203,7 +202,7 @@ class AuthController extends ControllerHelper {
             _authRepository.uploadImageToFirebase(imagePath, imageName),
         onSuccess: (success) => {success.data},
         onFailure: (failure) =>
-            {Fluttertoast.showToast(msg: "Upload hình ảnh không thành công!")});
+            {Fluttertoast.showToast(msg: "Image upload unsuccessful!")});
   }
 
   static AuthController get findOrInitialize {
