@@ -294,7 +294,7 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
       if (!cubit.isChecked) {
         Fluttertoast.showToast(msg: "You have not agreed to the terms!");
       } else {
-        controller.signUp(
+        controller.signUp(context,
             fullname: _formKey.currentState!.fields['fullname']!.value,
             email: _formKey.currentState!.fields['email']!.value,
             password: _formKey.currentState!.fields['password']!.value,

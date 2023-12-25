@@ -31,7 +31,7 @@ class AuthController extends ControllerHelper {
       role: '',
       status: true));
 
-  signUp(
+  signUp(BuildContext context,
       {required String fullname,
       required String email,
       required String password,
@@ -45,7 +45,7 @@ class AuthController extends ControllerHelper {
         onFailure: (failure) =>
             NotificationHelper.showSnackBar(message: failure.message),
         onSuccess: (success) => {
-              if (fromOnboard) {Get.back()} else {Get.offNamed(Routes.login)},
+              context.router.popAndPush(const LoginRoute()),
               NotificationHelper.showSnackBar(message: success.message)
             });
   }
@@ -175,7 +175,7 @@ class AuthController extends ControllerHelper {
     _authRepository.logout();
     update();
     Navigator.of(context).popUntil((route) => route.isFirst);
-    context.router.replace(const WelcomeRoute());
+    context.router.pushNamed(Routes.welcome);
   }
 
   Future<void> sendPasswordResetEmail(

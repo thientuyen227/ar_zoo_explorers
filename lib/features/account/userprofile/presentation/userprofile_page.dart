@@ -52,7 +52,7 @@ class _State
                           gradient: LinearGradient(
                               colors: [
                             Color.fromARGB(255, 255, 255, 255),
-                            Color.fromARGB(255, 0, 128, 255)
+                            Color.fromARGB(255, 109, 182, 255)
                           ],
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter)),

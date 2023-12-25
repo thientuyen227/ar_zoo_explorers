@@ -67,7 +67,7 @@ class AuthRepositoryImplement implements AuthRepository {
 
       UserModel user = await getUserOrCreateUser(userCredential);
 
-      return Success(data: user, message: "Đăng nhập thành công");
+      return Success(data: user, message: "Login successful");
     });
   }
 
@@ -77,7 +77,7 @@ class AuthRepositoryImplement implements AuthRepository {
       var userCredential = await _firebaseAuth.signInWithGoogle();
 
       UserModel user = await getUserOrCreateUser(userCredential);
-      return Success(data: user, message: "Đăng nhập thành công");
+      return Success(data: user, message: "Login successful");
     });
   }
 
@@ -87,7 +87,7 @@ class AuthRepositoryImplement implements AuthRepository {
       var userCredential = await _firebaseAuth.signInWithFacebook();
 
       UserModel user = await getUserOrCreateUser(userCredential);
-      return Success(data: user, message: "Đăng nhập thành công");
+      return Success(data: user, message: "Login successful");
     });
   }
 
@@ -103,7 +103,7 @@ class AuthRepositoryImplement implements AuthRepository {
 
       UserModel user =
           await getUserOrCreateUser(userCredential, fullname: fullname);
-      return Success(data: user, message: "Đăng ký thành công");
+      return Success(data: user, message: "Sign up successful");
     });
   }
 
@@ -140,7 +140,7 @@ class AuthRepositoryImplement implements AuthRepository {
     return ResponseHandler.processResponse(() async {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
       return Success(
-          data: Fluttertoast.showToast(msg: "Gửi email thành công!"));
+          data: Fluttertoast.showToast(msg: "Send email successful!"));
     });
   }
 
@@ -197,7 +197,7 @@ class AuthRepositoryImplement implements AuthRepository {
       await user.reauthenticateWithCredential(credential);
       await user.updatePassword(newPassword);
       return Success(
-          data: Fluttertoast.showToast(msg: "Đổi mật khẩu thành công!"));
+          data: Fluttertoast.showToast(msg: "Change password successful!"));
     });
   }
 
