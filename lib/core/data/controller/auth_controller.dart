@@ -1,5 +1,4 @@
 import 'package:ar_zoo_explorers/app/config/app_router.gr.dart';
-import 'package:ar_zoo_explorers/app/config/routes.dart';
 import 'package:ar_zoo_explorers/core/data/models/user_model.dart';
 import 'package:ar_zoo_explorers/core/helpers/controller_helper.dart';
 import 'package:ar_zoo_explorers/core/helpers/notification_helper.dart';
@@ -11,6 +10,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+
+import '../../../app/config/routes.dart';
 
 class AuthController extends ControllerHelper {
   final AuthRepository _authRepository = AuthRepositoryImplement();
@@ -117,10 +118,30 @@ class AuthController extends ControllerHelper {
             predicate: (route) => route.settings.name == '/home',
           );
         } else {
-          context.router.replace(const WelcomeRoute());
+          //context.router.replace(const WelcomeRoute());
+          //context.router.pushNamed(Routes.welcome);
         }
       } catch (e) {
-        context.router.replace(const WelcomeRoute());
+        //context.router.pushNamed(Routes.welcome);
+        //context.router.replace(const WelcomeRoute());
+      }
+    });
+  }
+
+  checkAuthStateInWelcome(BuildContext context) {
+    Future.delayed(const Duration(seconds: 3), () {
+      try {
+        User? user = FirebaseAuth.instance.currentUser;
+
+        if (user != null || currentUser.value.id != '') {
+          context.router.pushAndPopUntil(
+            const HomeRoute(),
+            predicate: (route) => route.settings.name == '/home',
+          );
+        }
+      } catch (e) {
+        //context.router.pushNamed(Routes.welcome);
+        //context.router.replace(const WelcomeRoute());
       }
     });
   }
@@ -174,7 +195,7 @@ class AuthController extends ControllerHelper {
   logout(BuildContext context) {
     _authRepository.logout();
     update();
-    Navigator.of(context).popUntil((route) => route.isFirst);
+    //Navigator.of(context).popUntil((route) => route.isFirst);
     context.router.pushNamed(Routes.welcome);
   }
 

@@ -45,7 +45,7 @@ class _State extends BaseState<WelcomeState, WelcomeCubit, WelcomePage> {
     Future.delayed(const Duration(seconds: 3), () {
       context.router.pushNamed(Routes.login);
     });
-    controller.getCurrentUser(context);
-    //controller.checkAuthState(context);
+    //controller.getCurrentUser(context);
+    controller.checkAuthStateInWelcome(context);
   }
 }

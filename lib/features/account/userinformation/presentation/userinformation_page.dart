@@ -146,6 +146,7 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
                 return 'Invalid Province/City!';
               }
               return null;
+              //return null;
             }
           ])),
       const SizedBox(height: 12)

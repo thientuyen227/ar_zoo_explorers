@@ -169,6 +169,7 @@ class _State extends BaseState<AccountManagerState, AccountManagerCubit,
         break;
       case AccountManagerType.Logout:
         controller.logout(context);
+        //context.router.pushNamed(Routes.welcome);
         break;
       case AccountManagerType.ChangePassword:
         context.router.pushNamed(Routes.changepassword);

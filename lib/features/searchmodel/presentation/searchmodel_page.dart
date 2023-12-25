@@ -1,4 +1,3 @@
-import 'package:ar_zoo_explorers/app/config/app_router.gr.dart';
 import 'package:ar_zoo_explorers/core/data/controller/user_animal_controller.dart';
 import 'package:ar_zoo_explorers/features/searchmodel/presentation/searchmodel_cubit.dart';
 import 'package:ar_zoo_explorers/features/searchmodel/presentation/searchmodel_state.dart';
@@ -72,7 +71,8 @@ class _State
     return AppIconButton(
         onPressed: () async {
           await animalController.resetCurrentValue(context);
-          context.router.popAndPush(const HomeRoute());
+          context.router.pop();
+          context.router.pushNamed(Routes.home);
         },
         icon: Image.asset(AppIcons.icBack_png, scale: 0.65));
   }
@@ -212,9 +212,10 @@ class _State
         ]));
   }
 
-  void setAnimal(BuildContext context) {
+  Future<void> setAnimal(BuildContext context) async {
+    await animalController.getAllAnimals(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      animalController.getAllAnimals(context);
+      print("1: ${animalController.listAnimal.value.length}");
       setState(() {
         cubit.setListAnimal(animalController.listAnimal.value,
             animalController.searchValue.value);
@@ -278,5 +279,6 @@ class _State
     controller.getCurrentUser(context);
     animalController.getAllAnimals(context);
     setAnimal(context);
+    print("2: ${animalController.listAnimal.value.length}");
   }
 }
