@@ -43,6 +43,7 @@ class _State extends BaseState<WelcomeState, WelcomeCubit, WelcomePage> {
       });
     });
     Future.delayed(const Duration(seconds: 3), () {
+      context.router.pop();
       context.router.pushNamed(Routes.login);
     });
     //controller.getCurrentUser(context);

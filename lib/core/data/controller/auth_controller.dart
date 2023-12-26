@@ -192,11 +192,27 @@ class AuthController extends ControllerHelper {
             Fluttertoast.showToast(msg: "Failed to update information!"));
   }
 
-  logout(BuildContext context) {
-    _authRepository.logout();
+  logout(BuildContext context) async {
+    await _authRepository.logout();
+    _resetCurrentUser();
     update();
     //Navigator.of(context).popUntil((route) => route.isFirst);
-    context.router.pushNamed(Routes.welcome);
+    context.router.pushNamed(Routes.login);
+  }
+
+  _resetCurrentUser() {
+    currentUser.value = UserModel(
+        id: '',
+        email: '',
+        fullname: '',
+        phone: '',
+        avatarUrl: '',
+        address: '',
+        birth: '',
+        provider: '',
+        gender: '',
+        role: '',
+        status: true);
   }
 
   Future<void> sendPasswordResetEmail(
