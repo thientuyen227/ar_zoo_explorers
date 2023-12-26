@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:ar_zoo_explorers/app/config/app_router.gr.dart';
 import 'package:ar_zoo_explorers/base/widgets/page_loading_indicator.dart';
 import 'package:ar_zoo_explorers/features/account/userinformation/model/provincial_name.dart';
@@ -33,7 +31,6 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
     UserInformationPage> {
   final controller = AuthController.findOrInitialize;
   final _formKey = GlobalKey<FormBuilderState>();
-  File? _imageFile;
   final ImagePicker _picker = ImagePicker();
 
   @override
@@ -45,7 +42,7 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
             scaffold: Scaffold(
               appBar: AppBar(
                   centerTitle: true,
-                  title: const Text('CHỈNH SỬA THÔNG TIN',
+                  title: const Text('Edit Information',
                       style: TextStyle(fontSize: 18, color: Colors.white)),
                   actions: const [],
                   leading: turnBack()),
@@ -57,16 +54,16 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
                     Container(
                         padding: const EdgeInsets.only(left: 30, right: 30),
                         child: Column(children: [
-                          textForm("Họ và tên", 0,
+                          textForm("Full Name", 0,
                               controller.currentUser.value.fullname),
-                          textForm("Địa chỉ email", 1,
+                          textForm("Email Address", 1,
                               controller.currentUser.value.email),
                           dateForm(),
-                          radioForm("Giới tính"),
-                          textForm("Số điện thoại", 2,
+                          radioForm("Gender"),
+                          textForm("Phone Number", 2,
                               controller.currentUser.value.phone),
-                          dropdownForm("Tỉnh / Thành phố"),
-                          textForm("Địa chỉ", 3, cubit.address)
+                          dropdownForm("Province / City"),
+                          textForm("Address", 3, cubit.address)
                         ])),
                     const Divider(),
                     FutureBuilder(
@@ -112,7 +109,7 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
           contentPadding: const EdgeInsets.all(10)),
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: FormBuilderValidators.compose([
-        FormBuilderValidators.required(errorText: "Không thể để trống"),
+        FormBuilderValidators.required(errorText: "Required field"),
       ]),
     );
   }
@@ -143,12 +140,13 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
           },
           autovalidateMode: AutovalidateMode.onUserInteraction,
           validator: FormBuilderValidators.compose([
-            FormBuilderValidators.required(errorText: "Không thể để trống"),
+            FormBuilderValidators.required(errorText: "Required field"),
             (value) {
               if (value != null && !Provincial().names.contains(value)) {
-                return 'Tỉnh/Thành phố không đúng!';
+                return 'Invalid Province/City!';
               }
               return null;
+              //return null;
             }
           ])),
       const SizedBox(height: 12)
@@ -201,7 +199,7 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
 
   Widget turnBack() {
     return AppIconButton(
-        onPressed: () => context.router.pop(),
+        onPressed: () => context.router.popAndPush(const UserProfileRoute()),
         icon: Transform.scale(
             scale: 1.5, child: Image.asset(AppIcons.icBack_png, height: 55)));
   }
@@ -211,7 +209,7 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
         onPressed: snapshot.connectionState != ConnectionState.waiting
             ? () => _onUpdatePressed(context)
             : () => {
-                  Fluttertoast.showToast(msg: "Đang cập nhật!"),
+                  Fluttertoast.showToast(msg: "Updating!"),
                   _onUpdatePressed(context)
                 },
         style: ButtonStyle(
@@ -220,13 +218,13 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
             elevation: MaterialStateProperty.all(5),
             shape: MaterialStateProperty.all(RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20)))),
-        child: const Text("CẬP NHẬT",
+        child: const Text("Update",
             style: TextStyle(fontSize: 16, color: Colors.white)));
   }
 
   Widget dateForm() {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      titleForm("Ngày sinh"),
+      titleForm("Birthday"),
       const SizedBox(height: 10),
       TextFormField(
           onTap: () {
@@ -238,7 +236,7 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
           decoration: InputDecoration(
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-              hintText: 'Chọn ngày tháng',
+              hintText: 'Select Date',
               prefixIcon: Image.asset(AppIcons.icCalendar),
               contentPadding: const EdgeInsets.all(10))),
       const SizedBox(height: 12),
@@ -260,13 +258,14 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
           options: const [
             FormBuilderFieldOption(
                 value: 'male',
-                child: Text('Nam', style: TextStyle(fontSize: 17))),
+                child: Text('Male', style: TextStyle(fontSize: 17))),
             FormBuilderFieldOption(
                 value: 'female',
-                child: Text('Nữ', style: TextStyle(fontSize: 17))),
+                child: Text('Female', style: TextStyle(fontSize: 17))),
           ],
           validator: FormBuilderValidators.compose([
-            FormBuilderValidators.required(errorText: "Bạn chưa chọn giới tính")
+            FormBuilderValidators.required(
+                errorText: "You have not selected a gender.")
           ])),
       const SizedBox(height: 12),
     ]);

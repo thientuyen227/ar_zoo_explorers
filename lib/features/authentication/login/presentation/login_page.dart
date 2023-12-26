@@ -41,7 +41,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
           scaffold: Scaffold(
             appBar: AppBar(
                 centerTitle: true,
-                title: const Text("ĐĂNG NHẬP",
+                title: const Text("Login",
                     style: TextStyle(fontSize: 20, color: Colors.white)),
                 leading: const Column(children: []),
                 actions: [signUpAction()]),
@@ -159,7 +159,8 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
             contentPadding: const EdgeInsets.all(10)),
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: FormBuilderValidators.compose([
-          FormBuilderValidators.required(errorText: "Hãy nhập mật khẩu"),
+          FormBuilderValidators.required(
+              errorText: "Please enter the password!"),
         ]),
       ),
       const SizedBox(height: 12),
@@ -190,8 +191,8 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
               cubit.isChecked = value!;
             });
           }),
-      const Text('Ghi nhớ mật khẩu',
-          style: TextStyle(color: Colors.black, fontSize: 16)),
+      const Text('Remember',
+          style: TextStyle(color: Colors.black, fontSize: 15.5)),
       const SizedBox(width: 20)
     ]);
   }
@@ -201,25 +202,25 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
         onTap: () {
           context.router.pushNamed(Routes.forgotpassword);
         },
-        child: const Text('Quên mật khẩu',
+        child: const Text('Forgot password',
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontStyle: FontStyle.italic,
-                fontSize: 17,
+                fontSize: 16.5,
                 color: Colors.grey,
                 decoration: TextDecoration.none)));
   }
 
   Widget register() {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      const Text("Bạn chưa có tài khoản?",
+      const Text("Don't have an account?",
           style: TextStyle(fontSize: 16.5, color: Colors.black)),
       const SizedBox(width: 7),
       GestureDetector(
           onTap: () {
             context.router.pushNamed(Routes.register);
           },
-          child: const Text('Đăng ký tại đây!',
+          child: const Text('Sign up here!',
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontStyle: FontStyle.italic,
@@ -271,8 +272,8 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
       Container(
           color: Colors.white,
           padding: const EdgeInsets.all(8.0),
-          child: Text('Đăng nhập bằng cách khác',
-              style: TextStyle(fontSize: 15, color: Colors.grey[700]),
+          child: Text('Or',
+              style: TextStyle(fontSize: 16, color: Colors.grey[700]),
               textAlign: TextAlign.center))
     ]);
   }
@@ -287,7 +288,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
             shape: MaterialStateProperty.all(RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(0)))),
         child: Row(children: [
-          const Text('Đăng ký ',
+          const Text('Sign up',
               style: TextStyle(color: Colors.white, fontSize: 17)),
           Image.asset(AppIcons.icNext_png)
         ]));
@@ -316,7 +317,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
         controller.loginWithGoogle(context);
         break;
       case 2:
-        Fluttertoast.showToast(msg: "Tính năng sẽ cập nhật sau");
+        Fluttertoast.showToast(msg: "The feature will be updated later.");
         break;
       default:
         return;

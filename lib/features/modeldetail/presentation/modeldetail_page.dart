@@ -35,7 +35,7 @@ class _State
         extendBodyBehindAppBar: true,
         appBar: AppBar(
             centerTitle: true,
-            title: const Text("THÔNG TIN CHI TIẾT",
+            title: const Text("Animal Detail",
                 style: TextStyle(fontSize: 20, color: Colors.white)),
             backgroundColor: Colors.transparent,
             elevation: 0,
@@ -134,11 +134,11 @@ class _State
       const SizedBox(height: 15),
       Container(height: 2, width: double.infinity, color: Colors.grey),
       const SizedBox(height: 15),
-      informationRow("Mô Tả:", cubit.description),
-      informationRow("Phân Loại Sinh Học:", cubit.classification),
-      informationRow("Tình Trạng Bảo Tồn:", cubit.conservation),
-      informationRow("Thời Kỳ Sinh Sản :", cubit.reproduction),
-      informationRow("Hình tượng văn hóa:", cubit.culturalFigure),
+      informationRow("Description:", cubit.description),
+      informationRow("Biological Classification:", cubit.classification),
+      informationRow("Conservation:", cubit.conservation),
+      informationRow("Reproduction:", cubit.reproduction),
+      informationRow("Cultural Depiction:", cubit.culturalFigure),
       const SizedBox(height: 50)
     ]);
   }

@@ -1,4 +1,3 @@
-import 'package:ar_zoo_explorers/app/config/app_router.gr.dart';
 import 'package:ar_zoo_explorers/core/data/controller/user_animal_controller.dart';
 import 'package:ar_zoo_explorers/features/searchmodel/presentation/searchmodel_cubit.dart';
 import 'package:ar_zoo_explorers/features/searchmodel/presentation/searchmodel_state.dart';
@@ -48,7 +47,7 @@ class _State
             scaffold: Scaffold(
                 appBar: AppBar(
                     centerTitle: true,
-                    title: const Text("SEARCH",
+                    title: const Text("Search",
                         style: TextStyle(fontSize: 20, color: Colors.white)),
                     leading: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -72,8 +71,8 @@ class _State
     return AppIconButton(
         onPressed: () async {
           await animalController.resetCurrentValue(context);
-          //context.router.pop();
-          context.router.popAndPush(const HomeRoute());
+          context.router.pop();
+          context.router.pushNamed(Routes.home);
         },
         icon: Image.asset(AppIcons.icBack_png, scale: 0.65));
   }
@@ -129,8 +128,8 @@ class _State
               context.router.pushNamed(Routes.modeldetail)
             },
         child: Container(
-            width: MediaQuery.of(context).size.width * 0.4,
-            height: MediaQuery.of(context).size.width * 0.4,
+            width: MediaQuery.of(context).size.width * 0.4 + 5,
+            height: MediaQuery.of(context).size.width * 0.4 + 5,
             decoration: BoxDecoration(
                 border: Border.all(color: Colors.blue, width: 7),
                 borderRadius: BorderRadius.circular(15.0),
@@ -147,11 +146,16 @@ class _State
                   padding: const EdgeInsets.only(top: 5),
                   child: buttonImage(cubit.listSearchAnimal[index].icon)),
               Center(
-                  child: Stack(alignment: Alignment.center, children: [
-                buttonTitle(cubit.listSearchAnimal[index].title),
-                loveButton(index),
-                views(index)
-              ]))
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                    views(index),
+                    const SizedBox(width: 5),
+                    Expanded(
+                        child:
+                            buttonTitle(cubit.listSearchAnimal[index].title)),
+                    loveButton(index),
+                  ]))
             ])));
   }
 
@@ -170,53 +174,48 @@ class _State
 
   // TÊN MODEL
   Widget buttonTitle(String title) {
-    return SizedBox(
-        width: 80,
-        child: Text(title,
-            style: const TextStyle(
-                color: Colors.black,
-                fontSize: 11.5,
-                fontWeight: FontWeight.bold),
-            softWrap: true,
-            textAlign: TextAlign.center));
+    return Text(title,
+        style: const TextStyle(
+            color: Colors.black, fontSize: 11, fontWeight: FontWeight.bold),
+        softWrap: true,
+        textAlign: TextAlign.center);
   }
 
   Widget loveButton(int index) {
-    return Align(
-        alignment: Alignment.centerRight,
-        child: SizedBox(
-            width: 32,
-            height: 32,
-            child: IconButton(
-                onPressed: () async {
-                  setState(() {
-                    cubit.isLoved(index);
-                  });
-                  await _updateLoveButton(context, index);
-                },
-                icon: Image.asset(cubit.listSearchAnimal[index].isLoved
+    return SizedBox(
+        width: 30,
+        height: 30,
+        child: IconButton(
+            onPressed: () async {
+              setState(() {
+                cubit.isLoved(index);
+              });
+              await _updateLoveButton(context, index);
+            },
+            icon: Image.asset(
+                cubit.listSearchAnimal[index].isLoved
                     ? AppIcons.icLoved
-                    : AppIcons.icHeart))));
+                    : AppIcons.icHeart,
+                fit: BoxFit.cover)));
   }
 
   Widget views(int index) {
-    return Align(
-        alignment: Alignment.centerLeft,
-        child: Padding(
-            padding: const EdgeInsets.all(2),
-            child: SizedBox(
-                width: 28,
-                height: 28,
-                child: Column(children: [
-                  Image.asset(AppIcons.icEye24, scale: 1.6),
-                  Text(cubit.listSearchAnimal[index].views.toString(),
-                      style: const TextStyle(fontSize: 10, color: Colors.black))
-                ]))));
+    return Padding(
+        padding: const EdgeInsets.all(5),
+        child: Column(children: [
+          SizedBox(
+              width: 12,
+              height: 12,
+              child: Image.asset(AppIcons.icEye24, fit: BoxFit.cover)),
+          Text(cubit.listSearchAnimal[index].views.toString(),
+              style: const TextStyle(fontSize: 8, color: Colors.black))
+        ]));
   }
 
-  void setAnimal(BuildContext context) {
+  Future<void> setAnimal(BuildContext context) async {
+    await animalController.getAllAnimals(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      animalController.getAllAnimals(context);
+      print("1: ${animalController.listAnimal.value.length}");
       setState(() {
         cubit.setListAnimal(animalController.listAnimal.value,
             animalController.searchValue.value);
@@ -280,5 +279,6 @@ class _State
     controller.getCurrentUser(context);
     animalController.getAllAnimals(context);
     setAnimal(context);
+    print("2: ${animalController.listAnimal.value.length}");
   }
 }

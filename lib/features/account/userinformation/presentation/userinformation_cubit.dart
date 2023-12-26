@@ -27,22 +27,22 @@ class UserInformationCubit extends BaseCubit<UserInformationState> {
   List<FormBuilderTextFieldModel> ListFormItem = [
     FormBuilderTextFieldModel(
         name: "fullname",
-        hint_text: "Họ và tên",
+        hint_text: "Full name",
         icon_prefix: AppIcons.icUser,
         TIT: TextInputType.none),
     FormBuilderTextFieldModel(
         name: "email",
-        hint_text: "Địa chỉ email",
+        hint_text: "Email Address",
         icon_prefix: AppIcons.icMail,
         TIT: TextInputType.emailAddress),
     FormBuilderTextFieldModel(
         name: "phone",
-        hint_text: "Số điện thoại",
+        hint_text: "Phone Number",
         icon_prefix: AppIcons.icPhone,
         TIT: TextInputType.phone),
     FormBuilderTextFieldModel(
         name: "address",
-        hint_text: "Địa chỉ",
+        hint_text: "Address",
         icon_prefix: AppIcons.icAddress,
         TIT: TextInputType.text),
   ];

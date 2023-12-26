@@ -8,65 +8,68 @@ import '../model/term_model.dart';
 class TermOfServiceCubit extends BaseCubit<TermOfServiceState> {
   TermOfServiceCubit() : super(TermOfServiceState());
 
+  double WIDTH = 0;
+  double HEIGHT = 0;
+
   List<Term> listTerm = [
     Term(
-        title: "1. Chấp Nhận Điều Khoản:",
+        title: "1. Accept Terms:",
         content:
-            "Trước khi sử dụng ứng dụng ArZoo, bạn cần đồng ý và tuân theo các điều khoản dưới đây."),
+            "Before using the ArZoo app, you need to agree to and comply with the following terms."),
     Term(
-        title: "2. Sử Dụng Ứng Dụng:",
+        title: "2. Using the App:",
         content:
-            "Bạn được cấp quyền sử dụng ứng dụng AR cho mục đích cá nhân hoặc thương mại.Không được sử dụng ứng dụng cho mục đích bất hợp pháp hoặc gây hại cho người khác."),
+            "You are granted the right to use the AR app for personal or commercial purposes. The app must not be used for illegal purposes or to harm others."),
     Term(
-        title: "3. Quyền Sở Hữu:",
+        title: "3. Ownership Rights:",
         content:
-            "Ứng dụng AR là tài sản của chúng tôi và được bảo vệ bởi bản quyền. Không sao chép hoặc sửa đổi ứng dụng mà không có sự cho phép."),
+            "The AR app is our property and is protected by copyright. Copying or modifying the app without permission is prohibited."),
     Term(
-        title: "4. Quyền Riêng Tư:",
+        title: "4. Privacy Rights:",
         content:
-            "Chúng tôi bảo vệ quyền riêng tư của bạn theo chính sách bảo mật. Dữ liệu cá nhân của bạn có thể được thu thập, nhưng chúng tôi cam kết bảo vệ nó."),
+            "We protect your privacy according to our privacy policy. Your personal data may be collected, but we commit to safeguarding it."),
     Term(
-        title: "5. Thay Đổi Điều Khoản:",
+        title: "5. Change of Terms:",
         content:
-            "Chúng tôi có quyền thay đổi điều khoản và sẽ thông báo cho bạn về các thay đổi."),
+            "We reserve the right to change the terms and will notify you of any changes."),
     Term(
-        title: "6. Kết Thúc Sử Dụng:",
-        content: "Bạn có thể ngừng sử dụng ứng dụng bất cứ lúc nào."),
+        title: "6. Termination of Use:",
+        content: "You may cease using the app at any time."),
     Term(
-        title: "7. Bảo Mật Dữ Liệu:",
+        title: "7. Data Security:",
         content:
-            "Dữ liệu cá nhân của người dùng là ưu tiên hàng đầu đối với chúng tôi. Chúng tôi chỉ thu thập thông tin cần thiết để cung cấp dịch vụ và cá nhân hóa trải nghiệm người dùng. Mọi thông tin này đều được bảo vệ một cách an toàn và chúng tôi cam kết không chia sẻ hoặc bán thông tin cá nhân cho bất kỳ bên thứ ba nào mà không có sự đồng ý rõ ràng từ phía người dùng."),
+            "The user's personal data is our top priority. We only collect necessary information to provide services and personalize the user experience. All this information is securely protected, and we commit not to share or sell personal information to any third party without clear consent from the user."),
     Term(
-        title: "8. Chất Lượng Dịch Vụ:",
+        title: "8. Service Quality:",
         content:
-            "Chúng tôi cam kết cung cấp ứng dụng AR với chất lượng tốt nhất."),
+            "We are committed to providing the AR app with the highest quality."),
     Term(
-        title: "9. Hạn Chế Sử Dụng:",
+        title: "9. Usage Restrictions:",
         content:
-            "Bạn không được phép chạy nhiều phiên bản của ứng dụng trên cùng một thiết bị."),
+            "You are not allowed to run multiple instances of the app on the same device."),
     Term(
-        title: "10. Hỗ Trợ Kỹ Thuật:",
+        title: "10. Technical Support:",
         content:
-            "Chúng tôi cung cấp hỗ trợ kỹ thuật cho người dùng qua email hoặc hotline."),
+            "We provide technical support for users via email or hotline."),
     Term(
-        title: "11. Thanh Toán (nếu áp dụng):",
+        title: "11. Payment (if applicable):",
         content:
-            "Nếu ứng dụng AR có tính phí, bạn phải thanh toán theo giá quy định."),
+            "If the AR app is free, you must pay according to the specified price if applicable."),
     Term(
-        title: "12. Chấp Nhận Sự Cố:",
+        title: "12. Acceptance of Incidents:",
         content:
-            "Bạn chấp nhận rủi ro khi sử dụng ứng dụng AR và không thể đòi bồi thường cho hỏng hóc hoặc sự."),
+            "Acceptance of risk limitations when using the AR app, and no compensation can be claimed for damage or loss."),
     Term(
-        title: "13. Bản Quyền và Tài Khoản:",
+        title: "13. Copyright and Accounts:",
         content:
-            "Tất cả quyền bản quyền đều thuộc sở hữu của chúng tôi. Mỗi tài khoản người dùng chỉ được sử dụng bởi một người."),
+            "All copyright rights are owned by us. Each user account is for single-user use only."),
     Term(
-        title: "14. Điều Khoản Cảnh Báo:",
+        title: "14. Warning Terms:",
         content:
-            "Bạn cần tuân thủ tất cả các điều khoản và cảnh báo trong ứng dụng AR."),
+            "You must adhere to all terms and warnings within the AR app."),
     Term(
-        title: "15. Sử Dụng Công Cụ:",
+        title: "15. Tool Usage:",
         content:
-            "Chúng tôi có thể cung cấp các công cụ hỗ trợ sử dụng ứng dụng AR một cách tốt nhất.")
+            "We can provide tools to support the optimal usage of the AR app.")
   ];
 }
