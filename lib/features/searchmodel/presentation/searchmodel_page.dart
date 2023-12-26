@@ -215,7 +215,7 @@ class _State
   Future<void> setAnimal(BuildContext context) async {
     await animalController.getAllAnimals(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      print("1: ${animalController.listAnimal.value.length}");
+      //print("1: ${animalController.listAnimal.value.length}");
       setState(() {
         cubit.setListAnimal(animalController.listAnimal.value,
             animalController.searchValue.value);
@@ -279,6 +279,6 @@ class _State
     controller.getCurrentUser(context);
     animalController.getAllAnimals(context);
     setAnimal(context);
-    print("2: ${animalController.listAnimal.value.length}");
+    //print("2: ${animalController.listAnimal.value.length}");
   }
 }
