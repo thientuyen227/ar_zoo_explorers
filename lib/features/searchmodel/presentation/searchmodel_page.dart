@@ -117,7 +117,15 @@ class _State
           ]));
       listRow.add(const SizedBox(height: 20));
     }
-    return Column(children: listRow);
+    if (listRow.isEmpty &&
+        _formKey.currentState?.fields['search']?.value != null) {
+      return const Text(
+        "This model does not exist!",
+        style: TextStyle(color: Colors.black),
+      );
+    } else {
+      return Column(children: listRow);
+    }
   }
 
   // MODEL BUTTON
