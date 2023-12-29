@@ -133,7 +133,7 @@ class _State extends BaseState<ResetPasswordState, ResetPasswordCubit,
                 borderRadius: BorderRadius.circular(20)))),
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Image.asset(AppIcons.icWhiteSubmit),
-          const Text("Thay đổi", style: TextStyle(fontSize: 18))
+          const Text("Change", style: TextStyle(fontSize: 18))
         ]));
   }
 
