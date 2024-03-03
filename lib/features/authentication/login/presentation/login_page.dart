@@ -39,61 +39,67 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
         child: PageLoadingIndicator(
           future: controller.loginFuture.value,
           scaffold: Scaffold(
-            appBar: AppBar(
-                centerTitle: true,
-                title: const Text("Login",
-                    style: TextStyle(fontSize: 20, color: Colors.white)),
-                leading: const Column(children: []),
-                actions: [signUpAction()]),
             body: FormBuilder(
                 key: _formKey,
                 child: SingleChildScrollView(
                   child: Container(
+                      color: Colors.white,
                       width: MediaQuery.of(context).size.width,
-                      color: Colors.blue[600],
-                      child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black.withOpacity(0.8),
-                                    spreadRadius: 5,
-                                    blurRadius: 7,
-                                    offset: const Offset(0, 3))
-                              ]),
-                          margin: const EdgeInsets.all(20.0),
-                          padding: const EdgeInsets.only(
-                              left: 20, right: 20, bottom: 25),
-                          child: Column(children: [
-                            const SizedBox(height: 12),
-                            appLogo(),
-                            emailForm(cubit.ListFormItem[0]),
-                            passwordForm(cubit.ListFormItem[1]),
-                            Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [rememberPass(), forgotPassword()]),
-                            const SizedBox(height: 12),
-                            FutureBuilder(
-                                future: controller.loginFuture.value,
-                                builder: (context, snapshot) => Align(
-                                    child: submitButton(context, snapshot))),
-                            const SizedBox(height: 25),
-                            register(),
-                            const SizedBox(height: 20),
-                            listOtherLoginButton(context),
-                          ]))),
+                      constraints: BoxConstraints(
+                          minHeight: MediaQuery.of(context).size.height),
+                      padding: const EdgeInsets.only(
+                          left: 30, right: 30, bottom: 30),
+                      child: Column(children: [
+                        const SizedBox(height: 12),
+                        appLogo(),
+                        emailForm(cubit.ListFormItem[0]),
+                        passwordForm(cubit.ListFormItem[1]),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [rememberPass(), forgotPassword()]),
+                        const SizedBox(height: 12),
+                        FutureBuilder(
+                            future: controller.loginFuture.value,
+                            builder: (context, snapshot) =>
+                                Align(child: submitButton(context, snapshot))),
+                        const SizedBox(height: 25),
+                        register(),
+                        const SizedBox(height: 20),
+                        listOtherLoginButton(context),
+                      ])),
                 )),
           ),
         )));
   }
 
   Widget appLogo() {
-    return Column(children: [
+    return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      const SizedBox(height: 48),
       Transform.scale(
-          scale: 1.5, child: Image.asset(AppImages.imgAppLogo, height: 250)),
-      const SizedBox(height: 12)
+        scale: 2,
+        child: Image.asset(
+          AppImages.imgAppLogo,
+          height: cubit.HEIGHT * 0.25,
+          width: cubit.WIDTH,
+        ),
+      ),
+      ShaderMask(
+          shaderCallback: (Rect bounds) {
+            return const LinearGradient(
+              colors: [
+                Color.fromARGB(255, 0, 128, 255),
+                Color.fromARGB(255, 236, 142, 0)
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ).createShader(bounds);
+          },
+          child: const Text('WELCOME TO AR-ZOO !',
+              style: TextStyle(
+                  fontSize: 26.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white))),
+      const SizedBox(height: 24),
     ]);
   }
 
@@ -120,6 +126,8 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
         },
         valueTransformer: (suggestion) => suggestion,
         decoration: InputDecoration(
+            filled: true,
+            fillColor: const Color.fromARGB(255, 246, 246, 246),
             hintText: items.hint_text,
             labelText: items.hint_text,
             prefixIcon: Image.asset(items.icon_prefix, height: 20, width: 20),
@@ -127,7 +135,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
             contentPadding: const EdgeInsets.all(10)),
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: FormBuilderValidators.compose([
-          FormBuilderValidators.required(errorText: "Hãy nhập email"),
+          FormBuilderValidators.required(errorText: "Please enter your email!"),
           FormBuilderValidators.email()
         ]),
       ),
@@ -143,6 +151,8 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
         obscureText: items.isObscured,
         keyboardType: TextInputType.text,
         decoration: InputDecoration(
+            filled: true,
+            fillColor: const Color.fromARGB(255, 246, 246, 246),
             labelText: items.hint_text,
             hintText: items.hint_text,
             suffixIcon: IconButton(
@@ -174,7 +184,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
             : null,
         style: ButtonStyle(
             fixedSize: MaterialStateProperty.all(const Size(140, 50)),
-            backgroundColor: MaterialStateProperty.all(Colors.blue),
+            backgroundColor: MaterialStateProperty.all(Colors.blue[600]),
             elevation: MaterialStateProperty.all(5),
             shape: MaterialStateProperty.all(RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20)))),
@@ -185,15 +195,16 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
   Widget rememberPass() {
     return Row(children: [
       Checkbox(
+          visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
           value: cubit.isChecked,
           onChanged: (value) {
             setState(() {
               cubit.isChecked = value!;
             });
-          }),
-      const Text('Remember',
-          style: TextStyle(color: Colors.black, fontSize: 15.5)),
-      const SizedBox(width: 20)
+          },
+          activeColor: Colors.blue[700]),
+      const Text('Remember Me',
+          style: TextStyle(color: Colors.black, fontSize: 15.5))
     ]);
   }
 
@@ -202,13 +213,16 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
         onTap: () {
           context.router.pushNamed(Routes.forgotpassword);
         },
-        child: const Text('Forgot password',
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontStyle: FontStyle.italic,
-                fontSize: 16.5,
-                color: Colors.grey,
-                decoration: TextDecoration.none)));
+        child: const Row(children: [
+          Text('Forgot password',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontStyle: FontStyle.italic,
+                  fontSize: 16.5,
+                  color: Colors.grey,
+                  decoration: TextDecoration.none)),
+          SizedBox(width: 10)
+        ]));
   }
 
   Widget register() {
@@ -220,11 +234,11 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
           onTap: () {
             context.router.pushNamed(Routes.register);
           },
-          child: const Text('Sign up here!',
+          child: const Text('SIGN UP',
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontStyle: FontStyle.italic,
-                  fontSize: 17,
+                  fontSize: 20,
                   color: Colors.blue, // Màu chữ
                   decoration: TextDecoration.none // Gạch chân chữ
                   )))
@@ -248,8 +262,8 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
     return GestureDetector(
         onTap: () => _onLoginWithOtherOptions(context, index),
         child: Container(
-            width: 60,
-            height: 60,
+            width: cubit.WIDTH * 0.14,
+            height: cubit.WIDTH * 0.14,
             decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 //border: Border.all(color: Colors.grey, width: 2),
@@ -337,6 +351,15 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
     }
   }
 
+  void setDimension() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        cubit.WIDTH = MediaQuery.of(context).size.width;
+        cubit.HEIGHT = MediaQuery.of(context).size.height;
+      });
+    });
+  }
+
   // Future<void> _loadSavedPassword() async {
   //   String? email = await _secureStorage.read(key: 'lastest' ?? '');
   //   String? savedPassword = await _secureStorage.read(key: email ?? '');
@@ -351,6 +374,8 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
   @override
   void initState() {
     super.initState();
+
     _loadListEmail();
+    setDimension();
   }
 }
