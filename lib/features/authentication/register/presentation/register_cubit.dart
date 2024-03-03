@@ -5,11 +5,13 @@ import 'package:injectable/injectable.dart';
 import '../../../../app/theme/icons.dart';
 import '../../../../base/base_cubit.dart';
 import '../../../base-model/form_builder_text_field_model.dart';
-import '../../login/model/OthersLoginButton_Model.dart';
 
 @injectable
 class RegisterCubit extends BaseCubit<RegisterState> {
   RegisterCubit() : super(RegisterState());
+  double HEIGHT = 0;
+  double WIDTH = 0;
+
   bool isChecked = false;
 
   List<FormBuilderTextFieldModel> ListFormItem = [
@@ -36,25 +38,10 @@ class RegisterCubit extends BaseCubit<RegisterState> {
         isObscured: true)
   ];
 
-  List<OthersLoginButtonModel> listOthersLoginButton = [
-    OthersLoginButtonModel(
-        bgColor: Colors.red,
-        bdColor: Colors.red,
-        colorText: Colors.white,
-        icon: AppIcons.icGMail,
-        content: "Login with Gmail"),
-    OthersLoginButtonModel(
-        bgColor: Colors.blue,
-        bdColor: Colors.blue,
-        colorText: Colors.white,
-        icon: AppIcons.icFacebook,
-        content: "Login with Facebook"),
-    OthersLoginButtonModel(
-        bgColor: Colors.white,
-        bdColor: Colors.grey,
-        colorText: Colors.black,
-        icon: AppIcons.icApple,
-        content: "Login with ID Apple")
+  List<String> listOthersLoginButton = [
+    AppIcons.icFacebookCircle,
+    AppIcons.icGMailCircle,
+    AppIcons.icAppleCircle
   ];
 
   void onChangeObscuredStatus(int index) {

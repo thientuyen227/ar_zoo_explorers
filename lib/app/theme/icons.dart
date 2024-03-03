@@ -33,6 +33,7 @@ class AppIcons {
   static const String icCalendar = "assets/icons/ic_calendar.png";
   static const String icAddress = "assets/icons/ic_address.png";
   static const String icBack_png = "assets/icons/ic_back.png";
+  static const String icBack_x64_png = "assets/icons/ic_back_x64.png";
   static const String icNext_png = "assets/icons/ic_next.png";
   static const String icWhiteSubmit = "assets/icons/ic_white_submit.png";
   static const String icDefaultUser = "assets/icons/ic_default_user.png";

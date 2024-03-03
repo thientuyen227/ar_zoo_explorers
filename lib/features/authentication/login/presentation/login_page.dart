@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/base/widgets/page_loading_indicator.dart';
@@ -48,7 +50,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
                       constraints: BoxConstraints(
                           minHeight: MediaQuery.of(context).size.height),
                       padding: const EdgeInsets.only(
-                          left: 30, right: 30, bottom: 30),
+                          left: 35, right: 35, bottom: 50),
                       child: Column(children: [
                         const SizedBox(height: 12),
                         appLogo(),
@@ -57,15 +59,15 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
                         Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [rememberPass(), forgotPassword()]),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: 24),
                         FutureBuilder(
                             future: controller.loginFuture.value,
                             builder: (context, snapshot) =>
                                 Align(child: submitButton(context, snapshot))),
+                        const SizedBox(height: 24),
+                        listOtherLoginButton(context),
                         const SizedBox(height: 25),
                         register(),
-                        const SizedBox(height: 20),
-                        listOtherLoginButton(context),
                       ])),
                 )),
           ),
@@ -127,19 +129,19 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
         valueTransformer: (suggestion) => suggestion,
         decoration: InputDecoration(
             filled: true,
-            fillColor: const Color.fromARGB(255, 246, 246, 246),
+            fillColor: Colors.grey.shade50,
             hintText: items.hint_text,
             labelText: items.hint_text,
             prefixIcon: Image.asset(items.icon_prefix, height: 20, width: 20),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-            contentPadding: const EdgeInsets.all(10)),
+            contentPadding: const EdgeInsets.all(12)),
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: FormBuilderValidators.compose([
           FormBuilderValidators.required(errorText: "Please enter your email!"),
           FormBuilderValidators.email()
         ]),
       ),
-      const SizedBox(height: 12),
+      const SizedBox(height: 16),
     ]);
   }
 
@@ -152,7 +154,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
         keyboardType: TextInputType.text,
         decoration: InputDecoration(
             filled: true,
-            fillColor: const Color.fromARGB(255, 246, 246, 246),
+            fillColor: Colors.grey.shade50,
             labelText: items.hint_text,
             hintText: items.hint_text,
             suffixIcon: IconButton(
@@ -166,14 +168,14 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
                     : Icons.visibility)),
             prefixIcon: Image.asset(items.icon_prefix, height: 20, width: 20),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-            contentPadding: const EdgeInsets.all(10)),
+            contentPadding: const EdgeInsets.all(12)),
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: FormBuilderValidators.compose([
           FormBuilderValidators.required(
               errorText: "Please enter the password!"),
         ]),
       ),
-      const SizedBox(height: 12),
+      const SizedBox(height: 24),
     ]);
   }
 
@@ -183,7 +185,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
             ? () => _onLoginPressed(context)
             : null,
         style: ButtonStyle(
-            fixedSize: MaterialStateProperty.all(const Size(140, 50)),
+            fixedSize: MaterialStateProperty.all(Size(cubit.WIDTH * 0.6, 50)),
             backgroundColor: MaterialStateProperty.all(Colors.blue[600]),
             elevation: MaterialStateProperty.all(5),
             shape: MaterialStateProperty.all(RoundedRectangleBorder(
@@ -246,15 +248,20 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
   }
 
   Widget listOtherLoginButton(BuildContext context) {
+    List<Widget> lstButton = [
+      otherLoginButton(context, 0),
+      SizedBox(width: cubit.WIDTH * 0.1),
+      otherLoginButton(context, 1)
+    ];
+
+    if (Platform.isIOS) {
+      lstButton.add(SizedBox(width: cubit.WIDTH * 0.1));
+      lstButton.add(otherLoginButton(context, 3));
+    }
     return Column(children: [
       otherLoginTitle(),
       const SizedBox(height: 15),
-      Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-        otherLoginButton(context, 0),
-        otherLoginButton(context, 1),
-        otherLoginButton(context, 2)
-      ]),
-      const SizedBox(height: 12),
+      Row(mainAxisAlignment: MainAxisAlignment.center, children: lstButton)
     ]);
   }
 
@@ -286,27 +293,27 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
       Container(
           color: Colors.white,
           padding: const EdgeInsets.all(8.0),
-          child: Text('Or',
-              style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+          child: Text('or sign up with',
+              style: TextStyle(fontSize: 17, color: Colors.grey[700]),
               textAlign: TextAlign.center))
     ]);
   }
 
   //NÚT ĐĂNG KÝ TRÊN THANH APPBAR
-  Widget signUpAction() {
-    return ElevatedButton(
-        onPressed: () => context.router.pushNamed(Routes.register),
-        style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.blue),
-            elevation: MaterialStateProperty.all(0),
-            shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(0)))),
-        child: Row(children: [
-          const Text('Sign up',
-              style: TextStyle(color: Colors.white, fontSize: 17)),
-          Image.asset(AppIcons.icNext_png)
-        ]));
-  }
+  // Widget signUpAction() {
+  //   return ElevatedButton(
+  //       onPressed: () => context.router.pushNamed(Routes.register),
+  //       style: ButtonStyle(
+  //           backgroundColor: MaterialStateProperty.all(Colors.blue),
+  //           elevation: MaterialStateProperty.all(0),
+  //           shape: MaterialStateProperty.all(RoundedRectangleBorder(
+  //               borderRadius: BorderRadius.circular(0)))),
+  //       child: Row(children: [
+  //         const Text('Sign up',
+  //             style: TextStyle(color: Colors.white, fontSize: 17)),
+  //         Image.asset(AppIcons.icNext_png)
+  //       ]));
+  // }
 
   Future<void> _onLoginPressed(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
