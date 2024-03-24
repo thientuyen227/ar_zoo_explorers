@@ -17,7 +17,6 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: UserProfileRoute.page, path: '/userprofile'),
         AutoRoute(page: TermOfServiceRoute.page, path: '/termofservice'),
         AutoRoute(page: AccountManagerRoute.page, path: '/accountmanager'),
-        AutoRoute(page: TestUnity.page, path: '/testunity'),
         AutoRoute(page: UserInformationRoute.page, path: '/userinformation'),
         AutoRoute(page: ForgotPasswordRoute.page, path: '/forgotpassword'),
         AutoRoute(page: ResetPasswordRoute.page, path: '/resetpassword'),
@@ -25,11 +24,8 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: AnimalModelsRoute.page, path: '/animalmodels'),
         AutoRoute(page: ModelDetailRoute.page, path: '/modeldetail'),
         AutoRoute(page: SearchModelRoute.page, path: '/searchmodel'),
-<<<<<<< HEAD
-        AutoRoute(page: HelpRoute.page, path: '/help')
-=======
+        AutoRoute(page: HelpRoute.page, path: '/help'),
         AutoRoute(page: LearningRoute.page, path: '/learning'),
         AutoRoute(page: StoryRoute.page, path: '/story'),
->>>>>>> Dev_MT_NotUnity
       ];
 }

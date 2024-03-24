@@ -12,7 +12,6 @@ class Routes {
   static const String userprofile = "/userprofile";
   static const String termofservice = "/termofservice";
   static const String accountmanager = "/accountmanager";
-  static const String testunity = "/testunity";
   static const String userinformation = "/userinformation";
   static const String forgotpassword = "/forgotpassword";
   static const String resetpassword = "/resetpassword";

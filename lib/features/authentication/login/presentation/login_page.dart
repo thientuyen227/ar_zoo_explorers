@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/base/widgets/page_loading_indicator.dart';
@@ -14,7 +15,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
 import '../../../../app/config/routes.dart';
 import '../../../../core/data/controller/auth_controller.dart';
@@ -184,7 +184,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: FormBuilderValidators.compose([
           FormBuilderValidators.required(
-              errorText: "Please enter the password!"),
+              errorText: LanguageKeys.formShortPasswordError.tr),
         ]),
       ),
       const SizedBox(height: 24),
