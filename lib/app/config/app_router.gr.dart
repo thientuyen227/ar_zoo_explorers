@@ -23,33 +23,33 @@ import 'package:ar_zoo_explorers/features/authentication/changepassword/presenta
 import 'package:ar_zoo_explorers/features/authentication/forgotpassword/presentation/forgotpassword_page.dart'
     as _i6;
 import 'package:ar_zoo_explorers/features/authentication/login/presentation/login_page.dart'
-    as _i10;
+    as _i11;
 import 'package:ar_zoo_explorers/features/authentication/register/presentation/register_page.dart'
-    as _i13;
-import 'package:ar_zoo_explorers/features/authentication/resetpassword/presentation/resetpassword_page.dart'
     as _i14;
-import 'package:ar_zoo_explorers/features/authentication/termsofservice/presentation/termofservice_page.dart'
-    as _i19;
-import 'package:ar_zoo_explorers/features/home/presentation/home_page.dart'
-    as _i7;
-import 'package:ar_zoo_explorers/features/languageselection/presentation/languageselection_page.dart'
-    as _i8;
-import 'package:ar_zoo_explorers/features/learning/presentation/learning_page.dart'
-    as _i9;
-import 'package:ar_zoo_explorers/features/modeldetail/presentation/modeldetail_page.dart'
-    as _i12;
-import 'package:ar_zoo_explorers/features/searchmodel/presentation/searchmodel_page.dart'
+import 'package:ar_zoo_explorers/features/authentication/resetpassword/presentation/resetpassword_page.dart'
     as _i15;
-import 'package:ar_zoo_explorers/features/setting/presentation/setting_page.dart'
-    as _i16;
-import 'package:ar_zoo_explorers/features/splash/splash_page.dart' as _i17;
-import 'package:ar_zoo_explorers/features/story/presentation/story_page.dart'
-    as _i18;
-import 'package:ar_zoo_explorers/features/testunity/presentation/test_unity.dart'
+import 'package:ar_zoo_explorers/features/authentication/termsofservice/presentation/termofservice_page.dart'
     as _i20;
+import 'package:ar_zoo_explorers/features/help/presentation/help_page.dart'
+    as _i7;
+import 'package:ar_zoo_explorers/features/home/presentation/home_page.dart'
+    as _i8;
+import 'package:ar_zoo_explorers/features/languageselection/presentation/languageselection_page.dart'
+    as _i9;
+import 'package:ar_zoo_explorers/features/learning/presentation/learning_page.dart'
+    as _i10;
+import 'package:ar_zoo_explorers/features/modeldetail/presentation/modeldetail_page.dart'
+    as _i13;
+import 'package:ar_zoo_explorers/features/searchmodel/presentation/searchmodel_page.dart'
+    as _i16;
+import 'package:ar_zoo_explorers/features/setting/presentation/setting_page.dart'
+    as _i17;
+import 'package:ar_zoo_explorers/features/splash/splash_page.dart' as _i18;
+import 'package:ar_zoo_explorers/features/story/presentation/story_page.dart'
+    as _i19;
 import 'package:ar_zoo_explorers/features/welcome/presentation/welcome_page.dart'
     as _i23;
-import 'package:ar_zoo_explorers/main_page.dart' as _i11;
+import 'package:ar_zoo_explorers/main_page.dart' as _i12;
 import 'package:auto_route/auto_route.dart' as _i24;
 
 abstract class $AppRouter extends _i24.RootStackRouter {
@@ -94,7 +94,7 @@ abstract class $AppRouter extends _i24.RootStackRouter {
       );
     },
     HelpRoute.name: (routeData) {
-      return _i23.AutoRoutePage<dynamic>(
+      return _i24.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i7.HelpPage(),
       );
@@ -108,79 +108,73 @@ abstract class $AppRouter extends _i24.RootStackRouter {
     LanguageSelectionRoute.name: (routeData) {
       return _i24.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i8.LanguageSelectionPage(),
+        child: const _i9.LanguageSelectionPage(),
       );
     },
     LearningRoute.name: (routeData) {
       return _i24.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i9.LearningPage(),
+        child: const _i10.LearningPage(),
       );
     },
     LoginRoute.name: (routeData) {
       return _i24.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i10.LoginPage(),
+        child: const _i11.LoginPage(),
       );
     },
     MainRoute.name: (routeData) {
       return _i24.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i11.MainPage(),
+        child: const _i12.MainPage(),
       );
     },
     ModelDetailRoute.name: (routeData) {
       return _i24.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i12.ModelDetailPage(),
+        child: const _i13.ModelDetailPage(),
       );
     },
     RegisterRoute.name: (routeData) {
       return _i24.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i13.RegisterPage(),
+        child: const _i14.RegisterPage(),
       );
     },
     ResetPasswordRoute.name: (routeData) {
       return _i24.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i14.ResetPasswordPage(),
+        child: const _i15.ResetPasswordPage(),
       );
     },
     SearchModelRoute.name: (routeData) {
       return _i24.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i15.SearchModelPage(),
+        child: const _i16.SearchModelPage(),
       );
     },
     SettingRoute.name: (routeData) {
       return _i24.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i16.SettingPage(),
+        child: const _i17.SettingPage(),
       );
     },
     SplashRoute.name: (routeData) {
       return _i24.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i17.SplashPage(),
+        child: const _i18.SplashPage(),
       );
     },
     StoryRoute.name: (routeData) {
       return _i24.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i18.StoryPage(),
+        child: const _i19.StoryPage(),
       );
     },
     TermOfServiceRoute.name: (routeData) {
       return _i24.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i19.TermOfServicePage(),
-      );
-    },
-    TestUnity.name: (routeData) {
-      return _i24.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const _i20.TestUnity(),
+        child: const _i20.TermOfServicePage(),
       );
     },
     UserInformationRoute.name: (routeData) {
@@ -289,7 +283,21 @@ class ForgotPasswordRoute extends _i24.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i7.HomePage]
+/// [_i7.HelpPage]
+class HelpRoute extends _i24.PageRouteInfo<void> {
+  const HelpRoute({List<_i24.PageRouteInfo>? children})
+      : super(
+          HelpRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'HelpRoute';
+
+  static const _i24.PageInfo<void> page = _i24.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i8.HomePage]
 class HomeRoute extends _i24.PageRouteInfo<void> {
   const HomeRoute({List<_i24.PageRouteInfo>? children})
       : super(
@@ -303,7 +311,7 @@ class HomeRoute extends _i24.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i8.LanguageSelectionPage]
+/// [_i9.LanguageSelectionPage]
 class LanguageSelectionRoute extends _i24.PageRouteInfo<void> {
   const LanguageSelectionRoute({List<_i24.PageRouteInfo>? children})
       : super(
@@ -317,7 +325,7 @@ class LanguageSelectionRoute extends _i24.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i9.LearningPage]
+/// [_i10.LearningPage]
 class LearningRoute extends _i24.PageRouteInfo<void> {
   const LearningRoute({List<_i24.PageRouteInfo>? children})
       : super(
@@ -331,7 +339,7 @@ class LearningRoute extends _i24.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i10.LoginPage]
+/// [_i11.LoginPage]
 class LoginRoute extends _i24.PageRouteInfo<void> {
   const LoginRoute({List<_i24.PageRouteInfo>? children})
       : super(
@@ -345,7 +353,7 @@ class LoginRoute extends _i24.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i11.MainPage]
+/// [_i12.MainPage]
 class MainRoute extends _i24.PageRouteInfo<void> {
   const MainRoute({List<_i24.PageRouteInfo>? children})
       : super(
@@ -359,7 +367,7 @@ class MainRoute extends _i24.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i12.ModelDetailPage]
+/// [_i13.ModelDetailPage]
 class ModelDetailRoute extends _i24.PageRouteInfo<void> {
   const ModelDetailRoute({List<_i24.PageRouteInfo>? children})
       : super(
@@ -373,7 +381,7 @@ class ModelDetailRoute extends _i24.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i13.RegisterPage]
+/// [_i14.RegisterPage]
 class RegisterRoute extends _i24.PageRouteInfo<void> {
   const RegisterRoute({List<_i24.PageRouteInfo>? children})
       : super(
@@ -387,7 +395,7 @@ class RegisterRoute extends _i24.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i14.ResetPasswordPage]
+/// [_i15.ResetPasswordPage]
 class ResetPasswordRoute extends _i24.PageRouteInfo<void> {
   const ResetPasswordRoute({List<_i24.PageRouteInfo>? children})
       : super(
@@ -401,7 +409,7 @@ class ResetPasswordRoute extends _i24.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i15.SearchModelPage]
+/// [_i16.SearchModelPage]
 class SearchModelRoute extends _i24.PageRouteInfo<void> {
   const SearchModelRoute({List<_i24.PageRouteInfo>? children})
       : super(
@@ -415,7 +423,7 @@ class SearchModelRoute extends _i24.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i16.SettingPage]
+/// [_i17.SettingPage]
 class SettingRoute extends _i24.PageRouteInfo<void> {
   const SettingRoute({List<_i24.PageRouteInfo>? children})
       : super(
@@ -429,7 +437,7 @@ class SettingRoute extends _i24.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i17.SplashPage]
+/// [_i18.SplashPage]
 class SplashRoute extends _i24.PageRouteInfo<void> {
   const SplashRoute({List<_i24.PageRouteInfo>? children})
       : super(
@@ -443,7 +451,7 @@ class SplashRoute extends _i24.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i18.StoryPage]
+/// [_i19.StoryPage]
 class StoryRoute extends _i24.PageRouteInfo<void> {
   const StoryRoute({List<_i24.PageRouteInfo>? children})
       : super(
@@ -457,7 +465,7 @@ class StoryRoute extends _i24.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i19.TermOfServicePage]
+/// [_i20.TermOfServicePage]
 class TermOfServiceRoute extends _i24.PageRouteInfo<void> {
   const TermOfServiceRoute({List<_i24.PageRouteInfo>? children})
       : super(
@@ -466,20 +474,6 @@ class TermOfServiceRoute extends _i24.PageRouteInfo<void> {
         );
 
   static const String name = 'TermOfServiceRoute';
-
-  static const _i24.PageInfo<void> page = _i24.PageInfo<void>(name);
-}
-
-/// generated route for
-/// [_i20.TestUnity]
-class TestUnity extends _i24.PageRouteInfo<void> {
-  const TestUnity({List<_i24.PageRouteInfo>? children})
-      : super(
-          TestUnity.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'TestUnity';
 
   static const _i24.PageInfo<void> page = _i24.PageInfo<void>(name);
 }
