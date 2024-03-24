@@ -6,4 +6,7 @@ import '../../../base/base_cubit.dart';
 @injectable
 class WelcomeCubit extends BaseCubit<WelcomeState> {
   WelcomeCubit() : super(WelcomeState());
+
+  double WIDTH = 0;
+  double HEIGHT = 0;
 }

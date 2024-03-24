@@ -95,7 +95,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
       // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // SizedBox(width: MediaQuery.of(context).size.width),
-        primaryGradientText("Sign in here !", 32.0),
+        primaryGradientText("Sign in", 32.0),
         const SizedBox(height: 36),
       ],
     );

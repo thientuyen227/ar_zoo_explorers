@@ -22,6 +22,7 @@ class Routes {
   static const String searchmodel = "/searchmodel";
   static const String learning = "/learning";
   static const String story = "/story";
+  static const String languageselection = "/languageselection";
 
   static Route<T> fadeThrough<T>(RouteSettings settings, WidgetBuilder page,
       {int duration = 300}) {

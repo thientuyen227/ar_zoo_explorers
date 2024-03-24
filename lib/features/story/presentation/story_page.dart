@@ -193,7 +193,7 @@ class _State extends BaseState<StoryState, StoryCubit, StoryPage> {
         child: Container(
             width: cubit.WIDTH * 0.37,
             height: cubit.WIDTH * 0.37,
-            margin: const EdgeInsets.only(left: 15, right: 15),
+            margin: const EdgeInsets.only(right: 20),
             decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey, width: 2),
                 borderRadius: BorderRadius.circular(5.0),
@@ -203,7 +203,7 @@ class _State extends BaseState<StoryState, StoryCubit, StoryPage> {
                       color: Colors.black.withOpacity(0.15),
                       spreadRadius: 2,
                       blurRadius: 5,
-                      offset: const Offset(0, 3))
+                      offset: const Offset(0, 1))
                 ]),
             child: Column(children: [
               buttonImage(btnObject.icon),
@@ -276,7 +276,8 @@ class _State extends BaseState<StoryState, StoryCubit, StoryPage> {
     for (int i = 0; i < list.length; i = i + 1) {
       listRow.add(storyButton(list[i]));
     }
-    return ListView(scrollDirection: Axis.horizontal, children: listRow);
+    return SingleChildScrollView(
+        scrollDirection: Axis.horizontal, child: Row(children: listRow));
   }
 
   Future<void> _onSearch(String? value) async {}

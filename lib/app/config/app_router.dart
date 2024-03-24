@@ -27,5 +27,7 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: SearchModelRoute.page, path: '/searchmodel'),
         AutoRoute(page: LearningRoute.page, path: '/learning'),
         AutoRoute(page: StoryRoute.page, path: '/story'),
+         AutoRoute(page: LanguageSelectionRoute.page, path: '/languageselection'),
       ];
+      
 }
