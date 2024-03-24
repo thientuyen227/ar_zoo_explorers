@@ -1,8 +1,6 @@
-import 'dart:convert';
-
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_unity_widget/flutter_unity_widget.dart';
+// import 'package:flutter_unity_widget/flutter_unity_widget.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../app/theme/icons.dart';
@@ -16,16 +14,16 @@ class TestUnity extends StatefulWidget {
 }
 
 class _TestUnityState extends State<TestUnity> {
-  late UnityWidgetController _unityWidgetController;
+  // late UnityWidgetController _unityWidgetController;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Stack(children: <Widget>[
-          UnityWidget(
-            onUnityCreated: onUnityCreated,
-            onUnityMessage: onUnityMessage,
-          ),
+          // UnityWidget(
+          //   onUnityCreated: onUnityCreated,
+          //   onUnityMessage: onUnityMessage,
+          // ),
           Positioned(
               top: 0,
               right: 10,
@@ -47,7 +45,7 @@ class _TestUnityState extends State<TestUnity> {
                       )
                     ],
                   ),
-                  buttonMenu(),
+                  // buttonMenu(),
                 ],
               )),
           Positioned(
@@ -99,22 +97,22 @@ class _TestUnityState extends State<TestUnity> {
     );
   }
 
-  void onUnityCreated(UnityWidgetController controller) {}
+  // void onUnityCreated(UnityWidgetController controller) {}
 
-  void onUnityMessage(dynamic data) {
-    Map<String, dynamic> message = jsonDecode(data);
-    Future.delayed(const Duration(seconds: 1), () {
-      Navigator.of(context).pop();
-    });
-  }
+  // void onUnityMessage(dynamic data) {
+  //   Map<String, dynamic> message = jsonDecode(data);
+  //   Future.delayed(const Duration(seconds: 1), () {
+  //     Navigator.of(context).pop();
+  //   });
+  // }
 
-  Widget buttonMenu() {
-    return PopupMenuButton(
-      itemBuilder: (context) => [
-        PopupMenuItem(
-            child:
-                IconButton(onPressed: () {}, icon: const Icon(Icons.ac_unit)))
-      ],
-    );
-  }
+  // Widget buttonMenu() {
+  //   return PopupMenuButton(
+  //     itemBuilder: (context) => [
+  //       PopupMenuItem(
+  //           child:
+  //               IconButton(onPressed: () {}, icon: const Icon(Icons.ac_unit)))
+  //     ],
+  //   );
+  // }
 }

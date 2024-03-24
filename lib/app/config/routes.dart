@@ -20,6 +20,8 @@ class Routes {
   static const String animalmodels = "/animalmodels";
   static const String modeldetail = "/modeldetail";
   static const String searchmodel = "/searchmodel";
+  static const String learning = "/learning";
+  static const String story = "/story";
   static const String help = "/help";
 
   static Route<T> fadeThrough<T>(RouteSettings settings, WidgetBuilder page,

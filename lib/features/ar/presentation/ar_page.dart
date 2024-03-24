@@ -5,7 +5,6 @@ import 'package:ar_zoo_explorers/features/ar/presentation/ar_cubit.dart';
 import 'package:ar_zoo_explorers/features/ar/presentation/ar_state.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_unity_widget/flutter_unity_widget.dart';
 
 import '../../../base/base_state.dart';
 
@@ -38,25 +37,25 @@ class _State extends BaseState<ARState, ARCubit, ARPage> {
     );
   }
 
-  Future<void> onUnityCreated(UnityWidgetController controller) async {
-    print("QQQQQQQ3");
-    unityWidgetController = controller;
+  // Future<void> onUnityCreated(UnityWidgetController controller) async {
+  //   print("QQQQQQQ3");
+  //   unityWidgetController = controller;
 
-    controller.postMessage("AICamera", "onFlutterMessage", "ResetModel");
-    sendMessageToUnity(animalController.currentAnimal.value.name,
-        animalController.currentAnimal.value.type);
-  }
+  //   controller.postMessage("AICamera", "onFlutterMessage", "ResetModel");
+  //   sendMessageToUnity(animalController.currentAnimal.value.name,
+  //       animalController.currentAnimal.value.type);
+  // }
 
-  Future<void> sendMessageToUnity(String valueName, String type) async {
-    if (valueName.isNotEmpty && type.isNotEmpty) {
-      Map<String, dynamic> url = await cubit.getFilePath(valueName, type);
-      File filePath = url['file'];
+  // Future<void> sendMessageToUnity(String valueName, String type) async {
+  //   if (valueName.isNotEmpty && type.isNotEmpty) {
+  //     Map<String, dynamic> url = await cubit.getFilePath(valueName, type);
+  //     File filePath = url['file'];
 
-      print("TTTT: ${filePath.path}");
-      unityWidgetController?.postMessage(
-          "AICamera", "onFlutterMessage", "FilePath: ${filePath.path}");
-    }
-  }
+  //     print("TTTT: ${filePath.path}");
+  //     unityWidgetController?.postMessage(
+  //         "AICamera", "onFlutterMessage", "FilePath: ${filePath.path}");
+  //   }
+  // }
 
   void onUnityMessage(dynamic data) {
     print("QQQQQQ $data");

@@ -4,7 +4,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../app/config/app_router.gr.dart';
-import '../../../../app/config/routes.dart';
 import '../../../../app/theme/icons.dart';
 import '../../../../base/base_state.dart';
 import '../../../../base/widgets/page_loading_indicator.dart';
@@ -35,7 +34,8 @@ class _State
               actions: const [SizedBox(width: 55)],
               leading: AppIconButton(
                   onPressed: () {
-                    context.router.pushNamed(Routes.home);
+                    // context.router.pushNamed(Routes.home);
+                    context.router.pop();
                   },
                   icon: Transform.scale(
                       scale: 1.5,

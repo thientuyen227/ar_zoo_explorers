@@ -26,8 +26,9 @@ class AnimalModelsCubit extends BaseCubit<AnimalModelsState> {
       AdvertisementObject([AppImages.imgAdvertisement, AppImages.imgAds1]);
 
   void isLoved(int index) {
+    listFullAnimal[index].isLoved = !listFullAnimal[index].isLoved;
     listSearchAnimal[index].isLoved = !listSearchAnimal[index].isLoved;
-    print(listSearchAnimal[index].isLoved);
+    //print(listSearchAnimal[index].isLoved);
   }
 
   String nameCustom(String fullname) {

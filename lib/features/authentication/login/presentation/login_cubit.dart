@@ -9,6 +9,9 @@ import '../../../base-model/form_builder_text_field_model.dart';
 class LoginCubit extends BaseCubit<LoginState> {
   LoginCubit() : super(LoginState());
 
+  double HEIGHT = 0;
+  double WIDTH = 0;
+
   bool isVisible = true;
   bool isChecked = false;
 

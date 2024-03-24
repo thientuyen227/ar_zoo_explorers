@@ -88,13 +88,13 @@ dependencies:
   loading_animation_widget: ^1.2.0+4
   firebase_storage: ^11.3.0
   flutter_smart_dialog: ^4.9.4
-  flutter_unity_widget: ^2022.2.0
+  # flutter_unity_widget: ^2022.2.0
   flutter_facebook_auth: ^5.0.11
   flutter_facebook_auth_platform_interface: ^4.1.1
   form_builder_extra_fields: ^10.1.0
   palette_generator: ^0.3.3+3
   http: ^0.13.6
-  flutter_html: ^3.0.0-beta.2
+  carousel_slider: ^4.2.1 
 
 dev_dependencies:
   flutter_test:
@@ -132,6 +132,8 @@ flutter:
     - assets/images/fishes/
     - assets/images/mammals/
     - assets/images/reptiles/
+    - assets/images/story_image/
+    - assets/images/story_topic/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

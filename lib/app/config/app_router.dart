@@ -25,6 +25,11 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: AnimalModelsRoute.page, path: '/animalmodels'),
         AutoRoute(page: ModelDetailRoute.page, path: '/modeldetail'),
         AutoRoute(page: SearchModelRoute.page, path: '/searchmodel'),
+<<<<<<< HEAD
         AutoRoute(page: HelpRoute.page, path: '/help')
+=======
+        AutoRoute(page: LearningRoute.page, path: '/learning'),
+        AutoRoute(page: StoryRoute.page, path: '/story'),
+>>>>>>> Dev_MT_NotUnity
       ];
 }

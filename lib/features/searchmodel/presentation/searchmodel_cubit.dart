@@ -19,6 +19,7 @@ class SearchModelCubit extends BaseCubit<SearchModelState> {
 
   void isLoved(int index) {
     listSearchAnimal[index].isLoved = !listSearchAnimal[index].isLoved;
+    listFullAnimal[index].isLoved = !listFullAnimal[index].isLoved;
   }
 
   void setListAnimal(List<AnimalEntity> list, String searchValue) {
