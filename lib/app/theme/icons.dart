@@ -60,6 +60,10 @@ class AppIcons {
   static const String icHelp = "assets/icons/ic_help.png";
   static const String icLogout = "assets/icons/ic_logout.png";
 
+  //Settings
+  static const String icClose = "assets/icons/ic_close.svg";
+  static const String icTick = "assets/icons/ic_tick.svg";
+
   //Icon animals
   static const String icWolf = "assets/icons/animals/wolf.png";
   static const String icDragon = "assets/icons/animals/dragon.png";

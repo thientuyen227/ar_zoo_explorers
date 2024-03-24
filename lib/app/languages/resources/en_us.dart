@@ -67,6 +67,7 @@ const Map<String, String> en_us = {
   "en_US": "English",
   "vi_VN": "Vietnamese",
   "delete": "Delete",
+  'chooseLanguage': 'Language',
   "deleteMessage": "Do you sure you want to delete this record?",
   // Welcome
   'welcome_title': 'Welcome to Focus 1',

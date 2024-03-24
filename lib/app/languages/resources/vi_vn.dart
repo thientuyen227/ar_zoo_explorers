@@ -16,6 +16,7 @@ const Map<String, String> vi_vn = {
 
   "en_US": "Tiếng Anh",
   "vi_VN": "Tiếng Việt",
+  'chooseLanguage': 'Chọn ngôn ngữ',
   'total': "Tổng",
   'doNotHaveAnAccount': "Bạn chưa có tài khoản? Vui lòng",
   'haveAnAccount': "Bạn đã có tài khoản?",

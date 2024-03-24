@@ -1,5 +1,9 @@
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 import '../../../app/config/routes.dart';
 import '../../../app/languages/localization_service.dart';
@@ -18,7 +22,7 @@ class LanguageSelectionPage extends StatefulWidget {
 
 class _State extends BaseState<LanguageSelectionState, LanguageSelectionCubit,
     LanguageSelectionPage> {
-  final Locale _selectedLocale = LocalizationService.locale;
+  Locale _selectedLocale = LocalizationService.locale;
 
   @override
   Widget buildByState(BuildContext context, LanguageSelectionState state) {
@@ -105,7 +109,7 @@ class _State extends BaseState<LanguageSelectionState, LanguageSelectionCubit,
                 style: const TextStyle(fontSize: 18)),
             IconButton(
               onPressed: () {
-                // _showDropdownBottomSheet(context);
+                _showDropdownBottomSheet(context);
               },
               icon: const RotatedBox(
                 quarterTurns: 45,
@@ -133,6 +137,133 @@ class _State extends BaseState<LanguageSelectionState, LanguageSelectionCubit,
                 borderRadius: BorderRadius.circular(20)))),
         child: const Text("Go To Login",
             style: TextStyle(fontSize: 20, color: Colors.white)));
+  }
+
+  void _showDropdownBottomSheet(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      barrierColor: Colors.transparent,
+      backgroundColor: const Color(0xFFF2F2F2),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10.0), topRight: Radius.circular(10.0))),
+      builder: (BuildContext context) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: Text(
+                      LanguageKeys.chooseLanguage.tr,
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.w500),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Positioned(
+                    right: 20,
+                    top: 0,
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      padding: EdgeInsets.zero,
+                      splashRadius: 10,
+                      constraints: const BoxConstraints(),
+                      icon: SvgPicture.asset(
+                        AppIcons.icClose,
+                        width: 28,
+                        height: 28,
+                        fit: BoxFit.scaleDown,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 23),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white),
+                child: Column(
+                  children: _buildDropdownMenuItems(context),
+                ),
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  List<Widget> _buildDropdownMenuItems(BuildContext context) {
+    return LocalizationService.langs.entries.mapIndexed((idx, e) {
+      final iconPath = e.key == 'en' ? AppImages.flagUK : AppImages.flagVN;
+      final isSelectedLocale = _selectedLocale.languageCode == e.key;
+      return Column(
+        children: [
+          ListTile(
+            leading: Image.asset(
+              iconPath,
+              width: 41,
+              height: 27,
+            ),
+            title: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      isSelectedLocale
+                          ? Locale(e.key).displayLanguageCountry
+                          : Locale(e.key).displayLanguageCountry,
+                      style: isSelectedLocale
+                          ? const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF5F8D4D))
+                          : null,
+                    ),
+                    Text(
+                      e.value.toString(),
+                      style: isSelectedLocale
+                          ? const TextStyle(color: Color(0xFF5F8D4E))
+                          : null,
+                    ),
+                  ],
+                ),
+                if (isSelectedLocale) const Spacer(),
+                if (isSelectedLocale) SvgPicture.asset(AppIcons.icTick),
+              ],
+            ),
+            onTap: () {
+              LocalizationService.changeLocale(e.key);
+              setState(() =>
+                  _selectedLocale = LocalizationService.locales.firstWhere(
+                    (element) => element.languageCode == e.key,
+                  ));
+              Navigator.pop(context);
+            },
+          ),
+          if (idx < LocalizationService.langs.length - 1) ...{
+            const Padding(
+              padding: EdgeInsets.only(left: 80),
+              child: Divider(
+                color: Color(0xFFC4C4C4),
+                height: 1,
+              ),
+            )
+          }
+        ],
+      );
+    }).toList();
   }
 
   void setDimension() {

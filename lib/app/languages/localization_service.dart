@@ -1,10 +1,10 @@
 import 'dart:collection';
 
-import 'package:ar_zoo_explorers/app/languages/resources/en_us.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../helpers/storage_helper.dart';
+import 'resources/en_us.dart';
 import 'resources/vi_vn.dart';
 
 class LocalizationService extends Translations {
@@ -15,12 +15,15 @@ class LocalizationService extends Translations {
   static const fallbackLocale = Locale('en', 'US');
 
   // language code của những locale được support
-  static final langCodes = ['vi', 'en'];
+  static final langCodes = [
+    'en',
+    'vi',
+  ];
 
   // các Locale được support
   static final locales = [
-    const Locale('vi', 'VN'),
     const Locale('en', 'EN'),
+    const Locale('vi', 'VN'),
   ];
 
   // cái này là Map các language được support đi kèm với mã code của lang đó: cái này dùng để đổ data vào Dropdownbutton và set language mà không cần quan tâm tới language của hệ thống
@@ -47,6 +50,7 @@ class LocalizationService extends Translations {
     var lang = langCode ??
         StorageHelper.getLanguageCode() ??
         Get.deviceLocale?.languageCode;
+    print('Lang: $lang');
     return locales.firstWhere(
       (element) => element.languageCode == lang,
       orElse: () => Get.locale!,
@@ -56,31 +60,31 @@ class LocalizationService extends Translations {
 
 extension LocaleExt on Locale {
   String get displayCountry {
-    if (countryCode == "US") {
+    if (countryCode == "EN") {
       return "EN";
     }
     return countryCode ?? "";
   }
-}
 
-extension LocaleExt1 on Locale {
   static const Map<String, String> localeDisplayNames = {
+    'en': 'English (EN)',
     'vi': 'Vietnamese (VN)',
   };
 
   String get displayLanguageCountry {
-    final languageCountry = LocaleExt1.localeDisplayNames[languageCode] ?? '';
+    final languageCountry = localeDisplayNames[languageCode] ?? '';
     return languageCountry;
   }
 }
 
-extension LocaleExt2 on String {
+extension LocaleStringExt on String {
   static const Map<String, String> localeDisplayNames = {
+    'en_EN': 'English (EN)',
     'vi_VN': 'Vietnamese (VN)',
   };
 
   String get displayLanguageCountry {
-    final languageCountry = LocaleExt2.localeDisplayNames[this] ?? '';
+    final languageCountry = localeDisplayNames[this] ?? '';
     return languageCountry;
   }
 }
