@@ -75,11 +75,37 @@ class AppImages {
   static const String imgHome = "assets/images/img_home.png";
   static const String imgAdvertisement = "assets/images/img_advertisement.png";
   static const String imgAds1 = "assets/images/img_ads1.jpg";
+  static const String imgAds2 = "assets/images/img_ads2.png";
   static const String imgAppLogo = "assets/images/img_app_logo.png";
   static const String imgAppLogoBG = "assets/images/img_app_logo_bg.png";
   static const String imgDefaultUser = "assets/images/img_default_user.png";
   static const String imgProfile128x128 =
       "assets/images/img_profile_128x128.png";
+  static const String imgStoryTelling = "assets/images/img_story_telling.png";
+  static const String imgLearning = "assets/images/img_learning.png";
+
+  //STORY IMAGE
+  static const String imgBacVoiTotBung =
+      "assets/images/story_image/img_bac_voi_tot_bung.png";
+  static const String imgChuChoHachiko =
+      "assets/images/story_image/img_chu_cho_hachiko.png";
+  static const String imgChuGaTrongKieuCang =
+      "assets/images/story_image/img_chu_ga_trong_kieu_cang.png";
+  static const String imgDeMenPhieuLuuKy =
+      "assets/images/story_image/img_de_men_phieu_luu_ky.png";
+  static const String imgRuaVaTho =
+      "assets/images/story_image/img_rua_va_tho.png";
+  static const String imgVitConXauXi =
+      "assets/images/story_image/img_vit_con_xau_xi.png";
+
+  //STORY TOPIC
+  static const String imgNguNgon = "assets/images/story_topic/img_ngu_ngon.png";
+  static const String imgCoTich = "assets/images/story_topic/img_co_tich.png";
+  static const String imgTruyenThuyet =
+      "assets/images/story_topic/img_truyen_thuyet.png";
+  static const String imgDaoDuc = "assets/images/story_topic/img_dao_duc.png";
+  static const String imgTruyenCuoi =
+      "assets/images/story_topic/img_truyen_cuoi.png";
 
   //MODELS BUTTONS
   static const String imgAmphibians =

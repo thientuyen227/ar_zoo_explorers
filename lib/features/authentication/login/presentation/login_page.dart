@@ -54,6 +54,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
                       child: Column(children: [
                         const SizedBox(height: 12),
                         appLogo(),
+                        loginHeader(),
                         emailForm(cubit.ListFormItem[0]),
                         passwordForm(cubit.ListFormItem[1]),
                         Row(
@@ -85,24 +86,35 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
           width: cubit.WIDTH,
         ),
       ),
-      ShaderMask(
-          shaderCallback: (Rect bounds) {
-            return const LinearGradient(
-              colors: [
-                Color.fromARGB(255, 0, 128, 255),
-                Color.fromARGB(255, 236, 142, 0)
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ).createShader(bounds);
-          },
-          child: const Text('WELCOME TO AR-ZOO !',
-              style: TextStyle(
-                  fontSize: 26.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white))),
-      const SizedBox(height: 24),
+      const SizedBox(height: 10),
     ]);
+  }
+
+  Widget loginHeader() {
+    return Column(
+      // crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // SizedBox(width: MediaQuery.of(context).size.width),
+        primaryGradientText("Sign in here !", 32.0),
+        const SizedBox(height: 36),
+      ],
+    );
+  }
+
+  Widget primaryGradientText(String content, double size,
+      {Color color = Colors.white}) {
+    return ShaderMask(
+        shaderCallback: (Rect bounds) {
+          return LinearGradient(
+            colors: [Colors.blue.shade800, Colors.orange.shade500],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ).createShader(bounds);
+        },
+        child: Text(content,
+            softWrap: true,
+            style: TextStyle(
+                fontSize: size, fontWeight: FontWeight.bold, color: color)));
   }
 
   Widget emailForm(FormBuilderTextFieldModel items) {

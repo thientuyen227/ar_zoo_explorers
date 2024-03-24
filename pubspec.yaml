@@ -95,7 +95,7 @@ dependencies:
   form_builder_extra_fields: ^10.1.0
   palette_generator: ^0.3.3+3
   http: ^0.13.6
- 
+  carousel_slider: ^4.2.1 
 
 dev_dependencies:
   flutter_test:
@@ -136,6 +136,8 @@ flutter:
     - assets/images/mammals/
     - assets/images/mollusks/
     - assets/images/reptiles/
+    - assets/images/story_image/
+    - assets/images/story_topic/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
