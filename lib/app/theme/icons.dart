@@ -84,6 +84,10 @@ class AppImages {
   static const String imgStoryTelling = "assets/images/img_story_telling.png";
   static const String imgLearning = "assets/images/img_learning.png";
 
+  //FLAGS
+  static const String flagUK = "assets/images/flags/img_greatbritain.png";
+  static const String flagVN = "assets/images/flags/img_vietnam.png";
+
   //STORY IMAGE
   static const String imgBacVoiTotBung =
       "assets/images/story_image/img_bac_voi_tot_bung.png";

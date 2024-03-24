@@ -197,7 +197,7 @@ class AuthController extends ControllerHelper {
     _resetCurrentUser();
     update();
     //Navigator.of(context).popUntil((route) => route.isFirst);
-    context.router.pushNamed(Routes.login);
+    context.router.pushNamed(Routes.welcome);
   }
 
   _resetCurrentUser() {
