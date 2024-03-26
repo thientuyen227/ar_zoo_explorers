@@ -114,6 +114,9 @@ class _State extends BaseState<SettingState, SettingCubit, SettingPage> {
       case SettingType.accountmanager:
         context.router.pushNamed(Routes.accountmanager);
         break;
+      case SettingType.changeLanguage:
+        context.router.pushNamed(Routes.changelanguage);
+        break;
       default:
     }
   }

@@ -23,6 +23,7 @@ class Routes {
   static const String story = "/story";
   static const String help = "/help";
   static const String languageselection = "/languageselection";
+  static const String changelanguage = "/changelanguage";
 
   static Route<T> fadeThrough<T>(RouteSettings settings, WidgetBuilder page,
       {int duration = 300}) {

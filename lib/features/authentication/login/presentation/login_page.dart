@@ -95,7 +95,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
       // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // SizedBox(width: MediaQuery.of(context).size.width),
-        primaryGradientText("Sign in", 32.0),
+        primaryGradientText(LanguageKeys.login.tr, 32.0),
         const SizedBox(height: 36),
       ],
     );
@@ -149,7 +149,8 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
             contentPadding: const EdgeInsets.all(12)),
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: FormBuilderValidators.compose([
-          FormBuilderValidators.required(errorText: "Please enter your email!"),
+          FormBuilderValidators.required(
+              errorText: LanguageKeys.formRequiredEmailError.tr),
           FormBuilderValidators.email()
         ]),
       ),

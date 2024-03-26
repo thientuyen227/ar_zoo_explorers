@@ -63,6 +63,7 @@ class AppIcons {
   //Settings
   static const String icClose = "assets/icons/ic_close.svg";
   static const String icTick = "assets/icons/ic_tick.svg";
+  static const String icGlobe = "assets/icons/settings/ic_globe.svg";
 
   //Icon animals
   static const String icWolf = "assets/icons/animals/wolf.png";

@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:ar_zoo_explorers/app/languages/localization_service.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get_it/get_it.dart';
 
 import 'app/app/app_cubit.dart';
@@ -36,11 +38,15 @@ class _MainPageState extends State<MainPage> {
   final appCubit = GetIt.instance<AppCubit>();
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
+    return GetMaterialApp.router(
       title: appCubit.appConfig.appName,
       debugShowCheckedModeBanner: false,
       routerDelegate: appCubit.appRouter.delegate(),
       routeInformationParser: appCubit.appRouter.defaultRouteParser(),
+      // Localization
+      locale: LocalizationService.locale,
+      fallbackLocale: LocalizationService.fallbackLocale,
+      translations: LocalizationService(),
       //theme: appCubit.state.appTheme.themeData,
     );
   }
