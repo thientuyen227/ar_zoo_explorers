@@ -64,12 +64,19 @@ class LanguageKeys {
   static const String auth_policy = 'auth_policy';
   static const String auth_and = 'auth_and';
   static const String auth_terms = 'auth_terms';
-  static const String auth_offFocus1 = 'auth_offFocus1';
 
   // Avatar Page
   static const String avatar_viewAvatar = 'avatar_viewAvatar';
   static const String avatar_cameraAvatar = 'avatar_cameraAvatar';
   static const String avatar_galleryAvatar = 'avatar_galleryAvatar';
+
+  //Learning
+  static const String your_points = 'your_points';
+  static const String vocabulary = 'vocabulary';
+  static const String puzzle = 'puzzle';
+  static const String in_process = 'in_process';
+  static const String completed = 'completed';
+  static const String take_the_quiz = 'take_the_quiz';
 
   // Setting Page
   static const String setting_upgradeAccount = 'setting_upgradeAccount';
@@ -84,51 +91,12 @@ class LanguageKeys {
   static const String upgradeAccount = 'upgradeAccount';
 
   // Actions
-  static const String all = 'all';
-  static const String inprogress = 'in-progress';
-  static const String perform = 'perform';
-  static const String completed = 'completed';
-  static const String actionList = 'actionList';
-  static const String actionListUpdate = 'actionListUpdate';
-  static const String emptyAction = 'emptyAction';
-  static const String pickAction = 'pickAction';
-  static const String target = 'target';
-  static const String notification = 'notification';
   static const String passwordResetRequestMessage =
       'passwordResetRequestMessage';
   static const String passwordResetRequestErrorNoUserFound =
       'passwordResetRequestErrorNoUserFound';
   static const String requiresRecentLogin = 'requiresRecentLogin';
-  static const String time = 'time';
-  static const String completePercent = 'completePercent';
-  static const String createAction = 'createAction';
-  static const String action = 'action';
-  static const String icon = 'icon';
-  static const String color = 'color';
-  static const String targetClip = 'targetClip';
-  static const String enterActionName = 'enterActionName';
-  static const String enterActionTarget = 'enterActionTarget';
-  static const String actionTemplate = 'actionTemplate';
-  static const String actionTemplateUpdate = 'actionTemplateUpdate';
-  static const String actionCompletedMessage = 'actionCompletedMessage';
-  static const String clip = 'clip';
-  static const String actionQuantity = 'actionQuantity';
-  static const String percent = 'percent';
-  static const String reward = 'reward';
-
-  static const String actionInReport = "actionInReport";
-
-  static const String total = "total";
-
   static const String reportMessage = "reportMessage";
-
-  static const String monday = "monday";
-  static const String tuesday = "tuesday";
-  static const String wednesday = "wednesday";
-  static const String thursday = "thursday";
-  static const String friday = "friday";
-  static const String saturday = "saturday";
-  static const String sunday = "sunday";
 
   static const String createActionSuccessfully = "createActionSuccessfully";
   static const String deleteActionSuccessfully = "deleteActionSuccessfully";

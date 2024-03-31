@@ -132,6 +132,9 @@ flutter:
     - assets/images/story_image/
     - assets/images/story_topic/
     - assets/images/flags/
+    - assets/images/learning_image/
+    - assets/images/learning_image/vocabulary/
+    - assets/images/learning_image/puzzle/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
