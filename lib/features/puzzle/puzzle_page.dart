@@ -4,6 +4,7 @@ import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/features/puzzle/puzzle_cubit.dart';
 import 'package:ar_zoo_explorers/features/puzzle/puzzle_state.dart';
+import 'package:ar_zoo_explorers/features/puzzle/questions.dart';
 import 'package:ar_zoo_explorers/utils/widget/custom_back_button.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -23,13 +24,22 @@ class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
 
   // final _formKey = GlobalKey<FormBuilderState>();
   List<String> answers = ["Bear", "Lion", "Giraffe", "Elephant"];
-  String? selectedAnswer;
-  String answerTrue = "Lion";
-  bool? isSelected;
-  bool? isCorrect;
+  // String? selectedAnswer;
+  // String answerTrue = "Lion";
+  // bool? isSelected;
+  // bool? isCorrect;
+  int? selectedAnswerIndex;
+  int questionIndex = 0;
+  void pickAnswer(int value) {
+    selectedAnswerIndex = value;
+    final question = questions[questionIndex];
+
+    setState(() {});
+  }
 
   @override
   Widget buildByState(BuildContext context, PuzzleState state) {
+    final question = questions[questionIndex];
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -105,15 +115,23 @@ class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
             ),
             itemCount: answers.length,
             itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    renderAnswer(
-                        answer: answers[index],
-                        isSelected: isSelected,
-                        isCorrect: isCorrect),
-                  ],
+              return GestureDetector(
+                onTap: selectedAnswerIndex == null
+                    ? () => pickAnswer(index)
+                    : null,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      renderAnswer(
+                        currentIndex: index,
+                        question: question.options[index],
+                        isSelected: selectedAnswerIndex == index,
+                        selectedAnswerIndex: selectedAnswerIndex,
+                        correctAnswerIndex: question.correctAnswerIndex,
+                      )
+                    ],
+                  ),
                 ),
               );
             },
@@ -123,48 +141,61 @@ class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
     );
   }
 
-  Widget renderAnswer(
-      {required String answer, bool? isSelected, bool? isCorrect}) {
-    Color backgroundColor;
+  Widget renderAnswer({
+    required String question,
+    required bool isSelected,
+    required int? correctAnswerIndex,
+    required int? selectedAnswerIndex,
+    required int currentIndex,
+  }) {
+    bool isCorrectAnswer = currentIndex == correctAnswerIndex;
+    bool isWrongAnswer = !isCorrectAnswer && isSelected;
 
-    if (isSelected == null) {
-      backgroundColor = AppColor.vibrantYellow;
-    } else {
-      backgroundColor = isCorrect == true
-          ? AppColor.completed
-          : isSelected == true
-              ? AppColor.isFalse
-              : AppColor.vibrantYellow;
-    }
-    return GestureDetector(
-      onTap: () {
-        selectedAnswer = answer;
-        if (selectedAnswer == null) return;
-        isSelected = true;
-        isCorrect = answer == answerTrue;
-        setState(() {});
-      },
-      child: Container(
-        decoration: BoxDecoration(
-            color: backgroundColor,
-            border: Border.all(),
-            borderRadius: const BorderRadius.all(Radius.circular(10))),
-        child: Padding(
-          padding:
-              const EdgeInsets.only(right: 50, left: 50, top: 15, bottom: 15),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                answer,
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+    return selectedAnswerIndex != null
+        ? Container(
+            decoration: BoxDecoration(
+                color: isCorrectAnswer
+                    ? AppColor.completed
+                    : isWrongAnswer
+                        ? AppColor.isFalse
+                        : AppColor.vibrantYellow,
+                border: Border.all(),
+                borderRadius: const BorderRadius.all(Radius.circular(10))),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  right: 50, left: 50, top: 15, bottom: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    question,
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          )
+        : Container(
+            decoration: BoxDecoration(
+                color: AppColor.vibrantYellow,
+                border: Border.all(),
+                borderRadius: const BorderRadius.all(Radius.circular(10))),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  right: 50, left: 50, top: 15, bottom: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    question,
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                ],
+              ),
+            ),
+          );
   }
 
   Widget renderVocabulary() {
