@@ -39,6 +39,7 @@ class LanguageKeys {
   static const String done = 'done';
   static const String next = 'next';
   static const String report = 'report';
+  static const String chooseLanguage = "chooseLanguage";
 
   // Welcome Page
   static const String welcome_title = 'welcome_title';

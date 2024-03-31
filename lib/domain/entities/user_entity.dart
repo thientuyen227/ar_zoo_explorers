@@ -7,17 +7,22 @@ class UserEntity {
   final String address;
   final String birth;
   final String? provider;
+  final String gender;
+  final String role;
+  final bool status;
 
-  UserEntity({
-    required this.id,
-    required this.avatarUrl,
-    required this.fullname,
-    required this.email,
-    required this.phone,
-    required this.address,
-    required this.birth,
-    required this.provider,
-  });
+  UserEntity(
+      {required this.id,
+      required this.avatarUrl,
+      required this.fullname,
+      required this.email,
+      required this.phone,
+      required this.address,
+      required this.birth,
+      required this.provider,
+      required this.gender,
+      required this.role,
+      required this.status});
 
   Map<String, dynamic> toMap() {
     return {
@@ -28,7 +33,10 @@ class UserEntity {
       'address': address,
       'birth': birth,
       'avatarUrl': avatarUrl,
-      'provider': provider
+      'provider': provider,
+      'gender': gender,
+      'role': role,
+      'status': status,
     };
   }
 }

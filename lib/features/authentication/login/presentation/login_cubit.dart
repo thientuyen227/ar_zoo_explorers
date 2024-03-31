@@ -9,6 +9,9 @@ import '../../../base-model/form_builder_text_field_model.dart';
 class LoginCubit extends BaseCubit<LoginState> {
   LoginCubit() : super(LoginState());
 
+  double HEIGHT = 0;
+  double WIDTH = 0;
+
   bool isVisible = true;
   bool isChecked = false;
 
@@ -17,12 +20,12 @@ class LoginCubit extends BaseCubit<LoginState> {
   List<FormBuilderTextFieldModel> ListFormItem = [
     FormBuilderTextFieldModel(
         name: 'email',
-        hint_text: "Địa chỉ email",
+        hint_text: "Email address",
         icon_prefix: AppIcons.icUser,
         isObscured: false),
     FormBuilderTextFieldModel(
         name: 'password',
-        hint_text: 'Mật khẩu',
+        hint_text: 'Password',
         icon_prefix: AppIcons.icLock,
         isObscured: true)
   ];

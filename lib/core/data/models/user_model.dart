@@ -10,8 +10,12 @@ class UserModel extends UserEntity {
       required super.address,
       required super.birth,
       required super.avatarUrl,
-      required super.provider});
+      required super.provider,
+      required super.gender,
+      required super.role,
+      required super.status});
 
+  @override
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -21,7 +25,10 @@ class UserModel extends UserEntity {
       'address': address,
       'birth': birth,
       'avatarUrl': avatarUrl,
-      'provider': provider
+      'provider': provider,
+      'gender': gender,
+      'role': role,
+      'status': status,
     };
   }
 
@@ -34,10 +41,19 @@ class UserModel extends UserEntity {
         address: map['address'] ?? '',
         birth: map['birth'] ?? '',
         avatarUrl: map['avatarUrl'] ?? '',
-        provider: map['provider'] ?? '');
+        provider: map['provider'] ?? '',
+        gender: map['gender'] ?? '',
+        role: map['role'] ?? '',
+        status: map['status'] ?? true);
   }
   factory UserModel.fromUserCredential(UserCredential userCredential,
-      {String? fullname, String? phone, String? address, String? birth}) {
+      {String? fullname,
+      String? phone,
+      String? address,
+      String? birth,
+      String? gender,
+      String? role,
+      bool? status}) {
     return UserModel(
         id: userCredential.user!.uid,
         fullname: fullname ??
@@ -49,6 +65,9 @@ class UserModel extends UserEntity {
         address: address ?? "",
         birth: birth ?? "",
         avatarUrl: userCredential.user!.photoURL ?? "",
-        provider: userCredential.credential?.providerId);
+        provider: userCredential.credential?.providerId,
+        gender: gender ?? '',
+        role: role ?? '',
+        status: status ?? true);
   }
 }

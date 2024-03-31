@@ -35,17 +35,16 @@ class _State extends BaseState<ChangePasswordState, ChangePasswordCubit,
           scaffold: Scaffold(
             appBar: AppBar(
                 centerTitle: true,
-                title: const Text("NHẬP MẬT KHẨU MỚI",
+                title: const Text("Change Password",
                     style: TextStyle(fontSize: 18, color: Colors.white)),
-                leading: Column(children: [TurnBack()]),
+                leading: Column(children: [turnBack()]),
                 actions: const []),
             body: FormBuilder(
                 key: _formKey,
                 child: SingleChildScrollView(
                   child: Container(
                       constraints: BoxConstraints(
-                        minHeight: MediaQuery.of(context).size.height,
-                      ),
+                          minHeight: MediaQuery.of(context).size.height),
                       width: MediaQuery.of(context).size.width,
                       color: Colors.blue[600],
                       child: Container(
@@ -66,17 +65,17 @@ class _State extends BaseState<ChangePasswordState, ChangePasswordCubit,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 //NHẬP MẬT KHẨU CŨ
-                                PasswordForm(cubit.ListFormItem[0], 0),
+                                passwordForm(cubit.ListFormItem[0], 0),
                                 // NHẬP MẬT KHẨU MỚI
-                                PasswordForm(cubit.ListFormItem[1], 1),
+                                passwordForm(cubit.ListFormItem[1], 1),
                                 // NHẬP LẠI MẬT KHẨU MỚI
-                                PasswordForm(cubit.ListFormItem[2], 2),
+                                passwordForm(cubit.ListFormItem[2], 2),
                                 const SizedBox(height: 15),
                                 FutureBuilder(
                                     future: null,
                                     builder: (context, snapshot) => Align(
                                           child:
-                                              SubmitButton(context, snapshot),
+                                              submitButton(context, snapshot),
                                         ))
                               ]))),
                 )),
@@ -84,7 +83,7 @@ class _State extends BaseState<ChangePasswordState, ChangePasswordCubit,
         )));
   }
 
-  Widget TurnBack() {
+  Widget turnBack() {
     return ElevatedButton(
         onPressed: () {
           context.router.pop();
@@ -97,7 +96,7 @@ class _State extends BaseState<ChangePasswordState, ChangePasswordCubit,
         child: Image.asset(AppIcons.icBack_png));
   }
 
-  Widget PasswordForm(FormBuilderTextFieldModel items, int index) {
+  Widget passwordForm(FormBuilderTextFieldModel items, int index) {
     return Column(children: [
       FormBuilderTextField(
           name: items.name,
@@ -120,7 +119,7 @@ class _State extends BaseState<ChangePasswordState, ChangePasswordCubit,
               contentPadding: const EdgeInsets.all(10)),
           autovalidateMode: AutovalidateMode.onUserInteraction,
           validator: FormBuilderValidators.compose([
-            FormBuilderValidators.required(errorText: "Không thể để trống"),
+            FormBuilderValidators.required(errorText: "Required field"),
             (value) {
               return _onHandleValidator(index, value);
             }
@@ -129,12 +128,12 @@ class _State extends BaseState<ChangePasswordState, ChangePasswordCubit,
     ]);
   }
 
-  Widget SubmitButton(BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+  Widget submitButton(BuildContext context, AsyncSnapshot<dynamic> snapshot) {
     return ElevatedButton(
         onPressed: snapshot.connectionState != ConnectionState.waiting
             ? () => _onUpdatePassword(context)
             : () => {
-                  Fluttertoast.showToast(msg: "Đang cập nhật"),
+                  Fluttertoast.showToast(msg: "Updating"),
                   _onUpdatePassword(context)
                 },
         style: ButtonStyle(
@@ -145,7 +144,7 @@ class _State extends BaseState<ChangePasswordState, ChangePasswordCubit,
                 borderRadius: BorderRadius.circular(20)))),
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Image.asset(AppIcons.icWhiteSubmit),
-          const Text("Thay đổi", style: TextStyle(fontSize: 18))
+          const Text("Change", style: TextStyle(fontSize: 18))
         ]));
   }
 

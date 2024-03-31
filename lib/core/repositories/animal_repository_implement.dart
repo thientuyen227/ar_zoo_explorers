@@ -17,6 +17,8 @@ class AnimalRepositoryImplement implements AnimalRepository {
     required String icon,
     required String type,
     required String name,
+    required String categoryId,
+    required bool status,
   }) {
     return ResponseHandler.processResponse(() async {
       return Success(
@@ -25,7 +27,9 @@ class AnimalRepositoryImplement implements AnimalRepository {
               title: title,
               icon: icon,
               type: type,
-              name: name)));
+              name: name,
+              categoryId: categoryId,
+              status: status)));
     });
   }
 
@@ -38,16 +42,34 @@ class AnimalRepositoryImplement implements AnimalRepository {
   }
 
   @override
-  Future<Either<Failure, Success<AnimalEntity>>> updateAnimal(
-      {required String id,
-      required String title,
-      required String icon,
-      required String type,
-      required String name}) {
+  Future<Either<Failure, Success<AnimalEntity>>> updateAnimal({
+    required String id,
+    required String title,
+    required String icon,
+    required String type,
+    required String name,
+    required String categoryId,
+    required bool status,
+  }) {
     return ResponseHandler.processResponse(() async {
       return Success(
           data: await _firestoreSource.updateAnimal(
-              id: id, title: title, icon: icon, type: type, name: name));
+              id: id,
+              title: title,
+              icon: icon,
+              type: type,
+              name: name,
+              categoryId: categoryId,
+              status: status));
+    });
+  }
+
+  @override
+  Future<Either<Failure, Success<List<AnimalEntity>>>> getAllAnimals() {
+    return ResponseHandler.processResponse(() async {
+      return Success(
+        data: await _firestoreSource.getAllAnimals() ?? [],
+      );
     });
   }
 }

@@ -7,5 +7,6 @@ enum SettingType {
   shareApp,
   ads,
   contactUs,
-  accountmanager
+  accountmanager,
+  changeLanguage
 }

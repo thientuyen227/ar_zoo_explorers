@@ -6,4 +6,21 @@ import '../../../../base/base_cubit.dart';
 @injectable
 class UserProfileCubit extends BaseCubit<UserProfileState> {
   UserProfileCubit() : super(UserProfileState());
+  String userAvatar = "";
+
+  void setUserAvatar(String? url) {
+    if (url != "" && url != null) {
+      userAvatar = url;
+    }
+  }
+
+  String getGender(String gender) {
+    if (gender == '') {
+      return "Not updated";
+    } else if (gender == 'male') {
+      return "Male";
+    } else {
+      return "Female";
+    }
+  }
 }

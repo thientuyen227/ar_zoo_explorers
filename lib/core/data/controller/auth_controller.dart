@@ -1,5 +1,4 @@
 import 'package:ar_zoo_explorers/app/config/app_router.gr.dart';
-import 'package:ar_zoo_explorers/app/config/routes.dart';
 import 'package:ar_zoo_explorers/core/data/models/user_model.dart';
 import 'package:ar_zoo_explorers/core/helpers/controller_helper.dart';
 import 'package:ar_zoo_explorers/core/helpers/notification_helper.dart';
@@ -11,6 +10,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+
+import '../../../app/config/routes.dart';
 
 class AuthController extends ControllerHelper {
   final AuthRepository _authRepository = AuthRepositoryImplement();
@@ -26,9 +27,12 @@ class AuthController extends ControllerHelper {
       avatarUrl: '',
       address: '',
       birth: '',
-      provider: ''));
+      provider: '',
+      gender: '',
+      role: '',
+      status: true));
 
-  signUp(
+  signUp(BuildContext context,
       {required String fullname,
       required String email,
       required String password,
@@ -42,7 +46,7 @@ class AuthController extends ControllerHelper {
         onFailure: (failure) =>
             NotificationHelper.showSnackBar(message: failure.message),
         onSuccess: (success) => {
-              if (fromOnboard) {Get.back()} else {Get.offNamed(Routes.login)},
+              context.router.popAndPush(const LoginRoute()),
               NotificationHelper.showSnackBar(message: success.message)
             });
   }
@@ -54,7 +58,7 @@ class AuthController extends ControllerHelper {
     loginFuture.value = processRequest<UserEntity>(
         request: () => _authRepository.login(email: email, password: password),
         onFailure: (failure) => NotificationHelper.showSnackBar(
-            message: "Tài khoản hoặc mật khẩu bị sai"),
+            message: "Email or password is incorrect!"),
         onSuccess: (success) => _onLoginSuccess(context, success.data));
   }
 
@@ -114,16 +118,36 @@ class AuthController extends ControllerHelper {
             predicate: (route) => route.settings.name == '/home',
           );
         } else {
-          context.router.replace(const WelcomeRoute());
+          //context.router.replace(const WelcomeRoute());
+          //context.router.pushNamed(Routes.welcome);
         }
       } catch (e) {
-        context.router.replace(const WelcomeRoute());
+        //context.router.pushNamed(Routes.welcome);
+        //context.router.replace(const WelcomeRoute());
+      }
+    });
+  }
+
+  checkAuthStateInWelcome(BuildContext context) {
+    Future.delayed(const Duration(seconds: 3), () {
+      try {
+        User? user = FirebaseAuth.instance.currentUser;
+
+        if (user != null || currentUser.value.id != '') {
+          context.router.pushAndPopUntil(
+            const HomeRoute(),
+            predicate: (route) => route.settings.name == '/home',
+          );
+        }
+      } catch (e) {
+        //context.router.pushNamed(Routes.welcome);
+        //context.router.replace(const WelcomeRoute());
       }
     });
   }
 
   _onLoginSuccess(BuildContext context, UserEntity user) {
-    Fluttertoast.showToast(msg: "đăng nhập thành công");
+    Fluttertoast.showToast(msg: "Login successful!");
     currentUser.value = user;
     update();
     context.router.replace(const HomeRoute());
@@ -137,16 +161,17 @@ class AuthController extends ControllerHelper {
         onSuccess: (success) => {currentUser.value = success.data, update()});
   }
 
-  Future<UserEntity> updateUserProfile(
-    BuildContext context, {
-    required String id,
-    required String fullname,
-    required String phone,
-    required String avatarUrl,
-    required String address,
-    required String birth,
-    required String provider,
-  }) async {
+  Future<UserEntity> updateUserProfile(BuildContext context,
+      {required String id,
+      required String fullname,
+      required String phone,
+      required String avatarUrl,
+      required String address,
+      required String birth,
+      required String provider,
+      required String gender,
+      required String role,
+      required bool status}) async {
     return processRequest<UserEntity>(
         request: () => _authRepository.updateUserProfile(
             id: id,
@@ -155,27 +180,46 @@ class AuthController extends ControllerHelper {
             avatarUrl: avatarUrl,
             address: address,
             birth: birth,
-            provider: provider),
+            provider: provider,
+            gender: gender,
+            role: role,
+            status: status),
         onSuccess: (success) => {
               _setCurrentUser(context, success.data),
-              Fluttertoast.showToast(msg: "Cập nhật thông tin thành công!")
+              Fluttertoast.showToast(msg: "Information updated successfully!")
             },
         onFailure: (failure) =>
-            Fluttertoast.showToast(msg: "Cập nhật thông tin thất bại!"));
+            Fluttertoast.showToast(msg: "Failed to update information!"));
   }
 
-  logout(BuildContext context) {
-    _authRepository.logout();
+  logout(BuildContext context) async {
+    await _authRepository.logout();
+    _resetCurrentUser();
     update();
-    context.router.replace(const LoginRoute());
+    //Navigator.of(context).popUntil((route) => route.isFirst);
+    context.router.pushNamed(Routes.welcome);
+  }
+
+  _resetCurrentUser() {
+    currentUser.value = UserModel(
+        id: '',
+        email: '',
+        fullname: '',
+        phone: '',
+        avatarUrl: '',
+        address: '',
+        birth: '',
+        provider: '',
+        gender: '',
+        role: '',
+        status: true);
   }
 
   Future<void> sendPasswordResetEmail(
       BuildContext context, String email) async {
     return processRequest<void>(
         request: () => _authRepository.sendPasswordResetEmail(email),
-        onFailure: (failure) =>
-            Fluttertoast.showToast(msg: "Email không chính xác!"),
+        onFailure: (failure) => Fluttertoast.showToast(msg: "Incorrect email!"),
         onSuccess: (success) => {context.router.pop()});
   }
 
@@ -185,7 +229,17 @@ class AuthController extends ControllerHelper {
         request: () => _authRepository.changePassword(oldPassword, newPassword),
         onSuccess: (success) => getCurrentUser(context),
         onFailure: (failure) =>
-            {Fluttertoast.showToast(msg: "Thay đổi mật khẩu thất bại!")});
+            {Fluttertoast.showToast(msg: "Password change failed!")});
+  }
+
+  Future<String> uploadAvatar(
+      BuildContext context, String imagePath, String imageName) async {
+    return processRequest<String>(
+        request: () =>
+            _authRepository.uploadImageToFirebase(imagePath, imageName),
+        onSuccess: (success) => {success.data},
+        onFailure: (failure) =>
+            {Fluttertoast.showToast(msg: "Image upload unsuccessful!")});
   }
 
   static AuthController get findOrInitialize {

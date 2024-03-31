@@ -4,7 +4,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../app/config/app_router.gr.dart';
-import '../../../../app/config/routes.dart';
 import '../../../../app/theme/icons.dart';
 import '../../../../base/base_state.dart';
 import '../../../../base/widgets/page_loading_indicator.dart';
@@ -30,12 +29,13 @@ class _State
         scaffold: Scaffold(
           appBar: AppBar(
               centerTitle: true,
-              title: const Text('Trang cá nhân',
+              title: const Text('User Profile',
                   style: TextStyle(fontSize: 20, color: Colors.white)),
               actions: const [SizedBox(width: 55)],
               leading: AppIconButton(
                   onPressed: () {
-                    context.router.pushNamed(Routes.home);
+                    // context.router.pushNamed(Routes.home);
+                    context.router.pop();
                   },
                   icon: Transform.scale(
                       scale: 1.5,
@@ -45,11 +45,21 @@ class _State
               future: controller.getCurrentUser(context),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
-                  print("controller 3 ${controller.currentUser.value.email}");
-                  return Column(children: [
-                    ProfileHeader(),
-                    UserInformation(context),
-                  ]);
+                  return Container(
+                      constraints: BoxConstraints(
+                          minHeight: MediaQuery.of(context).size.height),
+                      decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                              colors: [
+                            Color.fromARGB(255, 255, 255, 255),
+                            Color.fromARGB(255, 109, 182, 255)
+                          ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter)),
+                      child: Column(children: [
+                        profileHeader(),
+                        userInformation(context),
+                      ]));
                 } else {
                   return const CircularProgressIndicator();
                 }
@@ -59,7 +69,7 @@ class _State
         ));
   }
 
-  Widget ProfileHeader() {
+  Widget profileHeader() {
     return Stack(children: [
       SizedBox(
         width: MediaQuery.of(context).size.width,
@@ -77,23 +87,11 @@ class _State
                   image: AssetImage(AppImages.imgAppLogoBG),
                   fit: BoxFit.cover))),
       Positioned(
-          left: 0,
-          right: 0,
-          bottom: 0,
-          child: Center(
-              child: Container(
-                  width: MediaQuery.of(context).size.height * 0.15,
-                  height: MediaQuery.of(context).size.height * 0.15,
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white, width: 5),
-                      shape: BoxShape.circle,
-                      image: const DecorationImage(
-                          image: AssetImage(AppImages.imgProfile128x128),
-                          fit: BoxFit.cover))))),
+          left: 0, right: 0, bottom: 0, child: Center(child: userAvatar())),
     ]);
   }
 
-  Widget UserInformation(BuildContext context) {
+  Widget userInformation(BuildContext context) {
     return SizedBox(
         width: MediaQuery.of(context).size.width,
         child: Container(
@@ -113,47 +111,50 @@ class _State
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               const Text(
-                "THÔNG TIN CÁ NHÂN",
+                "User Information",
                 style: TextStyle(
                     fontSize: 18,
                     color: Colors.black,
                     fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 20),
-              UserInformationCustom(context),
+              userInformationCustom(context),
               Container(height: 2, width: double.infinity, color: Colors.grey),
-              UpdateInformation(),
+              updateInformation(),
             ])));
   }
 
-  Widget UserInformationCustom(BuildContext context) {
+  Widget userInformationCustom(BuildContext context) {
     return Column(children: [
-      UserInformationItem(
-          context, "Họ và tên", controller.currentUser.value.fullname),
+      userInformationItem(
+          context, "Full Name", controller.currentUser.value.fullname),
       const SizedBox(height: 13),
-      UserInformationItem(
-          context, "Ngày sinh", controller.currentUser.value.birth),
+      userInformationItem(
+          context, "Birthday", controller.currentUser.value.birth),
       const SizedBox(height: 13),
-      UserInformationItem(
-          context, "Địa chỉ email", controller.currentUser.value.email),
+      userInformationItem(context, "Gender",
+          cubit.getGender(controller.currentUser.value.gender)),
       const SizedBox(height: 13),
-      UserInformationItem(
-          context, "Số điện thoại", controller.currentUser.value.phone),
+      userInformationItem(
+          context, "Email Address", controller.currentUser.value.email),
       const SizedBox(height: 13),
-      UserInformationItem(
-          context, "Địa chỉ", controller.currentUser.value.address),
+      userInformationItem(
+          context, "Phone Number", controller.currentUser.value.phone),
+      const SizedBox(height: 13),
+      userInformationItem(
+          context, "Address", controller.currentUser.value.address),
       const SizedBox(height: 13)
     ]);
   }
 
-  Widget UpdateInformation() {
+  Widget updateInformation() {
     return Center(
         child: MaterialButton(
             onPressed: () {
               context.router.popAndPush(const UserInformationRoute());
             },
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              const Text("Thay đổi thông tin",
+              const Text("Update Information",
                   style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -166,7 +167,7 @@ class _State
             ])));
   }
 
-  Widget UserInformationItem(
+  Widget userInformationItem(
       BuildContext context, String title, String content) {
     String showContent = content;
     if (content == '') {
@@ -194,5 +195,25 @@ class _State
                       color: Colors.grey[900],
                       fontStyle: FontStyle.italic))),
         ]));
+  }
+
+  Widget userAvatar() {
+    return Container(
+        width: MediaQuery.of(context).size.height * 0.155,
+        height: MediaQuery.of(context).size.height * 0.155,
+        decoration: BoxDecoration(
+            border: Border.all(color: Colors.white, width: 5),
+            shape: BoxShape.circle),
+        child: ClipOval(
+          child: (cubit.userAvatar == "")
+              ? Image.asset(AppImages.imgProfile128x128, fit: BoxFit.cover)
+              : Image.network(cubit.userAvatar, fit: BoxFit.cover),
+        ));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    cubit.setUserAvatar(controller.currentUser.value.avatarUrl);
   }
 }

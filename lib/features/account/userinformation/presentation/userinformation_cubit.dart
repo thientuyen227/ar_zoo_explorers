@@ -6,10 +6,14 @@ import 'package:internationalization/internationalization.dart';
 import '../../../../app/theme/icons.dart';
 import '../../../../base/base_cubit.dart';
 import '../../../base-model/form_builder_text_field_model.dart';
+import '../model/provincial_name.dart';
 
 @injectable
 class UserInformationCubit extends BaseCubit<UserInformationState> {
   UserInformationCubit() : super(UserInformationState());
+
+  double HEIGHT = 0;
+  double WIDTH = 0;
 
   DateTime dtBirthday = DateTime.now();
   DateFormat dateFormat = DateFormat("dd/MM/yyyy");
@@ -18,26 +22,27 @@ class UserInformationCubit extends BaseCubit<UserInformationState> {
   String userAvatar = "";
   String userBackground = "";
   String provider = "";
+  String gender = "male";
 
   List<FormBuilderTextFieldModel> ListFormItem = [
     FormBuilderTextFieldModel(
         name: "fullname",
-        hint_text: "Họ và tên",
+        hint_text: "Full name",
         icon_prefix: AppIcons.icUser,
         TIT: TextInputType.none),
     FormBuilderTextFieldModel(
         name: "email",
-        hint_text: "Địa chỉ email",
+        hint_text: "Email Address",
         icon_prefix: AppIcons.icMail,
         TIT: TextInputType.emailAddress),
     FormBuilderTextFieldModel(
         name: "phone",
-        hint_text: "Số điện thoại",
+        hint_text: "Phone Number",
         icon_prefix: AppIcons.icPhone,
         TIT: TextInputType.phone),
     FormBuilderTextFieldModel(
         name: "address",
-        hint_text: "Địa chỉ",
+        hint_text: "Address",
         icon_prefix: AppIcons.icAddress,
         TIT: TextInputType.text),
   ];
@@ -62,7 +67,9 @@ class UserInformationCubit extends BaseCubit<UserInformationState> {
 
   void setAddress(String value) {
     List<String> values = value.split(', ');
-    provincial = values[values.length - 1].trim();
+    if (Provincial().names.contains(values[values.length - 1].trim())) {
+      provincial = values[values.length - 1].trim();
+    }
     address = values[0];
     for (int i = 1; i < values.length - 1; i++) {
       address = "$address, ${values[i]}";
@@ -75,7 +82,29 @@ class UserInformationCubit extends BaseCubit<UserInformationState> {
     }
   }
 
+  void setGender(String userGender) {
+    if (userGender == 'female') {
+      gender = userGender;
+    }
+  }
+
   String getBirthday() {
     return dateFormat.format(dtBirthday);
+  }
+
+  String avatarName(String fullname) {
+    String name = "";
+    List<String> values = fullname.split(' ');
+    for (int i = 0; i < values.length; i++) {
+      name = "$name${values[i]}";
+    }
+    name = name +
+        DateTime.now().day.toString() +
+        DateTime.now().month.toString() +
+        DateTime.now().year.toString() +
+        DateTime.now().microsecond.toString() +
+        DateTime.now().minute.toString() +
+        DateTime.now().hour.toString();
+    return name;
   }
 }

@@ -19,21 +19,20 @@ class _State extends BaseState<TermOfServiceState, TermOfServiceCubit,
   @override
   Widget buildByState(BuildContext context, TermOfServiceState state) {
     return Scaffold(
+        extendBodyBehindAppBar: true,
         appBar: AppBar(
             centerTitle: true,
-            title: const Text("ĐIỀU KHOẢN SỬ DỤNG",
+            backgroundColor: Colors.black.withOpacity(0),
+            title: const Text("Terms Of Service",
                 style: TextStyle(fontSize: 20, color: Colors.white)),
             leading: const Column(children: [])),
         body: Stack(children: [
           ClipRect(
-              child: Image.asset(
-            AppImages.imgAppLogoBG,
-            width: MediaQuery.of(context).size.width,
-            fit: BoxFit.cover,
-          )),
+              child: Image.asset(AppImages.imgAppLogoBG,
+                  width: cubit.WIDTH, height: cubit.HEIGHT, fit: BoxFit.cover)),
           Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
+              width: cubit.WIDTH,
+              height: cubit.HEIGHT,
               color: Colors.black.withOpacity(0.2)),
           SingleChildScrollView(
               child: Center(
@@ -41,21 +40,21 @@ class _State extends BaseState<TermOfServiceState, TermOfServiceCubit,
                       padding: const EdgeInsets.only(
                           left: 20, right: 20, bottom: 25),
                       child: Column(children: [
-                        const SizedBox(height: 25),
-                        ListTermsOfService(),
+                        SizedBox(height: cubit.HEIGHT * 0.13),
+                        listTermsOfService(),
                         const SizedBox(height: 5),
-                        SubmitButton()
+                        submitButton()
                       ]))))
         ]));
   }
 
-  Widget ListTermsOfService() {
+  Widget listTermsOfService() {
     return Container(
       padding: const EdgeInsets.all(10),
-      width: MediaQuery.of(context).size.width * 0.8,
-      height: MediaQuery.of(context).size.width * 1.2,
+      width: cubit.WIDTH * 0.85,
+      height: cubit.WIDTH * 1.2,
       decoration: BoxDecoration(
-          color: Colors.white70,
+          color: Colors.white.withOpacity(0.85),
           border: Border.all(color: Colors.grey, width: 2),
           borderRadius: BorderRadius.circular(15.0)),
       child: SingleChildScrollView(
@@ -66,41 +65,24 @@ class _State extends BaseState<TermOfServiceState, TermOfServiceCubit,
                 scale: 1.5,
                 child: Image.asset(AppImages.imgAppLogo, height: 200))),
         const SizedBox(height: 12),
-        TermItem("1. Chấp Nhận Điều Khoản:",
-            "Trước khi sử dụng ứng dụng ArZoo, bạn cần đồng ý và tuân theo các điều khoản dưới đây."),
-        TermItem("2. Sử Dụng Ứng Dụng:",
-            "Bạn được cấp quyền sử dụng ứng dụng AR cho mục đích cá nhân hoặc thương mại.Không được sử dụng ứng dụng cho mục đích bất hợp pháp hoặc gây hại cho người khác."),
-        TermItem("3. Quyền Sở Hữu:",
-            "Ứng dụng AR là tài sản của chúng tôi và được bảo vệ bởi bản quyền. Không sao chép hoặc sửa đổi ứng dụng mà không có sự cho phép."),
-        TermItem("4. Quyền Riêng Tư:",
-            "Chúng tôi bảo vệ quyền riêng tư của bạn theo chính sách bảo mật. Dữ liệu cá nhân của bạn có thể được thu thập, nhưng chúng tôi cam kết bảo vệ nó."),
-        TermItem("5. Thay Đổi Điều Khoản:",
-            "Chúng tôi có quyền thay đổi điều khoản và sẽ thông báo cho bạn về các thay đổi."),
-        TermItem("6. Kết Thúc Sử Dụng:",
-            "Bạn có thể ngừng sử dụng ứng dụng bất cứ lúc nào."),
-        TermItem("7. Bảo Mật Dữ Liệu:",
-            "Dữ liệu mà ứng dụng thu thập có thể được sử dụng để cải thiện dịch vụ."),
-        TermItem("8. Chất Lượng Dịch Vụ:",
-            "Chúng tôi cam kết cung cấp ứng dụng AR với chất lượng tốt nhất."),
-        TermItem("9. Hạn Chế Sử Dụng:",
-            "Bạn không được phép chạy nhiều phiên bản của ứng dụng trên cùng một thiết bị."),
-        TermItem("10. Hỗ Trợ Kỹ Thuật:",
-            "Chúng tôi cung cấp hỗ trợ kỹ thuật cho người dùng qua email hoặc hotline."),
-        TermItem("11. Thanh Toán (nếu áp dụng):",
-            "Nếu ứng dụng AR có tính phí, bạn phải thanh toán theo giá quy định."),
-        TermItem("12. Chấp Nhận Sự Cố:",
-            "Bạn chấp nhận rủi ro khi sử dụng ứng dụng AR và không thể đòi bồi thường cho hỏng hóc hoặc sự."),
-        TermItem("13. Bản Quyền và Tài Khoản:",
-            "Tất cả quyền bản quyền đều thuộc sở hữu của chúng tôi. Mỗi tài khoản người dùng chỉ được sử dụng bởi một người."),
-        TermItem("14. Điều Khoản Cảnh Báo:",
-            "Bạn cần tuân thủ tất cả các điều khoản và cảnh báo trong ứng dụng AR."),
-        TermItem("15. Sử Dụng Công Cụ:",
-            "Chúng tôi có thể cung cấp các công cụ hỗ trợ sử dụng ứng dụng AR một cách tốt nhất."),
+        loadListTerm(),
       ])),
     );
   }
 
-  Widget TermItem(String termTitle, String termContent) {
+  Widget loadListTerm() {
+    List<Widget> listTerm = [];
+    for (int i = 0; i < cubit.listTerm.length; i++) {
+      listTerm
+          .add(termItem(cubit.listTerm[i].title, cubit.listTerm[i].content));
+    }
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: listTerm);
+  }
+
+  Widget termItem(String termTitle, String termContent) {
     return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
       const SizedBox(height: 8),
       Row(mainAxisAlignment: MainAxisAlignment.start, children: [
@@ -117,17 +99,15 @@ class _State extends BaseState<TermOfServiceState, TermOfServiceCubit,
     ]);
   }
 
-  Widget SubmitButton() {
+  Widget submitButton() {
     return Container(
-        width: MediaQuery.of(context).size.width * 0.5,
-        height: MediaQuery.of(context).size.width * 0.2,
+        width: cubit.WIDTH * 0.5,
+        height: cubit.WIDTH * 0.2,
         padding: const EdgeInsets.all(15),
         child: ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
+            onPressed: () => Navigator.of(context).pop(),
             style: TextButton.styleFrom(
-                minimumSize: const Size(160, 50),
+                minimumSize: const Size(140, 50),
                 backgroundColor: const Color.fromARGB(255, 248, 133, 18),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
@@ -136,8 +116,23 @@ class _State extends BaseState<TermOfServiceState, TermOfServiceCubit,
             child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Quay lại",
+                  Text("Back",
                       style: TextStyle(fontSize: 20, color: Colors.white)),
                 ])));
+  }
+
+  void setDimension() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        cubit.WIDTH = MediaQuery.of(context).size.width;
+        cubit.HEIGHT = MediaQuery.of(context).size.height;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setDimension();
   }
 }

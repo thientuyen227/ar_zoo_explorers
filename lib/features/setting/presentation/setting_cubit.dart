@@ -35,6 +35,10 @@ class SettingCubit extends BaseCubit<SettingState> {
         type: SettingType.shareApp,
         title: "Share App",
         icon: AppIcons.icShareApp),
+    SettingItem(
+        type: SettingType.changeLanguage,
+        title: "Change language",
+        icon: AppIcons.icGlobe),
   ];
 
   void openManageSubscription() {

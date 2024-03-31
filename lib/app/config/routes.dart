@@ -12,13 +12,18 @@ class Routes {
   static const String userprofile = "/userprofile";
   static const String termofservice = "/termofservice";
   static const String accountmanager = "/accountmanager";
-  static const String testunity = "/testunity";
   static const String userinformation = "/userinformation";
   static const String forgotpassword = "/forgotpassword";
   static const String resetpassword = "/resetpassword";
   static const String changepassword = "/changepassword";
   static const String animalmodels = "/animalmodels";
   static const String modeldetail = "/modeldetail";
+  static const String searchmodel = "/searchmodel";
+  static const String learning = "/learning";
+  static const String story = "/story";
+  static const String help = "/help";
+  static const String languageselection = "/languageselection";
+  static const String changelanguage = "/changelanguage";
 
   static Route<T> fadeThrough<T>(RouteSettings settings, WidgetBuilder page,
       {int duration = 300}) {

@@ -34,17 +34,16 @@ class _State extends BaseState<ForgotPasswordState, ForgotPasswordCubit,
           scaffold: Scaffold(
             appBar: AppBar(
                 centerTitle: true,
-                title: const Text("QUÊN MẬT KHẨU",
+                title: const Text("Forgot Password",
                     style: TextStyle(fontSize: 18, color: Colors.white)),
-                leading: Column(children: [TurnBack()]),
+                leading: Column(children: [turnBack()]),
                 actions: const []),
             body: FormBuilder(
                 key: _formKey,
                 child: SingleChildScrollView(
                   child: Container(
                       constraints: BoxConstraints(
-                        minHeight: MediaQuery.of(context).size.height,
-                      ),
+                          minHeight: MediaQuery.of(context).size.height),
                       width: MediaQuery.of(context).size.width,
                       color: Colors.blue[600],
                       child: Container(
@@ -62,28 +61,28 @@ class _State extends BaseState<ForgotPasswordState, ForgotPasswordCubit,
                           margin: const EdgeInsets.all(20.0),
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, bottom: 25),
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const SizedBox(height: 10),
-                                EmailForm(FormBuilderTextFieldModel(
-                                    name: 'email',
-                                    hint_text: "user123@gmail.com",
-                                    icon_prefix: AppIcons.icUser,
-                                    isObscured: false)),
-                                const SizedBox(height: 20),
-                                SendEmailButton(context)
-                              ]))),
+                          child: Column(children: [
+                            SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.2),
+                            emailForm(FormBuilderTextFieldModel(
+                                name: 'email',
+                                hint_text: "user123@gmail.com",
+                                icon_prefix: AppIcons.icUser,
+                                isObscured: false)),
+                            const SizedBox(height: 20),
+                            sendEmailButton(context)
+                          ]))),
                 )),
           ),
         )));
   }
 
-  Widget EmailForm(FormBuilderTextFieldModel items) {
+  Widget emailForm(FormBuilderTextFieldModel items) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       const Row(children: [
         SizedBox(width: 15),
-        Text("Nhập địa chỉ email tại đây",
+        Text("Enter your email address here",
             style: TextStyle(
                 fontSize: 16,
                 color: Colors.black,
@@ -102,7 +101,7 @@ class _State extends BaseState<ForgotPasswordState, ForgotPasswordCubit,
             contentPadding: const EdgeInsets.all(10)),
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: FormBuilderValidators.compose([
-          FormBuilderValidators.required(errorText: "Hãy nhập email"),
+          FormBuilderValidators.required(errorText: "Please enter the email."),
           FormBuilderValidators.email()
         ]),
       ),
@@ -110,7 +109,7 @@ class _State extends BaseState<ForgotPasswordState, ForgotPasswordCubit,
     ]);
   }
 
-  Widget SendEmailButton(BuildContext context) {
+  Widget sendEmailButton(BuildContext context) {
     return TextButton(
         onPressed: () {
           _resetPassword(context);
@@ -122,11 +121,11 @@ class _State extends BaseState<ForgotPasswordState, ForgotPasswordCubit,
             elevation: MaterialStateProperty.all(5),
             shape: MaterialStateProperty.all(RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20)))),
-        child: const Text("SEND CODE",
+        child: const Text("Submit",
             style: TextStyle(fontSize: 16, color: Colors.white)));
   }
 
-  Widget TurnBack() {
+  Widget turnBack() {
     return ElevatedButton(
         onPressed: () {
           context.router.pop();
