@@ -65,6 +65,16 @@ class AppIcons {
   static const String icTick = "assets/icons/ic_tick.svg";
   static const String icGlobe = "assets/icons/settings/ic_globe.svg";
 
+  //learning
+  static const String icSound =
+      "assets/images/learning_image/vocabulary/sound.svg";
+  static const String icSnail =
+      "assets/images/learning_image/vocabulary/snail.png";
+  static const String icCloseBtn =
+      "assets/images/learning_image/vocabulary/buttonclose.svg";
+  static const String icVector =
+      "assets/images/learning_image/vocabulary/vector.svg";
+
   //Icon animals
   static const String icWolf = "assets/icons/animals/wolf.png";
   static const String icDragon = "assets/icons/animals/dragon.png";
@@ -115,6 +125,15 @@ class AppImages {
   static const String imgDaoDuc = "assets/images/story_topic/img_dao_duc.png";
   static const String imgTruyenCuoi =
       "assets/images/story_topic/img_truyen_cuoi.png";
+
+  //Learning
+  static const String imgDictionary =
+      "assets/images/learning_image/dictionary.svg";
+  static const String imgPuzzle = "assets/images/learning_image/puzzle.svg";
+  static const String imgLionBaby =
+      "assets/images/learning_image/vocabulary/lion.svg";
+  static const String imgPuzzleDesign =
+      "assets/images/learning_image/puzzle/imgPuzzleDesign.png";
 
   //MODELS BUTTONS
   static const String imgAmphibians =

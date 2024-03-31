@@ -12,9 +12,9 @@ import 'package:ar_zoo_explorers/app/app/app_page.dart' as _i4;
 import 'package:ar_zoo_explorers/features/account/accountmanager/presentation/accountmanager_page.dart'
     as _i2;
 import 'package:ar_zoo_explorers/features/account/userinformation/presentation/userinformation_page.dart'
-    as _i22;
-import 'package:ar_zoo_explorers/features/account/userprofile/presentation/userprofile_page.dart'
     as _i23;
+import 'package:ar_zoo_explorers/features/account/userprofile/presentation/userprofile_page.dart'
+    as _i24;
 import 'package:ar_zoo_explorers/features/animalmodels/presentation/animalmodels_page.dart'
     as _i3;
 import 'package:ar_zoo_explorers/features/ar/presentation/ar_page.dart' as _i1;
@@ -25,11 +25,11 @@ import 'package:ar_zoo_explorers/features/authentication/forgotpassword/presenta
 import 'package:ar_zoo_explorers/features/authentication/login/presentation/login_page.dart'
     as _i12;
 import 'package:ar_zoo_explorers/features/authentication/register/presentation/register_page.dart'
-    as _i15;
-import 'package:ar_zoo_explorers/features/authentication/resetpassword/presentation/resetpassword_page.dart'
     as _i16;
+import 'package:ar_zoo_explorers/features/authentication/resetpassword/presentation/resetpassword_page.dart'
+    as _i17;
 import 'package:ar_zoo_explorers/features/authentication/termsofservice/presentation/termofservice_page.dart'
-    as _i21;
+    as _i22;
 import 'package:ar_zoo_explorers/features/help/presentation/help_page.dart'
     as _i8;
 import 'package:ar_zoo_explorers/features/home/presentation/home_page.dart'
@@ -42,165 +42,188 @@ import 'package:ar_zoo_explorers/features/learning/presentation/learning_page.da
     as _i11;
 import 'package:ar_zoo_explorers/features/modeldetail/presentation/modeldetail_page.dart'
     as _i14;
+import 'package:ar_zoo_explorers/features/puzzle/puzzle_page.dart' as _i15;
 import 'package:ar_zoo_explorers/features/searchmodel/presentation/searchmodel_page.dart'
-    as _i17;
-import 'package:ar_zoo_explorers/features/setting/presentation/setting_page.dart'
     as _i18;
-import 'package:ar_zoo_explorers/features/splash/splash_page.dart' as _i19;
+import 'package:ar_zoo_explorers/features/setting/presentation/setting_page.dart'
+    as _i19;
+import 'package:ar_zoo_explorers/features/splash/splash_page.dart' as _i20;
 import 'package:ar_zoo_explorers/features/story/presentation/story_page.dart'
-    as _i20;
+    as _i21;
+import 'package:ar_zoo_explorers/features/vocabulary/vocabulary_page.dart'
+    as _i26;
+import 'package:ar_zoo_explorers/features/vocabularydetail/vocabulary_detail_page.dart'
+    as _i25;
 import 'package:ar_zoo_explorers/features/welcome/presentation/welcome_page.dart'
-    as _i24;
+    as _i27;
 import 'package:ar_zoo_explorers/main_page.dart' as _i13;
-import 'package:auto_route/auto_route.dart' as _i25;
+import 'package:auto_route/auto_route.dart' as _i28;
 
-abstract class $AppRouter extends _i25.RootStackRouter {
+abstract class $AppRouter extends _i28.RootStackRouter {
   $AppRouter({super.navigatorKey});
 
   @override
-  final Map<String, _i25.PageFactory> pagesMap = {
+  final Map<String, _i28.PageFactory> pagesMap = {
     ARRoute.name: (routeData) {
-      return _i25.AutoRoutePage<dynamic>(
+      return _i28.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i1.ARPage(),
       );
     },
     AccountManagerRoute.name: (routeData) {
-      return _i25.AutoRoutePage<dynamic>(
+      return _i28.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i2.AccountManagerPage(),
       );
     },
     AnimalModelsRoute.name: (routeData) {
-      return _i25.AutoRoutePage<dynamic>(
+      return _i28.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i3.AnimalModelsPage(),
       );
     },
     AppRoute.name: (routeData) {
-      return _i25.AutoRoutePage<dynamic>(
+      return _i28.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i4.AppPage(),
       );
     },
     ChangLanguageRoute.name: (routeData) {
-      return _i25.AutoRoutePage<dynamic>(
+      return _i28.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i5.ChangLanguagePage(),
       );
     },
     ChangePasswordRoute.name: (routeData) {
-      return _i25.AutoRoutePage<dynamic>(
+      return _i28.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i6.ChangePasswordPage(),
       );
     },
     ForgotPasswordRoute.name: (routeData) {
-      return _i25.AutoRoutePage<dynamic>(
+      return _i28.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i7.ForgotPasswordPage(),
       );
     },
     HelpRoute.name: (routeData) {
-      return _i25.AutoRoutePage<dynamic>(
+      return _i28.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i8.HelpPage(),
       );
     },
     HomeRoute.name: (routeData) {
-      return _i25.AutoRoutePage<dynamic>(
+      return _i28.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i9.HomePage(),
       );
     },
     LanguageSelectionRoute.name: (routeData) {
-      return _i25.AutoRoutePage<dynamic>(
+      return _i28.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i10.LanguageSelectionPage(),
       );
     },
     LearningRoute.name: (routeData) {
-      return _i25.AutoRoutePage<dynamic>(
+      return _i28.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i11.LearningPage(),
       );
     },
     LoginRoute.name: (routeData) {
-      return _i25.AutoRoutePage<dynamic>(
+      return _i28.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i12.LoginPage(),
       );
     },
     MainRoute.name: (routeData) {
-      return _i25.AutoRoutePage<dynamic>(
+      return _i28.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i13.MainPage(),
       );
     },
     ModelDetailRoute.name: (routeData) {
-      return _i25.AutoRoutePage<dynamic>(
+      return _i28.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i14.ModelDetailPage(),
       );
     },
-    RegisterRoute.name: (routeData) {
-      return _i25.AutoRoutePage<dynamic>(
+    PuzzleRoute.name: (routeData) {
+      return _i28.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i15.RegisterPage(),
+        child: const _i15.PuzzlePage(),
+      );
+    },
+    RegisterRoute.name: (routeData) {
+      return _i28.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i16.RegisterPage(),
       );
     },
     ResetPasswordRoute.name: (routeData) {
-      return _i25.AutoRoutePage<dynamic>(
+      return _i28.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i16.ResetPasswordPage(),
+        child: const _i17.ResetPasswordPage(),
       );
     },
     SearchModelRoute.name: (routeData) {
-      return _i25.AutoRoutePage<dynamic>(
+      return _i28.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i17.SearchModelPage(),
+        child: const _i18.SearchModelPage(),
       );
     },
     SettingRoute.name: (routeData) {
-      return _i25.AutoRoutePage<dynamic>(
+      return _i28.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i18.SettingPage(),
+        child: const _i19.SettingPage(),
       );
     },
     SplashRoute.name: (routeData) {
-      return _i25.AutoRoutePage<dynamic>(
+      return _i28.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i19.SplashPage(),
+        child: const _i20.SplashPage(),
       );
     },
     StoryRoute.name: (routeData) {
-      return _i25.AutoRoutePage<dynamic>(
+      return _i28.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i20.StoryPage(),
+        child: const _i21.StoryPage(),
       );
     },
     TermOfServiceRoute.name: (routeData) {
-      return _i25.AutoRoutePage<dynamic>(
+      return _i28.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i21.TermOfServicePage(),
+        child: const _i22.TermOfServicePage(),
       );
     },
     UserInformationRoute.name: (routeData) {
-      return _i25.AutoRoutePage<dynamic>(
+      return _i28.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i22.UserInformationPage(),
+        child: const _i23.UserInformationPage(),
       );
     },
     UserProfileRoute.name: (routeData) {
-      return _i25.AutoRoutePage<dynamic>(
+      return _i28.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i23.UserProfilePage(),
+        child: const _i24.UserProfilePage(),
+      );
+    },
+    VocabularyDetailRoute.name: (routeData) {
+      return _i28.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i25.VocabularyDetailPage(),
+      );
+    },
+    VocabularyRoute.name: (routeData) {
+      return _i28.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i26.VocabularyPage(),
       );
     },
     WelcomeRoute.name: (routeData) {
-      return _i25.AutoRoutePage<dynamic>(
+      return _i28.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i24.WelcomePage(),
+        child: const _i27.WelcomePage(),
       );
     },
   };
@@ -208,8 +231,8 @@ abstract class $AppRouter extends _i25.RootStackRouter {
 
 /// generated route for
 /// [_i1.ARPage]
-class ARRoute extends _i25.PageRouteInfo<void> {
-  const ARRoute({List<_i25.PageRouteInfo>? children})
+class ARRoute extends _i28.PageRouteInfo<void> {
+  const ARRoute({List<_i28.PageRouteInfo>? children})
       : super(
           ARRoute.name,
           initialChildren: children,
@@ -217,13 +240,13 @@ class ARRoute extends _i25.PageRouteInfo<void> {
 
   static const String name = 'ARRoute';
 
-  static const _i25.PageInfo<void> page = _i25.PageInfo<void>(name);
+  static const _i28.PageInfo<void> page = _i28.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i2.AccountManagerPage]
-class AccountManagerRoute extends _i25.PageRouteInfo<void> {
-  const AccountManagerRoute({List<_i25.PageRouteInfo>? children})
+class AccountManagerRoute extends _i28.PageRouteInfo<void> {
+  const AccountManagerRoute({List<_i28.PageRouteInfo>? children})
       : super(
           AccountManagerRoute.name,
           initialChildren: children,
@@ -231,13 +254,13 @@ class AccountManagerRoute extends _i25.PageRouteInfo<void> {
 
   static const String name = 'AccountManagerRoute';
 
-  static const _i25.PageInfo<void> page = _i25.PageInfo<void>(name);
+  static const _i28.PageInfo<void> page = _i28.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i3.AnimalModelsPage]
-class AnimalModelsRoute extends _i25.PageRouteInfo<void> {
-  const AnimalModelsRoute({List<_i25.PageRouteInfo>? children})
+class AnimalModelsRoute extends _i28.PageRouteInfo<void> {
+  const AnimalModelsRoute({List<_i28.PageRouteInfo>? children})
       : super(
           AnimalModelsRoute.name,
           initialChildren: children,
@@ -245,13 +268,13 @@ class AnimalModelsRoute extends _i25.PageRouteInfo<void> {
 
   static const String name = 'AnimalModelsRoute';
 
-  static const _i25.PageInfo<void> page = _i25.PageInfo<void>(name);
+  static const _i28.PageInfo<void> page = _i28.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i4.AppPage]
-class AppRoute extends _i25.PageRouteInfo<void> {
-  const AppRoute({List<_i25.PageRouteInfo>? children})
+class AppRoute extends _i28.PageRouteInfo<void> {
+  const AppRoute({List<_i28.PageRouteInfo>? children})
       : super(
           AppRoute.name,
           initialChildren: children,
@@ -259,13 +282,13 @@ class AppRoute extends _i25.PageRouteInfo<void> {
 
   static const String name = 'AppRoute';
 
-  static const _i25.PageInfo<void> page = _i25.PageInfo<void>(name);
+  static const _i28.PageInfo<void> page = _i28.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i5.ChangLanguagePage]
-class ChangLanguageRoute extends _i25.PageRouteInfo<void> {
-  const ChangLanguageRoute({List<_i25.PageRouteInfo>? children})
+class ChangLanguageRoute extends _i28.PageRouteInfo<void> {
+  const ChangLanguageRoute({List<_i28.PageRouteInfo>? children})
       : super(
           ChangLanguageRoute.name,
           initialChildren: children,
@@ -273,13 +296,13 @@ class ChangLanguageRoute extends _i25.PageRouteInfo<void> {
 
   static const String name = 'ChangLanguageRoute';
 
-  static const _i25.PageInfo<void> page = _i25.PageInfo<void>(name);
+  static const _i28.PageInfo<void> page = _i28.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i6.ChangePasswordPage]
-class ChangePasswordRoute extends _i25.PageRouteInfo<void> {
-  const ChangePasswordRoute({List<_i25.PageRouteInfo>? children})
+class ChangePasswordRoute extends _i28.PageRouteInfo<void> {
+  const ChangePasswordRoute({List<_i28.PageRouteInfo>? children})
       : super(
           ChangePasswordRoute.name,
           initialChildren: children,
@@ -287,13 +310,13 @@ class ChangePasswordRoute extends _i25.PageRouteInfo<void> {
 
   static const String name = 'ChangePasswordRoute';
 
-  static const _i25.PageInfo<void> page = _i25.PageInfo<void>(name);
+  static const _i28.PageInfo<void> page = _i28.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i7.ForgotPasswordPage]
-class ForgotPasswordRoute extends _i25.PageRouteInfo<void> {
-  const ForgotPasswordRoute({List<_i25.PageRouteInfo>? children})
+class ForgotPasswordRoute extends _i28.PageRouteInfo<void> {
+  const ForgotPasswordRoute({List<_i28.PageRouteInfo>? children})
       : super(
           ForgotPasswordRoute.name,
           initialChildren: children,
@@ -301,13 +324,13 @@ class ForgotPasswordRoute extends _i25.PageRouteInfo<void> {
 
   static const String name = 'ForgotPasswordRoute';
 
-  static const _i25.PageInfo<void> page = _i25.PageInfo<void>(name);
+  static const _i28.PageInfo<void> page = _i28.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i8.HelpPage]
-class HelpRoute extends _i25.PageRouteInfo<void> {
-  const HelpRoute({List<_i25.PageRouteInfo>? children})
+class HelpRoute extends _i28.PageRouteInfo<void> {
+  const HelpRoute({List<_i28.PageRouteInfo>? children})
       : super(
           HelpRoute.name,
           initialChildren: children,
@@ -315,13 +338,13 @@ class HelpRoute extends _i25.PageRouteInfo<void> {
 
   static const String name = 'HelpRoute';
 
-  static const _i25.PageInfo<void> page = _i25.PageInfo<void>(name);
+  static const _i28.PageInfo<void> page = _i28.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i9.HomePage]
-class HomeRoute extends _i25.PageRouteInfo<void> {
-  const HomeRoute({List<_i25.PageRouteInfo>? children})
+class HomeRoute extends _i28.PageRouteInfo<void> {
+  const HomeRoute({List<_i28.PageRouteInfo>? children})
       : super(
           HomeRoute.name,
           initialChildren: children,
@@ -329,13 +352,13 @@ class HomeRoute extends _i25.PageRouteInfo<void> {
 
   static const String name = 'HomeRoute';
 
-  static const _i25.PageInfo<void> page = _i25.PageInfo<void>(name);
+  static const _i28.PageInfo<void> page = _i28.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i10.LanguageSelectionPage]
-class LanguageSelectionRoute extends _i25.PageRouteInfo<void> {
-  const LanguageSelectionRoute({List<_i25.PageRouteInfo>? children})
+class LanguageSelectionRoute extends _i28.PageRouteInfo<void> {
+  const LanguageSelectionRoute({List<_i28.PageRouteInfo>? children})
       : super(
           LanguageSelectionRoute.name,
           initialChildren: children,
@@ -343,13 +366,13 @@ class LanguageSelectionRoute extends _i25.PageRouteInfo<void> {
 
   static const String name = 'LanguageSelectionRoute';
 
-  static const _i25.PageInfo<void> page = _i25.PageInfo<void>(name);
+  static const _i28.PageInfo<void> page = _i28.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i11.LearningPage]
-class LearningRoute extends _i25.PageRouteInfo<void> {
-  const LearningRoute({List<_i25.PageRouteInfo>? children})
+class LearningRoute extends _i28.PageRouteInfo<void> {
+  const LearningRoute({List<_i28.PageRouteInfo>? children})
       : super(
           LearningRoute.name,
           initialChildren: children,
@@ -357,13 +380,13 @@ class LearningRoute extends _i25.PageRouteInfo<void> {
 
   static const String name = 'LearningRoute';
 
-  static const _i25.PageInfo<void> page = _i25.PageInfo<void>(name);
+  static const _i28.PageInfo<void> page = _i28.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i12.LoginPage]
-class LoginRoute extends _i25.PageRouteInfo<void> {
-  const LoginRoute({List<_i25.PageRouteInfo>? children})
+class LoginRoute extends _i28.PageRouteInfo<void> {
+  const LoginRoute({List<_i28.PageRouteInfo>? children})
       : super(
           LoginRoute.name,
           initialChildren: children,
@@ -371,13 +394,13 @@ class LoginRoute extends _i25.PageRouteInfo<void> {
 
   static const String name = 'LoginRoute';
 
-  static const _i25.PageInfo<void> page = _i25.PageInfo<void>(name);
+  static const _i28.PageInfo<void> page = _i28.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i13.MainPage]
-class MainRoute extends _i25.PageRouteInfo<void> {
-  const MainRoute({List<_i25.PageRouteInfo>? children})
+class MainRoute extends _i28.PageRouteInfo<void> {
+  const MainRoute({List<_i28.PageRouteInfo>? children})
       : super(
           MainRoute.name,
           initialChildren: children,
@@ -385,13 +408,13 @@ class MainRoute extends _i25.PageRouteInfo<void> {
 
   static const String name = 'MainRoute';
 
-  static const _i25.PageInfo<void> page = _i25.PageInfo<void>(name);
+  static const _i28.PageInfo<void> page = _i28.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i14.ModelDetailPage]
-class ModelDetailRoute extends _i25.PageRouteInfo<void> {
-  const ModelDetailRoute({List<_i25.PageRouteInfo>? children})
+class ModelDetailRoute extends _i28.PageRouteInfo<void> {
+  const ModelDetailRoute({List<_i28.PageRouteInfo>? children})
       : super(
           ModelDetailRoute.name,
           initialChildren: children,
@@ -399,13 +422,27 @@ class ModelDetailRoute extends _i25.PageRouteInfo<void> {
 
   static const String name = 'ModelDetailRoute';
 
-  static const _i25.PageInfo<void> page = _i25.PageInfo<void>(name);
+  static const _i28.PageInfo<void> page = _i28.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i15.RegisterPage]
-class RegisterRoute extends _i25.PageRouteInfo<void> {
-  const RegisterRoute({List<_i25.PageRouteInfo>? children})
+/// [_i15.PuzzlePage]
+class PuzzleRoute extends _i28.PageRouteInfo<void> {
+  const PuzzleRoute({List<_i28.PageRouteInfo>? children})
+      : super(
+          PuzzleRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'PuzzleRoute';
+
+  static const _i28.PageInfo<void> page = _i28.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i16.RegisterPage]
+class RegisterRoute extends _i28.PageRouteInfo<void> {
+  const RegisterRoute({List<_i28.PageRouteInfo>? children})
       : super(
           RegisterRoute.name,
           initialChildren: children,
@@ -413,13 +450,13 @@ class RegisterRoute extends _i25.PageRouteInfo<void> {
 
   static const String name = 'RegisterRoute';
 
-  static const _i25.PageInfo<void> page = _i25.PageInfo<void>(name);
+  static const _i28.PageInfo<void> page = _i28.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i16.ResetPasswordPage]
-class ResetPasswordRoute extends _i25.PageRouteInfo<void> {
-  const ResetPasswordRoute({List<_i25.PageRouteInfo>? children})
+/// [_i17.ResetPasswordPage]
+class ResetPasswordRoute extends _i28.PageRouteInfo<void> {
+  const ResetPasswordRoute({List<_i28.PageRouteInfo>? children})
       : super(
           ResetPasswordRoute.name,
           initialChildren: children,
@@ -427,13 +464,13 @@ class ResetPasswordRoute extends _i25.PageRouteInfo<void> {
 
   static const String name = 'ResetPasswordRoute';
 
-  static const _i25.PageInfo<void> page = _i25.PageInfo<void>(name);
+  static const _i28.PageInfo<void> page = _i28.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i17.SearchModelPage]
-class SearchModelRoute extends _i25.PageRouteInfo<void> {
-  const SearchModelRoute({List<_i25.PageRouteInfo>? children})
+/// [_i18.SearchModelPage]
+class SearchModelRoute extends _i28.PageRouteInfo<void> {
+  const SearchModelRoute({List<_i28.PageRouteInfo>? children})
       : super(
           SearchModelRoute.name,
           initialChildren: children,
@@ -441,13 +478,13 @@ class SearchModelRoute extends _i25.PageRouteInfo<void> {
 
   static const String name = 'SearchModelRoute';
 
-  static const _i25.PageInfo<void> page = _i25.PageInfo<void>(name);
+  static const _i28.PageInfo<void> page = _i28.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i18.SettingPage]
-class SettingRoute extends _i25.PageRouteInfo<void> {
-  const SettingRoute({List<_i25.PageRouteInfo>? children})
+/// [_i19.SettingPage]
+class SettingRoute extends _i28.PageRouteInfo<void> {
+  const SettingRoute({List<_i28.PageRouteInfo>? children})
       : super(
           SettingRoute.name,
           initialChildren: children,
@@ -455,13 +492,13 @@ class SettingRoute extends _i25.PageRouteInfo<void> {
 
   static const String name = 'SettingRoute';
 
-  static const _i25.PageInfo<void> page = _i25.PageInfo<void>(name);
+  static const _i28.PageInfo<void> page = _i28.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i19.SplashPage]
-class SplashRoute extends _i25.PageRouteInfo<void> {
-  const SplashRoute({List<_i25.PageRouteInfo>? children})
+/// [_i20.SplashPage]
+class SplashRoute extends _i28.PageRouteInfo<void> {
+  const SplashRoute({List<_i28.PageRouteInfo>? children})
       : super(
           SplashRoute.name,
           initialChildren: children,
@@ -469,13 +506,13 @@ class SplashRoute extends _i25.PageRouteInfo<void> {
 
   static const String name = 'SplashRoute';
 
-  static const _i25.PageInfo<void> page = _i25.PageInfo<void>(name);
+  static const _i28.PageInfo<void> page = _i28.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i20.StoryPage]
-class StoryRoute extends _i25.PageRouteInfo<void> {
-  const StoryRoute({List<_i25.PageRouteInfo>? children})
+/// [_i21.StoryPage]
+class StoryRoute extends _i28.PageRouteInfo<void> {
+  const StoryRoute({List<_i28.PageRouteInfo>? children})
       : super(
           StoryRoute.name,
           initialChildren: children,
@@ -483,13 +520,13 @@ class StoryRoute extends _i25.PageRouteInfo<void> {
 
   static const String name = 'StoryRoute';
 
-  static const _i25.PageInfo<void> page = _i25.PageInfo<void>(name);
+  static const _i28.PageInfo<void> page = _i28.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i21.TermOfServicePage]
-class TermOfServiceRoute extends _i25.PageRouteInfo<void> {
-  const TermOfServiceRoute({List<_i25.PageRouteInfo>? children})
+/// [_i22.TermOfServicePage]
+class TermOfServiceRoute extends _i28.PageRouteInfo<void> {
+  const TermOfServiceRoute({List<_i28.PageRouteInfo>? children})
       : super(
           TermOfServiceRoute.name,
           initialChildren: children,
@@ -497,13 +534,13 @@ class TermOfServiceRoute extends _i25.PageRouteInfo<void> {
 
   static const String name = 'TermOfServiceRoute';
 
-  static const _i25.PageInfo<void> page = _i25.PageInfo<void>(name);
+  static const _i28.PageInfo<void> page = _i28.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i22.UserInformationPage]
-class UserInformationRoute extends _i25.PageRouteInfo<void> {
-  const UserInformationRoute({List<_i25.PageRouteInfo>? children})
+/// [_i23.UserInformationPage]
+class UserInformationRoute extends _i28.PageRouteInfo<void> {
+  const UserInformationRoute({List<_i28.PageRouteInfo>? children})
       : super(
           UserInformationRoute.name,
           initialChildren: children,
@@ -511,13 +548,13 @@ class UserInformationRoute extends _i25.PageRouteInfo<void> {
 
   static const String name = 'UserInformationRoute';
 
-  static const _i25.PageInfo<void> page = _i25.PageInfo<void>(name);
+  static const _i28.PageInfo<void> page = _i28.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i23.UserProfilePage]
-class UserProfileRoute extends _i25.PageRouteInfo<void> {
-  const UserProfileRoute({List<_i25.PageRouteInfo>? children})
+/// [_i24.UserProfilePage]
+class UserProfileRoute extends _i28.PageRouteInfo<void> {
+  const UserProfileRoute({List<_i28.PageRouteInfo>? children})
       : super(
           UserProfileRoute.name,
           initialChildren: children,
@@ -525,13 +562,41 @@ class UserProfileRoute extends _i25.PageRouteInfo<void> {
 
   static const String name = 'UserProfileRoute';
 
-  static const _i25.PageInfo<void> page = _i25.PageInfo<void>(name);
+  static const _i28.PageInfo<void> page = _i28.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i24.WelcomePage]
-class WelcomeRoute extends _i25.PageRouteInfo<void> {
-  const WelcomeRoute({List<_i25.PageRouteInfo>? children})
+/// [_i25.VocabularyDetailPage]
+class VocabularyDetailRoute extends _i28.PageRouteInfo<void> {
+  const VocabularyDetailRoute({List<_i28.PageRouteInfo>? children})
+      : super(
+          VocabularyDetailRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'VocabularyDetailRoute';
+
+  static const _i28.PageInfo<void> page = _i28.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i26.VocabularyPage]
+class VocabularyRoute extends _i28.PageRouteInfo<void> {
+  const VocabularyRoute({List<_i28.PageRouteInfo>? children})
+      : super(
+          VocabularyRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'VocabularyRoute';
+
+  static const _i28.PageInfo<void> page = _i28.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i27.WelcomePage]
+class WelcomeRoute extends _i28.PageRouteInfo<void> {
+  const WelcomeRoute({List<_i28.PageRouteInfo>? children})
       : super(
           WelcomeRoute.name,
           initialChildren: children,
@@ -539,5 +604,5 @@ class WelcomeRoute extends _i25.PageRouteInfo<void> {
 
   static const String name = 'WelcomeRoute';
 
-  static const _i25.PageInfo<void> page = _i25.PageInfo<void>(name);
+  static const _i28.PageInfo<void> page = _i28.PageInfo<void>(name);
 }

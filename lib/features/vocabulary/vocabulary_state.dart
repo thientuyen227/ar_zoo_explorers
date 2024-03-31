@@ -1,13 +1,13 @@
 import 'package:ar_zoo_explorers/app/app/app_state.dart';
 
-class StoryState {
+class VocabularyState {
   final PageStatus pageStatus;
-  StoryState({
+  VocabularyState({
     this.pageStatus = PageStatus.loading,
   });
 
-  StoryState copyWith({PageStatus? pageStatus}) {
-    return StoryState(
+  VocabularyState copyWith({PageStatus? pageStatus}) {
+    return VocabularyState(
       pageStatus: pageStatus ?? this.pageStatus,
     );
   }

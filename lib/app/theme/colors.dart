@@ -66,12 +66,17 @@ class AppColor {
   static const blue = Color(0xFF4476CA);
   static const yellow = Color(0xFFFFB800);
   static const blurBlue = Color(0xFFD0E0FF);
+  static const vibrantYellow = Color(0xFFFFDA2C);
+  static const tinintIce = Color(0xFFDBF9F8);
+  static const completed = Color(0xFF43CC28);
+  static const isFalse = Color(0xFFFF4432);
 
   static const textFieldBG = Color(0xFF222838);
   static const chatPageBG = Color(0xFF1C212B);
   static const messageBlueBG = Color(0xFF384DBC);
   static const readmoreText = Color(0xFF3E82E7);
   static const darkBG = Color(0xFF1A1A1A);
+  static const brown = Color(0xFFB16E3D);
 
   static Color parseColor(String color) {
     String hex = color.replaceAll("#", "");

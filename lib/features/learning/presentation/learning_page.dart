@@ -1,7 +1,12 @@
+import 'package:ar_zoo_explorers/app/config/routes.dart';
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
+import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/features/learning/presentation/learning_cubit.dart';
 import 'package:ar_zoo_explorers/features/learning/presentation/learning_state.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 import '../../../app/theme/icons.dart';
 import '../../../base/base_state.dart';
@@ -19,7 +24,6 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
   @override
   Widget buildByState(BuildContext context, LearningState state) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
       appBar: AppBar(
           centerTitle: true,
           title: const Text("Learning Home",
@@ -30,6 +34,81 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [backButton()]),
           actions: const []),
+      body: Padding(
+        padding: const EdgeInsets.all(17.0),
+        child: Column(
+          children: [
+            _renderPoints(),
+            const SizedBox(
+              height: 24,
+            ),
+            GestureDetector(
+              onTap: () {
+                context.router.pushNamed(Routes.vocabulary);
+              },
+              child: Container(
+                height: 96,
+                decoration: BoxDecoration(
+                    color: AppColor.tinintIce,
+                    border: Border.all(),
+                    borderRadius: const BorderRadius.all(Radius.circular(10))),
+                child: Padding(
+                  padding: const EdgeInsets.all(21.0),
+                  child: InkWell(
+                    onTap: () {
+                      context.router.pushNamed(Routes.vocabulary);
+                    },
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(AppImages.imgDictionary),
+                        const SizedBox(
+                          width: 24,
+                        ),
+                        Text(
+                          LanguageKeys.vocabulary.tr,
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.w600),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            GestureDetector(
+              onTap: () {
+                context.router.pushNamed(Routes.puzzle);
+              },
+              child: Container(
+                height: 96,
+                decoration: BoxDecoration(
+                    color: AppColor.tinintIce,
+                    border: Border.all(),
+                    borderRadius: const BorderRadius.all(Radius.circular(10))),
+                child: Padding(
+                  padding: const EdgeInsets.all(21.0),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(AppImages.imgPuzzle),
+                      const SizedBox(
+                        width: 24,
+                      ),
+                      Text(
+                        LanguageKeys.puzzle.tr,
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w600),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 
@@ -42,6 +121,47 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
               scale: 1.15,
               child:
                   Image.asset(AppIcons.icBack_x64_png, height: 24, width: 24))),
+    );
+  }
+
+  Widget _renderPoints() {
+    return Container(
+      height: 60,
+      decoration: BoxDecoration(
+          color: AppColor.vibrantYellow,
+          border: Border.all(),
+          borderRadius: const BorderRadius.all(Radius.circular(10))),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 16, right: 6),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              LanguageKeys.your_points.tr,
+              style: const TextStyle(
+                  fontSize: 16,
+                  color: AppColor.black,
+                  fontWeight: FontWeight.w500),
+            ),
+            Container(
+              height: 30,
+              decoration: BoxDecoration(
+                  border: Border.all(),
+                  color: AppColor.lightBlue,
+                  borderRadius: const BorderRadius.all(Radius.circular(10))),
+              child: const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(6.0),
+                  child: Text(
+                    "1000 pts",
+                    style: TextStyle(color: AppColor.white, fontSize: 16),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }

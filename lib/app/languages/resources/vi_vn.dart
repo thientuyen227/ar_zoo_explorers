@@ -62,9 +62,6 @@ const Map<String, String> vi_vn = {
   'report': "Báo cáo",
 
   // Welcome
-  'welcome_title': 'Chào mừng bạn đến tới FOCUS 1',
-  'welcome_subtitle':
-      'Ứng dụng giúp bạn làm việc tập trung, học tập và phát triển bản thân. Hãy cùng khám phá bí mật để đạt đến thành công trong thời gian ngắn nhất!',
   'welcome_start': 'Bắt đầu',
 
   //Home page
@@ -79,6 +76,14 @@ const Map<String, String> vi_vn = {
   'avatar_cameraAvatar': 'Chụp ảnh mới',
   'avatar_galleryAvatar': 'Chọn ảnh Avatar',
 
+  //Learning
+  'your_points': 'Điểm của bạn',
+  'vocabulary': 'Từ vựng',
+  'puzzle': 'Trò chơi',
+  'in_process': 'Đang tiến hành',
+  'completed': 'Đã hoàn thành',
+  'take_the_quiz': 'Chơi trò chơi',
+
   // Auth
   'auth_enterEmail': "Nhập email của bạn",
   'auth_enterPassword': "Nhập mật khẩu của bạn",
@@ -89,11 +94,8 @@ const Map<String, String> vi_vn = {
   'auth_policy': "Điều khoản",
   'auth_and': "và",
   'auth_terms': "Chính sách",
-  'auth_offFocus1': "của Focus 1",
 
   // Setting Pages
-  'setting_upgradeAccount':
-      'Nâng cấp lên tài khoản PRO để sở hữu \nnhiều tính năng, lợi ích và giá trị tuyệt vời',
   'setting_support': 'Trợ giúp cho bạn',
   'setting_policy': 'Điều khoản sử dụng',
   'setting_privacy': 'Chính sách bảo mật',
@@ -105,24 +107,8 @@ const Map<String, String> vi_vn = {
   'upgradeAccount': 'Nâng cấp tài khoản',
 
   'passwordResetRequestMessage': "Vui lòng kiểm tra Email để lấy lại mật khẩu",
-  'passwordResetRequestErrorNoUserFound': "Không tìm thấy người dùng",
-  'actionCompletedMessage': "Chúc mừng bạn đã hành thành mục tiêu",
-  'clip': "Số ghim",
-  'actionQuantity': "Số lượng (việc)",
-  'percent': "Tỉ lệ (%)",
-  'reward': "Phần thưởng",
 
-  "youDontHaveAnyNotifcation": "Bạn không có thông báo nào.",
-  "monday": "T2",
-  "tuesday": "T3",
-  "wednesday": "T4",
-  "thursday": "T5",
-  "friday": "T6",
-  "saturday": "T7",
-  "sunday": "CN",
   "settings": "Cài đặt",
-  "enterActionIcon": "Vui lòng chọn biểu tượng",
-  "enterActionColor": "Vui lòng chọn màu",
   "save": "Lưu lại",
   "account": "Quản lý tài khoản",
   "formRequiredEmailError": "Vui lòng nhập địa chỉ email",
@@ -130,8 +116,6 @@ const Map<String, String> vi_vn = {
   "formRequiredError": "Vui lòng nhập vào trường bắt buộc",
   "formRequiredNameError": "Vui lòng nhập họ tên",
   "formRequiredConfirmError": "Mật khẩu không khớp",
-  "actionTargetNeedTobeLargerThanZero": "Số ghim phải lớn hơn 0",
-  "formNumericError": "Vui lòng chỉ nhập số",
   "formEmailAddressError": "Địa chỉ email không phù hợp",
   "formPhoneError": "Số điện thoại không phù hợp",
   "formShortPasswordError": "Mật khẩu phải có ít nhất 6 ký tự",
