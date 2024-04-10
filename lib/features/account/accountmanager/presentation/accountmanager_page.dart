@@ -180,6 +180,9 @@ class _State extends BaseState<AccountManagerState, AccountManagerCubit,
         break;
       case AccountManagerType.Event:
         break;
+      case AccountManagerType.ChangeLanguage:
+        context.router.pushNamed(Routes.changelanguage);
+        break;
       default:
     }
   }

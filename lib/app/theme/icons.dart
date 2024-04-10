@@ -15,6 +15,7 @@ class AppIcons {
   static const String icNewMessage = "assets/icons/ic_new_message.png";
   static const String icCrown = "assets/icons/ic_crown.png";
   static const String icSearch = "assets/icons/ic_search.png";
+  static const String icWhiteSearch = "assets/icons/ic_search_white.png";
   static const String icAnimal = "assets/icons/ic_animal.png";
   static const String icCrocodile = "assets/icons/ic_crocodile.png";
   static const String icBird = "assets/icons/ic_bird.png";
@@ -48,6 +49,17 @@ class AppIcons {
   static const String icEye = "assets/icons/ic_eye.png";
   static const String icEye24 = "assets/icons/ic_eye_x24.png";
   static const String icWhiteDownload = "assets/icons/ic_whiteDownload.png";
+
+  static const String icHeart64 = "assets/icons/ic_heart_x64.png";
+  static const String icHome64 = "assets/icons/ic_home_x64.png";
+  static const String icMagnifyingGlass64 =
+      "assets/icons/ic_magnifying_glass_x64.png";
+  static const String icPlay64 = "assets/icons/ic_play_x64.png";
+  static const String icPause64 = "assets/icons/ic_pause_x64.png";
+  static const String icRefresh64 = "assets/icons/ic_refresh_x64.png";
+  static const String icRewind64 = "assets/icons/ic_rewind_x64.png";
+  static const String icVolume64 = "assets/icons/ic_volume_x64.png";
+  static const String icMute64 = "assets/icons/ic_mute_x64.png";
 
   //Account Manager
   static const String icUserProfile = "assets/icons/ic_userprofile.png";

@@ -60,7 +60,7 @@ class _State
               },
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                childAspectRatio: 1.05,
+                childAspectRatio: 0.9,
                 crossAxisSpacing: 14,
               ),
             )
