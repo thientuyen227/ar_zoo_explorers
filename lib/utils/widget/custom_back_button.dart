@@ -1,4 +1,3 @@
-import 'package:ar_zoo_explorers/app/config/app_router.gr.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +13,7 @@ class CustomBackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      onPressed:
-          onPressed ?? () => context.router.popAndPush(const HomeRoute()),
+      onPressed: onPressed ?? () => context.router.pop(),
       icon: const Icon(
         Icons.keyboard_arrow_left,
         size: 30,

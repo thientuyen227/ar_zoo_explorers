@@ -51,7 +51,7 @@ class _State extends BaseState<VocabularyDetailState, VocabularyDetailCubit,
                   color: Color(0xFF49B0AB),
                 ),
                 child: const Text("150 pts",
-                    style: TextStyle(color: AppColor.white, fontSize: 12)),
+                    style: TextStyle(color: AppColor.white, fontSize: 8)),
               ),
               GridView.builder(
                 shrinkWrap: true,
@@ -69,7 +69,7 @@ class _State extends BaseState<VocabularyDetailState, VocabularyDetailCubit,
                 },
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: 0.92,
+                  childAspectRatio: 0.8,
                 ),
               )
             ],
