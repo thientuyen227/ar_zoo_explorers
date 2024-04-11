@@ -32,15 +32,12 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: VocabularyRoute.page, path: '/vocabulary'),
         AutoRoute(page: VocabularyDetailRoute.page, path: '/vocabularydetail'),
         AutoRoute(page: PuzzleRoute.page, path: '/puzzle'),
-<<<<<<< HEAD
         AutoRoute(page: PuzzleWordRoute.page, path: '/puzzleword'),
         AutoRoute(page: PuzzleWordDetailRoute.page, path: '/puzzleworddetail'),
-=======
         AutoRoute(page: ListStoryRoute.page, path: '/liststory'),
         AutoRoute(page: StoryRoute.page, path: '/story'),
         AutoRoute(page: StoryHomeRoute.page, path: '/storyhome'),
         AutoRoute(page: StoryOverviewRoute.page, path: '/storyoverview'),
         AutoRoute(page: StoryPlayerRoute.page, path: '/storyplayer'),
->>>>>>> origin/develop_minhtien
       ];
 }

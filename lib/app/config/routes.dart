@@ -26,16 +26,13 @@ class Routes {
   static const String vocabulary = "/vocabulary";
   static const String vocabularydetail = "/vocabularydetail";
   static const String puzzle = "/puzzle";
-<<<<<<< HEAD
   static const String puzzleword = "/puzzleword";
   static const String puzzleworddetail = "/puzzleworddetail";
-=======
   static const String liststory = "/liststory";
   static const String story = "/story";
   static const String storyhome = "/storyhome";
   static const String storyoverview = "/storyoverview";
   static const String storyplayer = "/storyplayer";
->>>>>>> origin/develop_minhtien
 
   static Route<T> fadeThrough<T>(RouteSettings settings, WidgetBuilder page,
       {int duration = 300}) {
