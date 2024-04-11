@@ -27,6 +27,8 @@ class Routes {
   static const String vocabulary = "/vocabulary";
   static const String vocabularydetail = "/vocabularydetail";
   static const String puzzle = "/puzzle";
+  static const String puzzleword = "/puzzleword";
+  static const String puzzleworddetail = "/puzzleworddetail";
 
   static Route<T> fadeThrough<T>(RouteSettings settings, WidgetBuilder page,
       {int duration = 300}) {

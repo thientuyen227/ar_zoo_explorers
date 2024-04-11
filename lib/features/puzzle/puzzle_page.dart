@@ -2,9 +2,9 @@ import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
+import 'package:ar_zoo_explorers/features/puzzle/model/questions.dart';
 import 'package:ar_zoo_explorers/features/puzzle/puzzle_cubit.dart';
 import 'package:ar_zoo_explorers/features/puzzle/puzzle_state.dart';
-import 'package:ar_zoo_explorers/features/puzzle/questions.dart';
 import 'package:ar_zoo_explorers/utils/widget/custom_back_button.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -24,15 +24,10 @@ class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
 
   // final _formKey = GlobalKey<FormBuilderState>();
   List<String> answers = ["Bear", "Lion", "Giraffe", "Elephant"];
-  // String? selectedAnswer;
-  // String answerTrue = "Lion";
-  // bool? isSelected;
-  // bool? isCorrect;
   int? selectedAnswerIndex;
   int questionIndex = 0;
   void pickAnswer(int value) {
     selectedAnswerIndex = value;
-    final question = questions[questionIndex];
 
     setState(() {});
   }

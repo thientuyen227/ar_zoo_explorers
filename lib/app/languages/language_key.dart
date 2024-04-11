@@ -77,6 +77,10 @@ class LanguageKeys {
   static const String in_process = 'in_process';
   static const String completed = 'completed';
   static const String take_the_quiz = 'take_the_quiz';
+  static const String choose_topic = 'choose_topic';
+  static const String toys = 'toys';
+  static const String fruit = 'fruit';
+  static const String family = 'family';
 
   // Setting Page
   static const String setting_upgradeAccount = 'setting_upgradeAccount';

@@ -99,6 +99,7 @@ const Map<String, String> en_us = {
   'in_process': 'In Process',
   'completed': 'Completed',
   'take_the_quiz': 'Take the quiz',
+  'choose_topic': 'Choose topic',
 
   // Setting Pages
   'setting_upgradeAccount':

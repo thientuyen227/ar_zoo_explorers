@@ -83,6 +83,7 @@ const Map<String, String> vi_vn = {
   'in_process': 'Đang tiến hành',
   'completed': 'Đã hoàn thành',
   'take_the_quiz': 'Chơi trò chơi',
+  'choose_topic': 'Chọn đề tài',
 
   // Auth
   'auth_enterEmail': "Nhập email của bạn",

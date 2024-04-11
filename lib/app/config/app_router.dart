@@ -32,6 +32,8 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: ChangLanguageRoute.page, path: '/changelanguage'),
         AutoRoute(page: VocabularyRoute.page, path: '/vocabulary'),
         AutoRoute(page: VocabularyDetailRoute.page, path: '/vocabularydetail'),
-        AutoRoute(page: PuzzleRoute.page, path: '/puzzle')
+        AutoRoute(page: PuzzleRoute.page, path: '/puzzle'),
+        AutoRoute(page: PuzzleWordRoute.page, path: '/puzzleword'),
+        AutoRoute(page: PuzzleWordDetailRoute.page, path: '/puzzleworddetail'),
       ];
 }
