@@ -1,7 +1,9 @@
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_cubit.dart';
+import 'package:ar_zoo_explorers/domain/entities/topic_entity.dart';
 import 'package:ar_zoo_explorers/features/base-model/button_object.dart';
 import 'package:ar_zoo_explorers/features/base-model/form_builder_text_field_model.dart';
+import 'package:ar_zoo_explorers/features/story/storyhome/model/topic_button_object.dart';
 import 'package:ar_zoo_explorers/features/story/storyhome/presentation/storyhome_state.dart';
 import 'package:injectable/injectable.dart';
 
@@ -37,12 +39,12 @@ class StoryHomeCubit extends BaseCubit<StoryHomeState> {
         title: "Vịt con xấu xí", icon: AppImages.imgVitConXauXi, views: 299),
   ];
 
-  List<ButtonObject> lstTopic = [
-    ButtonObject(title: "Cổ tích", icon: AppImages.imgCoTich),
-    ButtonObject(title: "Đạo đức", icon: AppImages.imgDaoDuc),
-    ButtonObject(title: "Ngụ ngôn", icon: AppImages.imgNguNgon),
-    ButtonObject(title: "Truyền thuyết", icon: AppImages.imgTruyenThuyet),
-    ButtonObject(title: "Truyện cười", icon: AppImages.imgTruyenCuoi),
+  List<TopicButtonObject> lstTopic = [
+    // ButtonObject(title: "Cổ tích", icon: AppImages.imgCoTich),
+    // ButtonObject(title: "Đạo đức", icon: AppImages.imgDaoDuc),
+    // ButtonObject(title: "Ngụ ngôn", icon: AppImages.imgNguNgon),
+    // ButtonObject(title: "Truyền thuyết", icon: AppImages.imgTruyenThuyet),
+    // ButtonObject(title: "Truyện cười", icon: AppImages.imgTruyenCuoi),
   ];
 
   String nameCustom(String fullname, int index) {
@@ -56,5 +58,15 @@ class StoryHomeCubit extends BaseCubit<StoryHomeState> {
       respond = '${content.substring(0, (index - 3))}...';
     }
     return respond;
+  }
+
+  void getAllTopics(List<TopicEntity> topics) {
+    for (var item in topics) {
+      lstTopic.add(TopicButtonObject(
+          id: item.id,
+          name: item.name,
+          title: item.title,
+          imageUrl: item.imageUrl));
+    }
   }
 }

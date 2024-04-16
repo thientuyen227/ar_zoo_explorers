@@ -4,7 +4,7 @@ class StoryButtonObject {
   String avatar;
   String author;
   String reader;
-  int listencount;
+  int listenCount;
   Duration duration;
   String topic;
   Duration timestamp;
@@ -18,5 +18,5 @@ class StoryButtonObject {
       this.duration = const Duration(seconds: 0, minutes: 0, hours: 0),
       this.timestamp = const Duration(seconds: 0, minutes: 0, hours: 0),
       required this.topic,
-      this.listencount = 0});
+      this.listenCount = 0});
 }

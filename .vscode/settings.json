@@ -4,5 +4,8 @@
         "source.organizeImports": "explicit",
         "source.fixAll": "explicit"
     },
-    "dart.flutterSdkPath": "D:\\Development\\Flutter\\flutter"
+    "dart.flutterSdkPath": "D:\\Development\\Flutter\\flutter",
+    "cSpell.words": [
+        "Fluttertoast"
+    ]
 }

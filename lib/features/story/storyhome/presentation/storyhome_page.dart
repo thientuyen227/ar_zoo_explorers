@@ -4,8 +4,11 @@ import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/base/widgets/page_loading_indicator.dart';
 import 'package:ar_zoo_explorers/core/data/controller/auth_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/topic_controller.dart';
+import 'package:ar_zoo_explorers/domain/entities/topic_entity.dart';
 import 'package:ar_zoo_explorers/features/base-model/button_object.dart';
 import 'package:ar_zoo_explorers/features/base-model/form_builder_text_field_model.dart';
+import 'package:ar_zoo_explorers/features/story/storyhome/model/topic_button_object.dart';
 import 'package:ar_zoo_explorers/features/story/storyhome/presentation/storyhome_cubit.dart';
 import 'package:ar_zoo_explorers/features/story/storyhome/presentation/storyhome_state.dart';
 import 'package:ar_zoo_explorers/utils/widget/button_widget.dart';
@@ -27,6 +30,7 @@ class StoryHomePage extends StatefulWidget {
 
 class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
   final controller = AuthController.findOrInitialize;
+  final topicController = TopicController.findOrInitialize;
 
   final _formKey = GlobalKey<FormBuilderState>();
 
@@ -66,8 +70,8 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
                   child: Column(children: [
                     Container(height: 24),
                     searchBar(cubit.searchBar),
-                    Container(height: 24),
-                    recommendedList(),
+                    // Container(height: 24),
+                    // recommendedList(),
                     Container(height: 24),
                     topicList(),
                   ]),
@@ -141,7 +145,7 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
         validator: FormBuilderValidators.compose([]));
   }
 
-  Widget listTopicButton(List<ButtonObject> list) {
+  Widget listTopicButton(List<TopicButtonObject> list) {
     List<Widget> listRow = [];
     for (int i = 0; i < list.length - 1; i = i + 2) {
       listRow.add(Row(
@@ -163,7 +167,7 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
     return Column(children: listRow);
   }
 
-  Widget topicButton(ButtonObject btnObject) {
+  Widget topicButton(TopicButtonObject btnObject) {
     return GestureDetector(
         onTap: () {
           // context.router.pushNamed(Routes.liststory);
@@ -184,7 +188,7 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
                       offset: const Offset(0, 3))
                 ]),
             child: Column(children: [
-              buttonImage(btnObject.icon),
+              buttonImage(btnObject.imageUrl),
               Padding(
                   padding: const EdgeInsets.only(top: 4),
                   child: buttonTitle(btnObject.title)),
@@ -227,7 +231,7 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
       // child: (url == "")
       //     ? Image.asset(AppImages.imgProfile128x128, fit: BoxFit.cover)
       //     : Image.network(url, fit: BoxFit.cover),
-      child: Image.asset(url, fit: BoxFit.cover),
+      child: Image.network(url, fit: BoxFit.cover),
     );
   }
 
@@ -264,9 +268,13 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
 
   Widget topicList() {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      const Text("Topics",
-          style: TextStyle(
-              color: Colors.black, fontSize: 22, fontWeight: FontWeight.w500)),
+      SizedBox(
+          width: cubit.WIDTH,
+          child: const Text("Topics",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w500))),
       const SizedBox(height: 10),
       listTopicButton(cubit.lstTopic)
     ]);
@@ -289,6 +297,12 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
     widget.onPageChanged(2);
   }
 
+  void _getAllTopics(List<TopicEntity> lstTopic) {
+    setState(() {
+      cubit.getAllTopics(lstTopic);
+    });
+  }
+
   void _setDimension() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
@@ -301,8 +315,9 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
   @override
   void initState() {
     super.initState();
-
-    controller.getCurrentUser(context);
     _setDimension();
+    controller.getCurrentUser(context);
+    topicController.getAllTopics(context);
+    _getAllTopics(topicController.listTopic.value);
   }
 }
