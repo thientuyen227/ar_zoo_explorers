@@ -37,7 +37,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   final controller = AuthController.findOrInitialize;
   final animalController = AnimalController.findOrInitialize;
   final cateController = AnimalCategoryController.findOrInitialize;
-  final topicController = TopicController.findOrInitialize;
+  final storyTopicController = StoryTopicController.findOrInitialize;
 
   final _formKey = GlobalKey<FormBuilderState>();
 
@@ -410,7 +410,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   }
 
   Future<void> _getAllTopics(BuildContext context) async {
-    await topicController.getAllTopics(context);
+    await storyTopicController.getAllStoryTopics(context);
   }
 
   void _setDimension() {

@@ -146,6 +146,12 @@ class AppImages {
       "assets/images/learning_image/vocabulary/lion.svg";
   static const String imgPuzzleDesign =
       "assets/images/learning_image/puzzle/imgPuzzleDesign.png";
+  static const String imgFox = "assets/images/learning_image/puzzle/fox.png";
+  static const String imgFruits =
+      "assets/images/learning_image/puzzle/fruits.png";
+  static const String imgToys = "assets/images/learning_image/puzzle/toys.png";
+  static const String imgFamily =
+      "assets/images/learning_image/puzzle/family.png";
 
   //MODELS BUTTONS
   static const String imgAmphibians =

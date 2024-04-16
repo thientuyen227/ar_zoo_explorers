@@ -1,6 +1,6 @@
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_cubit.dart';
-import 'package:ar_zoo_explorers/domain/entities/topic_entity.dart';
+import 'package:ar_zoo_explorers/domain/entities/story_topic_entity.dart';
 import 'package:ar_zoo_explorers/features/base-model/button_object.dart';
 import 'package:ar_zoo_explorers/features/base-model/form_builder_text_field_model.dart';
 import 'package:ar_zoo_explorers/features/story/storyhome/model/topic_button_object.dart';
@@ -60,7 +60,7 @@ class StoryHomeCubit extends BaseCubit<StoryHomeState> {
     return respond;
   }
 
-  void getAllTopics(List<TopicEntity> topics) {
+  void getAllTopics(List<StoryTopicEntity> topics) {
     for (var item in topics) {
       lstTopic.add(TopicButtonObject(
           id: item.id,

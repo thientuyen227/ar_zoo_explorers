@@ -1,5 +1,5 @@
 import 'package:ar_zoo_explorers/core/data/models/animal_category_model.dart';
-import 'package:ar_zoo_explorers/core/data/models/topic_model.dart';
+import 'package:ar_zoo_explorers/core/data/models/story_topic_model.dart';
 import 'package:ar_zoo_explorers/core/data/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -24,7 +24,7 @@ class FirebaseFirestoreSource {
       FirebaseFirestore.instance.collection('user_animal');
 
   final CollectionReference<Map<String, dynamic>> _topicCollectionRef =
-      FirebaseFirestore.instance.collection('topics');
+      FirebaseFirestore.instance.collection('story_topics');
 
   Future<String> get generateUniqueAnimalModelId async =>
       _animalModelCollectionRef.add({}).then((value) => value.id);
@@ -241,19 +241,19 @@ class FirebaseFirestoreSource {
   }
 
   //Story Topics
-  Future<TopicModel?> getTopicModel(String id) async {
+  Future<StoryTopicModel?> getStoryTopicModel(String id) async {
     var document = await _topicCollectionRef.doc(id).get();
     if (document.exists && document.data() != null) {
-      return TopicModel.fromMap(document.data()!);
+      return StoryTopicModel.fromMap(document.data()!);
     } else {
       return null;
     }
   }
 
-  Future<List<TopicModel>?> getAllTopicModels() async {
+  Future<List<StoryTopicModel>?> getAllStoryTopicModels() async {
     var querySnapshot = await _topicCollectionRef.get();
-    List<TopicModel> topics = querySnapshot.docs
-        .map((doc) => TopicModel.fromMap(doc.data()))
+    List<StoryTopicModel> topics = querySnapshot.docs
+        .map((doc) => StoryTopicModel.fromMap(doc.data()))
         .toList();
     return topics;
   }

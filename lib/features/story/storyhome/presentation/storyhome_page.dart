@@ -5,7 +5,7 @@ import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/base/widgets/page_loading_indicator.dart';
 import 'package:ar_zoo_explorers/core/data/controller/auth_controller.dart';
 import 'package:ar_zoo_explorers/core/data/controller/topic_controller.dart';
-import 'package:ar_zoo_explorers/domain/entities/topic_entity.dart';
+import 'package:ar_zoo_explorers/domain/entities/story_topic_entity.dart';
 import 'package:ar_zoo_explorers/features/base-model/button_object.dart';
 import 'package:ar_zoo_explorers/features/base-model/form_builder_text_field_model.dart';
 import 'package:ar_zoo_explorers/features/story/storyhome/model/topic_button_object.dart';
@@ -30,7 +30,7 @@ class StoryHomePage extends StatefulWidget {
 
 class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
   final controller = AuthController.findOrInitialize;
-  final topicController = TopicController.findOrInitialize;
+  final storyTopicController = StoryTopicController.findOrInitialize;
 
   final _formKey = GlobalKey<FormBuilderState>();
 
@@ -297,7 +297,7 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
     widget.onPageChanged(2);
   }
 
-  void _getAllTopics(List<TopicEntity> lstTopic) {
+  void _getAllStoryTopics(List<StoryTopicEntity> lstTopic) {
     setState(() {
       cubit.getAllTopics(lstTopic);
     });
@@ -317,7 +317,7 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
     super.initState();
     _setDimension();
     controller.getCurrentUser(context);
-    topicController.getAllTopics(context);
-    _getAllTopics(topicController.listTopic.value);
+    storyTopicController.getAllStoryTopics(context);
+    _getAllStoryTopics(storyTopicController.listStoryTopic.value);
   }
 }

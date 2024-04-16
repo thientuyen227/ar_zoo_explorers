@@ -42,71 +42,50 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
             const SizedBox(
               height: 24,
             ),
-            GestureDetector(
-              onTap: () {
-                context.router.pushNamed(Routes.vocabulary);
-              },
-              child: Container(
-                height: 96,
-                decoration: BoxDecoration(
-                    color: AppColor.tinintIce,
-                    border: Border.all(),
-                    borderRadius: const BorderRadius.all(Radius.circular(10))),
-                child: Padding(
-                  padding: const EdgeInsets.all(21.0),
-                  child: InkWell(
-                    onTap: () {
-                      context.router.pushNamed(Routes.vocabulary);
-                    },
-                    child: Row(
-                      children: [
-                        SvgPicture.asset(AppImages.imgDictionary),
-                        const SizedBox(
-                          width: 24,
-                        ),
-                        Text(
-                          LanguageKeys.vocabulary.tr,
-                          style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w600),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            _renderTitleAndIcon(
+                title: LanguageKeys.vocabulary,
+                icon: AppImages.imgDictionary,
+                router: Routes.vocabulary),
             const SizedBox(
               height: 24,
             ),
-            GestureDetector(
-              onTap: () {
-                context.router.pushNamed(Routes.puzzle);
-              },
-              child: Container(
-                height: 96,
-                decoration: BoxDecoration(
-                    color: AppColor.tinintIce,
-                    border: Border.all(),
-                    borderRadius: const BorderRadius.all(Radius.circular(10))),
-                child: Padding(
-                  padding: const EdgeInsets.all(21.0),
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(AppImages.imgPuzzle),
-                      const SizedBox(
-                        width: 24,
-                      ),
-                      Text(
-                        LanguageKeys.puzzle.tr,
-                        style: const TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w600),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            )
+            _renderTitleAndIcon(
+                icon: AppImages.imgPuzzle,
+                title: LanguageKeys.puzzle,
+                router: Routes.puzzleword)
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _renderTitleAndIcon(
+      {required String title, required String icon, required String router}) {
+    return GestureDetector(
+      onTap: () {
+        context.router.pushNamed(router);
+      },
+      child: Container(
+        height: 96,
+        decoration: BoxDecoration(
+            color: AppColor.tinintIce,
+            border: Border.all(),
+            borderRadius: const BorderRadius.all(Radius.circular(10))),
+        child: Padding(
+          padding: const EdgeInsets.all(21.0),
+          child: Row(
+            children: [
+              SvgPicture.asset(icon),
+              const SizedBox(
+                width: 24,
+              ),
+              Text(
+                title.tr,
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              )
+            ],
+          ),
         ),
       ),
     );

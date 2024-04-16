@@ -26,6 +26,8 @@ class Routes {
   static const String vocabulary = "/vocabulary";
   static const String vocabularydetail = "/vocabularydetail";
   static const String puzzle = "/puzzle";
+  static const String puzzleword = "/puzzleword";
+  static const String puzzleworddetail = "/puzzleworddetail";
   static const String liststory = "/liststory";
   static const String story = "/story";
   static const String storyhome = "/storyhome";

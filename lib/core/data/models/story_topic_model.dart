@@ -1,7 +1,7 @@
-import 'package:ar_zoo_explorers/domain/entities/topic_entity.dart';
+import 'package:ar_zoo_explorers/domain/entities/story_topic_entity.dart';
 
-class TopicModel extends TopicEntity {
-  TopicModel(
+class StoryTopicModel extends StoryTopicEntity {
+  StoryTopicModel(
       {required super.id,
       required super.name,
       required super.title,
@@ -18,8 +18,8 @@ class TopicModel extends TopicEntity {
     };
   }
 
-  factory TopicModel.fromMap(Map<String, dynamic> map) {
-    return TopicModel(
+  factory StoryTopicModel.fromMap(Map<String, dynamic> map) {
+    return StoryTopicModel(
       id: map['id'] ?? '',
       title: map['title'] ?? '',
       name: map['name'] ?? '',
