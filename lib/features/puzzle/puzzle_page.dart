@@ -120,7 +120,7 @@ class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
                     children: [
                       renderAnswer(
                         currentIndex: index,
-                        question: question.options[index],
+                        question: question.options![index],
                         isSelected: selectedAnswerIndex == index,
                         selectedAnswerIndex: selectedAnswerIndex,
                         correctAnswerIndex: question.correctAnswerIndex,

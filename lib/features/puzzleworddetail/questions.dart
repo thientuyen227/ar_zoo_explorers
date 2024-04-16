@@ -2,13 +2,6 @@ import 'package:ar_zoo_explorers/domain/entities/question_entity.dart';
 
 List<QuestionEntity> questions = [
   QuestionEntity(
-    correctAnswerIndex: 1,
-    options: [
-      'a) Madrid',
-      'b) Paris',
-      'c) Berlin',
-      'd) Rome',
-    ],
     categoryQuestion: '',
     question: 'Which animal is this?',
     image: '',
@@ -16,13 +9,6 @@ List<QuestionEntity> questions = [
     puzzles: [],
   ),
   QuestionEntity(
-    correctAnswerIndex: 1,
-    options: [
-      'a) Madrid',
-      'b) Paris',
-      'c) Berlin',
-      'd) Rome',
-    ],
     categoryQuestion: '',
     question: '1. What is the capital of France?',
     image: '',
@@ -30,27 +16,13 @@ List<QuestionEntity> questions = [
     puzzles: [],
   ),
   QuestionEntity(
-    correctAnswerIndex: 3,
-    options: [
-      'a) Europe',
-      'b) Asia',
-      'c) North America',
-      'd) South America',
-    ],
-    categoryQuestion: '2. In what continent is Brazil located?',
-    question: '',
+    categoryQuestion: '',
+    question: '2. In what continent is Brazil located?',
     image: '',
     answer: '',
     puzzles: [],
   ),
   QuestionEntity(
-    correctAnswerIndex: 1,
-    options: [
-      'a) Earth',
-      'b) Jupiter',
-      'c) Saturn',
-      'd) Venus',
-    ],
     categoryQuestion: '',
     question: '3. What is the largest planet in our solar system?',
     image: '',
