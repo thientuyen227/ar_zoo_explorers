@@ -8,3 +8,11 @@ extension ListExt<T> on List<T> {
     return take(length).toList();
   }
 }
+
+extension StringExtensions on String {
+  bool isValidUrl() {
+    const pattern = r'^(https?:\/\/)?[\w\-]+(\.[\w\-]+)+[/#?]?.*$';
+    final regex = RegExp(pattern, caseSensitive: false);
+    return regex.hasMatch(this);
+  }
+}

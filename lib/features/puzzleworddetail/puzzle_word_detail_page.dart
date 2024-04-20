@@ -2,13 +2,13 @@ import 'dart:math';
 
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
-import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/domain/entities/question_entity.dart';
 import 'package:ar_zoo_explorers/features/puzzle/model/questions.dart';
 import 'package:ar_zoo_explorers/features/puzzleworddetail/puzzle_word_detail_cubit.dart';
 import 'package:ar_zoo_explorers/features/puzzleworddetail/puzzle_word_detail_state.dart';
 import 'package:ar_zoo_explorers/utils/widget/custom_back_button.dart';
+import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -78,7 +78,7 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
                           height: 30,
                         ),
                         _renderQuestion(question: question),
-                        _renderImage(image: AppImages.imgFox),
+                        _renderImage(image: listQuestions[0].image!),
                         const SizedBox(
                           height: 30,
                         ),
@@ -151,7 +151,8 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
 
     if (currentIndexEmpty >= 0 && arrayBtns!.isNotEmpty) {
       currentQues.puzzles![currentIndexEmpty].currentIndex = index;
-      currentQues.puzzles![currentIndexEmpty].currentValue = arrayBtns![index];
+      currentQues.puzzles![currentIndexEmpty].currentValue =
+          arrayBtns![index].toUpperCase();
 
       if (fieldCompleteCorrect(currentQues: currentQues)) {
         isDone = true;
@@ -259,8 +260,8 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
       width: 287,
       child: Padding(
         padding: const EdgeInsets.all(21.0),
-        child: Image.asset(
-          image,
+        child: ImageSvgUrlCustom(
+          imagePath: image,
           height: 244,
           width: 244,
         ),

@@ -23,7 +23,7 @@ class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
   // final controller = AuthController.findOrInitialize;
 
   // final _formKey = GlobalKey<FormBuilderState>();
-  List<String> answers = ["Bear", "Lion", "Giraffe", "Elephant"];
+  // List<String> answers = ["Bear", "Lion", "Giraffe", "Elephant"];
   int? selectedAnswerIndex;
   int questionIndex = 0;
   void pickAnswer(int value) {
@@ -108,7 +108,7 @@ class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
               childAspectRatio: 2.35,
               crossAxisSpacing: 5,
             ),
-            itemCount: answers.length,
+            itemCount: question.options!.length,
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: selectedAnswerIndex == null
