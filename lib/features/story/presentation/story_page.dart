@@ -1,10 +1,10 @@
 import 'package:ar_zoo_explorers/base/base_state.dart';
-import 'package:ar_zoo_explorers/features/story/listening/presentation/listening_page.dart';
-import 'package:ar_zoo_explorers/features/story/liststory/presentation/liststory_page.dart';
 import 'package:ar_zoo_explorers/features/story/presentation/story_cubit.dart';
 import 'package:ar_zoo_explorers/features/story/presentation/story_state.dart';
-import 'package:ar_zoo_explorers/features/story/searchstory/presentation/searchstory_page.dart';
-import 'package:ar_zoo_explorers/features/story/storyhome/presentation/storyhome_page.dart';
+import 'package:ar_zoo_explorers/features/storyhome/presentation/storyhome_page.dart';
+import 'package:ar_zoo_explorers/features/storylistening/presentation/storylistening_page.dart';
+import 'package:ar_zoo_explorers/features/storylisting/presentation/storylisting_page.dart';
+import 'package:ar_zoo_explorers/features/storysearching/presentation/storysearching_page.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
@@ -84,9 +84,9 @@ class _State extends BaseState<StoryState, StoryCubit, StoryPage> {
     super.initState();
     _pages = [
       StoryHomePage(onPageChanged: _onJump),
-      const ListStoryPage(),
-      const SearchStoryPage(),
-      const ListeningPage(),
+      const StoryListingPage(),
+      const StorySearchingPage(),
+      const StoryListeningPage(),
     ];
   }
 }

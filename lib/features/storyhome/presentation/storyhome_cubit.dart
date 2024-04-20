@@ -3,8 +3,8 @@ import 'package:ar_zoo_explorers/base/base_cubit.dart';
 import 'package:ar_zoo_explorers/domain/entities/story_topic_entity.dart';
 import 'package:ar_zoo_explorers/features/base-model/button_object.dart';
 import 'package:ar_zoo_explorers/features/base-model/form_builder_text_field_model.dart';
-import 'package:ar_zoo_explorers/features/story/storyhome/model/topic_button_object.dart';
-import 'package:ar_zoo_explorers/features/story/storyhome/presentation/storyhome_state.dart';
+import 'package:ar_zoo_explorers/features/storyhome/model/topic_button_object.dart';
+import 'package:ar_zoo_explorers/features/storyhome/presentation/storyhome_state.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
@@ -61,12 +61,25 @@ class StoryHomeCubit extends BaseCubit<StoryHomeState> {
   }
 
   void getAllTopics(List<StoryTopicEntity> topics) {
+    StoryTopicEntity tmp = StoryTopicEntity(
+        id: '', title: '', name: ',', imageUrl: '', status: true);
     for (var item in topics) {
+      if (item.name != 'otherstories') {
+        lstTopic.add(TopicButtonObject(
+            id: item.id,
+            name: item.name,
+            title: item.title,
+            imageUrl: item.imageUrl));
+      } else {
+        tmp = item;
+      }
+    }
+    if (tmp.id != '') {
       lstTopic.add(TopicButtonObject(
-          id: item.id,
-          name: item.name,
-          title: item.title,
-          imageUrl: item.imageUrl));
+          id: tmp.id,
+          name: tmp.name,
+          title: tmp.title,
+          imageUrl: tmp.imageUrl));
     }
   }
 }

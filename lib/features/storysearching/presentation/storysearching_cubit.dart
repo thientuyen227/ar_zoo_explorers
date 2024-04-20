@@ -1,16 +1,14 @@
 import 'package:ar_zoo_explorers/base/base_cubit.dart';
-import 'package:ar_zoo_explorers/features/story/liststory/presentation/liststory_state.dart';
 import 'package:ar_zoo_explorers/features/story/model/storybuttonobject.dart';
+import 'package:ar_zoo_explorers/features/storysearching/presentation/storysearching_state.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
-class ListStoryCubit extends BaseCubit<ListStoryState> {
-  ListStoryCubit() : super(ListStoryState());
+class StorySearchingCubit extends BaseCubit<StorySearchingState> {
+  StorySearchingCubit() : super(StorySearchingState());
 
-  double WIDTH = 0;
-  double HEIGHT = 0;
-
-  List<StoryButtonObject> lstStory = [
+  List<StoryButtonObject> listSearchStory = [];
+  List<StoryButtonObject> listFullStory = [
     StoryButtonObject(
         avatar:
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFKGwd9XsayxfZ2m8XD3PQegpGYz4Dzwy6hR85H7bgIg&s",
@@ -48,4 +46,41 @@ class ListStoryCubit extends BaseCubit<ListStoryState> {
         topic: 'Giả Tưởng',
         duration: const Duration(minutes: 4, seconds: 34))
   ];
+
+  double WIDTH = 0;
+  double HEIGHT = 0;
+
+  String txtSearch = "";
+
+  // void setListStory(List<AnimalEntity> list, String searchValue) {
+  //   if (list.isNotEmpty) {
+  //     for (int i = 0; i < list.length; i++) {
+  //       listFullAnimal.add(ButtonObject(
+  //           title: list[i].title, icon: list[i].icon, id: list[i].id));
+  //       if (list[i].title.toLowerCase().contains(searchValue.toLowerCase())) {
+  //         listSearchAnimal.add(ButtonObject(
+  //             title: list[i].title, icon: list[i].icon, id: list[i].id));
+  //       }
+  //     }
+  //   }
+  // }
+
+  void onSearch(String searchValue) {
+    listSearchStory = [];
+    for (int i = 0; i < listFullStory.length; i++) {
+      if (listFullStory[i]
+          .name
+          .toLowerCase()
+          .contains(searchValue.trim().toLowerCase())) {
+        listSearchStory.add(StoryButtonObject(
+            id: listFullStory[i].id,
+            name: listFullStory[i].name,
+            avatar: listFullStory[i].avatar,
+            author: listFullStory[i].author,
+            reader: listFullStory[i].reader,
+            topic: listFullStory[i].topic,
+            duration: listFullStory[i].duration));
+      }
+    }
+  }
 }

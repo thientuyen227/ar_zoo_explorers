@@ -1,22 +1,23 @@
 import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/features/story/component/listening_story_button.dart';
-import 'package:ar_zoo_explorers/features/story/listening/presentation/listening_cubit.dart';
-import 'package:ar_zoo_explorers/features/story/listening/presentation/listening_state.dart';
 import 'package:ar_zoo_explorers/features/story/model/storybuttonobject.dart';
+import 'package:ar_zoo_explorers/features/storylistening/presentation/storylistening_cubit.dart';
+import 'package:ar_zoo_explorers/features/storylistening/presentation/storylistening_state.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 @RoutePage()
-class ListeningPage extends StatefulWidget {
-  const ListeningPage({super.key});
+class StoryListeningPage extends StatefulWidget {
+  const StoryListeningPage({super.key});
 
   @override
   State createState() => _State();
 }
 
-class _State extends BaseState<ListeningState, ListeningCubit, ListeningPage> {
+class _State extends BaseState<StoryListeningState, StoryListeningCubit,
+    StoryListeningPage> {
   @override
-  Widget buildByState(BuildContext context, ListeningState state) {
+  Widget buildByState(BuildContext context, StoryListeningState state) {
     return Scaffold(
         // extendBodyBehindAppBar: true,
         appBar: AppBar(

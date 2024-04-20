@@ -28,11 +28,15 @@ class Routes {
   static const String puzzle = "/puzzle";
   static const String puzzleword = "/puzzleword";
   static const String puzzleworddetail = "/puzzleworddetail";
-  static const String liststory = "/liststory";
+
   static const String story = "/story";
   static const String storyhome = "/storyhome";
   static const String storyoverview = "/storyoverview";
   static const String storyplayer = "/storyplayer";
+  static const String storysearching = "/storysearching";
+  static const String storylistening = "/storylistening";
+  static const String storylisting = "/storylisting";
+  static const String storytopic = "/storytopic";
 
   static Route<T> fadeThrough<T>(RouteSettings settings, WidgetBuilder page,
       {int duration = 300}) {

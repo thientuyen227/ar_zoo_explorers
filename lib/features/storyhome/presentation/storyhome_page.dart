@@ -4,13 +4,12 @@ import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/base/widgets/page_loading_indicator.dart';
 import 'package:ar_zoo_explorers/core/data/controller/auth_controller.dart';
-import 'package:ar_zoo_explorers/core/data/controller/topic_controller.dart';
-import 'package:ar_zoo_explorers/domain/entities/story_topic_entity.dart';
+import 'package:ar_zoo_explorers/core/data/controller/story_topic_controller.dart';
 import 'package:ar_zoo_explorers/features/base-model/button_object.dart';
 import 'package:ar_zoo_explorers/features/base-model/form_builder_text_field_model.dart';
-import 'package:ar_zoo_explorers/features/story/storyhome/model/topic_button_object.dart';
-import 'package:ar_zoo_explorers/features/story/storyhome/presentation/storyhome_cubit.dart';
-import 'package:ar_zoo_explorers/features/story/storyhome/presentation/storyhome_state.dart';
+import 'package:ar_zoo_explorers/features/storyhome/model/topic_button_object.dart';
+import 'package:ar_zoo_explorers/features/storyhome/presentation/storyhome_cubit.dart';
+import 'package:ar_zoo_explorers/features/storyhome/presentation/storyhome_state.dart';
 import 'package:ar_zoo_explorers/utils/widget/button_widget.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -169,8 +168,10 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
 
   Widget topicButton(TopicButtonObject btnObject) {
     return GestureDetector(
-        onTap: () {
+        onTap: () async {
           // context.router.pushNamed(Routes.liststory);
+          await storyTopicController.updateCurrentStoryTopic(
+              context, btnObject.id);
           widget.onPageChanged(1);
         },
         child: Container(
@@ -297,9 +298,12 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
     widget.onPageChanged(2);
   }
 
-  void _getAllStoryTopics(List<StoryTopicEntity> lstTopic) {
+  _getAllStoryTopics(BuildContext context) async {
+    await storyTopicController.getAllStoryTopics(context);
+
     setState(() {
-      cubit.getAllTopics(lstTopic);
+      // print(storyTopicController.listStoryTopic.value.length);
+      cubit.getAllTopics(storyTopicController.listStoryTopic.value);
     });
   }
 
@@ -317,7 +321,7 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
     super.initState();
     _setDimension();
     controller.getCurrentUser(context);
-    storyTopicController.getAllStoryTopics(context);
-    _getAllStoryTopics(storyTopicController.listStoryTopic.value);
+    _getAllStoryTopics(context);
+    // print(storyTopicController.listStoryTopic.value.length);
   }
 }

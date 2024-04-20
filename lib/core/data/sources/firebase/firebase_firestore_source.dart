@@ -23,7 +23,7 @@ class FirebaseFirestoreSource {
   final CollectionReference<Map<String, dynamic>> _userAnimalCollectionRef =
       FirebaseFirestore.instance.collection('user_animal');
 
-  final CollectionReference<Map<String, dynamic>> _topicCollectionRef =
+  final CollectionReference<Map<String, dynamic>> _storyTopicCollectionRef =
       FirebaseFirestore.instance.collection('story_topics');
 
   Future<String> get generateUniqueAnimalModelId async =>
@@ -242,7 +242,7 @@ class FirebaseFirestoreSource {
 
   //Story Topics
   Future<StoryTopicModel?> getStoryTopicModel(String id) async {
-    var document = await _topicCollectionRef.doc(id).get();
+    var document = await _storyTopicCollectionRef.doc(id).get();
     if (document.exists && document.data() != null) {
       return StoryTopicModel.fromMap(document.data()!);
     } else {
@@ -251,7 +251,7 @@ class FirebaseFirestoreSource {
   }
 
   Future<List<StoryTopicModel>?> getAllStoryTopicModels() async {
-    var querySnapshot = await _topicCollectionRef.get();
+    var querySnapshot = await _storyTopicCollectionRef.get();
     List<StoryTopicModel> topics = querySnapshot.docs
         .map((doc) => StoryTopicModel.fromMap(doc.data()))
         .toList();

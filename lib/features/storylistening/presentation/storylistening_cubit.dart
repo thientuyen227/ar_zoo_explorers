@@ -1,11 +1,11 @@
 import 'package:ar_zoo_explorers/base/base_cubit.dart';
-import 'package:ar_zoo_explorers/features/story/listening/presentation/listening_state.dart';
 import 'package:ar_zoo_explorers/features/story/model/storybuttonobject.dart';
+import 'package:ar_zoo_explorers/features/storylistening/presentation/storylistening_state.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
-class ListeningCubit extends BaseCubit<ListeningState> {
-  ListeningCubit() : super(ListeningState());
+class StoryListeningCubit extends BaseCubit<StoryListeningState> {
+  StoryListeningCubit() : super(StoryListeningState());
 
   List<StoryButtonObject> listStory = [
     StoryButtonObject(

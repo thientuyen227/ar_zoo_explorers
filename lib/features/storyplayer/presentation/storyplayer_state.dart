@@ -1,4 +1,4 @@
-import '../../../../app/app/app_state.dart';
+import '../../../app/app/app_state.dart';
 
 class StoryPlayerState {
   final PageStatus pageStatus;

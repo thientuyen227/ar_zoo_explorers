@@ -81,7 +81,7 @@ class StoryTopicController extends ControllerHelper {
   }
 }
 
-class TopicBinding implements Bindings {
+class StoryTopicBinding implements Bindings {
   @override
   void dependencies() {
     StoryTopicController.findOrInitialize;

@@ -1,8 +1,8 @@
 import 'package:ar_zoo_explorers/app/config/routes.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
-import 'package:ar_zoo_explorers/features/story/storyoverview/presentation/storyoverview_cubit.dart';
-import 'package:ar_zoo_explorers/features/story/storyoverview/presentation/storyoverview_state.dart';
+import 'package:ar_zoo_explorers/features/storyoverview/presentation/storyoverview_cubit.dart';
+import 'package:ar_zoo_explorers/features/storyoverview/presentation/storyoverview_state.dart';
 import 'package:ar_zoo_explorers/utils/widget/custom_back_button.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';

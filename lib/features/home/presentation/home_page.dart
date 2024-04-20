@@ -3,7 +3,7 @@ import 'package:ar_zoo_explorers/app/theme/dimens.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/core/data/controller/animal_category_controller.dart';
-import 'package:ar_zoo_explorers/core/data/controller/topic_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/story_topic_controller.dart';
 import 'package:ar_zoo_explorers/features/base-model/button_object.dart';
 import 'package:ar_zoo_explorers/features/base-model/form_builder_text_field_model.dart';
 import 'package:ar_zoo_explorers/features/home/presentation/home_state.dart';
