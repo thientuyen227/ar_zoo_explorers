@@ -4,7 +4,7 @@ List<QuestionEntity> questions = [
   QuestionEntity(
     categoryQuestion: '',
     question: 'Which animal is this?',
-    image: '',
+    image: 'assets/images/learning_image/puzzle/fox.png',
     answer: 'FOX',
     puzzles: [],
   ),

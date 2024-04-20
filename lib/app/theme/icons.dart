@@ -96,6 +96,7 @@ class AppIcons {
       "assets/icons/animals/tyrannosaurus.png";
 
   static const String icFeed = "assets/icons/ic_feeds.png";
+  static const String icWarning = "assets/icon/ic_warning.svg";
 }
 
 class AppImages {
