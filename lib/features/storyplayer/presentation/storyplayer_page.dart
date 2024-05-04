@@ -2,6 +2,12 @@ import 'dart:async';
 
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
+import 'package:ar_zoo_explorers/core/data/controller/auth_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/story_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/story_topic_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/user_story_controller.dart';
+import 'package:ar_zoo_explorers/domain/entities/story_entity.dart';
+import 'package:ar_zoo_explorers/domain/entities/user_story_entity.dart';
 import 'package:ar_zoo_explorers/features/story/component/volume_slider.dart';
 import 'package:ar_zoo_explorers/features/storyplayer/presentation/storyplayer_cubit.dart';
 import 'package:ar_zoo_explorers/features/storyplayer/presentation/storyplayer_state.dart';
@@ -24,11 +30,17 @@ class _State
 
   Timer timer = Timer(Duration.zero, () {});
 
+  final controller = AuthController.findOrInitialize;
+  final storyTopicController = StoryTopicController.findOrInitialize;
+  final userStoryController = UserStoryController.findOrInitialize;
+  final storyController = StoryController.findOrInitialize;
+
   @override
   Widget buildByState(BuildContext context, StoryPlayerState state) {
     return PopScope(
         canPop: false, //When false, blocks the current route from being popped.
-        onPopInvoked: (didPop) {
+        onPopInvoked: (didPop) async {
+          await _updatePausedTime();
           Navigator.of(context).pop();
         },
         child: Scaffold(
@@ -58,7 +70,10 @@ class _State
 
   Widget backButton() {
     return AppIconButton(
-      onPressed: () => context.router.pop(),
+      onPressed: () async {
+        await _updatePausedTime();
+        context.router.pop();
+      },
       icon: Container(
           margin: const EdgeInsets.only(left: 0),
           child: Transform.scale(
@@ -475,6 +490,19 @@ class _State
     });
   }
 
+  _getInformations(StoryEntity storyEntity, UserStoryEntity usEntity) {
+    setState(() {
+      cubit.getInformations(storyEntity, usEntity);
+    });
+  }
+
+  Future<void> _updatePausedTime() async {
+    await audioPlayer.stop();
+    await userStoryController.updatePausedTime(context,
+        id: userStoryController.currentUserStory.value.id,
+        pausedTime: cubit.position.inSeconds);
+  }
+
   void setDimension() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
@@ -487,12 +515,16 @@ class _State
   @override
   void initState() {
     super.initState();
+    loadingController.showLoading();
     setDimension();
+    _getInformations(storyController.currentStory.value,
+        userStoryController.currentUserStory.value);
     onDurationChanged();
     onPlayerStateChanged();
     setVolume();
     playAudio();
     completeAudio();
+    loadingController.hideLoading();
   }
 
   @override

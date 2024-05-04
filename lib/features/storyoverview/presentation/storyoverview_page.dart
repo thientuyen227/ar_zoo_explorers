@@ -10,7 +10,6 @@ import 'package:ar_zoo_explorers/domain/entities/user_story_entity.dart';
 import 'package:ar_zoo_explorers/features/storyoverview/presentation/storyoverview_cubit.dart';
 import 'package:ar_zoo_explorers/features/storyoverview/presentation/storyoverview_state.dart';
 import 'package:ar_zoo_explorers/utils/widget/custom_back_button.dart';
-import 'package:ar_zoo_explorers/utils/widget/loading_widget.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
@@ -29,8 +28,8 @@ class _State extends BaseState<StoryOverviewState, StoryOverviewCubit,
   final userStoryController = UserStoryController.findOrInitialize;
   final storyController = StoryController.findOrInitialize;
 
-  @override
-  final loadingController = AppLoadingController();
+  // @override
+  // final loadingController = AppLoadingController();
 
   @override
   Widget buildByState(BuildContext context, StoryOverviewState state) {
@@ -270,12 +269,9 @@ class _State extends BaseState<StoryOverviewState, StoryOverviewCubit,
     List<String> lstTopicName = [];
 
     for (var itemA in lstTopicId) {
-      print("item A : $itemA");
       for (var itemB in storyTopicController.listStoryTopic.value) {
         if (itemA == itemB.id) {
           lstTopicName.add(itemB.title);
-          print("item B : ${itemB.id}");
-          // break;
         }
       }
     }
