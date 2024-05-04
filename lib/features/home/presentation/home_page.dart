@@ -3,6 +3,8 @@ import 'package:ar_zoo_explorers/app/theme/dimens.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/core/data/controller/animal_category_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/story_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/story_topic_controller.dart';
 import 'package:ar_zoo_explorers/features/base-model/button_object.dart';
 import 'package:ar_zoo_explorers/features/base-model/form_builder_text_field_model.dart';
 import 'package:ar_zoo_explorers/features/home/presentation/home_state.dart';
@@ -36,6 +38,8 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   final controller = AuthController.findOrInitialize;
   final animalController = AnimalController.findOrInitialize;
   final cateController = AnimalCategoryController.findOrInitialize;
+  final storyTopicController = StoryTopicController.findOrInitialize;
+  final storyController = StoryController.findOrInitialize;
 
   final _formKey = GlobalKey<FormBuilderState>();
 
@@ -79,7 +83,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
                         carouselSlider(),
                         searchBar(cubit.searchBar),
                         const SizedBox(height: 20),
-                        listOptionButton(),
+                        listOptionButton(context),
                         const SizedBox(height: 24),
                         listModelButton(cubit.listAnimalCategory),
                       ]),
@@ -88,20 +92,21 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
                 )))));
   }
 
-  Widget listOptionButton() {
+  Widget listOptionButton(BuildContext context) {
     return Column(
       children: [
         componentTitle("Options"),
-        optionButton(AppImages.imgStoryTelling, "Tell stories for children",
-            Routes.story),
+        optionButton(context, AppImages.imgStoryTelling,
+            "Tell stories for children", Routes.story),
         const SizedBox(height: 16),
-        optionButton(
-            AppImages.imgLearning, "Learn with children", Routes.learning)
+        optionButton(context, AppImages.imgLearning, "Learn with children",
+            Routes.learning)
       ],
     );
   }
 
-  Widget optionButton(String imageUrl, String content, String routePage) {
+  Widget optionButton(
+      BuildContext context, String imageUrl, String content, String routePage) {
     return ElevatedButton(
         style: ElevatedButton.styleFrom(
             backgroundColor: const Color.fromARGB(255, 89, 178, 252),
@@ -111,8 +116,12 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
             padding: const EdgeInsets.all(0),
             fixedSize: Size(cubit.WIDTH * 0.85, cubit.HEIGHT * 0.1),
             shadowColor: Colors.black),
-        onPressed: () {
+        onPressed: () async {
           context.router.pushNamed(routePage);
+          if (routePage == Routes.story) {
+            await _getAllTopics(context);
+            await _getStoriesByReleaseDate(context);
+          }
         },
         child: Row(
           children: [
@@ -401,6 +410,14 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
           borderRadius: BorderRadius.circular(20.0),
           child: Image.asset(cubit.lstAdvertisement[i], fit: BoxFit.cover)));
     }
+  }
+
+  Future<void> _getAllTopics(BuildContext context) async {
+    await storyTopicController.getAllStoryTopics(context);
+  }
+
+  Future<void> _getStoriesByReleaseDate(BuildContext context) async {
+    await storyController.getStoriesByReleaseDate(context, true);
   }
 
   void _setDimension() {

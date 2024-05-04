@@ -14,8 +14,13 @@ import 'package:injectable/injectable.dart' as _i2;
 
 import '../app/app/app_cubit.dart' as _i7;
 import '../app/config/app_config.dart' as _i6;
+<<<<<<< HEAD
 import '../app/managers/recognize_voice_manager.dart' as _i23;
 import '../core/data/local_storage/local_storage.dart' as _i16;
+=======
+import '../app/managers/recognize_voice_manager.dart' as _i20;
+import '../core/data/local_storage/local_storage.dart' as _i14;
+>>>>>>> origin/develop_minhtien
 import '../features/account/accountmanager/presentation/accountmanager_cubit.dart'
     as _i4;
 import '../features/account/userinformation/presentation/userinformation_cubit.dart'
@@ -28,11 +33,17 @@ import '../features/authentication/changepassword/presentation/changepassword_cu
     as _i9;
 import '../features/authentication/forgotpassword/presentation/forgotpassword_cubit.dart'
     as _i10;
-import '../features/authentication/login/presentation/login_cubit.dart' as _i17;
+import '../features/authentication/login/presentation/login_cubit.dart' as _i15;
 import '../features/authentication/register/presentation/register_cubit.dart'
+<<<<<<< HEAD
     as _i24;
 import '../features/authentication/resetpassword/presentation/resetpassword_cubit.dart'
     as _i25;
+=======
+    as _i21;
+import '../features/authentication/resetpassword/presentation/resetpassword_cubit.dart'
+    as _i22;
+>>>>>>> origin/develop_minhtien
 import '../features/authentication/termsofservice/presentation/termofservice_cubit.dart'
     as _i33;
 import '../features/home/presentation/home_cubit.dart' as _i11;
@@ -40,6 +51,7 @@ import '../features/language/change_language_cubit.dart' as _i8;
 import '../features/languageselection/presentation/languageselection_cubit.dart'
     as _i12;
 import '../features/learning/presentation/learning_cubit.dart' as _i13;
+<<<<<<< HEAD
 import '../features/modeldetail/presentation/modeldetail_cubit.dart' as _i18;
 import '../features/phonics/phonics_cubit.dart' as _i19;
 import '../features/puzzle/puzzle_cubit.dart' as _i20;
@@ -57,6 +69,26 @@ import '../features/story/storyoverview/presentation/storyoverview_cubit.dart'
     as _i31;
 import '../features/story/storyplayer/presentation/storyplayer_cubit.dart'
     as _i32;
+=======
+import '../features/modeldetail/presentation/modeldetail_cubit.dart' as _i16;
+import '../features/puzzle/puzzle_cubit.dart' as _i17;
+import '../features/puzzleword/puzzle_word_cubit.dart' as _i18;
+import '../features/puzzleworddetail/puzzle_word_detail_cubit.dart' as _i19;
+import '../features/searchmodel/presentation/searchmodel_cubit.dart' as _i23;
+import '../features/setting/presentation/setting_cubit.dart' as _i24;
+import '../features/story/presentation/story_cubit.dart' as _i25;
+import '../features/storyfavorite/presentation/storyfavorite_cubit.dart'
+    as _i26;
+import '../features/storyhome/presentation/storyhome_cubit.dart' as _i27;
+import '../features/storylistening/presentation/storylistening_cubit.dart'
+    as _i28;
+import '../features/storyoverview/presentation/storyoverview_cubit.dart'
+    as _i29;
+import '../features/storyplayer/presentation/storyplayer_cubit.dart' as _i30;
+import '../features/storysearching/presentation/storysearching_cubit.dart'
+    as _i31;
+import '../features/storytopic/presentation/storytopic_cubit.dart' as _i32;
+>>>>>>> origin/develop_minhtien
 import '../features/vocabulary/vocabulary_cubit.dart' as _i36;
 import '../features/vocabularydetail/vocabulary_detail_cubit.dart' as _i37;
 import '../features/welcome/presentation/welcome_cubit.dart' as _i38;
@@ -83,6 +115,7 @@ _i1.GetIt $initGetit(
   gh.factory<_i11.HomeCubit>(() => _i11.HomeCubit());
   gh.factory<_i12.LanguageSelectionCubit>(() => _i12.LanguageSelectionCubit());
   gh.factory<_i13.LearningCubit>(() => _i13.LearningCubit());
+<<<<<<< HEAD
   gh.factory<_i14.ListStoryCubit>(() => _i14.ListStoryCubit());
   gh.factory<_i15.ListeningCubit>(() => _i15.ListeningCubit());
   gh.singleton<_i16.LocalStorage>(_i16.LocalStorageImpl());
@@ -102,6 +135,27 @@ _i1.GetIt $initGetit(
   gh.factory<_i30.StoryHomeCubit>(() => _i30.StoryHomeCubit());
   gh.factory<_i31.StoryOverviewCubit>(() => _i31.StoryOverviewCubit());
   gh.factory<_i32.StoryPlayerCubit>(() => _i32.StoryPlayerCubit());
+=======
+  gh.singleton<_i14.LocalStorage>(_i14.LocalStorageImpl());
+  gh.factory<_i15.LoginCubit>(() => _i15.LoginCubit());
+  gh.factory<_i16.ModelDetailCubit>(() => _i16.ModelDetailCubit());
+  gh.factory<_i17.PuzzleCubit>(() => _i17.PuzzleCubit());
+  gh.factory<_i18.PuzzleWordCubit>(() => _i18.PuzzleWordCubit());
+  gh.factory<_i19.PuzzleWordDetailCubit>(() => _i19.PuzzleWordDetailCubit());
+  gh.singleton<_i20.RecognizeVoiceManager>(_i20.RecognizeVoiceManager());
+  gh.factory<_i21.RegisterCubit>(() => _i21.RegisterCubit());
+  gh.factory<_i22.ResetPasswordCubit>(() => _i22.ResetPasswordCubit());
+  gh.factory<_i23.SearchModelCubit>(() => _i23.SearchModelCubit());
+  gh.factory<_i24.SettingCubit>(() => _i24.SettingCubit());
+  gh.factory<_i25.StoryCubit>(() => _i25.StoryCubit());
+  gh.factory<_i26.StoryFavoriteCubit>(() => _i26.StoryFavoriteCubit());
+  gh.factory<_i27.StoryHomeCubit>(() => _i27.StoryHomeCubit());
+  gh.factory<_i28.StoryListeningCubit>(() => _i28.StoryListeningCubit());
+  gh.factory<_i29.StoryOverviewCubit>(() => _i29.StoryOverviewCubit());
+  gh.factory<_i30.StoryPlayerCubit>(() => _i30.StoryPlayerCubit());
+  gh.factory<_i31.StorySearchingCubit>(() => _i31.StorySearchingCubit());
+  gh.factory<_i32.StoryTopicCubit>(() => _i32.StoryTopicCubit());
+>>>>>>> origin/develop_minhtien
   gh.factory<_i33.TermOfServiceCubit>(() => _i33.TermOfServiceCubit());
   gh.factory<_i34.UserInformationCubit>(() => _i34.UserInformationCubit());
   gh.factory<_i35.UserProfileCubit>(() => _i35.UserProfileCubit());
