@@ -6,12 +6,12 @@ class StoryButtonObject {
   String reader;
   int listenCount;
   Duration duration;
-  String topic;
+  List<String> topic;
   Duration timestamp;
 
   StoryButtonObject(
       {this.id,
-      required this.name,
+      this.name = "",
       required this.avatar,
       this.author = "Đang cập nhật",
       this.reader = "Đang cập nhật",

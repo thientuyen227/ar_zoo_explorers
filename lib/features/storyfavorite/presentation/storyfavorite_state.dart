@@ -1,13 +1,13 @@
 import 'package:ar_zoo_explorers/app/app/app_state.dart';
 
-class StoryListingState {
+class StoryFavoriteState {
   final PageStatus pageStatus;
-  StoryListingState({
+  StoryFavoriteState({
     this.pageStatus = PageStatus.loading,
   });
 
-  StoryListingState copyWith({PageStatus? pageStatus}) {
-    return StoryListingState(
+  StoryFavoriteState copyWith({PageStatus? pageStatus}) {
+    return StoryFavoriteState(
       pageStatus: pageStatus ?? this.pageStatus,
     );
   }

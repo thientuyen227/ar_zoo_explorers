@@ -54,11 +54,11 @@ import 'package:ar_zoo_explorers/features/setting/presentation/setting_page.dart
 import 'package:ar_zoo_explorers/features/splash/splash_page.dart' as _i22;
 import 'package:ar_zoo_explorers/features/story/presentation/story_page.dart'
     as _i27;
-import 'package:ar_zoo_explorers/features/storyhome/presentation/storyhome_page.dart'
+import 'package:ar_zoo_explorers/features/storyfavorite/presentation/storyfavorite_page.dart'
     as _i23;
-import 'package:ar_zoo_explorers/features/storylistening/presentation/storylistening_page.dart'
+import 'package:ar_zoo_explorers/features/storyhome/presentation/storyhome_page.dart'
     as _i24;
-import 'package:ar_zoo_explorers/features/storylisting/presentation/storylisting_page.dart'
+import 'package:ar_zoo_explorers/features/storylistening/presentation/storylistening_page.dart'
     as _i25;
 import 'package:ar_zoo_explorers/features/storyoverview/presentation/storyoverview_page.dart'
     as _i26;
@@ -215,11 +215,17 @@ abstract class $AppRouter extends _i37.RootStackRouter {
         child: const _i22.SplashPage(),
       );
     },
+    StoryFavoriteRoute.name: (routeData) {
+      return _i37.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i23.StoryFavoritePage(),
+      );
+    },
     StoryHomeRoute.name: (routeData) {
       final args = routeData.argsAs<StoryHomeRouteArgs>();
       return _i37.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i23.StoryHomePage(
+        child: _i24.StoryHomePage(
           key: args.key,
           onPageChanged: args.onPageChanged,
         ),
@@ -228,13 +234,7 @@ abstract class $AppRouter extends _i37.RootStackRouter {
     StoryListeningRoute.name: (routeData) {
       return _i37.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i24.StoryListeningPage(),
-      );
-    },
-    StoryListingRoute.name: (routeData) {
-      return _i37.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const _i25.StoryListingPage(),
+        child: const _i25.StoryListeningPage(),
       );
     },
     StoryOverviewRoute.name: (routeData) {
@@ -615,7 +615,21 @@ class SplashRoute extends _i37.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i23.StoryHomePage]
+/// [_i23.StoryFavoritePage]
+class StoryFavoriteRoute extends _i37.PageRouteInfo<void> {
+  const StoryFavoriteRoute({List<_i37.PageRouteInfo>? children})
+      : super(
+          StoryFavoriteRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'StoryFavoriteRoute';
+
+  static const _i37.PageInfo<void> page = _i37.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i24.StoryHomePage]
 class StoryHomeRoute extends _i37.PageRouteInfo<StoryHomeRouteArgs> {
   StoryHomeRoute({
     _i38.Key? key,
@@ -653,7 +667,7 @@ class StoryHomeRouteArgs {
 }
 
 /// generated route for
-/// [_i24.StoryListeningPage]
+/// [_i25.StoryListeningPage]
 class StoryListeningRoute extends _i37.PageRouteInfo<void> {
   const StoryListeningRoute({List<_i37.PageRouteInfo>? children})
       : super(
@@ -662,20 +676,6 @@ class StoryListeningRoute extends _i37.PageRouteInfo<void> {
         );
 
   static const String name = 'StoryListeningRoute';
-
-  static const _i37.PageInfo<void> page = _i37.PageInfo<void>(name);
-}
-
-/// generated route for
-/// [_i25.StoryListingPage]
-class StoryListingRoute extends _i37.PageRouteInfo<void> {
-  const StoryListingRoute({List<_i37.PageRouteInfo>? children})
-      : super(
-          StoryListingRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'StoryListingRoute';
 
   static const _i37.PageInfo<void> page = _i37.PageInfo<void>(name);
 }

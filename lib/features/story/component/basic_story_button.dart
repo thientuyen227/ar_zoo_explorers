@@ -50,7 +50,7 @@ class _BasicStoryButtonState extends State<BasicStoryButton> {
                           fontWeight: FontWeight.bold,
                           color: Colors.green))
                 ]),
-                topicStory(widget.item.topic),
+                topicStory(widget.item.topic[0]),
               ])),
           const SizedBox(width: 20),
         ]));

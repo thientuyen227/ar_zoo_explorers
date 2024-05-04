@@ -2,23 +2,23 @@ import 'package:ar_zoo_explorers/app/config/routes.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/features/story/component/basic_story_button.dart';
 import 'package:ar_zoo_explorers/features/story/model/storybuttonobject.dart';
-import 'package:ar_zoo_explorers/features/storylisting/presentation/storylisting_cubit.dart';
-import 'package:ar_zoo_explorers/features/storylisting/presentation/storylisting_state.dart';
+import 'package:ar_zoo_explorers/features/storyfavorite/presentation/storyfavorite_cubit.dart';
+import 'package:ar_zoo_explorers/features/storyfavorite/presentation/storyfavorite_state.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 @RoutePage()
-class StoryListingPage extends StatefulWidget {
-  const StoryListingPage({super.key});
+class StoryFavoritePage extends StatefulWidget {
+  const StoryFavoritePage({super.key});
 
   @override
   State createState() => _State();
 }
 
-class _State
-    extends BaseState<StoryListingState, StoryListingCubit, StoryListingPage> {
+class _State extends BaseState<StoryFavoriteState, StoryFavoriteCubit,
+    StoryFavoritePage> {
   @override
-  Widget buildByState(BuildContext context, StoryListingState state) {
+  Widget buildByState(BuildContext context, StoryFavoriteState state) {
     return Scaffold(
         // extendBodyBehindAppBar: true,
         appBar: AppBar(

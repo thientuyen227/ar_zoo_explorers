@@ -26,27 +26,34 @@ class _State
 
   @override
   Widget buildByState(BuildContext context, StoryPlayerState state) {
-    return Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-            centerTitle: true,
-            title: Text(cubit.name,
-                style: const TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold)),
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            leading: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [backButton()]),
-            actions: const []),
-        body: Stack(children: [
-          ClipRect(
-              child: Image.network(cubit.avatar,
-                  width: cubit.WIDTH, height: cubit.HEIGHT, fit: BoxFit.cover)),
-          backgroundPage(context)
-        ]));
+    return PopScope(
+        canPop: false, //When false, blocks the current route from being popped.
+        onPopInvoked: (didPop) {
+          Navigator.of(context).pop();
+        },
+        child: Scaffold(
+            extendBodyBehindAppBar: true,
+            appBar: AppBar(
+                centerTitle: true,
+                title: Text(cubit.name,
+                    style: const TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold)),
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                leading: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [backButton()]),
+                actions: const []),
+            body: Stack(children: [
+              ClipRect(
+                  child: Image.network(cubit.avatar,
+                      width: cubit.WIDTH,
+                      height: cubit.HEIGHT,
+                      fit: BoxFit.cover)),
+              backgroundPage(context)
+            ])));
   }
 
   Widget backButton() {

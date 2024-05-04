@@ -1,4 +1,6 @@
 import 'package:ar_zoo_explorers/base/base_cubit.dart';
+import 'package:ar_zoo_explorers/domain/entities/story_entity.dart';
+import 'package:ar_zoo_explorers/domain/entities/user_story_entity.dart';
 import 'package:ar_zoo_explorers/features/storyoverview/presentation/storyoverview_state.dart';
 import 'package:injectable/injectable.dart';
 
@@ -8,15 +10,41 @@ class StoryOverviewCubit extends BaseCubit<StoryOverviewState> {
 
   double HEIGHT = 0;
   double WIDTH = 0;
-  String name = "Rùa và thỏ";
+  String name = "";
   String avatar =
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFKGwd9XsayxfZ2m8XD3PQegpGYz4Dzwy6hR85H7bgIg&s";
-  String author = "Đang cập nhật";
-  String reader = "Đang cập nhật";
-  int listencount = 100;
+      "https://firebasestorage.googleapis.com/v0/b/ar-zoo-explorers.appspot.com/o/stories%2Fimg_default_book.jpg?alt=media&token=8dec4ea0-7fb6-436b-9b09-0efddf866fb6";
+  String author = "";
+  String reader = "";
+  int listenCount = 0;
   Duration duration = const Duration(seconds: 0, minutes: 0, hours: 0);
-  String topic = "Ngụ ngôn";
+  String topic = "";
+  String overView = "";
+  bool isFavorite = false;
 
-  String overview =
-      "Một cuộc đua đầy kịch tính giữa hai nhân vật đã tạo ra sự chú ý đặc biệt. Sự đối lập giữa tốc độ của thỏ và kiên nhẫn của rùa làm cho câu chuyện trở nên hấp dẫn và gợi lên những bài học sâu sắc về sự quyết tâm và kiên định trong cuộc sống.";
+  void setStoryInformation(StoryEntity storyEntity, UserStoryEntity usEntity,
+      List<String> lstTopicName) {
+    name = storyEntity.title;
+    avatar = storyEntity.avatar;
+    author = storyEntity.author;
+    reader = storyEntity.reader;
+    listenCount = storyEntity.listenCount;
+    duration = Duration(seconds: storyEntity.duration);
+    topic = getTopics(lstTopicName);
+    overView = storyEntity.overView;
+    listenCount = storyEntity.listenCount;
+    isFavorite = usEntity.isFavorited;
+  }
+
+  String getTopics(List<String> lstTopicName) {
+    print("A");
+    String topics = lstTopicName[0];
+    for (int i = 1; i < lstTopicName.length; i++) {
+      topics = "$topics, ${lstTopicName[i]}";
+    }
+    return topics;
+  }
+
+  void isLoved() {
+    isFavorite = !isFavorite;
+  }
 }

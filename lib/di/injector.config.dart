@@ -47,10 +47,11 @@ import '../features/puzzleworddetail/puzzle_word_detail_cubit.dart' as _i19;
 import '../features/searchmodel/presentation/searchmodel_cubit.dart' as _i23;
 import '../features/setting/presentation/setting_cubit.dart' as _i24;
 import '../features/story/presentation/story_cubit.dart' as _i25;
-import '../features/storyhome/presentation/storyhome_cubit.dart' as _i26;
+import '../features/storyfavorite/presentation/storyfavorite_cubit.dart'
+    as _i26;
+import '../features/storyhome/presentation/storyhome_cubit.dart' as _i27;
 import '../features/storylistening/presentation/storylistening_cubit.dart'
-    as _i27;
-import '../features/storylisting/presentation/storylisting_cubit.dart' as _i28;
+    as _i28;
 import '../features/storyoverview/presentation/storyoverview_cubit.dart'
     as _i29;
 import '../features/storyplayer/presentation/storyplayer_cubit.dart' as _i30;
@@ -95,9 +96,9 @@ _i1.GetIt $initGetit(
   gh.factory<_i23.SearchModelCubit>(() => _i23.SearchModelCubit());
   gh.factory<_i24.SettingCubit>(() => _i24.SettingCubit());
   gh.factory<_i25.StoryCubit>(() => _i25.StoryCubit());
-  gh.factory<_i26.StoryHomeCubit>(() => _i26.StoryHomeCubit());
-  gh.factory<_i27.StoryListeningCubit>(() => _i27.StoryListeningCubit());
-  gh.factory<_i28.StoryListingCubit>(() => _i28.StoryListingCubit());
+  gh.factory<_i26.StoryFavoriteCubit>(() => _i26.StoryFavoriteCubit());
+  gh.factory<_i27.StoryHomeCubit>(() => _i27.StoryHomeCubit());
+  gh.factory<_i28.StoryListeningCubit>(() => _i28.StoryListeningCubit());
   gh.factory<_i29.StoryOverviewCubit>(() => _i29.StoryOverviewCubit());
   gh.factory<_i30.StoryPlayerCubit>(() => _i30.StoryPlayerCubit());
   gh.factory<_i31.StorySearchingCubit>(() => _i31.StorySearchingCubit());

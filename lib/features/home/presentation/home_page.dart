@@ -3,6 +3,7 @@ import 'package:ar_zoo_explorers/app/theme/dimens.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/core/data/controller/animal_category_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/story_controller.dart';
 import 'package:ar_zoo_explorers/core/data/controller/story_topic_controller.dart';
 import 'package:ar_zoo_explorers/features/base-model/button_object.dart';
 import 'package:ar_zoo_explorers/features/base-model/form_builder_text_field_model.dart';
@@ -38,6 +39,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   final animalController = AnimalController.findOrInitialize;
   final cateController = AnimalCategoryController.findOrInitialize;
   final storyTopicController = StoryTopicController.findOrInitialize;
+  final storyController = StoryController.findOrInitialize;
 
   final _formKey = GlobalKey<FormBuilderState>();
 
@@ -118,6 +120,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
           context.router.pushNamed(routePage);
           if (routePage == Routes.story) {
             await _getAllTopics(context);
+            await _getStoriesByReleaseDate(context);
           }
         },
         child: Row(
@@ -411,6 +414,10 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
 
   Future<void> _getAllTopics(BuildContext context) async {
     await storyTopicController.getAllStoryTopics(context);
+  }
+
+  Future<void> _getStoriesByReleaseDate(BuildContext context) async {
+    await storyController.getStoriesByReleaseDate(context, true);
   }
 
   void _setDimension() {

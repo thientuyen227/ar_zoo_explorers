@@ -4,9 +4,11 @@ import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/base/widgets/page_loading_indicator.dart';
 import 'package:ar_zoo_explorers/core/data/controller/auth_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/story_controller.dart';
 import 'package:ar_zoo_explorers/core/data/controller/story_topic_controller.dart';
-import 'package:ar_zoo_explorers/features/base-model/button_object.dart';
+import 'package:ar_zoo_explorers/core/data/controller/user_story_controller.dart';
 import 'package:ar_zoo_explorers/features/base-model/form_builder_text_field_model.dart';
+import 'package:ar_zoo_explorers/features/story/model/storybuttonobject.dart';
 import 'package:ar_zoo_explorers/features/storyhome/model/topic_button_object.dart';
 import 'package:ar_zoo_explorers/features/storyhome/presentation/storyhome_cubit.dart';
 import 'package:ar_zoo_explorers/features/storyhome/presentation/storyhome_state.dart';
@@ -30,6 +32,8 @@ class StoryHomePage extends StatefulWidget {
 class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
   final controller = AuthController.findOrInitialize;
   final storyTopicController = StoryTopicController.findOrInitialize;
+  final userStoryController = UserStoryController.findOrInitialize;
+  final storyController = StoryController.findOrInitialize;
 
   final _formKey = GlobalKey<FormBuilderState>();
 
@@ -70,7 +74,7 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
                     Container(height: 24),
                     searchBar(cubit.searchBar),
                     // Container(height: 24),
-                    // recommendedList(),
+                    recommendedList(),
                     Container(height: 24),
                     topicList(),
                   ]),
@@ -172,7 +176,7 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
           // context.router.pushNamed(Routes.liststory);
           await storyTopicController.updateCurrentStoryTopic(
               context, btnObject.id);
-          widget.onPageChanged(1);
+          // widget.onPageChanged(1);
         },
         child: Container(
             width: cubit.WIDTH * 0.39,
@@ -196,9 +200,14 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
             ])));
   }
 
-  Widget storyButton(ButtonObject btnObject) {
+  Widget storyButton(StoryButtonObject btnObject) {
     return GestureDetector(
-        onTap: () {},
+        onTap: () async {
+          await storyController.getStory(context, id: btnObject.id!);
+          await userStoryController.createOrGetUserStory(context,
+              userId: controller.currentUser.value.id, storyId: btnObject.id!);
+          context.router.pushNamed(Routes.storyoverview);
+        },
         child: Container(
             width: cubit.WIDTH * 0.37,
             height: cubit.WIDTH * 0.37,
@@ -215,10 +224,10 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
                       offset: const Offset(0, 1))
                 ]),
             child: Column(children: [
-              buttonImage(btnObject.icon),
+              buttonImage(btnObject.avatar),
               Padding(
                   padding: const EdgeInsets.only(top: 4),
-                  child: buttonTitle(btnObject.title)),
+                  child: buttonTitle(btnObject.name)),
             ])));
   }
 
@@ -249,6 +258,7 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
 
   Widget recommendedList() {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      const SizedBox(height: 15),
       const Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Text("Recommended",
             style: TextStyle(
@@ -281,7 +291,7 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
     ]);
   }
 
-  Widget listRecommendedButton(List<ButtonObject> list) {
+  Widget listRecommendedButton(List<StoryButtonObject> list) {
     if (list.isEmpty) {
       return const Text("Chưa cập nhật!");
     }
@@ -307,6 +317,15 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
     });
   }
 
+  _getStoriesByReleaseDate(BuildContext context) async {
+    await storyController.getStoriesByReleaseDate(context, true);
+
+    setState(() {
+      // print(storyTopicController.listStoryTopic.value.length);
+      cubit.getRecommendStories(storyController.listStory.value);
+    });
+  }
+
   void _setDimension() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
@@ -322,6 +341,7 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
     _setDimension();
     controller.getCurrentUser(context);
     _getAllStoryTopics(context);
+    _getStoriesByReleaseDate(context);
     // print(storyTopicController.listStoryTopic.value.length);
   }
 }

@@ -1,9 +1,16 @@
 import 'package:ar_zoo_explorers/app/config/routes.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
+import 'package:ar_zoo_explorers/core/data/controller/auth_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/story_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/story_topic_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/user_story_controller.dart';
+import 'package:ar_zoo_explorers/domain/entities/story_entity.dart';
+import 'package:ar_zoo_explorers/domain/entities/user_story_entity.dart';
 import 'package:ar_zoo_explorers/features/storyoverview/presentation/storyoverview_cubit.dart';
 import 'package:ar_zoo_explorers/features/storyoverview/presentation/storyoverview_state.dart';
 import 'package:ar_zoo_explorers/utils/widget/custom_back_button.dart';
+import 'package:ar_zoo_explorers/utils/widget/loading_widget.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
@@ -17,6 +24,14 @@ class StoryOverviewPage extends StatefulWidget {
 
 class _State extends BaseState<StoryOverviewState, StoryOverviewCubit,
     StoryOverviewPage> {
+  final controller = AuthController.findOrInitialize;
+  final storyTopicController = StoryTopicController.findOrInitialize;
+  final userStoryController = UserStoryController.findOrInitialize;
+  final storyController = StoryController.findOrInitialize;
+
+  @override
+  final loadingController = AppLoadingController();
+
   @override
   Widget buildByState(BuildContext context, StoryOverviewState state) {
     return Scaffold(
@@ -33,7 +48,7 @@ class _State extends BaseState<StoryOverviewState, StoryOverviewCubit,
             leading: const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [CustomBackButton()]),
-            actions: const []),
+            actions: [loveButton()]),
         body: backgroundPage(context));
   }
 
@@ -49,8 +64,6 @@ class _State extends BaseState<StoryOverviewState, StoryOverviewCubit,
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter)),
           child: whiteLayoutPage()),
-      // loadArButton(),
-      // modelImage(cubit.imagePath),
     ]));
   }
 
@@ -71,6 +84,25 @@ class _State extends BaseState<StoryOverviewState, StoryOverviewCubit,
             top: cubit.HEIGHT * 0.12, left: 20, right: 20, bottom: 25),
         padding: const EdgeInsets.only(left: 20, right: 20, bottom: 25),
         child: storyInformation());
+  }
+
+  Widget loveButton() {
+    return Container(
+        width: cubit.WIDTH * 0.1,
+        height: cubit.WIDTH * 0.1,
+        margin: const EdgeInsets.only(right: 15),
+        child: IconButton(
+            onPressed: () async {
+              setState(() {
+                cubit.isLoved();
+              });
+              await _updateLoveButton(context);
+            },
+            icon: Image.asset(
+                cubit.isFavorite
+                    ? AppIcons.icHeartFull64
+                    : AppIcons.icHeartEmpty64,
+                fit: BoxFit.cover)));
   }
 
   Widget storyInformation() {
@@ -99,7 +131,12 @@ class _State extends BaseState<StoryOverviewState, StoryOverviewCubit,
             style: const TextStyle(
                 fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green))
       ]),
-      Row(children: [fieldName("Danh mục : "), topicStory("Ngụ ngôn")]),
+      Row(children: [
+        fieldName("Lượt nghe : "),
+        Text('${cubit.listenCount}',
+            style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold))
+      ]),
+      Row(children: [fieldName("Danh mục : "), topicStory(cubit.topic)]),
       Row(children: [fieldName("Tóm tắt : ")]),
       overview(),
       SizedBox(height: cubit.HEIGHT * 0.1),
@@ -157,7 +194,7 @@ class _State extends BaseState<StoryOverviewState, StoryOverviewCubit,
   Widget overview() {
     return Container(
         padding: const EdgeInsets.all(5),
-        child: Text(cubit.overview,
+        child: Text(cubit.overView,
             textAlign: TextAlign.justify,
             style: TextStyle(fontSize: 15, color: Colors.grey.shade700)));
   }
@@ -172,8 +209,8 @@ class _State extends BaseState<StoryOverviewState, StoryOverviewCubit,
             padding: const EdgeInsets.all(0),
             fixedSize: Size(cubit.WIDTH * 0.85, cubit.HEIGHT * 0.06),
             shadowColor: Colors.black),
-        onPressed: () {
-          context.router.pushNamed(Routes.storyplayer);
+        onPressed: () async {
+          await _listenStory();
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -215,9 +252,52 @@ class _State extends BaseState<StoryOverviewState, StoryOverviewCubit,
     });
   }
 
+  _updateLoveButton(BuildContext context) async {
+    await userStoryController.updateFavorite(context,
+        id: userStoryController.currentUserStory.value.id,
+        isFavorited: cubit.isFavorite);
+  }
+
+  _setStoryInformation(
+      StoryEntity storyEntity, UserStoryEntity usEntity) async {
+    List<String> lstTopicName = await _getListTopicNames(storyEntity.topicId);
+    setState(() {
+      cubit.setStoryInformation(storyEntity, usEntity, lstTopicName);
+    });
+  }
+
+  Future<List<String>> _getListTopicNames(List<String> lstTopicId) async {
+    List<String> lstTopicName = [];
+
+    for (var itemA in lstTopicId) {
+      print("item A : $itemA");
+      for (var itemB in storyTopicController.listStoryTopic.value) {
+        if (itemA == itemB.id) {
+          lstTopicName.add(itemB.title);
+          print("item B : ${itemB.id}");
+          // break;
+        }
+      }
+    }
+    return lstTopicName;
+  }
+
+  Future<void> _listenStory() async {
+    await storyController.updateListenCount(
+        context, storyController.currentStory.value.id);
+    setState(() {
+      cubit.listenCount = storyController.currentStory.value.listenCount;
+    });
+    context.router.pushNamed(Routes.storyplayer);
+  }
+
   @override
   void initState() {
     super.initState();
+    loadingController.showLoading();
     setDimension();
+    _setStoryInformation(storyController.currentStory.value,
+        userStoryController.currentUserStory.value);
+    loadingController.hideLoading();
   }
 }

@@ -35,7 +35,7 @@ class Routes {
   static const String storyplayer = "/storyplayer";
   static const String storysearching = "/storysearching";
   static const String storylistening = "/storylistening";
-  static const String storylisting = "/storylisting";
+  static const String storyfavorite = "/storyfavorite";
   static const String storytopic = "/storytopic";
 
   static Route<T> fadeThrough<T>(RouteSettings settings, WidgetBuilder page,
