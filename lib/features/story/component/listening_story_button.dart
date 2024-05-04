@@ -36,7 +36,7 @@ class _ListeningStoryButtonState extends State<ListeningStoryButton> {
                           fontWeight: FontWeight.bold,
                           color: Colors.green))
                 ]),
-                topicStory(widget.item.topic),
+                topicStory(widget.item.topic[0]),
                 progressBar(widget.item.timestamp, widget.item.duration)
               ])),
           const SizedBox(width: 20),
