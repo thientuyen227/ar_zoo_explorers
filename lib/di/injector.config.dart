@@ -4,7 +4,8 @@
 // InjectableConfigGenerator
 // **************************************************************************
 
-// ignore_for_file: type=lint
+// ignore_for_file: unnecessary_lambdas
+// ignore_for_file: lines_longer_than_80_chars
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
@@ -76,22 +77,22 @@ _i1.GetIt $initGetit(
   gh.factory<_i3.ARCubit>(() => _i3.ARCubit());
   gh.factory<_i4.AccountManagerCubit>(() => _i4.AccountManagerCubit());
   gh.factory<_i5.AnimalModelsCubit>(() => _i5.AnimalModelsCubit());
-  gh.singleton<_i6.AppConfig>(() => _i6.AppConfig());
-  gh.singleton<_i7.AppCubit>(() => _i7.AppCubit());
+  gh.singleton<_i6.AppConfig>(_i6.AppConfig());
+  gh.singleton<_i7.AppCubit>(_i7.AppCubit());
   gh.factory<_i8.ChangLanguageCubit>(() => _i8.ChangLanguageCubit());
   gh.factory<_i9.ChangePasswordCubit>(() => _i9.ChangePasswordCubit());
   gh.factory<_i10.ForgotPasswordCubit>(() => _i10.ForgotPasswordCubit());
   gh.factory<_i11.HomeCubit>(() => _i11.HomeCubit());
   gh.factory<_i12.LanguageSelectionCubit>(() => _i12.LanguageSelectionCubit());
   gh.factory<_i13.LearningCubit>(() => _i13.LearningCubit());
-  gh.singleton<_i14.LocalStorage>(() => _i14.LocalStorageImpl());
+  gh.singleton<_i14.LocalStorage>(_i14.LocalStorageImpl());
   gh.factory<_i15.LoginCubit>(() => _i15.LoginCubit());
   gh.factory<_i16.ModelDetailCubit>(() => _i16.ModelDetailCubit());
   gh.factory<_i17.PhonicsCubit>(() => _i17.PhonicsCubit());
   gh.factory<_i18.PuzzleCubit>(() => _i18.PuzzleCubit());
   gh.factory<_i19.PuzzleWordCubit>(() => _i19.PuzzleWordCubit());
   gh.factory<_i20.PuzzleWordDetailCubit>(() => _i20.PuzzleWordDetailCubit());
-  gh.singleton<_i21.RecognizeVoiceManager>(() => _i21.RecognizeVoiceManager());
+  gh.singleton<_i21.RecognizeVoiceManager>(_i21.RecognizeVoiceManager());
   gh.factory<_i22.RegisterCubit>(() => _i22.RegisterCubit());
   gh.factory<_i23.ResetPasswordCubit>(() => _i23.ResetPasswordCubit());
   gh.factory<_i24.SearchModelCubit>(() => _i24.SearchModelCubit());
