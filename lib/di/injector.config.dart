@@ -84,14 +84,14 @@ _i1.GetIt $initGetit(
   gh.factory<_i11.HomeCubit>(() => _i11.HomeCubit());
   gh.factory<_i12.LanguageSelectionCubit>(() => _i12.LanguageSelectionCubit());
   gh.factory<_i13.LearningCubit>(() => _i13.LearningCubit());
-  gh.singleton<_i14.LocalStorage>(() => _i14.LocalStorageImpl());
+  gh.singleton<_i14.LocalStorage>(_i14.LocalStorageImpl());
   gh.factory<_i15.LoginCubit>(() => _i15.LoginCubit());
   gh.factory<_i16.ModelDetailCubit>(() => _i16.ModelDetailCubit());
   gh.factory<_i17.PhonicsCubit>(() => _i17.PhonicsCubit());
   gh.factory<_i18.PuzzleCubit>(() => _i18.PuzzleCubit());
   gh.factory<_i19.PuzzleWordCubit>(() => _i19.PuzzleWordCubit());
   gh.factory<_i20.PuzzleWordDetailCubit>(() => _i20.PuzzleWordDetailCubit());
-  gh.singleton<_i21.RecognizeVoiceManager>(() => _i21.RecognizeVoiceManager());
+  gh.singleton<_i21.RecognizeVoiceManager>(_i21.RecognizeVoiceManager());
   gh.factory<_i22.RegisterCubit>(() => _i22.RegisterCubit());
   gh.factory<_i23.ResetPasswordCubit>(() => _i23.ResetPasswordCubit());
   gh.factory<_i24.SearchModelCubit>(() => _i24.SearchModelCubit());
