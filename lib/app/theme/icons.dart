@@ -34,6 +34,7 @@ class AppIcons {
   static const String icCalendar = "assets/icons/ic_calendar.png";
   static const String icAddress = "assets/icons/ic_address.png";
   static const String icBack_png = "assets/icons/ic_back.png";
+  static const String icBackPng = "assets/icons/ic_back.png";
   static const String icBack_x64_png = "assets/icons/ic_back_x64.png";
   static const String icNext_png = "assets/icons/ic_next.png";
   static const String icWhiteSubmit = "assets/icons/ic_white_submit.png";
@@ -96,7 +97,7 @@ class AppIcons {
       "assets/icons/animals/tyrannosaurus.png";
 
   static const String icFeed = "assets/icons/ic_feeds.png";
-  static const String icWarning = "assets/icon/ic_warning.svg";
+  static const String icWarning = "assets/icons/ic_warning.svg";
 }
 
 class AppImages {
@@ -153,6 +154,8 @@ class AppImages {
   static const String imgToys = "assets/images/learning_image/puzzle/toys.png";
   static const String imgFamily =
       "assets/images/learning_image/puzzle/family.png";
+  static const String imgPhonics = "assets/images/learning_image/phonics.jpeg";
+  static const String backgroundPhonics = "assets/images/backgroundphonics.jpg";
 
   //MODELS BUTTONS
   static const String imgAmphibians =

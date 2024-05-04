@@ -94,6 +94,7 @@ const Map<String, String> en_us = {
 
   //Learning
   'your_points': 'Your Points',
+  'phonics': 'Phonics',
   'vocabulary': 'Vocabulary',
   'puzzle': 'Puzzle',
   'in_process': 'In Process',

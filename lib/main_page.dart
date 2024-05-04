@@ -6,6 +6,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get_it/get_it.dart';
 
@@ -18,6 +19,7 @@ Future<void> runMain() async {
     configureDependencies();
 
     await Firebase.initializeApp();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
 
     runApp(const MainPage());
   }, (error, stackTrace) {
