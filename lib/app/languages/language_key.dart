@@ -74,6 +74,7 @@ class LanguageKeys {
   static const String your_points = 'your_points';
   static const String vocabulary = 'vocabulary';
   static const String puzzle = 'puzzle';
+  static const String phonics = 'phonics';
   static const String in_process = 'in_process';
   static const String completed = 'completed';
   static const String take_the_quiz = 'take_the_quiz';

@@ -79,6 +79,7 @@ const Map<String, String> vi_vn = {
   //Learning
   'your_points': 'Điểm của bạn',
   'vocabulary': 'Từ vựng',
+  'phonics': 'Phát âm',
   'puzzle': 'Trò chơi',
   'in_process': 'Đang tiến hành',
   'completed': 'Đã hoàn thành',

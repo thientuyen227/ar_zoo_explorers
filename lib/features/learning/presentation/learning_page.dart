@@ -3,9 +3,9 @@ import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/features/learning/presentation/learning_cubit.dart';
 import 'package:ar_zoo_explorers/features/learning/presentation/learning_state.dart';
+import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../../app/theme/icons.dart';
@@ -43,16 +43,17 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
               height: 24,
             ),
             _renderTitleAndIcon(
+                icon: AppImages.imgPhonics,
+                title: LanguageKeys.phonics.tr,
+                router: Routes.phonics),
+            _renderTitleAndIcon(
                 title: LanguageKeys.vocabulary,
                 icon: AppImages.imgDictionary,
                 router: Routes.vocabulary),
-            const SizedBox(
-              height: 24,
-            ),
             _renderTitleAndIcon(
                 icon: AppImages.imgPuzzle,
                 title: LanguageKeys.puzzle,
-                router: Routes.puzzleword)
+                router: Routes.puzzleword),
           ],
         ),
       ),
@@ -61,33 +62,40 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
 
   Widget _renderTitleAndIcon(
       {required String title, required String icon, required String router}) {
-    return GestureDetector(
-      onTap: () {
-        context.router.pushNamed(router);
-      },
-      child: Container(
-        height: 96,
-        decoration: BoxDecoration(
-            color: AppColor.tinintIce,
-            border: Border.all(),
-            borderRadius: const BorderRadius.all(Radius.circular(10))),
-        child: Padding(
-          padding: const EdgeInsets.all(21.0),
-          child: Row(
-            children: [
-              SvgPicture.asset(icon),
-              const SizedBox(
-                width: 24,
+    return Column(
+      children: [
+        const SizedBox(
+          height: 24,
+        ),
+        GestureDetector(
+          onTap: () {
+            context.router.pushNamed(router);
+          },
+          child: Container(
+            height: 96,
+            decoration: BoxDecoration(
+                color: AppColor.tinintIce,
+                border: Border.all(),
+                borderRadius: const BorderRadius.all(Radius.circular(10))),
+            child: Padding(
+              padding: const EdgeInsets.all(21.0),
+              child: Row(
+                children: [
+                  ImageSvgUrlCustom(imagePath: icon),
+                  const SizedBox(
+                    width: 24,
+                  ),
+                  Text(
+                    title.tr,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.w600),
+                  )
+                ],
               ),
-              Text(
-                title.tr,
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-              )
-            ],
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
 
