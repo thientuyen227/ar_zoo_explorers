@@ -38,13 +38,10 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: StoryHomeRoute.page, path: '/storyhome'),
         AutoRoute(page: StoryOverviewRoute.page, path: '/storyoverview'),
         AutoRoute(page: StoryPlayerRoute.page, path: '/storyplayer'),
-<<<<<<< HEAD
-        AutoRoute(page: PhonicsRoute.page, path: '/phonics')
-=======
+        AutoRoute(page: PhonicsRoute.page, path: '/phonics'),
         AutoRoute(page: StoryFavoriteRoute.page, path: '/storyfavorite'),
         AutoRoute(page: StoryListeningRoute.page, path: '/storylistening'),
         AutoRoute(page: StorySearchingRoute.page, path: '/storysearching'),
         AutoRoute(page: StoryTopicRoute.page, path: '/storytopic'),
->>>>>>> origin/develop_minhtien
       ];
 }

@@ -33,14 +33,11 @@ class Routes {
   static const String storyhome = "/storyhome";
   static const String storyoverview = "/storyoverview";
   static const String storyplayer = "/storyplayer";
-<<<<<<< HEAD
   static const String phonics = "/phonics";
-=======
   static const String storysearching = "/storysearching";
   static const String storylistening = "/storylistening";
   static const String storyfavorite = "/storyfavorite";
   static const String storytopic = "/storytopic";
->>>>>>> origin/develop_minhtien
 
   static Route<T> fadeThrough<T>(RouteSettings settings, WidgetBuilder page,
       {int duration = 300}) {
