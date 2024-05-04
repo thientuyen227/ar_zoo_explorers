@@ -61,6 +61,8 @@ class AppIcons {
   static const String icRewind64 = "assets/icons/ic_rewind_x64.png";
   static const String icVolume64 = "assets/icons/ic_volume_x64.png";
   static const String icMute64 = "assets/icons/ic_mute_x64.png";
+  static const String icHeartEmpty64 = "assets/icons/ic_heart_empty_x64.png";
+  static const String icHeartFull64 = "assets/icons/ic_heart_full_x64.png";
 
   //Account Manager
   static const String icUserProfile = "assets/icons/ic_userprofile.png";

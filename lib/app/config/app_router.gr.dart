@@ -23,10 +23,12 @@ import 'package:ar_zoo_explorers/features/authentication/changepassword/presenta
 import 'package:ar_zoo_explorers/features/authentication/forgotpassword/presentation/forgotpassword_page.dart'
     as _i7;
 import 'package:ar_zoo_explorers/features/authentication/login/presentation/login_page.dart'
-    as _i14;
+    as _i12;
 import 'package:ar_zoo_explorers/features/authentication/register/presentation/register_page.dart'
+    as _i18;
     as _i21;
 import 'package:ar_zoo_explorers/features/authentication/resetpassword/presentation/resetpassword_page.dart'
+    as _i19;
     as _i22;
 import 'package:ar_zoo_explorers/features/authentication/termsofservice/presentation/termofservice_page.dart'
     as _i31;
@@ -41,16 +43,24 @@ import 'package:ar_zoo_explorers/features/languageselection/presentation/languag
 import 'package:ar_zoo_explorers/features/learning/presentation/learning_page.dart'
     as _i11;
 import 'package:ar_zoo_explorers/features/modeldetail/presentation/modeldetail_page.dart'
+    as _i14;
+import 'package:ar_zoo_explorers/features/puzzle/puzzle_page.dart' as _i15;
     as _i16;
 import 'package:ar_zoo_explorers/features/phonics/phonics_page.dart' as _i17;
 import 'package:ar_zoo_explorers/features/puzzle/puzzle_page.dart' as _i18;
 import 'package:ar_zoo_explorers/features/puzzleword/puzzle_word_page.dart'
+    as _i17;
+import 'package:ar_zoo_explorers/features/puzzleworddetail/puzzle_word_detail_page.dart'
+    as _i16;
     as _i20;
 import 'package:ar_zoo_explorers/features/puzzleworddetail/puzzle_word_detail_page.dart'
     as _i19;
 import 'package:ar_zoo_explorers/features/searchmodel/presentation/searchmodel_page.dart'
+    as _i20;
     as _i23;
 import 'package:ar_zoo_explorers/features/setting/presentation/setting_page.dart'
+    as _i21;
+import 'package:ar_zoo_explorers/features/splash/splash_page.dart' as _i22;
     as _i25;
 import 'package:ar_zoo_explorers/features/splash/splash_page.dart' as _i26;
 import 'package:ar_zoo_explorers/features/story/listening/presentation/listening_page.dart'
@@ -58,6 +68,21 @@ import 'package:ar_zoo_explorers/features/story/listening/presentation/listening
 import 'package:ar_zoo_explorers/features/story/liststory/presentation/liststory_page.dart'
     as _i12;
 import 'package:ar_zoo_explorers/features/story/presentation/story_page.dart'
+    as _i27;
+import 'package:ar_zoo_explorers/features/storyfavorite/presentation/storyfavorite_page.dart'
+    as _i23;
+import 'package:ar_zoo_explorers/features/storyhome/presentation/storyhome_page.dart'
+    as _i24;
+import 'package:ar_zoo_explorers/features/storylistening/presentation/storylistening_page.dart'
+    as _i25;
+import 'package:ar_zoo_explorers/features/storyoverview/presentation/storyoverview_page.dart'
+    as _i26;
+import 'package:ar_zoo_explorers/features/storyplayer/presentation/storyplayer_page.dart'
+    as _i28;
+import 'package:ar_zoo_explorers/features/storysearching/presentation/storysearching_page.dart'
+    as _i29;
+import 'package:ar_zoo_explorers/features/storytopic/presentation/storytopic_page.dart'
+    as _i30;
     as _i29;
 import 'package:ar_zoo_explorers/features/story/searchstory/presentation/searchstory_page.dart'
     as _i24;
@@ -72,6 +97,10 @@ import 'package:ar_zoo_explorers/features/vocabulary/vocabulary_page.dart'
 import 'package:ar_zoo_explorers/features/vocabularydetail/vocabulary_detail_page.dart'
     as _i34;
 import 'package:ar_zoo_explorers/features/welcome/presentation/welcome_page.dart'
+    as _i36;
+import 'package:ar_zoo_explorers/main_page.dart' as _i13;
+import 'package:auto_route/auto_route.dart' as _i37;
+import 'package:flutter/material.dart' as _i38;
     as _i36;
 import 'package:ar_zoo_explorers/main_page.dart' as _i15;
 import 'package:auto_route/auto_route.dart' as _i37;
@@ -163,19 +192,19 @@ abstract class $AppRouter extends _i37.RootStackRouter {
     LoginRoute.name: (routeData) {
       return _i37.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i14.LoginPage(),
+        child: const _i12.LoginPage(),
       );
     },
     MainRoute.name: (routeData) {
       return _i37.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i15.MainPage(),
+        child: const _i13.MainPage(),
       );
     },
     ModelDetailRoute.name: (routeData) {
       return _i37.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i16.ModelDetailPage(),
+        child: const _i14.ModelDetailPage(),
       );
     },
     PhonicsRoute.name: (routeData) {
@@ -187,54 +216,69 @@ abstract class $AppRouter extends _i37.RootStackRouter {
     PuzzleRoute.name: (routeData) {
       return _i37.AutoRoutePage<dynamic>(
         routeData: routeData,
+        child: const _i15.PuzzlePage(),
         child: const _i18.PuzzlePage(),
       );
     },
     PuzzleWordDetailRoute.name: (routeData) {
       return _i37.AutoRoutePage<dynamic>(
         routeData: routeData,
+        child: const _i16.PuzzleWordDetailPage(),
         child: const _i19.PuzzleWordDetailPage(),
       );
     },
     PuzzleWordRoute.name: (routeData) {
       return _i37.AutoRoutePage<dynamic>(
         routeData: routeData,
+        child: const _i17.PuzzleWordPage(),
         child: const _i20.PuzzleWordPage(),
       );
     },
     RegisterRoute.name: (routeData) {
       return _i37.AutoRoutePage<dynamic>(
         routeData: routeData,
+        child: const _i18.RegisterPage(),
         child: const _i21.RegisterPage(),
       );
     },
     ResetPasswordRoute.name: (routeData) {
       return _i37.AutoRoutePage<dynamic>(
         routeData: routeData,
+        child: const _i19.ResetPasswordPage(),
         child: const _i22.ResetPasswordPage(),
       );
     },
     SearchModelRoute.name: (routeData) {
       return _i37.AutoRoutePage<dynamic>(
         routeData: routeData,
+        child: const _i20.SearchModelPage(),
         child: const _i23.SearchModelPage(),
-      );
-    },
-    SearchStoryRoute.name: (routeData) {
-      return _i37.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const _i24.SearchStoryPage(),
       );
     },
     SettingRoute.name: (routeData) {
       return _i37.AutoRoutePage<dynamic>(
+    SearchStoryRoute.name: (routeData) {
+      return _i37.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i25.SettingPage(),
+        child: const _i21.SettingPage(),
+        child: const _i24.SearchStoryPage(),
       );
     },
     SplashRoute.name: (routeData) {
       return _i37.AutoRoutePage<dynamic>(
+    SettingRoute.name: (routeData) {
+      return _i37.AutoRoutePage<dynamic>(
         routeData: routeData,
+        child: const _i22.SplashPage(),
+        child: const _i25.SettingPage(),
+      );
+    },
+    StoryFavoriteRoute.name: (routeData) {
+      return _i37.AutoRoutePage<dynamic>(
+    SplashRoute.name: (routeData) {
+      return _i37.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i23.StoryFavoritePage(),
         child: const _i26.SplashPage(),
       );
     },
@@ -242,28 +286,50 @@ abstract class $AppRouter extends _i37.RootStackRouter {
       final args = routeData.argsAs<StoryHomeRouteArgs>();
       return _i37.AutoRoutePage<dynamic>(
         routeData: routeData,
+        child: _i24.StoryHomePage(
         child: _i27.StoryHomePage(
           key: args.key,
           onPageChanged: args.onPageChanged,
         ),
       );
     },
+    StoryListeningRoute.name: (routeData) {
+      return _i37.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i25.StoryListeningPage(),
+      );
+    },
     StoryOverviewRoute.name: (routeData) {
       return _i37.AutoRoutePage<dynamic>(
         routeData: routeData,
+        child: const _i26.StoryOverviewPage(),
         child: const _i28.StoryOverviewPage(),
       );
     },
     StoryRoute.name: (routeData) {
       return _i37.AutoRoutePage<dynamic>(
         routeData: routeData,
+        child: const _i27.StoryPage(),
         child: const _i29.StoryPage(),
       );
     },
     StoryPlayerRoute.name: (routeData) {
       return _i37.AutoRoutePage<dynamic>(
         routeData: routeData,
+        child: const _i28.StoryPlayerPage(),
         child: const _i30.StoryPlayerPage(),
+      );
+    },
+    StorySearchingRoute.name: (routeData) {
+      return _i37.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i29.StorySearchingPage(),
+      );
+    },
+    StoryTopicRoute.name: (routeData) {
+      return _i37.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i30.StoryTopicPage(),
       );
     },
     TermOfServiceRoute.name: (routeData) {
@@ -460,6 +526,9 @@ class LearningRoute extends _i37.PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [_i12.LoginPage]
+class LoginRoute extends _i37.PageRouteInfo<void> {
+  const LoginRoute({List<_i37.PageRouteInfo>? children})
 /// [_i12.ListStoryPage]
 class ListStoryRoute extends _i37.PageRouteInfo<void> {
   const ListStoryRoute({List<_i37.PageRouteInfo>? children})
@@ -502,6 +571,9 @@ class LoginRoute extends _i37.PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [_i13.MainPage]
+class MainRoute extends _i37.PageRouteInfo<void> {
+  const MainRoute({List<_i37.PageRouteInfo>? children})
 /// [_i15.MainPage]
 class MainRoute extends _i37.PageRouteInfo<void> {
   const MainRoute({List<_i37.PageRouteInfo>? children})
@@ -516,6 +588,9 @@ class MainRoute extends _i37.PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [_i14.ModelDetailPage]
+class ModelDetailRoute extends _i37.PageRouteInfo<void> {
+  const ModelDetailRoute({List<_i37.PageRouteInfo>? children})
 /// [_i16.ModelDetailPage]
 class ModelDetailRoute extends _i37.PageRouteInfo<void> {
   const ModelDetailRoute({List<_i37.PageRouteInfo>? children})
@@ -530,6 +605,9 @@ class ModelDetailRoute extends _i37.PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [_i15.PuzzlePage]
+class PuzzleRoute extends _i37.PageRouteInfo<void> {
+  const PuzzleRoute({List<_i37.PageRouteInfo>? children})
 /// [_i17.PhonicsPage]
 class PhonicsRoute extends _i37.PageRouteInfo<void> {
   const PhonicsRoute({List<_i37.PageRouteInfo>? children})
@@ -558,6 +636,9 @@ class PuzzleRoute extends _i37.PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [_i16.PuzzleWordDetailPage]
+class PuzzleWordDetailRoute extends _i37.PageRouteInfo<void> {
+  const PuzzleWordDetailRoute({List<_i37.PageRouteInfo>? children})
 /// [_i19.PuzzleWordDetailPage]
 class PuzzleWordDetailRoute extends _i37.PageRouteInfo<void> {
   const PuzzleWordDetailRoute({List<_i37.PageRouteInfo>? children})
@@ -572,6 +653,9 @@ class PuzzleWordDetailRoute extends _i37.PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [_i17.PuzzleWordPage]
+class PuzzleWordRoute extends _i37.PageRouteInfo<void> {
+  const PuzzleWordRoute({List<_i37.PageRouteInfo>? children})
 /// [_i20.PuzzleWordPage]
 class PuzzleWordRoute extends _i37.PageRouteInfo<void> {
   const PuzzleWordRoute({List<_i37.PageRouteInfo>? children})
@@ -586,6 +670,9 @@ class PuzzleWordRoute extends _i37.PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [_i18.RegisterPage]
+class RegisterRoute extends _i37.PageRouteInfo<void> {
+  const RegisterRoute({List<_i37.PageRouteInfo>? children})
 /// [_i21.RegisterPage]
 class RegisterRoute extends _i37.PageRouteInfo<void> {
   const RegisterRoute({List<_i37.PageRouteInfo>? children})
@@ -600,6 +687,9 @@ class RegisterRoute extends _i37.PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [_i19.ResetPasswordPage]
+class ResetPasswordRoute extends _i37.PageRouteInfo<void> {
+  const ResetPasswordRoute({List<_i37.PageRouteInfo>? children})
 /// [_i22.ResetPasswordPage]
 class ResetPasswordRoute extends _i37.PageRouteInfo<void> {
   const ResetPasswordRoute({List<_i37.PageRouteInfo>? children})
@@ -614,6 +704,9 @@ class ResetPasswordRoute extends _i37.PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [_i20.SearchModelPage]
+class SearchModelRoute extends _i37.PageRouteInfo<void> {
+  const SearchModelRoute({List<_i37.PageRouteInfo>? children})
 /// [_i23.SearchModelPage]
 class SearchModelRoute extends _i37.PageRouteInfo<void> {
   const SearchModelRoute({List<_i37.PageRouteInfo>? children})
@@ -628,23 +721,12 @@ class SearchModelRoute extends _i37.PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [_i21.SettingPage]
+class SettingRoute extends _i37.PageRouteInfo<void> {
+  const SettingRoute({List<_i37.PageRouteInfo>? children})
 /// [_i24.SearchStoryPage]
 class SearchStoryRoute extends _i37.PageRouteInfo<void> {
   const SearchStoryRoute({List<_i37.PageRouteInfo>? children})
-      : super(
-          SearchStoryRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'SearchStoryRoute';
-
-  static const _i37.PageInfo<void> page = _i37.PageInfo<void>(name);
-}
-
-/// generated route for
-/// [_i25.SettingPage]
-class SettingRoute extends _i37.PageRouteInfo<void> {
-  const SettingRoute({List<_i37.PageRouteInfo>? children})
       : super(
           SettingRoute.name,
           initialChildren: children,
@@ -656,9 +738,12 @@ class SettingRoute extends _i37.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i26.SplashPage]
+/// [_i22.SplashPage]
 class SplashRoute extends _i37.PageRouteInfo<void> {
   const SplashRoute({List<_i37.PageRouteInfo>? children})
+/// [_i25.SettingPage]
+class SettingRoute extends _i37.PageRouteInfo<void> {
+  const SettingRoute({List<_i37.PageRouteInfo>? children})
       : super(
           SplashRoute.name,
           initialChildren: children,
@@ -670,6 +755,25 @@ class SplashRoute extends _i37.PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [_i23.StoryFavoritePage]
+class StoryFavoriteRoute extends _i37.PageRouteInfo<void> {
+  const StoryFavoriteRoute({List<_i37.PageRouteInfo>? children})
+/// [_i26.SplashPage]
+class SplashRoute extends _i37.PageRouteInfo<void> {
+  const SplashRoute({List<_i37.PageRouteInfo>? children})
+      : super(
+          StoryFavoriteRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'StoryFavoriteRoute';
+
+  static const _i37.PageInfo<void> page = _i37.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i24.StoryHomePage]
+class StoryHomeRoute extends _i37.PageRouteInfo<StoryHomeRouteArgs> {
 /// [_i27.StoryHomePage]
 class StoryHomeRoute extends _i37.PageRouteInfo<StoryHomeRouteArgs> {
   StoryHomeRoute({
@@ -708,7 +812,24 @@ class StoryHomeRouteArgs {
 }
 
 /// generated route for
+/// [_i25.StoryListeningPage]
+class StoryListeningRoute extends _i37.PageRouteInfo<void> {
+  const StoryListeningRoute({List<_i37.PageRouteInfo>? children})
 /// [_i28.StoryOverviewPage]
+class StoryOverviewRoute extends _i37.PageRouteInfo<void> {
+  const StoryOverviewRoute({List<_i37.PageRouteInfo>? children})
+      : super(
+          StoryListeningRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'StoryListeningRoute';
+
+  static const _i37.PageInfo<void> page = _i37.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i26.StoryOverviewPage]
 class StoryOverviewRoute extends _i37.PageRouteInfo<void> {
   const StoryOverviewRoute({List<_i37.PageRouteInfo>? children})
       : super(
@@ -722,6 +843,9 @@ class StoryOverviewRoute extends _i37.PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [_i27.StoryPage]
+class StoryRoute extends _i37.PageRouteInfo<void> {
+  const StoryRoute({List<_i37.PageRouteInfo>? children})
 /// [_i29.StoryPage]
 class StoryRoute extends _i37.PageRouteInfo<void> {
   const StoryRoute({List<_i37.PageRouteInfo>? children})
@@ -736,6 +860,9 @@ class StoryRoute extends _i37.PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [_i28.StoryPlayerPage]
+class StoryPlayerRoute extends _i37.PageRouteInfo<void> {
+  const StoryPlayerRoute({List<_i37.PageRouteInfo>? children})
 /// [_i30.StoryPlayerPage]
 class StoryPlayerRoute extends _i37.PageRouteInfo<void> {
   const StoryPlayerRoute({List<_i37.PageRouteInfo>? children})
@@ -745,6 +872,37 @@ class StoryPlayerRoute extends _i37.PageRouteInfo<void> {
         );
 
   static const String name = 'StoryPlayerRoute';
+
+  static const _i37.PageInfo<void> page = _i37.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i29.StorySearchingPage]
+class StorySearchingRoute extends _i37.PageRouteInfo<void> {
+  const StorySearchingRoute({List<_i37.PageRouteInfo>? children})
+/// [_i31.TermOfServicePage]
+class TermOfServiceRoute extends _i37.PageRouteInfo<void> {
+  const TermOfServiceRoute({List<_i37.PageRouteInfo>? children})
+      : super(
+          StorySearchingRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'StorySearchingRoute';
+
+  static const _i37.PageInfo<void> page = _i37.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i30.StoryTopicPage]
+class StoryTopicRoute extends _i37.PageRouteInfo<void> {
+  const StoryTopicRoute({List<_i37.PageRouteInfo>? children})
+      : super(
+          StoryTopicRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'StoryTopicRoute';
 
   static const _i37.PageInfo<void> page = _i37.PageInfo<void>(name);
 }
