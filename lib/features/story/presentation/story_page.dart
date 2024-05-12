@@ -33,6 +33,7 @@ class _State extends BaseState<StoryState, StoryCubit, StoryPage> {
                 height: MediaQuery.of(context).size.height,
                 child: PageView(
                   controller: _pageController,
+                  physics: const NeverScrollableScrollPhysics(),
                   onPageChanged: _onPageChanged,
                   children: _pages,
                 ),

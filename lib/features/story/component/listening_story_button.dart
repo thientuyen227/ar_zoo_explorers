@@ -17,6 +17,7 @@ class _ListeningStoryButtonState extends State<ListeningStoryButton> {
   Widget build(BuildContext context) {
     return Container(
         width: width,
+        color: Colors.white,
         padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
         child: Row(children: [
           const SizedBox(width: 20),

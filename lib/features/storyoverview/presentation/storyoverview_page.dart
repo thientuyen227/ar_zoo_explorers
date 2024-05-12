@@ -15,7 +15,8 @@ import 'package:flutter/material.dart';
 
 @RoutePage()
 class StoryOverviewPage extends StatefulWidget {
-  const StoryOverviewPage({super.key});
+  final Function(String) onClosed;
+  const StoryOverviewPage({super.key, required this.onClosed});
 
   @override
   State createState() => _State();
@@ -44,11 +45,18 @@ class _State extends BaseState<StoryOverviewState, StoryOverviewCubit,
                     fontWeight: FontWeight.bold)),
             backgroundColor: Colors.transparent,
             elevation: 0,
-            leading: const Column(
+            leading: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [CustomBackButton()]),
+                children: [backButton()]),
             actions: [loveButton()]),
         body: backgroundPage(context));
+  }
+
+  Widget backButton() {
+    return CustomBackButton(onPressed: () async {
+      await widget.onClosed(storyController.currentStory.value.id);
+      Navigator.of(context).pop();
+    });
   }
 
   Widget backgroundPage(BuildContext context) {

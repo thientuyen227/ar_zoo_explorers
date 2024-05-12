@@ -245,9 +245,13 @@ abstract class $AppRouter extends _i38.RootStackRouter {
       );
     },
     StoryOverviewRoute.name: (routeData) {
+      final args = routeData.argsAs<StoryOverviewRouteArgs>();
       return _i38.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i27.StoryOverviewPage(),
+        child: _i27.StoryOverviewPage(
+          key: args.key,
+          onClosed: args.onClosed,
+        ),
       );
     },
     StoryRoute.name: (routeData) {
@@ -703,16 +707,40 @@ class StoryListeningRoute extends _i38.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i27.StoryOverviewPage]
-class StoryOverviewRoute extends _i38.PageRouteInfo<void> {
-  const StoryOverviewRoute({List<_i38.PageRouteInfo>? children})
-      : super(
+class StoryOverviewRoute extends _i38.PageRouteInfo<StoryOverviewRouteArgs> {
+  StoryOverviewRoute({
+    _i39.Key? key,
+    required dynamic Function(String) onClosed,
+    List<_i38.PageRouteInfo>? children,
+  }) : super(
           StoryOverviewRoute.name,
+          args: StoryOverviewRouteArgs(
+            key: key,
+            onClosed: onClosed,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'StoryOverviewRoute';
 
-  static const _i38.PageInfo<void> page = _i38.PageInfo<void>(name);
+  static const _i38.PageInfo<StoryOverviewRouteArgs> page =
+      _i38.PageInfo<StoryOverviewRouteArgs>(name);
+}
+
+class StoryOverviewRouteArgs {
+  const StoryOverviewRouteArgs({
+    this.key,
+    required this.onClosed,
+  });
+
+  final _i39.Key? key;
+
+  final dynamic Function(String) onClosed;
+
+  @override
+  String toString() {
+    return 'StoryOverviewRouteArgs{key: $key, onClosed: $onClosed}';
+  }
 }
 
 /// generated route for

@@ -140,10 +140,10 @@ class UserStoryController extends ControllerHelper {
   }
 
   Future<List<UserStoryEntity>> getFavoriteUserStory(BuildContext context,
-      {required String userId, required bool isFavorited}) {
-    return processRequest<List<UserStoryEntity>>(
-        request: () => _userStoryRepository.getUserStoryByUserIdAndIsFavorited(
-            userId, isFavorited),
+      {required String userId, required bool isFavorited}) async {
+    return await processRequest<List<UserStoryEntity>>(
+        request: () async => await _userStoryRepository
+            .getUserStoryByUserIdAndIsFavorited(userId, isFavorited),
         onSuccess: (success) async => {
               await _setListFavortieUserStory(context, success.data),
             },
