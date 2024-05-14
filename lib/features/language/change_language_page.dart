@@ -49,6 +49,7 @@ class _State extends BaseState<ChangLanguageState, ChangLanguageCubit,
     return Scaffold(
       backgroundColor: AppColor.white,
       appBar: AppBar(
+        backgroundColor: AppColor.appBarColor,
         centerTitle: true,
         elevation: 1,
         leading: CustomBackButton(
@@ -58,7 +59,11 @@ class _State extends BaseState<ChangLanguageState, ChangLanguageCubit,
             // Get.back();
           },
         ),
-        title: Text(LanguageKeys.changeLanguage.tr),
+        title: Text(
+          LanguageKeys.changeLanguage.tr,
+          style: const TextStyle(
+              color: AppColor.white, fontWeight: FontWeight.bold),
+        ),
         actions: [
           TextButton(
             onPressed: () {
@@ -72,7 +77,7 @@ class _State extends BaseState<ChangLanguageState, ChangLanguageCubit,
             child: Text(
               LanguageKeys.done.tr,
               style: const TextStyle(
-                  color: AppColor.dartBlue,
+                  color: AppColor.white,
                   fontSize: 20,
                   fontWeight: FontWeight.w600),
             ),

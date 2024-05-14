@@ -62,7 +62,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
                       LanguageKeys.home.tr,
                       style: const TextStyle(
                           fontSize: 20,
-                          color: Colors.white,
+                          color: AppColor.white,
                           fontWeight: FontWeight.bold),
                     ),
                     leading: Column(
@@ -74,7 +74,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
                   child: SingleChildScrollView(
                     child: Container(
                       width: MediaQuery.of(context).size.width,
-                      color: Colors.white,
+                      color: AppColor.white,
                       constraints: BoxConstraints(
                           minHeight: MediaQuery.of(context).size.height),
                       padding: const EdgeInsets.only(
@@ -149,7 +149,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
         child: Text(
           content,
           style: const TextStyle(
-              color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700),
+              color: AppColor.white, fontSize: 18, fontWeight: FontWeight.w700),
           softWrap: true,
         ));
   }
@@ -159,7 +159,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
         onPressed: () => context.router.pushNamed(Routes.userprofile),
         icon: Row(children: [
           Text(cubit.nameCustom(controller.currentUser.value.fullname, 8),
-              style: const TextStyle(color: Colors.white)),
+              style: const TextStyle(color: AppColor.white)),
           const SizedBox(width: 5),
           userImage()
         ]));
@@ -181,7 +181,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   Widget settingButton() {
     return AppIconButton(
         onPressed: () => {_turnSettingPage()},
-        icon: const Icon(Icons.settings, color: Colors.white),
+        icon: const Icon(Icons.settings, color: AppColor.white),
         borderRadius: AppDimens.radius200,
         padding: const EdgeInsets.all(AppDimens.spacing5),
         width: AppDimens.size30.width,
@@ -315,7 +315,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
             decoration: BoxDecoration(
                 border: Border.all(color: Colors.blue, width: 7),
                 borderRadius: BorderRadius.circular(15.0),
-                color: Colors.white,
+                color: AppColor.white,
                 boxShadow: [
                   BoxShadow(
                       color: Colors.black.withOpacity(0.3),
@@ -338,10 +338,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
         width: cubit.WIDTH * 0.23,
         height: cubit.WIDTH * 0.23,
         decoration: BoxDecoration(
-            //border: Border.all(color: Colors.white, width: 3),
-            //image: DecorationImage(image: AssetImage(url), fit: BoxFit.cover),
-            borderRadius: BorderRadius.circular(15.0),
-            color: Colors.white),
+            borderRadius: BorderRadius.circular(15.0), color: AppColor.white),
         child: (url == "")
             ? Image.asset(AppImages.imgProfile128x128, fit: BoxFit.cover)
             : Image.network(url, fit: BoxFit.cover));

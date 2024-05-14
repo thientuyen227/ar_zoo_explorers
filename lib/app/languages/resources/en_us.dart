@@ -108,6 +108,10 @@ const Map<String, String> en_us = {
   'choose_topic': 'Choose topic',
 
   // Setting Pages
+  'accountManager': 'Account Manager',
+  'event': 'Event',
+  'notify': 'Notify',
+  'rating': 'Rating',
   'setting_upgradeAccount':
       'Upgrade to a PRO account for great features, benefits, and value',
   'setting_support': 'Help for you',
@@ -118,6 +122,9 @@ const Map<String, String> en_us = {
   'setting_relatedApps': 'Related software',
   'setting_notification': 'Turn notifications on and off',
   'setting_deleteAccount': 'Delete account',
+  'support': 'Support',
+  'termsOfService': "Terms Of Service",
+  'userProfile': 'User Profile',
 
   'passwordResetRequestMessage':
       "Please check your your email to reset your password",

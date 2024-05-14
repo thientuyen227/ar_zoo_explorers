@@ -89,6 +89,10 @@ class LanguageKeys {
   static const String family = 'family';
 
   // Setting Page
+  static const String accountManager = 'accountManager';
+  static const String event = 'event';
+  static const String notify = 'notify';
+  static const String rating = 'rating';
   static const String setting_upgradeAccount = 'setting_upgradeAccount';
   static const String setting_support = 'setting_support';
   static const String setting_policy = 'setting_policy';
@@ -98,7 +102,10 @@ class LanguageKeys {
   static const String setting_relatedApps = 'setting_relatedApps';
   static const String setting_notification = 'setting_notification';
   static const String setting_deleteAccount = 'setting_deleteAccount';
+  static const String support = 'support';
+  static const String termsOfService = 'termsOfService';
   static const String upgradeAccount = 'upgradeAccount';
+  static const String userProfile = 'userProfile';
 
   // Actions
   static const String passwordResetRequestMessage =
