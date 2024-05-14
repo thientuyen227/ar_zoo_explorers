@@ -2,71 +2,127 @@ import 'package:ar_zoo_explorers/app/config/routes.dart';
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
+import 'package:ar_zoo_explorers/core/data/controller/vocabulary_controller.dart';
+import 'package:ar_zoo_explorers/domain/entities/vocabulary_entity.dart';
+import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class DialogAnimal extends StatefulWidget {
-  const DialogAnimal({super.key});
+  final VocabularyEntity vocabularyEntity;
+  const DialogAnimal({super.key, required this.vocabularyEntity});
 
   @override
   State<DialogAnimal> createState() => _DialogAnimalState();
 }
 
 class _DialogAnimalState extends State<DialogAnimal> {
+  final languageCode = Get.locale?.languageCode;
+  final vocabularyController = VocabularyController.findOrInitialize;
+  late int currentIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    vocabularyController.getAllVocabularys();
+    currentIndex = vocabularyController.listVocabulary.value
+        .indexWhere((element) => element.id == widget.vocabularyEntity.id);
+  }
+
+  void goToVocabulary(bool isNext) {
+    setState(() {
+      if (isNext) {
+        if (currentIndex <
+            vocabularyController.listVocabulary.value.length - 1) {
+          currentIndex++;
+        }
+      } else {
+        if (currentIndex > 0) {
+          currentIndex--;
+        }
+      }
+    });
+  }
+
+  VocabularyEntity getCurrentVocabulary() {
+    return vocabularyController.listVocabulary.value[currentIndex];
+  }
+
   Widget buttonPreviousAndNext() {
     return Row(
       children: [
-        Container(
-          decoration: BoxDecoration(
-              color: AppColor.vibrantYellow,
-              border: Border.all(),
-              borderRadius: const BorderRadius.all(Radius.circular(10))),
-          child: Padding(
-            padding: const EdgeInsets.all(6.0),
-            child: Row(
-              children: [
-                Image.asset(
-                  AppIcons.icBack_x64_png,
-                  height: 20,
-                  width: 20,
-                  color: AppColor.black,
-                ),
-                const Text(
-                  "Previous",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                ),
-              ],
+        GestureDetector(
+          onTap: () {
+            goToVocabulary(false);
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                color: currentIndex != 0
+                    ? AppColor.vibrantYellow
+                    : AppColor.lightGrey,
+                border: Border.all(),
+                borderRadius: const BorderRadius.all(Radius.circular(10))),
+            child: Padding(
+              padding: const EdgeInsets.all(6.0),
+              child: Row(
+                children: [
+                  Image.asset(
+                    AppIcons.icBack_x64_png,
+                    height: 20,
+                    width: 20,
+                    color: AppColor.black,
+                  ),
+                  Text(
+                    LanguageKeys.previous.tr,
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
         const Spacer(),
-        Container(
-          decoration: BoxDecoration(
-              color: AppColor.vibrantYellow,
-              border: Border.all(),
-              borderRadius: const BorderRadius.all(Radius.circular(10))),
-          child: Padding(
-            padding: const EdgeInsets.all(6.0),
-            child: Row(
-              children: [
-                const SizedBox(
-                  width: 4,
-                ),
-                const Text(
-                  "Next",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(
-                  width: 6,
-                ),
-                SvgPicture.asset(
-                  AppIcons.icVector,
-                  height: 15,
-                  width: 15,
-                ),
-              ],
+        GestureDetector(
+          onTap: () {
+            goToVocabulary(true);
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                color: currentIndex ==
+                        vocabularyController.listVocabulary.value.length - 1
+                    ? AppColor.lightGrey
+                    : AppColor.vibrantYellow,
+                border: Border.all(),
+                borderRadius: const BorderRadius.all(Radius.circular(10))),
+            child: Padding(
+              padding: const EdgeInsets.all(6.0),
+              child: Row(
+                children: [
+                  const SizedBox(
+                    width: 4,
+                  ),
+                  Text(
+                    LanguageKeys.next.tr,
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(
+                    width: 6,
+                  ),
+                  SvgPicture.asset(
+                    AppIcons.icVector,
+                    height: 15,
+                    width: 15,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -75,50 +131,53 @@ class _DialogAnimalState extends State<DialogAnimal> {
   }
 
   Widget renderContent() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(
-          height: 20,
-        ),
-        const Padding(
-          padding: EdgeInsets.only(top: 20, bottom: 15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Description:",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-              ),
-              SizedBox(
-                height: 6,
-              ),
-              Text(
-                "A very large animal with short legs and thick, dark grey skin that lives near water in Africa",
-              ),
-            ],
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(
+            height: 20,
           ),
-        ),
-        const Padding(
-          padding: EdgeInsets.only(bottom: 15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Location:",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-              ),
-              SizedBox(
-                height: 6,
-              ),
-              Text(
-                "Hippopotamus  are found in the rivers.",
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.only(top: 20, bottom: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  LanguageKeys.description.tr,
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(
+                  height: 6,
+                ),
+                Text(
+                  getCurrentVocabulary().meaningLocalize,
+                ),
+              ],
+            ),
           ),
-        ),
-        buttonPreviousAndNext(),
-      ],
+          Padding(
+            padding: const EdgeInsets.only(bottom: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  LanguageKeys.location.tr,
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(
+                  height: 6,
+                ),
+                Text(
+                  getCurrentVocabulary().exampleLocalize,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -136,8 +195,8 @@ class _DialogAnimalState extends State<DialogAnimal> {
             height: 5,
           ),
           Center(
-            child: SvgPicture.asset(AppImages.imgLionBaby),
-          ),
+              child: ImageSvgUrlCustom(
+                  imagePath: getCurrentVocabulary().thumbnail)),
           const SizedBox(
             height: 10,
           ),
@@ -154,22 +213,27 @@ class _DialogAnimalState extends State<DialogAnimal> {
                   width: 32,
                 ),
               ),
-              const Text(
-                "Lion",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+              Text(
+                getCurrentVocabulary().wordLocalize,
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
               ),
               SvgPicture.asset(AppIcons.icSound),
             ],
           ),
-          const Center(
-            child: Text(
-              "/ˈlaɪən/",
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-          ),
+          languageCode != 'vi'
+              ? Center(
+                  child: Text(
+                    getCurrentVocabulary().phoneticTranscription ?? "",
+                    style: const TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                )
+              : Container(),
           renderContent(),
+          const Spacer(),
+          buttonPreviousAndNext(),
         ],
       ),
     );
@@ -184,7 +248,7 @@ class _DialogAnimalState extends State<DialogAnimal> {
             left: 16,
             right: 16,
             child: SizedBox(
-              height: 500,
+              height: 700,
               child: Stack(
                 children: [
                   Positioned(
@@ -198,7 +262,7 @@ class _DialogAnimalState extends State<DialogAnimal> {
                     padding:
                         const EdgeInsets.only(top: 55.0, right: 41, left: 41),
                     child: Container(
-                        height: 450,
+                        height: MediaQuery.of(context).size.height * 0.6,
                         width: 293,
                         decoration: BoxDecoration(
                             color: AppColor.white,

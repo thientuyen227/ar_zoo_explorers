@@ -15,7 +15,7 @@
             "name": "production",
             "type": "dart",
             "request": "launch",
-            "program": "lib/main_production.dart",
+            "program": "lib/main_develop.dart",
             "args": [
                 //"--flavor",
                 "production"
@@ -26,7 +26,7 @@
             "name": "stagging",
             "type": "dart",
             "request": "launch",
-            "program": "lib/main_staging.dart",
+            "program": "lib/main_develop.dart",
             "args": [
                 //"--flavor",
                 "staging"

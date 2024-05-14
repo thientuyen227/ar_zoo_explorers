@@ -8,11 +8,6 @@ const Map<String, String> en_us = {
   "appleLoginSuccess": "Sign-in with Apple success",
   "changeAvatar": "Change avatar",
   "oldPassword": "Old password",
-  "actionList": "Action list",
-  "actionListUpdate": "Action list update",
-  "actionTemplateUpdate": "Action templates update",
-  "accountInformation": "Account Information",
-  'actionInReport': "actions",
   'doNotHaveAnAccount': "You don't have an account?",
   'haveAnAccount': "Already have an account?",
   'please': 'Please',
@@ -51,22 +46,17 @@ const Map<String, String> en_us = {
   'more': "More",
   "changeLanguage": "Change Language",
   'next': "Next",
+  'previous': 'previous',
   'report': "Report",
-  "createActionSuccessfully": "Create action successfully",
-  "deleteActionSuccessfully": "Delete action successfully",
-  "updateActionSuccessfully": "Update action successfully",
   "notification": "Notification",
   "requiresRecentLogin": "Session timeout, please login again",
   "cancel": "Cancel",
-  "en_US": "English",
+  "en_EN": "English",
   "vi_VN": "Vietnamese",
   "delete": "Delete",
   'chooseLanguage': 'Language',
   "deleteMessage": "Do you sure you want to delete this record?",
   // Welcome
-  'welcome_title': 'Welcome to Focus 1',
-  'welcome_subtitle':
-      'The app helps you to develop and perfect yourself. Solutions to optimize capacity, maximize hidden value in each person.',
   'welcome_start': 'Start',
 
   //Home page
@@ -75,6 +65,10 @@ const Map<String, String> en_us = {
   "fish": "Fish",
   "bird": "Bird",
   "dinosaurs": "Dinosaurs",
+
+  //Model
+  'description': 'Description:',
+  'location': 'Location:',
 
   // Avatar
   'avatar_viewAvatar': 'View Avatar',

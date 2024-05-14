@@ -11,10 +11,8 @@ const Map<String, String> vi_vn = {
   "accountInformation": "Thông tin tài khoản",
   "changeLanguage": "Thay đổi ngôn ngữ",
   "status": "Status",
-  'reportMessage':
-      "Thông qua số liệu và biểu đồ trên, bạn rút ra được bài học gì cho mình?",
 
-  "en_US": "Tiếng Anh",
+  "en_EN": "Tiếng Anh",
   "vi_VN": "Tiếng Việt",
   'chooseLanguage': 'Chọn ngôn ngữ',
   'total': "Tổng",
@@ -27,9 +25,9 @@ const Map<String, String> vi_vn = {
   "cancel": "Huỷ",
   'saveLogin': "Nhớ mật khẩu",
   "delete": "Xoá",
-  "deleteMessage": "Bạn thực sự muốn xóa hành động này phải không?",
   'login': 'Đăng nhập',
-  'logout': 'Đăng xuất', "search": "Tìm kiếm",
+  'logout': 'Đăng xuất',
+  "search": "Tìm kiếm",
   'register': 'Đăng ký',
   'share': 'Chia sẻ',
   'receive': 'Nhận',
@@ -57,8 +55,9 @@ const Map<String, String> vi_vn = {
   'newRegister': 'Đăng ký mới',
   'edit': "Sửa",
   'done': "Xong",
+  'previous': 'Trước',
   'more': "Xem thêm",
-  'next': "Tiếp tục",
+  'next': "Tiếp theo",
   'report': "Báo cáo",
 
   // Welcome
@@ -70,6 +69,10 @@ const Map<String, String> vi_vn = {
   "fish": "Cá",
   "bird": "Chim",
   "dinosaurs": "Khủng long",
+
+  //model
+  'description': 'Mô tả:',
+  'location': 'Nơi sống:',
 
   // Avatar
   'avatar_viewAvatar': 'Xem Avatar',
