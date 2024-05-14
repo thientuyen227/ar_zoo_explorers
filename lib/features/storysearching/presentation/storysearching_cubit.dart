@@ -4,6 +4,7 @@ import 'package:ar_zoo_explorers/domain/entities/story_topic_entity.dart';
 import 'package:ar_zoo_explorers/features/story/model/storybuttonobject.dart';
 import 'package:ar_zoo_explorers/features/storysearching/presentation/storysearching_state.dart';
 import 'package:injectable/injectable.dart';
+import 'package:remove_diacritic/remove_diacritic.dart';
 
 @injectable
 class StorySearchingCubit extends BaseCubit<StorySearchingState> {
@@ -22,10 +23,8 @@ class StorySearchingCubit extends BaseCubit<StorySearchingState> {
   void onSearch(String searchValue) {
     listSearchStory = [];
     for (int i = 0; i < listFullStory.length; i++) {
-      if (listFullStory[i]
-          .name
-          .toLowerCase()
-          .contains(searchValue.trim().toLowerCase())) {
+      if (convertDiacritics(listFullStory[i].name)
+          .contains(convertDiacritics(searchValue))) {
         listSearchStory.add(StoryButtonObject(
             id: listFullStory[i].id,
             name: listFullStory[i].name,
@@ -88,5 +87,11 @@ class StorySearchingCubit extends BaseCubit<StorySearchingState> {
       topics = "$topics, ${lstTopicName[i]}";
     }
     return topics;
+  }
+
+  String convertDiacritics(String input) {
+    print(input);
+    print(input.trim().toLowerCase());
+    return removeDiacritics(input.trim().toLowerCase());
   }
 }

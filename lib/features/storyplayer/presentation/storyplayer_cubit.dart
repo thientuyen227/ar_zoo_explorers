@@ -31,9 +31,8 @@ class StoryPlayerCubit extends BaseCubit<StoryPlayerState> {
     name = storyEntity.title;
     avatar = storyEntity.avatar;
     audioUrl = storyEntity.sourceUrl;
-    // audioUrl =
-    // "https://firebasestorage.googleapis.com/v0/b/ar-zoo-explorers.appspot.com/o/stories%2Fchuvoitotbung%2Fchuvoitotbung.mp3?alt=media&token=994d2ede-c91f-4c8f-8f30-ed4f54242ee9";
     content = storyEntity.content;
+    content = content.replaceAll("\\n", "\n");
     duration = Duration(seconds: storyEntity.duration);
     position = Duration(seconds: usEntity.pausedTime);
   }

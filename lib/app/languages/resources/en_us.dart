@@ -70,11 +70,16 @@ const Map<String, String> en_us = {
   'welcome_start': 'Start',
 
   //Home page
+  "home": "Home",
+  'categories': 'Categories',
   "animals": "Animals",
   "reptiles": "Reptiles",
   "fish": "Fish",
   "bird": "Bird",
   "dinosaurs": "Dinosaurs",
+  "tellStoriesForChildren": "Tell Stories For Children",
+  "learnWithChildren": "Learn With Children",
+  "kidsActivities": "Kids's Activities",
 
   // Avatar
   'avatar_viewAvatar': 'View Avatar',

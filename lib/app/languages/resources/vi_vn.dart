@@ -65,11 +65,16 @@ const Map<String, String> vi_vn = {
   'welcome_start': 'Bắt đầu',
 
   //Home page
+  "home": "Trang Chủ",
+  'categories': 'Danh Mục',
   "animals": "Động vật",
   "reptiles": "Bò sát",
   "fish": "Cá",
   "bird": "Chim",
   "dinosaurs": "Khủng long",
+  "tellStoriesForChildren": "Kể Chuyện Cho Bé",
+  "learnWithChildren": "Học Cùng Bé",
+  "kidsActivities": "Hoạt Động Cho Bé",
 
   // Avatar
   'avatar_viewAvatar': 'Xem Avatar',

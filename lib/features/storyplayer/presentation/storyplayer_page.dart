@@ -223,7 +223,6 @@ class _State
               onChanged: (double value) {
                 setState(() {
                   seekToSecond(value.toInt());
-                  // value = value;
                 });
               },
             )));
@@ -482,14 +481,6 @@ class _State
 
   void stopTimer() => timer.cancel();
 
-  void onDurationChanged() {
-    audioPlayer.onDurationChanged.listen((Duration d) {
-      setState(() {
-        cubit.position = d;
-      });
-    });
-  }
-
   _getInformations(StoryEntity storyEntity, UserStoryEntity usEntity) {
     setState(() {
       cubit.getInformations(storyEntity, usEntity);
@@ -519,7 +510,6 @@ class _State
     setDimension();
     _getInformations(storyController.currentStory.value,
         userStoryController.currentUserStory.value);
-    onDurationChanged();
     onPlayerStateChanged();
     setVolume();
     playAudio();

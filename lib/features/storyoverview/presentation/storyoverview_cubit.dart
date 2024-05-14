@@ -36,7 +36,6 @@ class StoryOverviewCubit extends BaseCubit<StoryOverviewState> {
   }
 
   String getTopics(List<String> lstTopicName) {
-    print("A");
     String topics = lstTopicName[0];
     for (int i = 1; i < lstTopicName.length; i++) {
       topics = "$topics, ${lstTopicName[i]}";

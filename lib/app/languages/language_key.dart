@@ -48,11 +48,16 @@ class LanguageKeys {
   static const String more = 'more';
 
   //Home page
+  static const String home = 'home';
+  static const String categories = 'categories';
   static const String animals = 'animals';
   static const String reptiles = 'reptiles';
   static const String fish = 'fish';
   static const String bird = 'bird';
   static const String dinosaurs = 'dinosaurs';
+  static const String tellStoriesForChildren = 'tellStoriesForChildren';
+  static const String learnWithChildren = 'learnWithChildren';
+  static const String kidsActivities = "kidsActivities";
 
   // Authentication Pages
   static const String auth_enterEmail = 'auth_enterEmail';
@@ -164,4 +169,6 @@ class LanguageKeys {
       "actionTargetNeedTobeLargerThanZero";
 
   static var status = "status";
+
+  // STORY
 }

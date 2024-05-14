@@ -560,6 +560,8 @@ class FirebaseFirestoreSource {
           'pausedTime': userStory.pausedTime,
           'isCompleted': userStory.isCompleted,
           'isFavorited': userStory.isFavorited,
+          'createdAt': userStory.createdAt,
+          'updatedAt': userStory.updatedAt,
           'status': userStory.status,
         });
         String newDocumentId = documentReference.id;
@@ -572,6 +574,8 @@ class FirebaseFirestoreSource {
           pausedTime: userStory.pausedTime,
           isCompleted: userStory.isCompleted,
           isFavorited: userStory.isFavorited,
+          createdAt: userStory.createdAt,
+          updatedAt: userStory.updatedAt,
           status: userStory.status,
         );
         return userStory;
@@ -592,6 +596,8 @@ class FirebaseFirestoreSource {
       required int pausedTime,
       required bool isCompleted,
       required bool isFavorited,
+      required Timestamp createdAt,
+      required Timestamp updatedAt,
       required bool status}) async {
     try {
       await _userStoryCollectionRef.doc(id).update({
@@ -601,6 +607,8 @@ class FirebaseFirestoreSource {
         'pausedTime': pausedTime,
         'isCompleted': isCompleted,
         'isFavorited': isFavorited,
+        'createdAt': createdAt,
+        'updatedAt': updatedAt,
         'status': status,
       });
       return getUserStory(id);
@@ -631,11 +639,13 @@ class FirebaseFirestoreSource {
   Future<UserStoryModel?> updateUserStoryWithIsCompleted({
     required String id,
     required bool isCompleted,
+    required Timestamp updatedAt,
   }) async {
     try {
       await _userStoryCollectionRef.doc(id).update({
         'id': id,
         'isCompleted': isCompleted,
+        'updatedAt': updatedAt,
       });
       return getUserStory(id);
     } catch (e, stackTrace) {
@@ -646,11 +656,14 @@ class FirebaseFirestoreSource {
   }
 
   Future<UserStoryModel?> updateUserStoryWithPausedTime(
-      {required String id, required int pausedTime}) async {
+      {required String id,
+      required int pausedTime,
+      required Timestamp updatedAt}) async {
     try {
       await _userStoryCollectionRef.doc(id).update({
         'id': id,
         'pausedTime': pausedTime,
+        'updatedAt': updatedAt,
       });
       return getUserStory(id);
     } catch (e, stackTrace) {
@@ -726,19 +739,21 @@ class FirebaseFirestoreSource {
     try {
       var querySnapshot = await _userStoryCollectionRef
           .where('userId', isEqualTo: userId)
-          // .where('isFavorited', isEqualTo: isFavorited)
           .get();
+
       if (querySnapshot.docs.isNotEmpty) {
         List<UserStoryModel> userStory = querySnapshot.docs
             .map((doc) => UserStoryModel.fromMap(doc.data()))
             .toList();
+
+        userStory.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+
         return userStory;
       } else {
         return [];
       }
     } catch (e, stackTrace) {
-      print(
-          'Get User Animal By User Id = "$userId" And isFavorited Failed: $e');
+      print('Get User Story By User Id = "$userId": $e');
       FirebaseCrashlytics.instance.recordError(e, stackTrace);
     }
     return null;

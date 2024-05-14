@@ -101,6 +101,9 @@ class _State extends BaseState<StorySearchingState, StorySearchingCubit,
                     side: const BorderSide(
                         color: Colors.transparent, width: 0.0)))),
         onPressed: () async {
+          await storyController.getStory(context, id: item.id!);
+          await userStoryController.createOrGetUserStory(context,
+              userId: controller.currentUser.value.id, storyId: item.id!);
           await _navigateToOverviewPage();
         },
         child: Column(children: [
