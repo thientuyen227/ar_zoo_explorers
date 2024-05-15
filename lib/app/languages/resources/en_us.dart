@@ -145,4 +145,7 @@ const Map<String, String> en_us = {
   "formPhoneError": "Vaid phone number",
   "formShortPasswordError": "Password is too short (Atleast 6 characters)",
   "formPasswordDoesNotMatchError": "Password doesn't match",
+
+  //HELP
+  'introduction': 'Introduction',
 };

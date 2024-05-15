@@ -38,7 +38,7 @@ class _State
   @override
   Widget buildByState(BuildContext context, StoryPlayerState state) {
     return PopScope(
-        canPop: false, //When false, blocks the current route from being popped.
+        canPop: false,
         onPopInvoked: (didPop) async {
           await _updatePausedTime();
           Navigator.of(context).pop();

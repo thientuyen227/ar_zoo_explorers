@@ -137,4 +137,7 @@ const Map<String, String> vi_vn = {
   "updateAccountSuccessMessage": "Thông tin tài khoản đã được cập nhật",
   "changePasswordFailedMessage": "Đổi mật khẩu thất bại",
   "wrongOldPassword": "Mật khẩu cũ không chính xác",
+
+  //HELP
+  'introduction': 'Hướng Dẫn',
 };

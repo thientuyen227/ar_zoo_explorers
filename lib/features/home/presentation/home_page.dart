@@ -59,7 +59,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
                     centerTitle: true,
                     elevation: 1,
                     title: Text(
-                      LanguageKeys.home.tr,
+                      LanguageKeys.home.tr.toUpperCase(),
                       style: const TextStyle(
                           fontSize: 20,
                           color: AppColor.white,

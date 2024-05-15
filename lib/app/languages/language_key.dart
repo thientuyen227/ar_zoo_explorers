@@ -177,5 +177,13 @@ class LanguageKeys {
 
   static var status = "status";
 
+  //HELP
+  static const String instruction = 'introduction';
+
+  //TERMS OF SERVICE
+
+  //1
+  static const String acceptTerms = 'acceptTerms';
+
   // STORY
 }

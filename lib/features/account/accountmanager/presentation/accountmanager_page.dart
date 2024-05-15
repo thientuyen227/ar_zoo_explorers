@@ -32,7 +32,7 @@ class _State extends BaseState<AccountManagerState, AccountManagerCubit,
         appBar: AppBar(
             centerTitle: true,
             backgroundColor: AppColor.appBarColor,
-            title: Text(LanguageKeys.accountManager.tr,
+            title: Text(LanguageKeys.settings.tr.toUpperCase(),
                 style: const TextStyle(
                     fontSize: 20,
                     color: AppColor.white,
@@ -188,6 +188,9 @@ class _State extends BaseState<AccountManagerState, AccountManagerCubit,
         break;
       case AccountManagerType.ChangeLanguage:
         context.router.pushNamed(Routes.changelanguage);
+        break;
+      case AccountManagerType.Assistance:
+        context.router.pushNamed(Routes.help);
         break;
       default:
     }
