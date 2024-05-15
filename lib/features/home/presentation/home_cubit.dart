@@ -1,5 +1,7 @@
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/base/base_cubit.dart';
 import 'package:ar_zoo_explorers/features/home/presentation/home_state.dart';
+import 'package:get/get.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../app/theme/icons.dart';
@@ -15,7 +17,9 @@ class HomeCubit extends BaseCubit<HomeState> {
   int adsCurrentPage = 0;
 
   FormBuilderTextFieldModel searchBar = FormBuilderTextFieldModel(
-      name: "search", hint_text: "search", icon_suffix: AppIcons.icSearch);
+      name: "search",
+      hint_text: LanguageKeys.search.tr,
+      icon_suffix: AppIcons.icSearch);
 
   double HEIGHT = 0;
   double WIDTH = 0;

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserStoryEntity {
   String id;
   String storyId;
@@ -5,6 +7,8 @@ class UserStoryEntity {
   int pausedTime;
   bool isCompleted;
   bool isFavorited;
+  Timestamp createdAt;
+  Timestamp updatedAt;
   bool status;
 
   UserStoryEntity({
@@ -14,8 +18,11 @@ class UserStoryEntity {
     this.pausedTime = 0,
     this.isCompleted = false,
     this.isFavorited = false,
+    Timestamp? createdAt,
+    Timestamp? updatedAt,
     this.status = true,
-  });
+  })  : createdAt = createdAt ?? Timestamp.now(),
+        updatedAt = updatedAt ?? Timestamp.now();
 
   Map<String, dynamic> toMap() {
     return {
@@ -25,6 +32,8 @@ class UserStoryEntity {
       'pausedTime': pausedTime,
       'isCompleted': isCompleted,
       'isFavorited': isFavorited,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
       'status': status,
     };
   }

@@ -29,6 +29,10 @@ class StoryController extends ControllerHelper {
 
   Rx<List<StoryEntity>> listStory = Rx([]);
 
+  Rx<String> txtSearch = Rx("");
+
+  Rx<bool> searchStatus = Rx(false);
+
   Future<StoryEntity> getStory(BuildContext context, {required String id}) {
     return processRequest<StoryEntity>(
         request: () => _storyRepository.getStory(id),
@@ -87,6 +91,11 @@ class StoryController extends ControllerHelper {
     update();
   }
 
+  Future<void> setSearchValue(BuildContext context, String txt) async {
+    txtSearch.value = txt;
+    update();
+  }
+
   Future<void> updateCurrentStory(BuildContext context,
       {required String id,
       required String author,
@@ -132,6 +141,23 @@ class StoryController extends ControllerHelper {
         onSuccess: (success) => {_setCurrentStory(context, success.data)},
         onFailure: (failure) =>
             Fluttertoast.showToast(msg: "Truy cập thông tin thất bại!"));
+  }
+
+  Future<void> updateSearching(BuildContext context, {String text = ""}) async {
+    txtSearch.value = text;
+    searchStatus.value = true;
+    update();
+  }
+
+  Future<void> updateSearchStatus(BuildContext context) async {
+    searchStatus.value = !searchStatus.value;
+    update();
+  }
+
+  Future<void> resetSearching(BuildContext context) async {
+    txtSearch.value = "";
+    searchStatus.value = false;
+    update();
   }
 
   Future<void> _setCurrentStory(
