@@ -1,11 +1,15 @@
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
+import 'package:ar_zoo_explorers/domain/entities/vocabulary_entity.dart';
 import 'package:ar_zoo_explorers/features/vocabularydetail/components/dialog_animal.dart';
+import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 class ItemVocabularyDetail extends StatefulWidget {
-  const ItemVocabularyDetail({super.key});
+  final VocabularyEntity vocabularyEntity;
+  const ItemVocabularyDetail({super.key, required this.vocabularyEntity});
 
   @override
   State<ItemVocabularyDetail> createState() => _ItemVocabularyDetailState();
@@ -13,7 +17,7 @@ class ItemVocabularyDetail extends StatefulWidget {
 
 class _ItemVocabularyDetailState extends State<ItemVocabularyDetail> {
   var isComplete = false;
-
+  final languageCode = Get.locale?.languageCode;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,11 +30,18 @@ class _ItemVocabularyDetailState extends State<ItemVocabularyDetail> {
       child: Center(
         child: Column(
           children: [
-            SvgPicture.asset(AppImages.imgLionBaby),
-            const Text("/ˈlaɪən/"),
-            const Text(
-              "Lion",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+            ImageSvgUrlCustom(
+              imagePath: widget.vocabularyEntity.thumbnail,
+              height: 70,
+              width: 70,
+              size: 70,
+            ),
+            languageCode != 'vi'
+                ? Text(widget.vocabularyEntity.phoneticTranscription ?? "")
+                : Container(),
+            Text(
+              widget.vocabularyEntity.wordLocalize,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
             ),
             const SizedBox(
               height: 5,
@@ -41,7 +52,8 @@ class _ItemVocabularyDetailState extends State<ItemVocabularyDetail> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      _showDialogAndBottomSheet(context);
+                      _showDialogAndBottomSheet(
+                          context, widget.vocabularyEntity);
                     },
                     child: Image.asset(
                       AppIcons.icSnail,
@@ -61,11 +73,12 @@ class _ItemVocabularyDetailState extends State<ItemVocabularyDetail> {
   }
 }
 
-void _showDialogAndBottomSheet(BuildContext context) {
+void _showDialogAndBottomSheet(
+    BuildContext context, VocabularyEntity vocabularyEntities) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return const DialogAnimal();
+      return DialogAnimal(vocabularyEntity: vocabularyEntities);
     },
   );
 }

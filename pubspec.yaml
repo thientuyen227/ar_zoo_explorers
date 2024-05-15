@@ -93,6 +93,7 @@ dependencies:
   flutter_html: ^3.0.0-beta.2
   collection: ^1.17.2
   audioplayers: ^5.2.1
+  lottie: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -137,6 +138,7 @@ flutter:
     - assets/images/learning_image/vocabulary/
     - assets/images/learning_image/puzzle/
     - assets/audio/
+    - assets/lotties/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -150,21 +152,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: Arbuckle W00 Bright
+    - family: Coiny-Regular
       fonts:
-        - asset: assets/fonts/Arbuckle W00 Bright.ttf
-    - family: Homelike
-      fonts:
-        - asset: assets/fonts/Homelike.ttf
-    - family: NVN LittlePrincess-Bold
-      fonts:
-        - asset: assets/fonts/NVN LittlePrincess-Bold.ttf
-    - family: ShineBubbleDeco-MVKJx
-      fonts:
-        - asset: assets/fonts/ShineBubbleDeco-MVKJx.ttf
-    - family: SVN-Poky's
-      fonts:
-        - asset: assets/fonts/SVN-Poky's.ttf
+        - asset: assets/fonts/Coiny-Regular.ttf
   # fonts:
   #   - family: Schyler
   #     fonts:

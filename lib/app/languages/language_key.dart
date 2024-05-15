@@ -11,8 +11,6 @@ class LanguageKeys {
   static const String logout = 'logout';
   static const String register = 'register';
   static const String share = 'share';
-  static const String actNow = 'actNow';
-  static const String receive = 'receive';
   static const String email = 'email';
   static const String password = 'password';
   static const String fullname = 'fullname';
@@ -38,6 +36,7 @@ class LanguageKeys {
   static const String edit = 'edit';
   static const String done = 'done';
   static const String next = 'next';
+  static const String previous = 'previous';
   static const String report = 'report';
   static const String chooseLanguage = "chooseLanguage";
 
@@ -53,6 +52,10 @@ class LanguageKeys {
   static const String fish = 'fish';
   static const String bird = 'bird';
   static const String dinosaurs = 'dinosaurs';
+
+  //Model
+  static const String description = 'description';
+  static const String location = 'location';
 
   // Authentication Pages
   static const String auth_enterEmail = 'auth_enterEmail';
@@ -103,10 +106,6 @@ class LanguageKeys {
   static const String requiresRecentLogin = 'requiresRecentLogin';
   static const String reportMessage = "reportMessage";
 
-  static const String createActionSuccessfully = "createActionSuccessfully";
-  static const String deleteActionSuccessfully = "deleteActionSuccessfully";
-  static const String updateActionSuccessfully = "updateActionSuccessfully";
-
   static const String cancel = "cancel";
   static const String delete = "delete";
 
@@ -155,13 +154,6 @@ class LanguageKeys {
   static var appleLoginSuccess = "appleLoginSuccess";
 
   static var youDontHaveAnyNotifcation = "youDontHaveAnyNotifcation";
-
-  static var enterActionIcon = "enterActionIcon";
-
-  static var enterActionColor = "enterActionColor";
-
-  static var actionTargetNeedTobeLargerThanZero =
-      "actionTargetNeedTobeLargerThanZero";
 
   static var status = "status";
 }

@@ -36,6 +36,7 @@ class LocalizationService extends Translations {
   static void changeLocale(String langCode) {
     final locale = _getLocaleFromLanguage(langCode: langCode);
     Get.updateLocale(locale);
+    print("TTT $locale");
 
     StorageHelper.setLanguageCode(langCode);
   }

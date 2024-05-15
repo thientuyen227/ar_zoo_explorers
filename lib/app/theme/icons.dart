@@ -228,4 +228,7 @@ class AppImages {
 
 class AppLotties {
   static const String typingAnimation = "assets/lotties/typing.json";
+  static const String animationanimal = "assets/lotties/animationanimal.json";
+  static const String congratulation = "assets/lotties/congratulation.json";
+  static const String xl = "assets/lotties/xl.json";
 }
