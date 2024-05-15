@@ -40,6 +40,7 @@ class LanguageKeys {
   static const String next = 'next';
   static const String report = 'report';
   static const String chooseLanguage = "chooseLanguage";
+  static const String back = "back";
 
   // Welcome Page
   static const String welcome_title = 'welcome_title';
@@ -183,7 +184,64 @@ class LanguageKeys {
   //TERMS OF SERVICE
 
   //1
-  static const String acceptTerms = 'acceptTerms';
+  static const String term1_title = 'term1Title';
+  static const String term1_content = 'term1Content';
+
+  //2
+  static const String term2_title = 'term2Title';
+  static const String term2_content = 'term2Content';
+
+  //3
+  static const String term3_title = 'term3Title';
+  static const String term3_content = 'term3Content';
+
+  //4
+  static const String term4_title = 'term4Title';
+  static const String term4_content = 'term4Content';
+
+  //5
+  static const String term5_title = 'term5Title';
+  static const String term5_content = 'term5Content';
+
+  //6
+  static const String term6_title = 'term6Title';
+  static const String term6_content = 'term6Content';
+
+  //7
+  static const String term7_title = 'term7Title';
+  static const String term7_content = 'term7Content';
+
+  //8
+  static const String term8_title = 'term8Title';
+  static const String term8_content = 'term8Content';
+
+  //9
+  static const String term9_title = 'term9Title';
+  static const String term9_content = 'term9Content';
+
+  //10
+  static const String term10_title = 'term10Title';
+  static const String term10_content = 'term10Content';
+
+  //11
+  static const String term11_title = 'term11Title';
+  static const String term11_content = 'term11Content';
+
+  //12
+  static const String term12_title = 'term12Title';
+  static const String term12_content = 'term12Content';
+
+  //13
+  static const String term13_title = 'term13Title';
+  static const String term13_content = 'term13Content';
+
+  //14
+  static const String term14_title = 'term14Title';
+  static const String term14_content = 'term14Content';
+
+  //15
+  static const String term15_title = 'term15Title';
+  static const String term15_content = 'term15Content';
 
   // STORY
 }

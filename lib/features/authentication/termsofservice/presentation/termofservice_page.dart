@@ -52,7 +52,7 @@ class _State extends BaseState<TermOfServiceState, TermOfServiceCubit,
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, bottom: 25),
                           child: Column(children: [
-                            SizedBox(height: cubit.HEIGHT * 0.13),
+                            SizedBox(height: cubit.HEIGHT * 0.11),
                             listTermsOfService(),
                             const SizedBox(height: 15),
                             submitButton()
@@ -64,7 +64,7 @@ class _State extends BaseState<TermOfServiceState, TermOfServiceCubit,
     return Container(
       padding: const EdgeInsets.all(10),
       width: cubit.WIDTH * 0.85,
-      height: cubit.WIDTH * 1.25,
+      height: cubit.HEIGHT * 0.75,
       decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.85),
           border: Border.all(color: Colors.grey, width: 2),
@@ -125,12 +125,10 @@ class _State extends BaseState<TermOfServiceState, TermOfServiceCubit,
                     const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30))),
-            child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("Back",
-                      style: TextStyle(fontSize: 20, color: Colors.white)),
-                ])));
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Text(LanguageKeys.back.tr.toUpperCase(),
+                  style: const TextStyle(fontSize: 20, color: Colors.white)),
+            ])));
   }
 
   void setDimension() {

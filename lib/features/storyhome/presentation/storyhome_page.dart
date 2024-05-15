@@ -163,9 +163,10 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
   Widget topicButton(TopicButtonObject btnObject) {
     return GestureDetector(
         onTap: () async {
+          loadingController.showLoading();
           await _setCurrentStoryTopic(btnObject.id);
           context.router.pushNamed(Routes.storytopic);
-          // widget.onPageChanged(1);
+          loadingController.hideLoading();
         },
         child: Container(
             width: cubit.WIDTH * 0.39,

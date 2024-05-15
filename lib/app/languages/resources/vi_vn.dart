@@ -60,6 +60,7 @@ const Map<String, String> vi_vn = {
   'more': "Xem thêm",
   'next': "Tiếp tục",
   'report': "Báo cáo",
+  'back': 'quay lại',
 
   // Welcome
   'welcome_start': 'Bắt đầu',
@@ -140,4 +141,64 @@ const Map<String, String> vi_vn = {
 
   //HELP
   'introduction': 'Hướng Dẫn',
+
+  //TERMS OF SERVICE
+  'term1Title': 'Chấp nhận Điều khoản',
+  'term1Content':
+      'Trước khi sử dụng ứng dụng ArZoo, bạn cần đồng ý và tuân thủ các điều khoản sau đây.',
+
+  'term2Title': 'Sử dụng Ứng dụng',
+  'term2Content':
+      'Bạn được cấp quyền sử dụng ứng dụng AR cho mục đích cá nhân hoặc thương mại. Ứng dụng không được sử dụng cho các mục đích bất hợp pháp hoặc để gây hại cho người khác.',
+
+  'term3Title': 'Quyền Sở hữu',
+  'term3Content':
+      'Ứng dụng AR là tài sản của chúng tôi và được bảo vệ bởi luật bản quyền. Việc sao chép hoặc chỉnh sửa ứng dụng mà không có sự cho phép là bị cấm.',
+
+  'term4Title': 'Quyền Riêng tư',
+  'term4Content':
+      'Chúng tôi bảo vệ quyền riêng tư của bạn theo chính sách bảo mật của chúng tôi. Dữ liệu cá nhân của bạn có thể được thu thập, nhưng chúng tôi cam kết bảo vệ nó.',
+
+  'term5Title': 'Thay đổi Điều khoản',
+  'term5Content':
+      'Chúng tôi có quyền thay đổi các điều khoản và sẽ thông báo cho bạn về bất kỳ thay đổi nào.',
+
+  'term6Title': 'Chấm dứt việc sử dụng',
+  'term6Content': 'Bạn có thể ngừng sử dụng ứng dụng bất cứ lúc nào.',
+
+  'term7Title': 'Bảo mật Dữ liệu',
+  'term7Content':
+      "Dữ liệu cá nhân của người dùng là ưu tiên hàng đầu của chúng tôi. Chúng tôi chỉ thu thập thông tin cần thiết để cung cấp dịch vụ và cá nhân hóa trải nghiệm người dùng. Tất cả thông tin này được bảo vệ một cách an toàn và chúng tôi cam kết không chia sẻ hoặc bán thông tin cá nhân cho bất kỳ bên thứ ba nào mà không có sự đồng ý rõ ràng từ người dùng.",
+
+  'term8Title': 'Chất lượng Dịch vụ',
+  'term8Content':
+      'Chúng tôi cam kết cung cấp ứng dụng AR với chất lượng tốt nhất.',
+
+  'term9Title': 'Hạn chế Sử dụng',
+  'term9Content':
+      'Bạn không được phép chạy nhiều phiên bản của ứng dụng trên cùng một thiết bị.',
+
+  'term10Title': 'Hỗ trợ Kỹ thuật',
+  'term10Content':
+      'Chúng tôi cung cấp hỗ trợ kỹ thuật cho người dùng qua email hoặc hotline.',
+
+  'term11Title': 'Thanh toán (nếu có)',
+  'term11Content':
+      'Nếu ứng dụng AR là miễn phí, bạn phải thanh toán theo giá quy định nếu có.',
+
+  'term12Title': 'Chấp nhận Các Sự cố',
+  'term12Content':
+      'Quý vị chấp nhận giới hạn rủi ro khi sử dụng ứng dụng AR và không được đòi hỏi bồi thường cho thiệt hại hoặc mất mát nào.',
+
+  'term13Title': 'Bản quyền và Tài khoản',
+  'term13Content':
+      'Tất cả các quyền bản quyền đều thuộc sở hữu của chúng tôi. Mỗi tài khoản người dùng chỉ dành cho việc sử dụng của một người dùng duy nhất.',
+
+  'term14Title': 'Cảnh báo Điều khoản',
+  'term14Content':
+      'Bạn phải tuân thủ tất cả các điều khoản và cảnh báo trong ứng dụng AR.',
+
+  'term15Title': 'Sử dụng Công cụ',
+  'term15Content':
+      'Chúng tôi có thể cung cấp các công cụ để hỗ trợ việc sử dụng tối ưu của ứng dụng AR.',
 };

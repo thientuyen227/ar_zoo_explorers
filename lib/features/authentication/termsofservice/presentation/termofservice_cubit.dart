@@ -1,4 +1,6 @@
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/features/authentication/termsofservice/presentation/termofservice_state.dart';
+import 'package:get/get.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../base/base_cubit.dart';
@@ -13,63 +15,49 @@ class TermOfServiceCubit extends BaseCubit<TermOfServiceState> {
 
   List<Term> listTerm = [
     Term(
-        title: "1. Accept Terms:",
-        content:
-            "Before using the ArZoo app, you need to agree to and comply with the following terms."),
+        title: "1. ${LanguageKeys.term1_title.tr}:",
+        content: LanguageKeys.term1_content.tr),
     Term(
-        title: "2. Using the App:",
-        content:
-            "You are granted the right to use the AR app for personal or commercial purposes. The app must not be used for illegal purposes or to harm others."),
+        title: "2. ${LanguageKeys.term2_title.tr}:",
+        content: LanguageKeys.term2_content.tr),
     Term(
-        title: "3. Ownership Rights:",
-        content:
-            "The AR app is our property and is protected by copyright. Copying or modifying the app without permission is prohibited."),
+        title: "3. ${LanguageKeys.term3_title.tr}:",
+        content: LanguageKeys.term3_content.tr),
     Term(
-        title: "4. Privacy Rights:",
-        content:
-            "We protect your privacy according to our privacy policy. Your personal data may be collected, but we commit to safeguarding it."),
+        title: "4. ${LanguageKeys.term4_title.tr}:",
+        content: LanguageKeys.term4_content.tr),
     Term(
-        title: "5. Change of Terms:",
-        content:
-            "We reserve the right to change the terms and will notify you of any changes."),
+        title: "5. ${LanguageKeys.term5_title.tr}:",
+        content: LanguageKeys.term5_content.tr),
     Term(
-        title: "6. Termination of Use:",
-        content: "You may cease using the app at any time."),
+        title: "6. ${LanguageKeys.term6_title.tr}:",
+        content: LanguageKeys.term6_content.tr),
     Term(
-        title: "7. Data Security:",
-        content:
-            "The user's personal data is our top priority. We only collect necessary information to provide services and personalize the user experience. All this information is securely protected, and we commit not to share or sell personal information to any third party without clear consent from the user."),
+        title: "7. ${LanguageKeys.term7_title.tr}:",
+        content: LanguageKeys.term7_content.tr),
     Term(
-        title: "8. Service Quality:",
-        content:
-            "We are committed to providing the AR app with the highest quality."),
+        title: "8.  ${LanguageKeys.term8_title.tr}:",
+        content: LanguageKeys.term8_content.tr),
     Term(
-        title: "9. Usage Restrictions:",
-        content:
-            "You are not allowed to run multiple instances of the app on the same device."),
+        title: "9.  ${LanguageKeys.term9_title.tr}",
+        content: LanguageKeys.term9_content.tr),
     Term(
-        title: "10. Technical Support:",
-        content:
-            "We provide technical support for users via email or hotline."),
+        title: "10. ${LanguageKeys.term10_title.tr}:",
+        content: LanguageKeys.term10_content.tr),
     Term(
-        title: "11. Payment (if applicable):",
-        content:
-            "If the AR app is free, you must pay according to the specified price if applicable."),
+        title: "11. ${LanguageKeys.term11_title.tr}:",
+        content: LanguageKeys.term11_content.tr),
     Term(
-        title: "12. Acceptance of Incidents:",
-        content:
-            "Acceptance of risk limitations when using the AR app, and no compensation can be claimed for damage or loss."),
+        title: "12. ${LanguageKeys.term12_title.tr}:",
+        content: LanguageKeys.term12_content.tr),
     Term(
-        title: "13. Copyright and Accounts:",
-        content:
-            "All copyright rights are owned by us. Each user account is for single-user use only."),
+        title: "13. ${LanguageKeys.term13_title.tr}:",
+        content: LanguageKeys.term13_content.tr),
     Term(
-        title: "14. Warning Terms:",
-        content:
-            "You must adhere to all terms and warnings within the AR app."),
+        title: "14. ${LanguageKeys.term14_title.tr}:",
+        content: LanguageKeys.term14_content.tr),
     Term(
-        title: "15. Tool Usage:",
-        content:
-            "We can provide tools to support the optimal usage of the AR app.")
+        title: "15. ${LanguageKeys.term15_title.tr}:",
+        content: LanguageKeys.term15_content.tr)
   ];
 }

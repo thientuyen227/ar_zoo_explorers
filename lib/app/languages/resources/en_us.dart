@@ -63,6 +63,7 @@ const Map<String, String> en_us = {
   "delete": "Delete",
   'chooseLanguage': 'Language',
   "deleteMessage": "Do you sure you want to delete this record?",
+  'back': 'back',
   // Welcome
   'welcome_title': 'Welcome to Focus 1',
   'welcome_subtitle':
@@ -148,4 +149,64 @@ const Map<String, String> en_us = {
 
   //HELP
   'introduction': 'Introduction',
+
+  //TERMS OF SERVICE
+  'term1Title': 'Accept Terms',
+  'term1Content':
+      'Before using the ArZoo app, you need to agree to and comply with the following terms.',
+
+  'term2Title': 'Using the App',
+  'term2Content':
+      'You are granted the right to use the AR app for personal or commercial purposes. The app must not be used for illegal purposes or to harm others.',
+
+  'term3Title': 'Ownership Rights',
+  'term3Content':
+      'The AR app is our property and is protected by copyright. Copying or modifying the app without permission is prohibited.',
+
+  'term4Title': 'Privacy Rights',
+  'term4Content':
+      'We protect your privacy according to our privacy policy. Your personal data may be collected, but we commit to safeguarding it.',
+
+  'term5Title': 'Change of Terms',
+  'term5Content':
+      'We reserve the right to change the terms and will notify you of any changes.',
+
+  'term6Title': 'Termination of Use',
+  'term6Content': 'You may cease using the app at any time.',
+
+  'term7Title': 'Data Security',
+  'term7Content':
+      "The user's personal data is our top priority. We only collect necessary information to provide services and personalize the user experience. All this information is securely protected, and we commit not to share or sell personal information to any third party without clear consent from the user.",
+
+  'term8Title': 'Service Quality',
+  'term8Content':
+      'We are committed to providing the AR app with the highest quality.',
+
+  'term9Title': 'Usage Restrictions',
+  'term9Content':
+      'You are not allowed to run multiple instances of the app on the same device.',
+
+  'term10Title': 'Technical Support',
+  'term10Content':
+      'We provide technical support for users via email or hotline.',
+
+  'term11Title': 'Payment (if applicable)',
+  'term11Content':
+      'If the AR app is free, you must pay according to the specified price if applicable.',
+
+  'term12Title': 'Acceptance of Incidents',
+  'term12Content':
+      'Acceptance of risk limitations when using the AR app, and no compensation can be claimed for damage or loss.',
+
+  'term13Title': 'Copyright and Accounts',
+  'term13Content':
+      'All copyright rights are owned by us. Each user account is for single-user use only.',
+
+  'term14Title': 'Warning Terms',
+  'term14Content':
+      'You must adhere to all terms and warnings within the AR app.',
+
+  'term15Title': 'Tool Usage',
+  'term15Content':
+      'We can provide tools to support the optimal usage of the AR app',
 };
