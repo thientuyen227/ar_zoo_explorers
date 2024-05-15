@@ -25,6 +25,7 @@ class _State extends BaseState<VocabularyDetailState, VocabularyDetailCubit,
     cubit.init();
   }
 
+  final languageCode = Get.locale?.languageCode;
   @override
   Widget buildByState(BuildContext context, VocabularyDetailState state) {
     return Scaffold(
@@ -76,10 +77,10 @@ class _State extends BaseState<VocabularyDetailState, VocabularyDetailCubit,
                         ),
                       );
                     },
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
-                      childAspectRatio: 0.86,
+                      mainAxisSpacing: 0.1,
+                      childAspectRatio: languageCode == 'vi' ? 0.87 : 0.85,
                     ),
                   )
               ],

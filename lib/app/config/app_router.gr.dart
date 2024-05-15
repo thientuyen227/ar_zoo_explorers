@@ -256,9 +256,9 @@ abstract class $AppRouter extends _i39.RootStackRouter {
     },
     StoryOverviewRoute.name: (routeData) {
       final args = routeData.argsAs<StoryOverviewRouteArgs>();
-      return _i38.AutoRoutePage<dynamic>(
+      return _i39.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i27.StoryOverviewPage(
+        child: _i28.StoryOverviewPage(
           key: args.key,
           onClosed: args.onClosed,
         ),
@@ -730,12 +730,12 @@ class StoryListeningRoute extends _i39.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i27.StoryOverviewPage]
-class StoryOverviewRoute extends _i38.PageRouteInfo<StoryOverviewRouteArgs> {
+/// [_i28.StoryOverviewPage]
+class StoryOverviewRoute extends _i39.PageRouteInfo<StoryOverviewRouteArgs> {
   StoryOverviewRoute({
-    _i39.Key? key,
+    _i40.Key? key,
     required dynamic Function(String) onClosed,
-    List<_i38.PageRouteInfo>? children,
+    List<_i39.PageRouteInfo>? children,
   }) : super(
           StoryOverviewRoute.name,
           args: StoryOverviewRouteArgs(
@@ -747,8 +747,8 @@ class StoryOverviewRoute extends _i38.PageRouteInfo<StoryOverviewRouteArgs> {
 
   static const String name = 'StoryOverviewRoute';
 
-  static const _i38.PageInfo<StoryOverviewRouteArgs> page =
-      _i38.PageInfo<StoryOverviewRouteArgs>(name);
+  static const _i39.PageInfo<StoryOverviewRouteArgs> page =
+      _i39.PageInfo<StoryOverviewRouteArgs>(name);
 }
 
 class StoryOverviewRouteArgs {
@@ -757,7 +757,7 @@ class StoryOverviewRouteArgs {
     required this.onClosed,
   });
 
-  final _i39.Key? key;
+  final _i40.Key? key;
 
   final dynamic Function(String) onClosed;
 

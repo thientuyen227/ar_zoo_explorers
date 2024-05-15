@@ -38,7 +38,9 @@ class _ItemVocabularyDetailState extends State<ItemVocabularyDetail> {
             ),
             languageCode != 'vi'
                 ? Text(widget.vocabularyEntity.phoneticTranscription ?? "")
-                : Container(),
+                : Container(
+                    height: 0,
+                  ),
             Text(
               widget.vocabularyEntity.wordLocalize,
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
