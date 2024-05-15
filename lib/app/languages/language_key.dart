@@ -47,11 +47,16 @@ class LanguageKeys {
   static const String more = 'more';
 
   //Home page
+  static const String home = 'home';
+  static const String categories = 'categories';
   static const String animals = 'animals';
   static const String reptiles = 'reptiles';
   static const String fish = 'fish';
   static const String bird = 'bird';
   static const String dinosaurs = 'dinosaurs';
+  static const String tellStoriesForChildren = 'tellStoriesForChildren';
+  static const String learnWithChildren = 'learnWithChildren';
+  static const String kidsActivities = "kidsActivities";
 
   //Model
   static const String description = 'description';
@@ -87,6 +92,10 @@ class LanguageKeys {
   static const String family = 'family';
 
   // Setting Page
+  static const String accountManager = 'accountManager';
+  static const String event = 'event';
+  static const String notify = 'notify';
+  static const String rating = 'rating';
   static const String setting_upgradeAccount = 'setting_upgradeAccount';
   static const String setting_support = 'setting_support';
   static const String setting_policy = 'setting_policy';
@@ -96,7 +105,10 @@ class LanguageKeys {
   static const String setting_relatedApps = 'setting_relatedApps';
   static const String setting_notification = 'setting_notification';
   static const String setting_deleteAccount = 'setting_deleteAccount';
+  static const String support = 'support';
+  static const String termsOfService = 'termsOfService';
   static const String upgradeAccount = 'upgradeAccount';
+  static const String userProfile = 'userProfile';
 
   // Actions
   static const String passwordResetRequestMessage =
@@ -156,4 +168,6 @@ class LanguageKeys {
   static var youDontHaveAnyNotifcation = "youDontHaveAnyNotifcation";
 
   static var status = "status";
+
+  // STORY
 }

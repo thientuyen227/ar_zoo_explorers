@@ -1,3 +1,4 @@
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/dimens.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
@@ -14,7 +15,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/get.dart';
 
 import '../../../app/config/routes.dart';
 import '../../../base/widgets/page_loading_indicator.dart';
@@ -54,14 +55,14 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
             scaffold: Scaffold(
                 // extendBodyBehindAppBar: true,
                 appBar: AppBar(
-                    backgroundColor: const Color.fromARGB(255, 109, 189, 255),
+                    backgroundColor: AppColor.appBarColor,
                     centerTitle: true,
                     elevation: 1,
-                    title: const Text(
-                      "Home",
-                      style: TextStyle(
+                    title: Text(
+                      LanguageKeys.home.tr,
+                      style: const TextStyle(
                           fontSize: 20,
-                          color: Colors.white,
+                          color: AppColor.white,
                           fontWeight: FontWeight.bold),
                     ),
                     leading: Column(
@@ -73,7 +74,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
                   child: SingleChildScrollView(
                     child: Container(
                       width: MediaQuery.of(context).size.width,
-                      color: Colors.white,
+                      color: AppColor.white,
                       constraints: BoxConstraints(
                           minHeight: MediaQuery.of(context).size.height),
                       padding: const EdgeInsets.only(
@@ -95,12 +96,12 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   Widget listOptionButton(BuildContext context) {
     return Column(
       children: [
-        componentTitle("Options"),
+        componentTitle(LanguageKeys.kidsActivities.tr),
         optionButton(context, AppImages.imgStoryTelling,
-            "Tell stories for children", Routes.story),
+            LanguageKeys.tellStoriesForChildren.tr, Routes.story),
         const SizedBox(height: 16),
-        optionButton(context, AppImages.imgLearning, "Learn with children",
-            Routes.learning)
+        optionButton(context, AppImages.imgLearning,
+            LanguageKeys.learnWithChildren.tr, Routes.learning)
       ],
     );
   }
@@ -109,7 +110,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
       BuildContext context, String imageUrl, String content, String routePage) {
     return ElevatedButton(
         style: ElevatedButton.styleFrom(
-            backgroundColor: const Color.fromARGB(255, 89, 178, 252),
+            backgroundColor: AppColor.primaryColor,
             elevation: 5,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0)),
@@ -148,7 +149,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
         child: Text(
           content,
           style: const TextStyle(
-              color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700),
+              color: AppColor.white, fontSize: 18, fontWeight: FontWeight.w700),
           softWrap: true,
         ));
   }
@@ -158,7 +159,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
         onPressed: () => context.router.pushNamed(Routes.userprofile),
         icon: Row(children: [
           Text(cubit.nameCustom(controller.currentUser.value.fullname, 8),
-              style: const TextStyle(color: Colors.white)),
+              style: const TextStyle(color: AppColor.white)),
           const SizedBox(width: 5),
           userImage()
         ]));
@@ -180,7 +181,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   Widget settingButton() {
     return AppIconButton(
         onPressed: () => {_turnSettingPage()},
-        icon: const Icon(Icons.settings, color: Colors.white),
+        icon: const Icon(Icons.settings, color: AppColor.white),
         borderRadius: AppDimens.radius200,
         padding: const EdgeInsets.all(AppDimens.spacing5),
         width: AppDimens.size30.width,
@@ -261,25 +262,24 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
 
   // DANH SÁCH BUTTON MODEL
   Widget listModelButton(List<ButtonObject> list) {
-    List<Widget> listRow = [componentTitle("Categories")];
-    for (int i = 0; i < list.length - 1; i = i + 2) {
-      listRow.add(Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [modelButton(i), modelButton(i + 1)]));
-      listRow.add(const SizedBox(height: 20));
-    }
-    if ((list.length) % 2 != 0) {
-      listRow.add(Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            modelButton(list.length - 1),
-            const SizedBox(height: 150, width: 150)
-          ]));
-      listRow.add(const SizedBox(height: 20));
-    }
-    return Column(children: listRow);
+    return Column(children: [
+      componentTitle(LanguageKeys.categories.tr),
+      GridView.builder(
+        shrinkWrap: true,
+        itemCount: list.length,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.all(0.0),
+            child: Column(
+              children: [modelButton(index)],
+            ),
+          );
+        },
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, childAspectRatio: 0.9, crossAxisSpacing: 14),
+      ),
+    ]);
   }
 
   Widget componentTitle(String content) {
@@ -315,7 +315,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
             decoration: BoxDecoration(
                 border: Border.all(color: Colors.blue, width: 7),
                 borderRadius: BorderRadius.circular(15.0),
-                color: Colors.white,
+                color: AppColor.white,
                 boxShadow: [
                   BoxShadow(
                       color: Colors.black.withOpacity(0.3),
@@ -338,10 +338,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
         width: cubit.WIDTH * 0.23,
         height: cubit.WIDTH * 0.23,
         decoration: BoxDecoration(
-            //border: Border.all(color: Colors.white, width: 3),
-            //image: DecorationImage(image: AssetImage(url), fit: BoxFit.cover),
-            borderRadius: BorderRadius.circular(15.0),
-            color: Colors.white),
+            borderRadius: BorderRadius.circular(15.0), color: AppColor.white),
         child: (url == "")
             ? Image.asset(AppImages.imgProfile128x128, fit: BoxFit.cover)
             : Image.network(url, fit: BoxFit.cover));

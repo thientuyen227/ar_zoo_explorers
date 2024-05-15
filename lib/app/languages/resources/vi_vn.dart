@@ -64,11 +64,16 @@ const Map<String, String> vi_vn = {
   'welcome_start': 'Bắt đầu',
 
   //Home page
+  "home": "Trang Chủ",
+  'categories': 'Danh Mục',
   "animals": "Động vật",
   "reptiles": "Bò sát",
   "fish": "Cá",
   "bird": "Chim",
   "dinosaurs": "Khủng long",
+  "tellStoriesForChildren": "Kể Chuyện Cho Bé",
+  "learnWithChildren": "Học Cùng Bé",
+  "kidsActivities": "Hoạt Động Cho Bé",
 
   //model
   'description': 'Mô tả:',
@@ -101,6 +106,10 @@ const Map<String, String> vi_vn = {
   'auth_terms': "Chính sách",
 
   // Setting Pages
+  'accountManager': 'Quản Lý Tài Khoản',
+  'event': 'Sự Kiện',
+  'notify': 'Thông Báo',
+  'rating': 'Đánh giá',
   'setting_support': 'Trợ giúp cho bạn',
   'setting_policy': 'Điều khoản sử dụng',
   'setting_privacy': 'Chính sách bảo mật',
@@ -109,7 +118,10 @@ const Map<String, String> vi_vn = {
   'setting_relatedApps': 'Phần mềm liên quan',
   'setting_notification': 'Bật tắt thông báo',
   'setting_deleteAccount': 'Xoá tài khoản',
+  'support': 'Hỗ Trợ Người Dùng',
+  'termsOfService': "Điều Khoản Sử Dụng",
   'upgradeAccount': 'Nâng cấp tài khoản',
+  'userProfile': 'Trang Cá Nhân',
 
   'passwordResetRequestMessage': "Vui lòng kiểm tra Email để lấy lại mật khẩu",
 

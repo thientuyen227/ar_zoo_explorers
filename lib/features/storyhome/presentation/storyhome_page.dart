@@ -12,7 +12,9 @@ import 'package:ar_zoo_explorers/features/story/model/storybuttonobject.dart';
 import 'package:ar_zoo_explorers/features/storyhome/model/topic_button_object.dart';
 import 'package:ar_zoo_explorers/features/storyhome/presentation/storyhome_cubit.dart';
 import 'package:ar_zoo_explorers/features/storyhome/presentation/storyhome_state.dart';
+import 'package:ar_zoo_explorers/features/storyoverview/presentation/storyoverview_page.dart';
 import 'package:ar_zoo_explorers/utils/widget/button_widget.dart';
+import 'package:ar_zoo_explorers/utils/widget/custom_back_button.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -56,9 +58,9 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
                 backgroundColor: const Color.fromARGB(255, 109, 189, 255),
                 // backgroundColor: Colors.white,
                 elevation: 1,
-                leading: Column(
+                leading: const Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [backButton()]),
+                    children: [CustomBackButton()]),
                 actions: [profileCustom(), const SizedBox(width: 15)]),
             body: FormBuilder(
               key: _formKey,
@@ -73,10 +75,10 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
                   child: Column(children: [
                     Container(height: 24),
                     searchBar(cubit.searchBar),
-                    // Container(height: 24),
                     recommendedList(),
                     Container(height: 24),
                     topicList(),
+                    SizedBox(height: cubit.HEIGHT * 0.05),
                   ]),
                 ),
               ),
@@ -84,18 +86,6 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget backButton() {
-    return AppIconButton(
-      onPressed: () => context.router.pop(),
-      icon: Container(
-          margin: const EdgeInsets.only(left: 0),
-          child: Transform.scale(
-              scale: 1.15,
-              child:
-                  Image.asset(AppIcons.icBack_x64_png, height: 24, width: 24))),
     );
   }
 
@@ -173,9 +163,8 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
   Widget topicButton(TopicButtonObject btnObject) {
     return GestureDetector(
         onTap: () async {
-          // context.router.pushNamed(Routes.liststory);
-          await storyTopicController.updateCurrentStoryTopic(
-              context, btnObject.id);
+          await _setCurrentStoryTopic(btnObject.id);
+          context.router.pushNamed(Routes.storytopic);
           // widget.onPageChanged(1);
         },
         child: Container(
@@ -206,7 +195,7 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
           await storyController.getStory(context, id: btnObject.id!);
           await userStoryController.createOrGetUserStory(context,
               userId: controller.currentUser.value.id, storyId: btnObject.id!);
-          context.router.pushNamed(Routes.storyoverview);
+          await _navigateToOverviewPage();
         },
         child: Container(
             width: cubit.WIDTH * 0.37,
@@ -305,7 +294,16 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
 
   Future<void> _onSearch(String? value) async {
     FocusScope.of(context).unfocus();
+    await storyController.updateSearching(context, text: value ?? "");
     widget.onPageChanged(2);
+  }
+
+  Future<void> _navigateToOverviewPage() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+          builder: (context) =>
+              StoryOverviewPage(onClosed: (String value) async {})),
+    );
   }
 
   _getAllStoryTopics(BuildContext context) async {
@@ -322,8 +320,12 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
 
     setState(() {
       // print(storyTopicController.listStoryTopic.value.length);
-      cubit.getRecommendStories(storyController.listStory.value);
+      cubit.getRecommendStories(storyController.listStory.value.sublist(0, 5));
     });
+  }
+
+  _setCurrentStoryTopic(String id) async {
+    await storyTopicController.updateCurrentStoryTopic(context, id);
   }
 
   void _setDimension() {

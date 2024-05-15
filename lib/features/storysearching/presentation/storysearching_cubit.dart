@@ -1,77 +1,30 @@
 import 'package:ar_zoo_explorers/base/base_cubit.dart';
+import 'package:ar_zoo_explorers/domain/entities/story_entity.dart';
+import 'package:ar_zoo_explorers/domain/entities/story_topic_entity.dart';
 import 'package:ar_zoo_explorers/features/story/model/storybuttonobject.dart';
 import 'package:ar_zoo_explorers/features/storysearching/presentation/storysearching_state.dart';
 import 'package:injectable/injectable.dart';
+import 'package:remove_diacritic/remove_diacritic.dart';
 
 @injectable
 class StorySearchingCubit extends BaseCubit<StorySearchingState> {
   StorySearchingCubit() : super(StorySearchingState());
 
+  bool searchStatus = false;
+
   List<StoryButtonObject> listSearchStory = [];
-  List<StoryButtonObject> listFullStory = [
-    StoryButtonObject(
-        avatar:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFKGwd9XsayxfZ2m8XD3PQegpGYz4Dzwy6hR85H7bgIg&s",
-        name: 'Rùa Và Thỏ',
-        topic: ['Ngụ Ngôn'],
-        duration: const Duration(minutes: 4, seconds: 34)),
-    StoryButtonObject(
-        avatar:
-            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi657OFIAxdkCx6UKg-O3E8lyNvAnr_r8i4DeAMRJUD5JURpRnfnhl6HR78IYhIp2pFJ9Ad7pq8xQaV2_04HWbE_o-jweJ4injvlT2qg4AAUkEHz8grsEVLDeMxK9YtLlj-FS5XlKoMe2-k/s1600/bac_voi_tot_bung_4.jpg",
-        name: 'Bác Voi Tốt Bụng',
-        topic: ['Đạo Đức'],
-        duration: const Duration(minutes: 4, seconds: 34)),
-    StoryButtonObject(
-        avatar:
-            "https://4.bp.blogspot.com/-cCt_3UncqGg/Ws225-kNSEI/AAAAAAAAYUg/45QproQK3c4YzLfalVeDe72FjkHkwt96ACLcBGAs/s1600/IMG_5779a.JPG?w=900",
-        name: 'Chú Gà Trống Kiêu Căng',
-        topic: ['Đạo Đức'],
-        duration: const Duration(minutes: 4, seconds: 34)),
-    StoryButtonObject(
-        avatar:
-            "https://static.8cache.com/cover/o/eJzLyTDW1_VIzDROLfM3Noh31A8LM8zQLQlx8Uj11HeEgrw8V_0o5-Ck1IDyQEf3bP1iAwDLihCU/de-men-phieu-luu-ky.jpg",
-        name: 'Dế Mèn Phiêu Lưu Ký',
-        topic: ['Giả Tưởng'],
-        duration: const Duration(minutes: 4, seconds: 34)),
-    StoryButtonObject(
-        avatar:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_UcA0g2_L59hUx_BS15EW-VSh4HQAVcrSP6Rc79-4uQ&s",
-        name: 'Chú Chó Hachiko',
-        topic: ['Đạo Đức'],
-        duration: const Duration(minutes: 4, seconds: 34)),
-    StoryButtonObject(
-        avatar:
-            "https://cdn.eva.vn/upload/1-2022/images/2022-01-02/truyen-co-tich-vit-con-xau-xi-v---t-1-1641101885-38-width600height339.jpg",
-        name: 'Vịt Con Xấu Xí',
-        topic: ['Giả Tưởng'],
-        duration: const Duration(minutes: 4, seconds: 34))
-  ];
+  List<StoryButtonObject> listFullStory = [];
 
   double WIDTH = 0;
   double HEIGHT = 0;
 
   String txtSearch = "";
 
-  // void setListStory(List<AnimalEntity> list, String searchValue) {
-  //   if (list.isNotEmpty) {
-  //     for (int i = 0; i < list.length; i++) {
-  //       listFullAnimal.add(ButtonObject(
-  //           title: list[i].title, icon: list[i].icon, id: list[i].id));
-  //       if (list[i].title.toLowerCase().contains(searchValue.toLowerCase())) {
-  //         listSearchAnimal.add(ButtonObject(
-  //             title: list[i].title, icon: list[i].icon, id: list[i].id));
-  //       }
-  //     }
-  //   }
-  // }
-
   void onSearch(String searchValue) {
     listSearchStory = [];
     for (int i = 0; i < listFullStory.length; i++) {
-      if (listFullStory[i]
-          .name
-          .toLowerCase()
-          .contains(searchValue.trim().toLowerCase())) {
+      if (convertDiacritics(listFullStory[i].name)
+          .contains(convertDiacritics(searchValue))) {
         listSearchStory.add(StoryButtonObject(
             id: listFullStory[i].id,
             name: listFullStory[i].name,
@@ -82,5 +35,63 @@ class StorySearchingCubit extends BaseCubit<StorySearchingState> {
             duration: listFullStory[i].duration));
       }
     }
+  }
+
+  void getAllStories(List<StoryEntity> lstStory,
+      List<StoryTopicEntity> lstTopic, bool status) {
+    listFullStory = [];
+    listSearchStory = [];
+
+    setListStory(lstStory);
+
+    Map<String, StoryTopicEntity> topicMap = {};
+    for (var topic in lstTopic) {
+      topicMap[topic.id] = topic;
+    }
+
+    for (var story in listFullStory) {
+      List<String> topicNames = [];
+      for (var topicId in story.topic) {
+        var topic = topicMap[topicId];
+        if (topic != null) {
+          topicNames.add(topic.title);
+        }
+      }
+      story.topic = [getTopics(topicNames)];
+    }
+    if (searchStatus) {
+      onSearch(txtSearch);
+    }
+  }
+
+  void setListStory(List<StoryEntity> lstStory) {
+    for (var itemB in lstStory) {
+      var tmpObject = StoryButtonObject(
+        id: itemB.id,
+        name: itemB.title,
+        avatar: itemB.avatar,
+        author: itemB.author,
+        reader: itemB.reader,
+        listenCount: itemB.listenCount,
+        duration: Duration(seconds: itemB.duration),
+        timestamp: Duration(seconds: itemB.duration),
+        topic: itemB.topicId,
+      );
+      listFullStory.add(tmpObject);
+    }
+  }
+
+  String getTopics(List<String> lstTopicName) {
+    String topics = lstTopicName[0];
+    for (int i = 1; i < lstTopicName.length; i++) {
+      topics = "$topics, ${lstTopicName[i]}";
+    }
+    return topics;
+  }
+
+  String convertDiacritics(String input) {
+    print(input);
+    print(input.trim().toLowerCase());
+    return removeDiacritics(input.trim().toLowerCase());
   }
 }

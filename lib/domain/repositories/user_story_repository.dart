@@ -1,5 +1,6 @@
 import 'package:ar_zoo_explorers/core/failures.dart';
 import 'package:ar_zoo_explorers/core/success.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 
 import '../entities/user_story_entity.dart';
@@ -13,6 +14,8 @@ abstract class UserStoryRepository {
     required int pausedTime,
     required bool isCompleted,
     required bool isFavorited,
+    required Timestamp createdAt,
+    required Timestamp updatedAt,
     required bool status,
   });
 
@@ -23,6 +26,8 @@ abstract class UserStoryRepository {
     required int pausedTime,
     required bool isCompleted,
     required bool isFavorited,
+    required Timestamp createdAt,
+    required Timestamp updatedAt,
     required bool status,
   });
 
@@ -34,12 +39,14 @@ abstract class UserStoryRepository {
   Future<Either<Failure, Success<UserStoryEntity>>> updateCompleteOfUserStory({
     required String id,
     required bool isCompleted,
+    required Timestamp updatedAt,
   });
 
   Future<Either<Failure, Success<UserStoryEntity>>>
       updatePausedTimeOfUserStory({
     required String id,
     required int pausedTime,
+    required Timestamp updatedAt,
   });
 
   Future<Either<Failure, Success<UserStoryEntity>>>

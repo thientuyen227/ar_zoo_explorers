@@ -16,6 +16,7 @@ class _BasicStoryButtonState extends State<BasicStoryButton> {
   @override
   Widget build(BuildContext context) {
     return Container(
+        color: Colors.white,
         width: width,
         padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
         child: Row(children: [
