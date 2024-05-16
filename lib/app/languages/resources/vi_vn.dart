@@ -201,4 +201,20 @@ const Map<String, String> vi_vn = {
   'term15Title': 'Sử dụng Công cụ',
   'term15Content':
       'Chúng tôi có thể cung cấp các công cụ để hỗ trợ việc sử dụng tối ưu của ứng dụng AR.',
+
+  //VALIDATE MESSAGE
+  'change': 'Thay đổi',
+  'enterTheOldPassword': 'Nhập mật khẩu cũ',
+  'enterTheNewPassword': 'Nhập mật khẩu mới',
+  'enterTheConfirmPassword': 'Nhập lại mật khẩu mới',
+
+  'msg_atLeast8Characters': 'Ít nhất 8 ký tự',
+  'msg_includeANumber': 'Phải bao gồm 1 ký tự số',
+  'msg_includeSpecialCharacters': 'Phải bao gồm các ký tự đặc biệt @*&^',
+  'msg_missLowerCharacters': 'Thiếu ký tự thường',
+  'msg_missUpperCharacters': 'Thiếu ký tự in hoa',
+  'msg_passwordNotMatch': 'Xác nhận mật khẩu không khớp',
+
+  'requiredField': 'Không thể để trống',
+  'updating': 'Đang cập nhật',
 };

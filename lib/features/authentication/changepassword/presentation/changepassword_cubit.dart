@@ -1,4 +1,6 @@
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/features/authentication/changepassword/presentation/changepassword_state.dart';
+import 'package:get/get.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../app/theme/icons.dart';
@@ -8,20 +10,23 @@ import '../../../base-model/form_builder_text_field_model.dart';
 @injectable
 class ChangePasswordCubit extends BaseCubit<ChangePasswordState> {
   ChangePasswordCubit() : super(ChangePasswordState());
+  double HEIGHT = 0;
+  double WIDTH = 0;
+
   List<FormBuilderTextFieldModel> ListFormItem = [
     FormBuilderTextFieldModel(
         name: 'oldPassword',
-        hint_text: 'Enter the old password',
+        hint_text: LanguageKeys.enterTheOldPassword.tr,
         icon_prefix: AppIcons.icLock,
         isObscured: true),
     FormBuilderTextFieldModel(
         name: 'password',
-        hint_text: 'Enter the new password',
+        hint_text: LanguageKeys.enterTheNewPassword.tr,
         icon_prefix: AppIcons.icLock,
         isObscured: true),
     FormBuilderTextFieldModel(
         name: 'confirmPassword',
-        hint_text: 'Re-enter the new password',
+        hint_text: LanguageKeys.enterTheConfirmPassword.tr,
         icon_prefix: AppIcons.icLock,
         isObscured: true)
   ];
@@ -37,15 +42,15 @@ class ChangePasswordCubit extends BaseCubit<ChangePasswordState> {
       final regex3 = RegExp(r'[A-Z]');
       final regex4 = RegExp(r'[@*&^]');
       if (value.length < 8) {
-        return "At least 8 characters.";
+        return LanguageKeys.msg_atLeast8Characters.tr;
       } else if (!regex1.hasMatch(value)) {
-        return "Missing lowercase character.";
+        return LanguageKeys.msg_missLowerCharacters.tr;
       } else if (!regex2.hasMatch(value)) {
-        return "Missing uppercase character.";
+        return LanguageKeys.msg_missUpperCharacters.tr;
       } else if (!regex3.hasMatch(value)) {
-        return "Must include a number.";
+        return LanguageKeys.msg_includeANumber.tr;
       } else if (!regex4.hasMatch(value)) {
-        return "Must include special characters @*&^.";
+        return LanguageKeys.msg_includeSpecialCharacters.tr;
       }
     } else {
       return null;
@@ -59,7 +64,7 @@ class ChangePasswordCubit extends BaseCubit<ChangePasswordState> {
         confirmPassword != null &&
         confirmPassword.isNotEmpty) {
       if (!(password.compareTo(confirmPassword) == 0)) {
-        return "Password confirmation does not match.";
+        return LanguageKeys.msg_passwordNotMatch.tr;
       }
     } else {
       return null;

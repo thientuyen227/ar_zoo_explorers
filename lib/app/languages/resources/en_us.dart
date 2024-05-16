@@ -209,4 +209,20 @@ const Map<String, String> en_us = {
   'term15Title': 'Tool Usage',
   'term15Content':
       'We can provide tools to support the optimal usage of the AR app',
+
+  //VALIDATE MESSAGE
+  'change ': 'Change',
+  'enterTheOldPassword': 'Enter the old password',
+  'enterTheNewPassword': 'Enter the new password',
+  'enterTheConfirmPassword': 'Enter the confirm password',
+
+  'msg_atLeast8Characters': 'At least 8 characters',
+  'msg_includeANumber': 'Must include a number',
+  'msg_includeSpecialCharacters': 'Must include special characters @*&^',
+  'msg_missLowerCharacters': 'Missing lowercase character',
+  'msg_missUpperCharacters': 'Missing uppercase character',
+  'msg_passwordNotMatch': 'Password confirmation does not match',
+
+  'requiredField': 'Required field',
+  'updating': 'Updating',
 };

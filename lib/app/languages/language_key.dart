@@ -41,6 +41,7 @@ class LanguageKeys {
   static const String report = 'report';
   static const String chooseLanguage = "chooseLanguage";
   static const String back = "back";
+  static const String change = "change";
 
   // Welcome Page
   static const String welcome_title = 'welcome_title';
@@ -242,6 +243,22 @@ class LanguageKeys {
   //15
   static const String term15_title = 'term15Title';
   static const String term15_content = 'term15Content';
+
+  //VALIDATE MESSAGE
+  static const String enterTheOldPassword = 'enterTheOldPassword';
+  static const String enterTheNewPassword = 'enterTheNewPassword';
+  static const String enterTheConfirmPassword = 'enterTheConfirmPassword';
+
+  static const String msg_atLeast8Characters = 'msg_atLeast8Characters';
+  static const String msg_includeANumber = 'msg_includeANumber';
+  static const String msg_includeSpecialCharacters =
+      'msg_includeSpecialCharacters';
+  static const String msg_missLowerCharacters = 'msg_missLowerCharacters';
+  static const String msg_missUpperCharacters = 'msg_missUpperCharacters';
+  static const String msg_passwordNotMatch = 'msg_passwordNotMatch';
+
+  static const String requiredField = 'requiredField';
+  static const String updating = 'updating';
 
   // STORY
 }
