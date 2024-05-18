@@ -225,4 +225,12 @@ const Map<String, String> en_us = {
 
   'requiredField': 'Required field',
   'updating': 'Updating',
+
+  //USER INFORMATION
+  'updateInformation': 'Updating information',
+  'emailAddress': 'Email address',
+  'gender': 'Gender',
+  'province': 'Province',
+  'city': 'City',
+  'address': 'Address',
 };

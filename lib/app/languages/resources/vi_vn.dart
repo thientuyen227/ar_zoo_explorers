@@ -217,4 +217,12 @@ const Map<String, String> vi_vn = {
 
   'requiredField': 'Không thể để trống',
   'updating': 'Đang cập nhật',
+
+  //USER INFORMATION
+  'updateInformation': 'Cập nhật thông tin',
+  'emailAddress': 'Địa chỉ email',
+  'gender': 'Giới tính',
+  'province': 'Tỉnh',
+  'city': 'Thành phố',
+  'address': 'Địa chỉ',
 };

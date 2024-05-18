@@ -136,26 +136,6 @@ class _State
             ));
   }
 
-  Widget updateInformation() {
-    return Center(
-        child: MaterialButton(
-            onPressed: () {
-              context.router.popAndPush(const UserInformationRoute());
-            },
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              const Text("Update Information",
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black)),
-              ColorFiltered(
-                colorFilter:
-                    const ColorFilter.mode(Colors.black, BlendMode.srcIn),
-                child: Image.asset(AppIcons.icNext_png),
-              )
-            ])));
-  }
-
   Widget userAvatar() {
     return Container(
         width: cubit.HEIGHT * 0.155,

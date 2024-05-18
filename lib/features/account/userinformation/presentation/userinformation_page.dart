@@ -1,8 +1,10 @@
 import 'package:ar_zoo_explorers/app/config/app_router.gr.dart';
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/base/widgets/page_loading_indicator.dart';
 import 'package:ar_zoo_explorers/features/account/userinformation/model/provincial_name.dart';
 import 'package:ar_zoo_explorers/features/account/userinformation/presentation/userinformation_cubit.dart';
 import 'package:ar_zoo_explorers/features/account/userinformation/presentation/userinformation_state.dart';
+import 'package:ar_zoo_explorers/utils/widget/custom_back_button.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -10,14 +12,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:internationalization/internationalization.dart';
 
 import '../../../../app/theme/icons.dart';
 import '../../../../base/base_state.dart';
 import '../../../../core/data/controller/auth_controller.dart';
-import '../../../../utils/widget/button_widget.dart';
 
 @RoutePage()
 class UserInformationPage extends StatefulWidget {
@@ -40,12 +40,17 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
         child: PageLoadingIndicator(
             future: null,
             scaffold: Scaffold(
+              extendBodyBehindAppBar: true,
               appBar: AppBar(
                   centerTitle: true,
-                  title: const Text('Edit Information',
-                      style: TextStyle(fontSize: 18, color: Colors.white)),
+                  backgroundColor: Colors.transparent,
+                  title: Text(LanguageKeys.updateInformation.tr.toUpperCase(),
+                      style: const TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold)),
                   actions: const [],
-                  leading: turnBack()),
+                  leading: const CustomBackButton()),
               body: FormBuilder(
                   key: _formKey,
                   child: SingleChildScrollView(
@@ -54,16 +59,17 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
                     Container(
                         padding: const EdgeInsets.only(left: 30, right: 30),
                         child: Column(children: [
-                          textForm("Full Name", 0,
+                          textForm(LanguageKeys.fullname.tr, 0,
                               controller.currentUser.value.fullname),
-                          textForm("Email Address", 1,
+                          textForm(LanguageKeys.emailAddress.tr, 1,
                               controller.currentUser.value.email),
                           dateForm(),
-                          radioForm("Gender"),
-                          textForm("Phone Number", 2,
+                          radioForm(LanguageKeys.gender.tr),
+                          textForm(LanguageKeys.phone.tr, 2,
                               controller.currentUser.value.phone),
-                          dropdownForm("Province / City"),
-                          textForm("Address", 3, cubit.address)
+                          dropdownForm(
+                              "${LanguageKeys.province.tr} / ${LanguageKeys.city.tr}"),
+                          textForm(LanguageKeys.address.tr, 3, cubit.address)
                         ])),
                     const Divider(),
                     FutureBuilder(
@@ -155,28 +161,47 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
 
   Widget profileHeader() {
     return Stack(children: [
-      SizedBox(width: cubit.WIDTH, height: cubit.HEIGHT * 0.21),
-      backGround(),
+      SizedBox(width: cubit.WIDTH, height: cubit.HEIGHT * 0.3),
+      profileBackground(),
       Positioned(
-          left: 0, right: 0, bottom: 0, child: Center(child: userAvatar())),
+          left: 0,
+          right: 0,
+          bottom: cubit.HEIGHT * 0.04,
+          child: Center(child: userAvatar())),
     ]);
   }
 
-  Widget backGround() {
-    const borderRadius = BorderRadius.only(
-      bottomLeft: Radius.circular(15.0),
-      bottomRight: Radius.circular(15.0),
-    );
+  Widget profileBackground() {
     return Container(
-        width: cubit.WIDTH,
-        height: cubit.HEIGHT * 0.16,
         decoration: BoxDecoration(
-            border: Border.all(width: 0), borderRadius: borderRadius),
-        child: ClipRRect(
-            borderRadius: borderRadius,
-            child: (cubit.userBackground == "")
-                ? Image.asset(AppImages.imgAppLogoBG, fit: BoxFit.cover)
-                : Image.network(cubit.userBackground, fit: BoxFit.cover)));
+            border: Border.all(color: Colors.grey, width: 2),
+            borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(5.0),
+                bottomRight: Radius.circular(5.0))),
+        child: Column(children: [
+          gradientBackground(cubit.HEIGHT * 0.13, cubit.WIDTH, 0,
+              Colors.blue.shade800, Colors.blue.shade200),
+          gradientBackground(cubit.HEIGHT * 0.07, cubit.WIDTH, 5,
+              Colors.blue.shade200, Colors.blue.shade800)
+        ]));
+  }
+
+  Widget gradientBackground(double height, double width, double borderRadius,
+      Color topColor, Color bottomColor) {
+    return Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(borderRadius),
+                bottomRight: Radius.circular(borderRadius)),
+            gradient: LinearGradient(
+                colors: [topColor, bottomColor],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter)
+            // image: const DecorationImage(
+            //     image: AssetImage(AppImages.imgAppLogoBG), fit: BoxFit.cover),
+            ));
   }
 
   Widget userAvatar() {
@@ -195,13 +220,6 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
           )),
       updateAvatarButton()
     ]);
-  }
-
-  Widget turnBack() {
-    return AppIconButton(
-        onPressed: () => context.router.popAndPush(const UserProfileRoute()),
-        icon: Transform.scale(
-            scale: 1.5, child: Image.asset(AppIcons.icBack_png, height: 55)));
   }
 
   Widget submitButton(BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -363,6 +381,7 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
   void initState() {
     super.initState();
     setDimension();
+
     cubit.setBirthday(controller.currentUser.value.birth);
     cubit.setUserAvatar(controller.currentUser.value.avatarUrl);
     cubit.setProvider(controller.currentUser.value.provider);

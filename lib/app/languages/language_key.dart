@@ -260,5 +260,13 @@ class LanguageKeys {
   static const String requiredField = 'requiredField';
   static const String updating = 'updating';
 
+  //USER INFORMATION
+  static const String updateInformation = 'updateInformation';
+  static const String emailAddress = 'emailAddress';
+  static const String gender = 'gender';
+  static const String province = 'province';
+  static const String city = 'city';
+  static const String address = 'address';
+
   // STORY
 }
