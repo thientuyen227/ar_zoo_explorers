@@ -1245,6 +1245,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  lottie:
+    dependency: "direct main"
+    description:
+      name: lottie
+      sha256: "1f0ce68112072d66ea271a9841994fa8d16442e23d8cf8996c9fa74174e58b4e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
   mask_text_input_formatter:
     dependency: "direct main"
     description:
@@ -1501,6 +1509,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.0"
+  remove_diacritic:
+    dependency: "direct main"
+    description:
+      name: remove_diacritic
+      sha256: "778912615e4584563590ae79e71398b9ea0a41d2dfc38b3ad888024cd4459b19"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.9.0"
   result_type:
     dependency: "direct main"
     description:
@@ -1867,5 +1883,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.2.0-0 <4.0.0"
-  flutter: ">=3.13.0"
+  dart: ">=3.2.0 <4.0.0"
+  flutter: ">=3.16.0"
