@@ -64,6 +64,9 @@ const Map<String, String> en_us = {
   'chooseLanguage': 'Language',
   "deleteMessage": "Do you sure you want to delete this record?",
   'back': 'back',
+  'update': 'Update',
+  'birthday': 'Birthday',
+
   // Welcome
   'welcome_title': 'Welcome to Focus 1',
   'welcome_subtitle':
@@ -222,6 +225,10 @@ const Map<String, String> en_us = {
   'msg_missLowerCharacters': 'Missing lowercase character',
   'msg_missUpperCharacters': 'Missing uppercase character',
   'msg_passwordNotMatch': 'Password confirmation does not match',
+  'msg_invalidProvinceCity': 'Invalid Province / City',
+  'msg_notSelectedAGender': 'You have not selected a gender',
+  'msg_phoneNumberIncorrect': 'Phone number is incorrect',
+  'msg_fullNameIncorrect': 'Full name is incorrect',
 
   'requiredField': 'Required field',
   'updating': 'Updating',
@@ -233,4 +240,8 @@ const Map<String, String> en_us = {
   'province': 'Province',
   'city': 'City',
   'address': 'Address',
+  'selectProvincial': 'Select Provincial',
+  'selectDate': 'Select date',
+  'male': 'Male',
+  'female': 'Female',
 };

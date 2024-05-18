@@ -1,5 +1,7 @@
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/features/account/userinformation/presentation/userinformation_state.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:injectable/injectable.dart';
 import 'package:internationalization/internationalization.dart';
 
@@ -106,5 +108,29 @@ class UserInformationCubit extends BaseCubit<UserInformationState> {
         DateTime.now().minute.toString() +
         DateTime.now().hour.toString();
     return name;
+  }
+
+  String? onCheckPhoneNumber(String? value) {
+    if (value != null && value.isNotEmpty) {
+      if (value.length < 10) {
+        return LanguageKeys.msg_phoneNumberIncorrect.tr;
+      }
+    }
+    return null;
+  }
+
+  String? onCheckFullname(String? value) {
+    if (value != null && value.isNotEmpty) {
+      if (containsSpecialCharacters(value)) {
+        return LanguageKeys.msg_fullNameIncorrect.tr;
+      }
+    }
+    return null;
+  }
+
+  bool containsSpecialCharacters(String input) {
+    // Regular expression to match special characters
+    final RegExp specialCharacters = RegExp(r'[!@#\$%^&*(),.?":{}|<>]');
+    return specialCharacters.hasMatch(input);
   }
 }

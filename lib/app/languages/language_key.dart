@@ -42,6 +42,8 @@ class LanguageKeys {
   static const String chooseLanguage = "chooseLanguage";
   static const String back = "back";
   static const String change = "change";
+  static const String update = "update";
+  static const String birthday = "birthday";
 
   // Welcome Page
   static const String welcome_title = 'welcome_title';
@@ -256,6 +258,10 @@ class LanguageKeys {
   static const String msg_missLowerCharacters = 'msg_missLowerCharacters';
   static const String msg_missUpperCharacters = 'msg_missUpperCharacters';
   static const String msg_passwordNotMatch = 'msg_passwordNotMatch';
+  static const String msg_invalidProvinceCity = 'msg_invalidProvinceCity';
+  static const String msg_notSelectedAGender = 'msg_notSelectedAGender';
+  static const String msg_phoneNumberIncorrect = "msg_phoneNumberIncorrect";
+  static const String msg_fullNameIncorrect = "msg_fullNameIncorrect";
 
   static const String requiredField = 'requiredField';
   static const String updating = 'updating';
@@ -267,6 +273,10 @@ class LanguageKeys {
   static const String province = 'province';
   static const String city = 'city';
   static const String address = 'address';
+  static const String selectProvincial = 'selectProvincial';
+  static const String selectDate = 'selectDate';
+  static const String male = 'male';
+  static const String female = 'female';
 
   // STORY
 }

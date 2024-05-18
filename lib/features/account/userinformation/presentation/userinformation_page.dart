@@ -7,6 +7,7 @@ import 'package:ar_zoo_explorers/features/account/userinformation/presentation/u
 import 'package:ar_zoo_explorers/utils/widget/custom_back_button.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
@@ -76,7 +77,7 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
                         future: controller.getCurrentUser(context),
                         builder: (context, snapshot) =>
                             Align(child: submitButton(context, snapshot))),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 40),
                   ]))),
             ))));
   }
@@ -113,9 +114,19 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
               height: 20, width: 20),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
           contentPadding: const EdgeInsets.all(10)),
+      inputFormatters: (index == 2)
+          ? [
+              LengthLimitingTextInputFormatter(10),
+              FilteringTextInputFormatter.digitsOnly,
+            ]
+          : [],
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: FormBuilderValidators.compose([
-        FormBuilderValidators.required(errorText: "Required field"),
+        FormBuilderValidators.required(
+            errorText: LanguageKeys.requiredField.tr),
+        (value) {
+          return _onHandleValidator(index, value);
+        }
       ]),
     );
   }
@@ -127,7 +138,7 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
       FormBuilderTypeAhead(
           name: 'provincial',
           decoration: InputDecoration(
-              hintText: 'Select Provincial',
+              hintText: LanguageKeys.selectProvincial.tr,
               prefixIcon:
                   Image.asset(AppIcons.icProvincial, height: 20, width: 20),
               border:
@@ -146,10 +157,11 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
           },
           autovalidateMode: AutovalidateMode.onUserInteraction,
           validator: FormBuilderValidators.compose([
-            FormBuilderValidators.required(errorText: "Required field"),
+            FormBuilderValidators.required(
+                errorText: LanguageKeys.requiredField.tr),
             (value) {
               if (value != null && !Provincial().names.contains(value)) {
-                return 'Invalid Province/City!';
+                return '${LanguageKeys.msg_invalidProvinceCity.tr}!';
               }
               return null;
               //return null;
@@ -227,7 +239,7 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
         onPressed: snapshot.connectionState != ConnectionState.waiting
             ? () => _onUpdatePressed(context)
             : () => {
-                  Fluttertoast.showToast(msg: "Updating!"),
+                  Fluttertoast.showToast(msg: "${LanguageKeys.updating.tr}!"),
                   _onUpdatePressed(context)
                 },
         style: ButtonStyle(
@@ -236,13 +248,13 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
             elevation: MaterialStateProperty.all(5),
             shape: MaterialStateProperty.all(RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20)))),
-        child: const Text("Update",
-            style: TextStyle(fontSize: 16, color: Colors.white)));
+        child: Text(LanguageKeys.update.tr,
+            style: const TextStyle(fontSize: 16, color: Colors.white)));
   }
 
   Widget dateForm() {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      titleForm("Birthday"),
+      titleForm(LanguageKeys.birthday.tr),
       const SizedBox(height: 10),
       TextFormField(
           onTap: () {
@@ -254,7 +266,7 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
           decoration: InputDecoration(
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-              hintText: 'Select Date',
+              hintText: LanguageKeys.selectDate.tr,
               prefixIcon: Image.asset(AppIcons.icCalendar),
               contentPadding: const EdgeInsets.all(10))),
       const SizedBox(height: 12),
@@ -273,17 +285,19 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
               contentPadding: const EdgeInsets.all(2)),
-          options: const [
+          options: [
             FormBuilderFieldOption(
                 value: 'male',
-                child: Text('Male', style: TextStyle(fontSize: 17))),
+                child: Text(LanguageKeys.male.tr,
+                    style: const TextStyle(fontSize: 17))),
             FormBuilderFieldOption(
                 value: 'female',
-                child: Text('Female', style: TextStyle(fontSize: 17))),
+                child: Text(LanguageKeys.female.tr,
+                    style: const TextStyle(fontSize: 17))),
           ],
           validator: FormBuilderValidators.compose([
             FormBuilderValidators.required(
-                errorText: "You have not selected a gender.")
+                errorText: LanguageKeys.msg_notSelectedAGender.tr)
           ])),
       const SizedBox(height: 12),
     ]);
@@ -368,6 +382,18 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
     setState(() {
       cubit.userAvatar = downloadURL;
     });
+  }
+
+  String? _onHandleValidator(int index, String? value) {
+    switch (index) {
+      case 0:
+        return cubit.onCheckFullname(value);
+      case 2:
+        return cubit.onCheckPhoneNumber(value);
+
+      default:
+        return null;
+    }
   }
 
   void setDimension() {

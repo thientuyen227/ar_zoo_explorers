@@ -61,6 +61,8 @@ const Map<String, String> vi_vn = {
   'next': "Tiếp tục",
   'report': "Báo cáo",
   'back': 'quay lại',
+  'update': 'Cập nhật',
+  'birthday': 'Ngày sinh',
 
   // Welcome
   'welcome_start': 'Bắt đầu',
@@ -214,6 +216,8 @@ const Map<String, String> vi_vn = {
   'msg_missLowerCharacters': 'Thiếu ký tự thường',
   'msg_missUpperCharacters': 'Thiếu ký tự in hoa',
   'msg_passwordNotMatch': 'Xác nhận mật khẩu không khớp',
+  'msg_invalidProvinceCity': 'Tỉnh / Thành phố không đúng',
+  'msg_fullNameIncorrect': 'Họ và tên không hợp lệ',
 
   'requiredField': 'Không thể để trống',
   'updating': 'Đang cập nhật',
@@ -225,4 +229,10 @@ const Map<String, String> vi_vn = {
   'province': 'Tỉnh',
   'city': 'Thành phố',
   'address': 'Địa chỉ',
+  'selectProvincial': 'Chọn tỉnh thành phố',
+  'selectDate': 'Chọn ngày',
+  'male': 'Nam',
+  'female': 'Nữ',
+  'msg_notSelectedAGender': 'Bạn chưa chọn giới tính',
+  'msg_phoneNumberIncorrect': 'Số điện thoại không đúng',
 };

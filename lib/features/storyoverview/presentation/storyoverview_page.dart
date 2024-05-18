@@ -34,22 +34,25 @@ class _State extends BaseState<StoryOverviewState, StoryOverviewCubit,
 
   @override
   Widget buildByState(BuildContext context, StoryOverviewState state) {
-    return Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-            centerTitle: true,
-            title: const Text("Thông tin Chi Tiết",
-                style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold)),
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            leading: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [backButton()]),
-            actions: [loveButton()]),
-        body: backgroundPage(context));
+    return FutureBuilder(
+        future: null,
+        builder: (context, snapshot) => Align(
+            child: Scaffold(
+                extendBodyBehindAppBar: true,
+                appBar: AppBar(
+                    centerTitle: true,
+                    title: const Text("Thông tin Chi Tiết",
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold)),
+                    backgroundColor: Colors.transparent,
+                    elevation: 0,
+                    leading: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [backButton()]),
+                    actions: [loveButton()]),
+                body: backgroundPage(context))));
   }
 
   Widget backButton() {
