@@ -112,7 +112,7 @@ class _State
                 bottomRight: Radius.circular(5.0))),
         child: Column(children: [
           gradientBackground(cubit.HEIGHT * 0.13, cubit.WIDTH, 0,
-              Colors.blue.shade800, Colors.blue.shade200),
+              AppColor.appBarColor, Colors.blue.shade200),
           gradientBackground(cubit.HEIGHT * 0.07, cubit.WIDTH, 5,
               Colors.blue.shade200, Colors.blue.shade800)
         ]));

@@ -67,6 +67,13 @@ const Map<String, String> en_us = {
   'update': 'Update',
   'birthday': 'Birthday',
 
+  'goToLogin': 'Go to login',
+  'rememberPass': 'Remember me',
+  'forgetPass': 'Forgot password',
+  'signUp': 'Sign up',
+  'signUpWith': 'or sign up with',
+  'updateLater': 'The feature will be updated later',
+
   // Welcome
   'welcome_title': 'Welcome to Focus 1',
   'welcome_subtitle':

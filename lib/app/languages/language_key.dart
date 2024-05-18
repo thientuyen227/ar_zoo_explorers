@@ -45,6 +45,13 @@ class LanguageKeys {
   static const String update = "update";
   static const String birthday = "birthday";
 
+  static const String goToLogin = "goToLogin";
+  static const String rememberPass = "rememberPass";
+  static const String forgetPass = "forgetPass";
+  static const String signUp = "signUp";
+  static const String signUpWith = 'signUpWith';
+  static const String updateLater = "updateLater";
+
   // Welcome Page
   static const String welcome_title = 'welcome_title';
   static const String welcome_subtitle = 'welcome_subtitle';

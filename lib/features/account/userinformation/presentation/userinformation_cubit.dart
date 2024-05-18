@@ -121,14 +121,14 @@ class UserInformationCubit extends BaseCubit<UserInformationState> {
 
   String? onCheckFullname(String? value) {
     if (value != null && value.isNotEmpty) {
-      if (containsSpecialCharacters(value)) {
+      if (_containsSpecialCharacters(value)) {
         return LanguageKeys.msg_fullNameIncorrect.tr;
       }
     }
     return null;
   }
 
-  bool containsSpecialCharacters(String input) {
+  bool _containsSpecialCharacters(String input) {
     // Regular expression to match special characters
     final RegExp specialCharacters = RegExp(r'[!@#\$%^&*(),.?":{}|<>]');
     return specialCharacters.hasMatch(input);

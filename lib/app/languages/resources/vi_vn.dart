@@ -64,6 +64,13 @@ const Map<String, String> vi_vn = {
   'update': 'Cập nhật',
   'birthday': 'Ngày sinh',
 
+  'goToLogin': 'Đi tới đăng nhập',
+  'rememberPass': 'Nhớ mật khẩu',
+  'forgetPass': 'Quên mật khẩu',
+  'signUp': 'Đăng ký',
+  'signUpWith': 'đăng nhập với',
+  'updateLater': 'Tính năng này sẽ cập nhật sau',
+
   // Welcome
   'welcome_start': 'Bắt đầu',
 
