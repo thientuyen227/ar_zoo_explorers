@@ -63,6 +63,7 @@ const Map<String, String> vi_vn = {
   'back': 'quay lại',
   'update': 'Cập nhật',
   'birthday': 'Ngày sinh',
+  'submit': 'Gửi',
 
   'goToLogin': 'Đi tới đăng nhập',
   'rememberPass': 'Nhớ mật khẩu',
@@ -70,6 +71,11 @@ const Map<String, String> vi_vn = {
   'signUp': 'Đăng ký',
   'signUpWith': 'đăng nhập với',
   'updateLater': 'Tính năng này sẽ cập nhật sau',
+  'createAccount': 'Tạo tài khoản của bạn',
+
+  'notAgreeTheTerms': 'Bạn chưa đồng ý với điều khoản',
+
+  'i_understood_the': 'Tôi đã hiểu',
 
   // Welcome
   'welcome_start': 'Bắt đầu',
@@ -225,6 +231,8 @@ const Map<String, String> vi_vn = {
   'msg_passwordNotMatch': 'Xác nhận mật khẩu không khớp',
   'msg_invalidProvinceCity': 'Tỉnh / Thành phố không đúng',
   'msg_fullNameIncorrect': 'Họ và tên không hợp lệ',
+  'msg_notBeEmpty': 'Trường không được để trống',
+  'msg_invalidEmail': 'Địa chỉ email không hợp lệ',
 
   'requiredField': 'Không thể để trống',
   'updating': 'Đang cập nhật',
@@ -242,4 +250,5 @@ const Map<String, String> vi_vn = {
   'female': 'Nữ',
   'msg_notSelectedAGender': 'Bạn chưa chọn giới tính',
   'msg_phoneNumberIncorrect': 'Số điện thoại không đúng',
+  'enter_your_email': 'Nhập địa chỉ email tại đây',
 };

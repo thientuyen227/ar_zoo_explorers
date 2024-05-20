@@ -39,7 +39,7 @@ class ChangePasswordCubit extends BaseCubit<ChangePasswordState> {
     if (value != null && value.isNotEmpty) {
       final regex1 = RegExp(r'[a-z]');
       final regex2 = RegExp(r'[A-Z]');
-      final regex3 = RegExp(r'[A-Z]');
+      final regex3 = RegExp(r'[0-9]');
       final regex4 = RegExp(r'[@*&^]');
       if (value.length < 8) {
         return LanguageKeys.msg_atLeast8Characters.tr;

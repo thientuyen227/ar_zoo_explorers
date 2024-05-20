@@ -66,6 +66,7 @@ const Map<String, String> en_us = {
   'back': 'back',
   'update': 'Update',
   'birthday': 'Birthday',
+  'submit': 'Submit',
 
   'goToLogin': 'Go to login',
   'rememberPass': 'Remember me',
@@ -73,6 +74,11 @@ const Map<String, String> en_us = {
   'signUp': 'Sign up',
   'signUpWith': 'or sign up with',
   'updateLater': 'The feature will be updated later',
+  'createAccount': 'Create your account',
+
+  'notAgreeTheTerms': 'You have not agreed to the terms',
+
+  'i_understood_the': 'I understand the',
 
   // Welcome
   'welcome_title': 'Welcome to Focus 1',
@@ -236,6 +242,8 @@ const Map<String, String> en_us = {
   'msg_notSelectedAGender': 'You have not selected a gender',
   'msg_phoneNumberIncorrect': 'Phone number is incorrect',
   'msg_fullNameIncorrect': 'Full name is incorrect',
+  'msg_notBeEmpty': 'Field cannot be empty',
+  'msg_invalidEmail': 'The email address is invalid',
 
   'requiredField': 'Required field',
   'updating': 'Updating',
@@ -251,4 +259,5 @@ const Map<String, String> en_us = {
   'selectDate': 'Select date',
   'male': 'Male',
   'female': 'Female',
+  'enter_your_email': 'Enter your email address here',
 };

@@ -51,6 +51,9 @@ class LanguageKeys {
   static const String signUp = "signUp";
   static const String signUpWith = 'signUpWith';
   static const String updateLater = "updateLater";
+  static const String createAccount = "createAccount";
+  static const String notAgreeTheTerms = 'notAgreeTheTerms';
+  static const String i_understood_the = 'i_understood_the';
 
   // Welcome Page
   static const String welcome_title = 'welcome_title';
@@ -187,6 +190,7 @@ class LanguageKeys {
       "actionTargetNeedTobeLargerThanZero";
 
   static var status = "status";
+  static var submit = "submit";
 
   //HELP
   static const String instruction = 'introduction';
@@ -269,6 +273,8 @@ class LanguageKeys {
   static const String msg_notSelectedAGender = 'msg_notSelectedAGender';
   static const String msg_phoneNumberIncorrect = "msg_phoneNumberIncorrect";
   static const String msg_fullNameIncorrect = "msg_fullNameIncorrect";
+  static const String msg_notBeEmpty = "msg_notBeEmpty";
+  static const String msg_invalidEmail = "msg_invalidEmail";
 
   static const String requiredField = 'requiredField';
   static const String updating = 'updating';
@@ -284,6 +290,7 @@ class LanguageKeys {
   static const String selectDate = 'selectDate';
   static const String male = 'male';
   static const String female = 'female';
+  static const String enter_your_email = 'enter_your_email';
 
   // STORY
 }

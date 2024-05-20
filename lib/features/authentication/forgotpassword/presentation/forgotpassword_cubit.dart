@@ -5,4 +5,7 @@ import 'package:injectable/injectable.dart';
 @injectable
 class ForgotPasswordCubit extends BaseCubit<ForgotPasswordState> {
   ForgotPasswordCubit() : super(ForgotPasswordState());
+
+  double HEIGHT = 0;
+  double WIDTH = 0;
 }
