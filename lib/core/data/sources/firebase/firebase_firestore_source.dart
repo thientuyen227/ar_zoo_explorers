@@ -3,8 +3,11 @@ import 'package:ar_zoo_explorers/core/data/models/story_model.dart';
 import 'package:ar_zoo_explorers/core/data/models/story_topic_model.dart';
 import 'package:ar_zoo_explorers/core/data/models/user_model.dart';
 import 'package:ar_zoo_explorers/core/data/models/user_story_model.dart';
+import 'package:ar_zoo_explorers/domain/entities/chars_entity.dart';
+import 'package:ar_zoo_explorers/domain/entities/vocabulary_entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../models/animal_detail_model.dart';
 import '../../models/animal_model.dart';
@@ -34,6 +37,10 @@ class FirebaseFirestoreSource {
 
   final CollectionReference<Map<String, dynamic>> _userStoryCollectionRef =
       FirebaseFirestore.instance.collection('user_story');
+  final CollectionReference<Map<String, dynamic>> _charsColectionRef =
+      FirebaseFirestore.instance.collection('chars');
+  final CollectionReference<Map<String, dynamic>> _vocabularyColectionRef =
+      FirebaseFirestore.instance.collection('vocabulary');
 
   Future<String> get generateUniqueAnimalModelId async =>
       _animalModelCollectionRef.add({}).then((value) => value.id);
@@ -755,6 +762,55 @@ class FirebaseFirestoreSource {
     } catch (e, stackTrace) {
       print('Get User Story By User Id = "$userId": $e');
       FirebaseCrashlytics.instance.recordError(e, stackTrace);
+    }
+    return null;
+  }
+
+  //Chars
+  Future<CharsEntity?> getChars(String id) async {
+    try {
+      var document = await _charsColectionRef.doc(id).get();
+      if (document.exists && document.data() != null) {
+        return CharsEntity.fromMap(document.data()!);
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: "$e");
+    }
+    return null;
+  }
+
+  Future<List<CharsEntity>?> getAllChars() async {
+    try {
+      var querySnapshot = await _charsColectionRef.get();
+      List<CharsEntity> userAnimals = querySnapshot.docs
+          .map((doc) => CharsEntity.fromMap(doc.data()))
+          .toList();
+      return userAnimals;
+    } catch (e) {
+      Fluttertoast.showToast(msg: "$e");
+    }
+    return null;
+  }
+
+  //Vocabulary
+  Future<VocabularyEntity?> getVocabulary(String id) async {
+    var document = await _vocabularyColectionRef.doc(id).get();
+    if (document.exists && document.data() != null) {
+      return VocabularyEntity.fromMap(document.data()!);
+    } else {
+      return null;
+    }
+  }
+
+  Future<List<VocabularyEntity>?> getAllVocabulary() async {
+    try {
+      var querySnapshot = await _vocabularyColectionRef.get();
+      List<VocabularyEntity> vocabularies = querySnapshot.docs
+          .map((doc) => VocabularyEntity.fromMap(doc.data()))
+          .toList();
+      return vocabularies;
+    } catch (e) {
+      print(e);
     }
     return null;
   }
