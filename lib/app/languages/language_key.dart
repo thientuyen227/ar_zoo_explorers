@@ -53,6 +53,7 @@ class LanguageKeys {
   static const String createAccount = "createAccount";
   static const String notAgreeTheTerms = 'notAgreeTheTerms';
   static const String i_understood_the = 'i_understood_the';
+  static const String example = "example";
 
   // Welcome Page
   static const String welcome_title = 'welcome_title';
@@ -285,4 +286,10 @@ class LanguageKeys {
   static const String enter_your_email = 'enter_your_email';
 
   // STORY
+  static const String recommended = "recommended";
+  static const String explore = 'explore';
+
+  static const String story_examples_1 = 'story_examples_1';
+
+  static const String view = 'view';
 }

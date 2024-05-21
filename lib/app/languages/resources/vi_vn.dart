@@ -75,6 +75,7 @@ const Map<String, String> vi_vn = {
   'notAgreeTheTerms': 'Bạn chưa đồng ý với điều khoản',
 
   'i_understood_the': 'Tôi đã hiểu',
+  'example': 'Ví dụ:',
 
   // Welcome
   'welcome_start': 'Bắt đầu',
@@ -254,4 +255,12 @@ const Map<String, String> vi_vn = {
   'msg_notSelectedAGender': 'Bạn chưa chọn giới tính',
   'msg_phoneNumberIncorrect': 'Số điện thoại không đúng',
   'enter_your_email': 'Nhập địa chỉ email tại đây',
+
+  //STORY
+  'recommended': 'Gợi ý',
+  'explore': 'Khám phá',
+
+  'story_examples_1': 'Rùa va Thỏ, Thánh Gióng',
+
+  'view': 'Xem',
 };

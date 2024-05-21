@@ -60,6 +60,7 @@ const Map<String, String> en_us = {
   'update': 'Update',
   'birthday': 'Birthday',
   'submit': 'Submit',
+  'example': 'Example',
 
   'goToLogin': 'Go to login',
   'rememberPass': 'Remember me',
@@ -254,4 +255,12 @@ const Map<String, String> en_us = {
   'male': 'Male',
   'female': 'Female',
   'enter_your_email': 'Enter your email address here',
+
+  //STORY
+  'recommended': 'Recommended',
+  'explore': 'Explore',
+
+  'story_examples_1': 'Rua va tho, Thanh Giong',
+
+  'view': 'View',
 };

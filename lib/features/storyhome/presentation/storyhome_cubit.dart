@@ -1,24 +1,57 @@
-import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_cubit.dart';
+import 'package:ar_zoo_explorers/core/data/controller/auth_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/story_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/story_topic_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/user_story_controller.dart';
 import 'package:ar_zoo_explorers/domain/entities/story_entity.dart';
 import 'package:ar_zoo_explorers/domain/entities/story_topic_entity.dart';
-import 'package:ar_zoo_explorers/features/base-model/form_builder_text_field_model.dart';
 import 'package:ar_zoo_explorers/features/story/model/storybuttonobject.dart';
 import 'package:ar_zoo_explorers/features/storyhome/model/topic_button_object.dart';
 import 'package:ar_zoo_explorers/features/storyhome/presentation/storyhome_state.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
 class StoryHomeCubit extends BaseCubit<StoryHomeState> {
   StoryHomeCubit() : super(StoryHomeState());
 
-  FormBuilderTextFieldModel searchBar = FormBuilderTextFieldModel(
-      name: "search", hint_text: "search", icon_suffix: AppIcons.icSearch);
+  final controller = AuthController.findOrInitialize;
+  final storyTopicController = StoryTopicController.findOrInitialize;
+  final userStoryController = UserStoryController.findOrInitialize;
+  final storyController = StoryController.findOrInitialize;
 
-  double HEIGHT = 0;
-  double WIDTH = 0;
+  Future<void> init(BuildContext context) async {
+    showLoading();
+    Size mediaSize = MediaQueryData.fromView(
+            WidgetsBinding.instance.platformDispatcher.views.single)
+        .size;
+    await controller.getCurrentUser(context);
+    await state.setAttributes(
+        height: mediaSize.height,
+        width: mediaSize.width,
+        user: controller.currentUser.value,
+        lstRecommend: await getStoriesByReleaseDate());
+    print("init cubit");
+    hideLoading();
+  }
 
-  List<StoryButtonObject> lstRecommend = [];
+  Future<List<StoryButtonObject>> getStoriesByReleaseDate() async {
+    await storyController.getStoriesByReleaseDate(null, true);
+    return await getRecommend(storyController.listStory.value.sublist(0, 5));
+  }
+
+  Future<List<StoryButtonObject>> getRecommend(
+      List<StoryEntity> stories) async {
+    List<StoryButtonObject> items = [];
+    for (var item in stories) {
+      items.add(StoryButtonObject(
+          id: item.id,
+          name: item.title,
+          avatar: item.avatar,
+          topic: item.topicId));
+    }
+    return items;
+  }
 
   List<TopicButtonObject> lstTopic = [];
 
@@ -55,16 +88,6 @@ class StoryHomeCubit extends BaseCubit<StoryHomeState> {
           name: tmp.name,
           title: tmp.title,
           imageUrl: tmp.imageUrl));
-    }
-  }
-
-  void getRecommendStories(List<StoryEntity> stories) {
-    for (var item in stories) {
-      lstRecommend.add(StoryButtonObject(
-          id: item.id,
-          name: item.title,
-          avatar: item.avatar,
-          topic: item.topicId));
     }
   }
 }

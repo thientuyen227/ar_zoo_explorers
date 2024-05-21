@@ -1,10 +1,9 @@
 import 'package:ar_zoo_explorers/app/config/routes.dart';
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/dimens.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/base/widgets/page_loading_indicator.dart';
-import 'package:ar_zoo_explorers/core/data/controller/auth_controller.dart';
-import 'package:ar_zoo_explorers/core/data/controller/story_controller.dart';
 import 'package:ar_zoo_explorers/core/data/controller/story_topic_controller.dart';
 import 'package:ar_zoo_explorers/core/data/controller/user_story_controller.dart';
 import 'package:ar_zoo_explorers/features/base-model/form_builder_text_field_model.dart';
@@ -19,7 +18,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/get.dart';
 
 @RoutePage()
 class StoryHomePage extends StatefulWidget {
@@ -32,61 +31,55 @@ class StoryHomePage extends StatefulWidget {
 }
 
 class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
-  final controller = AuthController.findOrInitialize;
   final storyTopicController = StoryTopicController.findOrInitialize;
   final userStoryController = UserStoryController.findOrInitialize;
-  final storyController = StoryController.findOrInitialize;
 
   final _formKey = GlobalKey<FormBuilderState>();
 
   @override
   Widget buildByState(BuildContext context, StoryHomeState state) {
-    return Obx(
-      () => GestureDetector(
+    return GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         child: PageLoadingIndicator(
-          future: null,
-          scaffold: Scaffold(
-            // extendBodyBehindAppBar: true,
-            appBar: AppBar(
-                centerTitle: true,
-                title: const Text("Story Home",
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold)),
-                backgroundColor: const Color.fromARGB(255, 109, 189, 255),
-                // backgroundColor: Colors.white,
-                elevation: 1,
-                leading: const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [CustomBackButton()]),
-                actions: [profileCustom(), const SizedBox(width: 15)]),
-            body: FormBuilder(
-              key: _formKey,
-              child: SingleChildScrollView(
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  color: Colors.white,
-                  constraints: BoxConstraints(
-                      minHeight: MediaQuery.of(context).size.height),
-                  padding:
-                      const EdgeInsets.only(left: 25, right: 25, bottom: 50),
-                  child: Column(children: [
-                    Container(height: 24),
-                    searchBar(cubit.searchBar),
-                    recommendedList(),
-                    Container(height: 24),
-                    topicList(),
-                    SizedBox(height: cubit.HEIGHT * 0.05),
-                  ]),
+            future: null,
+            scaffold: Scaffold(
+              // extendBodyBehindAppBar: true,
+              appBar: AppBar(
+                  centerTitle: true,
+                  title: Text(LanguageKeys.explore.tr.toUpperCase(),
+                      style: const TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold)),
+                  backgroundColor: const Color.fromARGB(255, 109, 189, 255),
+                  // backgroundColor: Colors.white,
+                  elevation: 1,
+                  leading: const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [CustomBackButton()]),
+                  actions: [profileCustom(), const SizedBox(width: 15)]),
+              body: FormBuilder(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    color: Colors.white,
+                    constraints: BoxConstraints(
+                        minHeight: MediaQuery.of(context).size.height),
+                    padding:
+                        const EdgeInsets.only(left: 25, right: 25, bottom: 50),
+                    child: Column(children: [
+                      Container(height: 24),
+                      searchBar(state.searchBar),
+                      recommendedList(),
+                      Container(height: 24),
+                      topicList(),
+                      SizedBox(height: state.height * 0.05),
+                    ]),
+                  ),
                 ),
               ),
-            ),
-          ),
-        ),
-      ),
-    );
+            )));
   }
 
   Widget profileCustom() {
@@ -95,7 +88,7 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
           context.router.pushNamed(Routes.userprofile);
         },
         icon: Row(children: [
-          Text(cubit.nameCustom(controller.currentUser.value.fullname, 8),
+          Text(cubit.nameCustom(state.user.fullname, 8),
               style: const TextStyle(color: Colors.white)),
           const SizedBox(width: 5),
           userImage()
@@ -104,12 +97,12 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
 
   Widget userImage() {
     return ClipOval(
-        child: (controller.currentUser.value.avatarUrl == "")
+        child: (state.user.avatarUrl == "")
             ? Image.asset(AppImages.imgProfile128x128,
                 fit: BoxFit.cover,
                 width: AppDimens.size30.width,
                 height: AppDimens.size30.height)
-            : Image.network(controller.currentUser.value.avatarUrl,
+            : Image.network(state.user.avatarUrl,
                 fit: BoxFit.cover,
                 width: AppDimens.size30.width,
                 height: AppDimens.size30.height));
@@ -163,14 +156,14 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
   Widget topicButton(TopicButtonObject btnObject) {
     return GestureDetector(
         onTap: () async {
-          loadingController.showLoading();
+          cubit.showLoading();
           await _setCurrentStoryTopic(btnObject.id);
           context.router.pushNamed(Routes.storytopic);
-          loadingController.hideLoading();
+          cubit.hideLoading();
         },
         child: Container(
-            width: cubit.WIDTH * 0.39,
-            height: cubit.WIDTH * 0.39,
+            width: state.width * 0.39,
+            height: state.width * 0.39,
             decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey, width: 2),
                 borderRadius: BorderRadius.circular(5.0),
@@ -193,14 +186,16 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
   Widget storyButton(StoryButtonObject btnObject) {
     return GestureDetector(
         onTap: () async {
-          await storyController.getStory(context, id: btnObject.id!);
-          await userStoryController.createOrGetUserStory(context,
-              userId: controller.currentUser.value.id, storyId: btnObject.id!);
-          await _navigateToOverviewPage();
+          cubit.showLoading();
+          // await storyController.getStory(context, id: btnObject.id!);
+          // await userStoryController.createOrGetUserStory(context,
+          //     userId: controller.currentUser.value.id, storyId: btnObject.id!);
+          // await _navigateToOverviewPage();
+          cubit.hideLoading();
         },
         child: Container(
-            width: cubit.WIDTH * 0.37,
-            height: cubit.WIDTH * 0.37,
+            width: state.width * 0.37,
+            height: state.width * 0.37,
             margin: const EdgeInsets.only(right: 20, bottom: 10, top: 10),
             decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey, width: 2),
@@ -224,8 +219,8 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
   Widget buttonImage(String url) {
     return Container(
       padding: const EdgeInsets.all(5.0),
-      width: cubit.WIDTH,
-      height: cubit.WIDTH * 0.25,
+      width: state.width,
+      height: state.width * 0.25,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15.0), color: Colors.white),
       // child: (url == "")
@@ -238,7 +233,7 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
   // TÊN MODEL
   Widget buttonTitle(String title) {
     return SizedBox(
-        width: cubit.WIDTH * 0.28,
+        width: state.width * 0.28,
         child: Text(cubit.customContent(title, 30),
             style: const TextStyle(
                 color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
@@ -249,28 +244,28 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
   Widget recommendedList() {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       const SizedBox(height: 15),
-      const Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Text("Recommended",
-            style: TextStyle(
+      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Text(LanguageKeys.recommended.tr,
+            style: const TextStyle(
                 color: Colors.black,
                 fontSize: 22,
                 fontWeight: FontWeight.w500)),
-        Text("View",
-            style: TextStyle(
+        Text(LanguageKeys.view.tr,
+            style: const TextStyle(
                 color: Colors.blue, fontSize: 16, fontWeight: FontWeight.w500)),
       ]),
       const SizedBox(height: 10),
       SizedBox(
-          height: cubit.WIDTH * 0.45,
-          width: cubit.WIDTH,
-          child: listRecommendedButton(cubit.lstRecommend))
+          height: state.width * 0.45,
+          width: state.width,
+          child: listRecommendedButton(state.lstRecommend))
     ]);
   }
 
   Widget topicList() {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       SizedBox(
-          width: cubit.WIDTH,
+          width: state.width,
           child: const Text("Topics",
               style: TextStyle(
                   color: Colors.black,
@@ -295,7 +290,7 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
 
   Future<void> _onSearch(String? value) async {
     FocusScope.of(context).unfocus();
-    await storyController.updateSearching(context, text: value ?? "");
+    // await storyController.updateSearching(context, text: value ?? "");
     widget.onPageChanged(2);
   }
 
@@ -308,7 +303,7 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
   }
 
   _getAllStoryTopics(BuildContext context) async {
-    await storyTopicController.getAllStoryTopics(context);
+    await storyTopicController.getAllStoryTopics(null);
 
     setState(() {
       // print(storyTopicController.listStoryTopic.value.length);
@@ -316,35 +311,30 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
     });
   }
 
-  _getStoriesByReleaseDate(BuildContext context) async {
-    await storyController.getStoriesByReleaseDate(context, true);
-
-    setState(() {
-      // print(storyTopicController.listStoryTopic.value.length);
-      cubit.getRecommendStories(storyController.listStory.value.sublist(0, 5));
-    });
-  }
-
   _setCurrentStoryTopic(String id) async {
     await storyTopicController.updateCurrentStoryTopic(context, id);
   }
 
-  void _setDimension() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {
-        cubit.WIDTH = MediaQuery.of(context).size.width;
-        cubit.HEIGHT = MediaQuery.of(context).size.height;
-      });
-    });
+  // void _setDimension() {
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     setState(() {
+  //       cubit.WIDTH = MediaQuery.of(context).size.width;
+  //       cubit.HEIGHT = MediaQuery.of(context).size.height;
+  //     });
+  //   });
+  // }
+
+  Future<void> initCubit() async {
+    await cubit.init(context);
+    setState(() {});
   }
 
   @override
   void initState() {
     super.initState();
-    _setDimension();
-    controller.getCurrentUser(context);
+    initCubit();
+
     _getAllStoryTopics(context);
-    _getStoriesByReleaseDate(context);
     // print(storyTopicController.listStoryTopic.value.length);
   }
 }
