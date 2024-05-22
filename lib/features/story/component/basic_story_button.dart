@@ -1,5 +1,7 @@
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/features/story/model/storybuttonobject.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class BasicStoryButton extends StatefulWidget {
   const BasicStoryButton({Key? key, required this.item}) : super(key: key);
@@ -16,7 +18,10 @@ class _BasicStoryButtonState extends State<BasicStoryButton> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Colors.white,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(width * 0.04),
+            color: Colors.white),
+        constraints: BoxConstraints(minHeight: height * 0.18),
         width: width,
         padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
         child: Row(children: [
@@ -28,24 +33,32 @@ class _BasicStoryButtonState extends State<BasicStoryButton> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                 buttonFieldName(widget.item.name, isTitle: true),
-                Row(children: [
-                  buttonFieldName("Tác giả : "),
+                Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  buttonFieldName("${LanguageKeys.author.tr} : "),
                   Expanded(
-                      child: Text(widget.item.author,
-                          style: const TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.bold)))
+                      child: Text(
+                    widget.item.author,
+                    style: const TextStyle(
+                        fontSize: 14, fontWeight: FontWeight.bold),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ))
                 ]),
-                Row(children: [
-                  buttonFieldName("Người đọc : "),
+                Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  buttonFieldName("${LanguageKeys.reader.tr} : "),
                   Expanded(
-                      child: Text(widget.item.reader,
-                          style: const TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.bold)))
+                      child: Text(
+                    widget.item.reader,
+                    style: const TextStyle(
+                        fontSize: 14, fontWeight: FontWeight.bold),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ))
                 ]),
-                Row(children: [
-                  buttonFieldName("Thời lượng : "),
+                Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  buttonFieldName("${LanguageKeys.duration.tr} : "),
                   Text(
-                      '${widget.item.duration.inMinutes} phút ${widget.item.duration.inSeconds.remainder(60)} giây',
+                      '${(widget.item.duration.inMinutes < 10) ? '0' : ''}${widget.item.duration.inMinutes} : ${(widget.item.duration.inSeconds.remainder(60) < 10) ? '0' : ''}${widget.item.duration.inSeconds.remainder(60)}',
                       style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -58,11 +71,15 @@ class _BasicStoryButtonState extends State<BasicStoryButton> {
   }
 
   Widget buttonFieldName(String name, {bool isTitle = false}) {
-    return Text(name,
-        style: TextStyle(
-            fontSize: isTitle ? 18 : 14,
-            fontWeight: isTitle ? FontWeight.bold : FontWeight.normal,
-            color: isTitle ? Colors.black : Colors.grey.shade700));
+    return Text(
+      name,
+      style: TextStyle(
+          fontSize: isTitle ? 18 : 14,
+          fontWeight: isTitle ? FontWeight.bold : FontWeight.normal,
+          color: isTitle ? Colors.black : Colors.grey.shade700),
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
+    );
   }
 
   Widget topicStory(String topic) {
@@ -78,9 +95,13 @@ class _BasicStoryButtonState extends State<BasicStoryButton> {
 
   Widget imageStory(String url) {
     return SizedBox(
-        height: width * 0.25,
-        width: width * 0.25,
-        child: ClipRRect(child: Image.network(url, fit: BoxFit.cover)));
+      height: width * 0.25,
+      width: width * 0.25,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(width * 0.03),
+        child: Image.network(url, fit: BoxFit.cover),
+      ),
+    );
   }
 
   void _setDimension() {

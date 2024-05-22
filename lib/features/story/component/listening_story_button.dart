@@ -1,5 +1,8 @@
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
+import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/features/story/model/storybuttonobject.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ListeningStoryButton extends StatefulWidget {
   const ListeningStoryButton({Key? key, required this.item}) : super(key: key);
@@ -17,7 +20,10 @@ class _ListeningStoryButtonState extends State<ListeningStoryButton> {
   Widget build(BuildContext context) {
     return Container(
         width: width,
-        color: Colors.white,
+        constraints: BoxConstraints(minHeight: height * 0.18),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(width * 0.03),
+            color: AppColor.white),
         padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
         child: Row(children: [
           const SizedBox(width: 20),
@@ -29,9 +35,9 @@ class _ListeningStoryButtonState extends State<ListeningStoryButton> {
                   children: [
                 buttonFieldName(widget.item.name, isTitle: true),
                 Row(children: [
-                  buttonFieldName("Thời lượng : "),
+                  buttonFieldName("${LanguageKeys.duration.tr} : "),
                   Text(
-                      '${widget.item.duration.inMinutes} phút ${widget.item.duration.inSeconds.remainder(60)} giây',
+                      '${(widget.item.duration.inMinutes < 10) ? '0' : ''}${widget.item.duration.inMinutes} : ${(widget.item.duration.inSeconds.remainder(60) < 10) ? '0' : ''}${widget.item.duration.inSeconds.remainder(60)}',
                       style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -45,11 +51,15 @@ class _ListeningStoryButtonState extends State<ListeningStoryButton> {
   }
 
   Widget buttonFieldName(String name, {bool isTitle = false}) {
-    return Text(name,
-        style: TextStyle(
-            fontSize: isTitle ? 18 : 14,
-            fontWeight: isTitle ? FontWeight.bold : FontWeight.normal,
-            color: isTitle ? Colors.black : Colors.grey.shade700));
+    return Text(
+      name,
+      style: TextStyle(
+          fontSize: isTitle ? 18 : 14,
+          fontWeight: isTitle ? FontWeight.bold : FontWeight.normal,
+          color: isTitle ? Colors.black : Colors.grey.shade700),
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
+    );
   }
 
   Widget topicStory(String topic) {
@@ -65,9 +75,13 @@ class _ListeningStoryButtonState extends State<ListeningStoryButton> {
 
   Widget imageStory(String url) {
     return SizedBox(
-        height: width * 0.25,
-        width: width * 0.25,
-        child: ClipRRect(child: Image.network(url, fit: BoxFit.cover)));
+      height: width * 0.25,
+      width: width * 0.25,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(width * 0.03),
+        child: Image.network(url, fit: BoxFit.cover),
+      ),
+    );
   }
 
   Widget progressBar(Duration timestamp, Duration duration) {

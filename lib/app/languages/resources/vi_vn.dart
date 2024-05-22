@@ -257,10 +257,21 @@ const Map<String, String> vi_vn = {
   'enter_your_email': 'Nhập địa chỉ email tại đây',
 
   //STORY
+  'author': 'Tác giả',
+  'duration': 'Thời lượng',
   'recommended': 'Gợi ý',
+  'empty_favorite_stories': 'Danh sách truyện yêu thích đang trống',
   'explore': 'Khám phá',
+  'favorite': 'Yêu thích',
+  'listening': 'Đang nghe',
+  'minute': 'Phút',
+  'minutes': 'Phút',
+  'reader': 'Người đọc',
+  'second': 'giây',
+  'seconds': 'giây',
 
   'story_examples_1': 'Rùa va Thỏ, Thánh Gióng',
 
+  'topics': 'Chủ đề',
   'view': 'Xem',
 };

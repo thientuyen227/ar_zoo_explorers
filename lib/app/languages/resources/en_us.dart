@@ -257,10 +257,21 @@ const Map<String, String> en_us = {
   'enter_your_email': 'Enter your email address here',
 
   //STORY
+  'author': 'Author',
+  'duration': 'Duration',
   'recommended': 'Recommended',
+  'empty_favorite_stories': 'List of Favorite Story Is Empty',
   'explore': 'Explore',
+  'favorite': 'Favorite',
+  'listening': 'Listening',
+  'minute': 'Minute',
+  'minutes': 'Minutes',
+  'reader': 'Reader',
+  'second': 'second',
+  'seconds': 'seconds',
 
   'story_examples_1': 'Rua va tho, Thanh Giong',
 
+  'topics': 'Topics',
   'view': 'View',
 };

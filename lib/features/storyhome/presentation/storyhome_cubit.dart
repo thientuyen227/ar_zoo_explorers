@@ -30,8 +30,9 @@ class StoryHomeCubit extends BaseCubit<StoryHomeState> {
         height: mediaSize.height,
         width: mediaSize.width,
         user: controller.currentUser.value,
-        lstRecommend: await getStoriesByReleaseDate());
-    print("init cubit");
+        lstRecommend: await getStoriesByReleaseDate(),
+        lstTopic: await getAllStoryTopics());
+    print("Cubit.Init() : Get data");
     hideLoading();
   }
 
@@ -53,7 +54,57 @@ class StoryHomeCubit extends BaseCubit<StoryHomeState> {
     return items;
   }
 
-  List<TopicButtonObject> lstTopic = [];
+  Future<List<TopicButtonObject>> getAllStoryTopics() async {
+    await storyTopicController.getAllStoryTopics(null);
+    List<TopicButtonObject> items =
+        await getTopics(storyTopicController.listStoryTopic.value);
+    return items;
+  }
+
+  Future<List<TopicButtonObject>> getTopics(
+      List<StoryTopicEntity> topics) async {
+    List<TopicButtonObject> items = [];
+    StoryTopicEntity tmp = StoryTopicEntity(
+        id: '', title: '', name: ',', imageUrl: '', status: true);
+    for (var item in topics) {
+      if (item.name != 'otherstories') {
+        items.add(TopicButtonObject(
+            id: item.id,
+            name: item.name,
+            title: item.title,
+            imageUrl: item.imageUrl));
+      } else {
+        tmp = item;
+      }
+    }
+    if (tmp.id != '') {
+      items.add(TopicButtonObject(
+          id: tmp.id,
+          name: tmp.name,
+          title: tmp.title,
+          imageUrl: tmp.imageUrl));
+    }
+    return items;
+  }
+
+  Future<void> updateSearching(BuildContext context,
+      {String? text = ''}) async {
+    await storyController.updateSearching(context, text: text ?? "");
+  }
+
+  Future<void> updateCurrentStoryTopic(BuildContext context, String id) async {
+    await storyTopicController.updateCurrentStoryTopic(context, id);
+  }
+
+  Future<void> getStory(BuildContext context, String id) async {
+    await storyController.getStory(context, id: id);
+  }
+
+  Future<void> createOrGetUserStory(
+      BuildContext context, String storyId) async {
+    await userStoryController.createOrGetUserStory(context,
+        userId: state.user.id, storyId: storyId);
+  }
 
   String nameCustom(String fullname, int index) {
     List<String> parts = fullname.split(" ");
@@ -66,28 +117,5 @@ class StoryHomeCubit extends BaseCubit<StoryHomeState> {
       respond = '${content.substring(0, (index - 3))}...';
     }
     return respond;
-  }
-
-  void getAllTopics(List<StoryTopicEntity> topics) {
-    StoryTopicEntity tmp = StoryTopicEntity(
-        id: '', title: '', name: ',', imageUrl: '', status: true);
-    for (var item in topics) {
-      if (item.name != 'otherstories') {
-        lstTopic.add(TopicButtonObject(
-            id: item.id,
-            name: item.name,
-            title: item.title,
-            imageUrl: item.imageUrl));
-      } else {
-        tmp = item;
-      }
-    }
-    if (tmp.id != '') {
-      lstTopic.add(TopicButtonObject(
-          id: tmp.id,
-          name: tmp.name,
-          title: tmp.title,
-          imageUrl: tmp.imageUrl));
-    }
   }
 }

@@ -1,11 +1,10 @@
 import 'package:ar_zoo_explorers/app/config/routes.dart';
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
+import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/dimens.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/base/widgets/page_loading_indicator.dart';
-import 'package:ar_zoo_explorers/core/data/controller/story_topic_controller.dart';
-import 'package:ar_zoo_explorers/core/data/controller/user_story_controller.dart';
 import 'package:ar_zoo_explorers/features/base-model/form_builder_text_field_model.dart';
 import 'package:ar_zoo_explorers/features/story/model/storybuttonobject.dart';
 import 'package:ar_zoo_explorers/features/storyhome/model/topic_button_object.dart';
@@ -22,18 +21,19 @@ import 'package:get/get.dart';
 
 @RoutePage()
 class StoryHomePage extends StatefulWidget {
-  const StoryHomePage({super.key, required this.onPageChanged});
+  const StoryHomePage(
+      {super.key,
+      required this.onPageChanged,
+      required this.toggleBottomBarVisibility});
 
   final Function(int) onPageChanged;
+  final VoidCallback toggleBottomBarVisibility;
 
   @override
   State createState() => _State();
 }
 
 class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
-  final storyTopicController = StoryTopicController.findOrInitialize;
-  final userStoryController = UserStoryController.findOrInitialize;
-
   final _formKey = GlobalKey<FormBuilderState>();
 
   @override
@@ -49,10 +49,9 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
                   title: Text(LanguageKeys.explore.tr.toUpperCase(),
                       style: const TextStyle(
                           fontSize: 20,
-                          color: Colors.white,
+                          color: AppColor.white,
                           fontWeight: FontWeight.bold)),
-                  backgroundColor: const Color.fromARGB(255, 109, 189, 255),
-                  // backgroundColor: Colors.white,
+                  backgroundColor: AppColor.appBarColor,
                   elevation: 1,
                   leading: const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -85,7 +84,9 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
   Widget profileCustom() {
     return AppIconButton(
         onPressed: () {
+          cubit.showLoading();
           context.router.pushNamed(Routes.userprofile);
+          cubit.hideLoading();
         },
         icon: Row(children: [
           Text(cubit.nameCustom(state.user.fullname, 8),
@@ -119,8 +120,10 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
             hintText: item.hint_text,
             suffixIcon: IconButton(
                 onPressed: () async {
+                  cubit.showLoading();
                   await _onSearch(
                       _formKey.currentState!.fields['search']?.value);
+                  cubit.hideLoading();
                 },
                 icon: Image.asset(item.icon_suffix)),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
@@ -187,10 +190,9 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
     return GestureDetector(
         onTap: () async {
           cubit.showLoading();
-          // await storyController.getStory(context, id: btnObject.id!);
-          // await userStoryController.createOrGetUserStory(context,
-          //     userId: controller.currentUser.value.id, storyId: btnObject.id!);
-          // await _navigateToOverviewPage();
+          await cubit.getStory(context, btnObject.id!);
+          await cubit.createOrGetUserStory(context, btnObject.id!);
+          await _navigateToOverviewPage();
           cubit.hideLoading();
         },
         child: Container(
@@ -250,9 +252,18 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
                 color: Colors.black,
                 fontSize: 22,
                 fontWeight: FontWeight.w500)),
-        Text(LanguageKeys.view.tr,
-            style: const TextStyle(
-                color: Colors.blue, fontSize: 16, fontWeight: FontWeight.w500)),
+        GestureDetector(
+            onTap: () async {
+              cubit.showLoading();
+              await cubit.updateSearching(context, text: '');
+              widget.onPageChanged(2);
+              cubit.hideLoading();
+            },
+            child: Text(LanguageKeys.view.tr,
+                style: const TextStyle(
+                    color: Colors.blue,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500))),
       ]),
       const SizedBox(height: 10),
       SizedBox(
@@ -264,21 +275,22 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
 
   Widget topicList() {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      SizedBox(
-          width: state.width,
-          child: const Text("Topics",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 22,
-                  fontWeight: FontWeight.w500))),
+      Row(children: [
+        Text(LanguageKeys.topics.tr,
+            style: const TextStyle(
+                color: Colors.black,
+                fontSize: 22,
+                fontWeight: FontWeight.w500)),
+        const Spacer()
+      ]),
       const SizedBox(height: 10),
-      listTopicButton(cubit.lstTopic)
+      listTopicButton(state.lstTopic)
     ]);
   }
 
   Widget listRecommendedButton(List<StoryButtonObject> list) {
     if (list.isEmpty) {
-      return const Text("Chưa cập nhật!");
+      return Text("${LanguageKeys.updating.tr} !");
     }
     List<Widget> listRow = [];
     for (int i = 0; i < list.length; i = i + 1) {
@@ -290,7 +302,7 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
 
   Future<void> _onSearch(String? value) async {
     FocusScope.of(context).unfocus();
-    // await storyController.updateSearching(context, text: value ?? "");
+    await cubit.updateSearching(context, text: value);
     widget.onPageChanged(2);
   }
 
@@ -302,39 +314,20 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
     );
   }
 
-  _getAllStoryTopics(BuildContext context) async {
-    await storyTopicController.getAllStoryTopics(null);
-
-    setState(() {
-      // print(storyTopicController.listStoryTopic.value.length);
-      cubit.getAllTopics(storyTopicController.listStoryTopic.value);
-    });
+  Future<void> _setCurrentStoryTopic(String id) async {
+    await cubit.updateCurrentStoryTopic(context, id);
   }
 
-  _setCurrentStoryTopic(String id) async {
-    await storyTopicController.updateCurrentStoryTopic(context, id);
-  }
-
-  // void _setDimension() {
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     setState(() {
-  //       cubit.WIDTH = MediaQuery.of(context).size.width;
-  //       cubit.HEIGHT = MediaQuery.of(context).size.height;
-  //     });
-  //   });
-  // }
-
-  Future<void> initCubit() async {
+  Future<void> _initCubit() async {
     await cubit.init(context);
-    setState(() {});
+    setState(() {
+      widget.toggleBottomBarVisibility();
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    initCubit();
-
-    _getAllStoryTopics(context);
-    // print(storyTopicController.listStoryTopic.value.length);
+    _initCubit();
   }
 }

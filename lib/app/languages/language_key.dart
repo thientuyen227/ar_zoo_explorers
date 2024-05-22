@@ -286,10 +286,22 @@ class LanguageKeys {
   static const String enter_your_email = 'enter_your_email';
 
   // STORY
+  static const String author = 'author';
+  static const String duration = 'duration';
   static const String recommended = "recommended";
+  static const String empty_favorite_stories =
+      'empty_favorite_stories'; //Favorite Story Is Empty
   static const String explore = 'explore';
+  static const String favorite = "favorite";
+  static const String listening = "listening";
+  static const String minute = "minute";
+  static const String minutes = "minutes";
+  static const String reader = "reader";
+  static const String second = "second";
+  static const String seconds = "seconds";
 
   static const String story_examples_1 = 'story_examples_1';
 
+  static const String topics = 'topics';
   static const String view = 'view';
 }

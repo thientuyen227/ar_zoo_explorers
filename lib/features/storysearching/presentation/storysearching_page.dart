@@ -1,3 +1,5 @@
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
+import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/core/data/controller/auth_controller.dart';
@@ -12,10 +14,14 @@ import 'package:ar_zoo_explorers/features/storysearching/presentation/storysearc
 import 'package:ar_zoo_explorers/features/storysearching/presentation/storysearching_state.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 @RoutePage()
 class StorySearchingPage extends StatefulWidget {
-  const StorySearchingPage({super.key});
+  final VoidCallback toggleBottomBarVisibility;
+
+  const StorySearchingPage(
+      {super.key, required this.toggleBottomBarVisibility});
 
   @override
   State createState() => _State();
@@ -34,25 +40,25 @@ class _State extends BaseState<StorySearchingState, StorySearchingCubit,
         // extendBodyBehindAppBar: true,
         appBar: AppBar(
             centerTitle: true,
-            title: const Text("Search",
-                style: TextStyle(
+            title: Text(LanguageKeys.search.tr.toUpperCase(),
+                style: const TextStyle(
                     fontSize: 20,
-                    color: Colors.white,
+                    color: AppColor.white,
                     fontWeight: FontWeight.bold)),
-            backgroundColor: const Color.fromARGB(255, 109, 189, 255),
+            backgroundColor: AppColor.appBarColor,
             elevation: 1,
             automaticallyImplyLeading: false,
             actions: [searchButton()]),
         body: Container(
-            width: cubit.WIDTH,
+            width: state.width,
             // padding: const EdgeInsets.only(left: 10, right: 10),
-            constraints: BoxConstraints(minHeight: cubit.HEIGHT),
+            constraints: BoxConstraints(minHeight: state.height),
             child: SingleChildScrollView(
               padding:
                   const EdgeInsets.only(bottom: kBottomNavigationBarHeight),
               child: Column(children: [
                 listStoryButton(),
-                SizedBox(height: cubit.HEIGHT * 0.05),
+                SizedBox(height: state.height * 0.05),
               ]),
             )));
   }
@@ -65,10 +71,7 @@ class _State extends BaseState<StorySearchingState, StorySearchingCubit,
             builder: (BuildContext context) {
               return SearchBottomSheet(onClosed: (String? value) async {
                 if (value != null) {
-                  setState(() {
-                    cubit.txtSearch = value;
-                  });
-                  await onSearch(cubit.txtSearch);
+                  await onSearch(value);
                 }
               });
             },
@@ -84,9 +87,9 @@ class _State extends BaseState<StorySearchingState, StorySearchingCubit,
   Widget listStoryButton() {
     List<Widget> lstStory = [];
 
-    for (int i = 0; i < cubit.listSearchStory.length; i++) {
-      lstStory.add(storyButton(cubit.listSearchStory[i],
-          isLast: (i == cubit.listSearchStory.length - 1) ? true : false));
+    for (int i = 0; i < state.listSearchStory.length; i++) {
+      lstStory.add(storyButton(state.listSearchStory[i],
+          isLast: (i == state.listSearchStory.length - 1) ? true : false));
     }
     return Column(children: lstStory);
   }
@@ -111,46 +114,21 @@ class _State extends BaseState<StorySearchingState, StorySearchingCubit,
           isLast
               ? Container()
               : Container(
-                  width: cubit.WIDTH * 0.9,
+                  width: state.width * 0.9,
                   height: 0.5,
                   color: Colors.grey.shade500)
         ]));
   }
 
   Future<void> onSearch(String? value) async {
-    await storyController.updateSearching(context, text: value ?? "");
-    setState(() {
-      cubit.onSearch(value ?? "");
-    });
-  }
-
-  Future<void> _getAllStories(BuildContext context) async {
-    await storyController.getAllStories(context);
-    await storyTopicController.getAllStoryTopics(context);
-    if (mounted) {
-      setState(() {
-        cubit.getAllStories(
-            storyController.listStory.value,
-            storyTopicController.listStoryTopic.value,
-            storyController.searchStatus.value);
-      });
-    }
-  }
-
-  void _setDimension() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {
-        cubit.WIDTH = MediaQuery.of(context).size.width;
-        cubit.HEIGHT = MediaQuery.of(context).size.height;
-      });
-    });
+    await cubit.onSearch(context, value ?? "").then((value) => setState(() {}));
   }
 
   Future<void> _navigateToOverviewPage() async {
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => StoryOverviewPage(onClosed: (String value) async {
-          await _getAllStories(context);
+          await cubit.init(context).then((value) => setState(() {}));
           await _setSearchStatus();
         }),
       ),
@@ -158,23 +136,14 @@ class _State extends BaseState<StorySearchingState, StorySearchingCubit,
   }
 
   Future<void> _setSearchStatus() async {
-    setState(() {
-      cubit.txtSearch = storyController.txtSearch.value;
-      cubit.searchStatus = storyController.searchStatus.value;
-    });
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (cubit.searchStatus == false) {
+      if (state.searchStatus == false) {
         await showModalBottomSheet(
           context: context,
           builder: (BuildContext context) {
             return SearchBottomSheet(onClosed: (String? value) async {
               if (value != null) {
-                if (mounted) {
-                  setState(() {
-                    cubit.txtSearch = value;
-                  });
-                  await onSearch(cubit.txtSearch);
-                }
+                await onSearch(value);
               }
             });
           },
@@ -183,11 +152,17 @@ class _State extends BaseState<StorySearchingState, StorySearchingCubit,
     });
   }
 
+  Future<void> _initCubit() async {
+    await cubit.init(context);
+    setState(() {
+      widget.toggleBottomBarVisibility();
+    });
+    _setSearchStatus();
+  }
+
   @override
   void initState() {
     super.initState();
-    _setDimension();
-    _getAllStories(context);
-    _setSearchStatus();
+    _initCubit();
   }
 }
