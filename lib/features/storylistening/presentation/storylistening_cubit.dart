@@ -22,7 +22,7 @@ class StoryListeningCubit extends BaseCubit<StoryListeningState> {
 
   Future<void> init(BuildContext context) async {
     showLoading();
-    await getUserStory(context);
+    await _getUserStory(context);
 
     Size mediaSize = MediaQueryData.fromView(
             WidgetsBinding.instance.platformDispatcher.views.single)
@@ -31,7 +31,7 @@ class StoryListeningCubit extends BaseCubit<StoryListeningState> {
     await state.setAttributes(
       height: mediaSize.height,
       width: mediaSize.width,
-      listStory: await setStoryButtons(
+      listStory: await _setStoryButtons(
         storyController.listStory.value,
         userStoryController.listUserStory.value,
         storyTopicController.listStoryTopic.value,
@@ -47,9 +47,9 @@ class StoryListeningCubit extends BaseCubit<StoryListeningState> {
         userId: controller.currentUser.value.id, storyId: storyId);
   }
 
-  Future<List<StoryButtonObject>> setStoryButtons(List<StoryEntity> lstStory,
+  Future<List<StoryButtonObject>> _setStoryButtons(List<StoryEntity> lstStory,
       List<UserStoryEntity> lstUS, List<StoryTopicEntity> lstTopic) async {
-    List<StoryButtonObject> stories = await setStories(lstStory, lstUS);
+    List<StoryButtonObject> stories = await _setStories(lstStory, lstUS);
 
     Map<String, StoryTopicEntity> topicMap = {};
     for (var topic in lstTopic) {
@@ -70,7 +70,7 @@ class StoryListeningCubit extends BaseCubit<StoryListeningState> {
     return stories;
   }
 
-  Future<List<StoryButtonObject>> setStories(
+  Future<List<StoryButtonObject>> _setStories(
     List<StoryEntity> lstStory,
     List<UserStoryEntity> lstUS,
   ) async {
@@ -90,6 +90,7 @@ class StoryListeningCubit extends BaseCubit<StoryListeningState> {
                 ? Duration(seconds: itemB.duration)
                 : Duration(seconds: itemA.pausedTime),
             topic: itemB.topicId,
+            isCompleted: itemA.isCompleted,
           ));
         }
       }
@@ -97,7 +98,7 @@ class StoryListeningCubit extends BaseCubit<StoryListeningState> {
     return stories;
   }
 
-  Future<void> getUserStory(BuildContext context) async {
+  Future<void> _getUserStory(BuildContext context) async {
     await userStoryController.getUserStoryByUser(context,
         userId: controller.currentUser.value.id);
   }

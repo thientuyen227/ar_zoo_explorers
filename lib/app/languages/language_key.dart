@@ -289,19 +289,30 @@ class LanguageKeys {
   static const String author = 'author';
   static const String duration = 'duration';
   static const String recommended = "recommended";
-  static const String empty_favorite_stories =
-      'empty_favorite_stories'; //Favorite Story Is Empty
+  static const String empty_favorite_stories = 'empty_favorite_stories';
+  static const String empty_listening_stories = 'empty_listening_stories';
+  static const String enter_keyword = 'enter_keyword';
   static const String explore = 'explore';
   static const String favorite = "favorite";
   static const String listening = "listening";
+  static const String listens = "listens";
+
+  static const String msg_no_story_has = 'msg_no_story_has';
+  static const String msg_stories_updating = 'msg_stories_updating';
+
   static const String minute = "minute";
   static const String minutes = "minutes";
+  static const String play = 'play';
   static const String reader = "reader";
   static const String second = "second";
   static const String seconds = "seconds";
 
   static const String story_examples_1 = 'story_examples_1';
+  static const String story_overview = 'story_overview';
 
+  static const String summary = 'summary';
   static const String topics = 'topics';
+  static const String topic = 'topic';
   static const String view = 'view';
+  static const String volume = 'volume';
 }

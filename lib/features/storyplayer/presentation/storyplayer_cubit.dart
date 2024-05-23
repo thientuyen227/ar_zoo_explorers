@@ -24,7 +24,7 @@ class StoryPlayerCubit extends BaseCubit<StoryPlayerState> {
   bool isPlaying = false;
 
   PlayerState audioState = PlayerState.stopped;
-  double volumeValue = 0.5;
+  double volumeValue = 1.0;
   bool isLoop = false;
 
   void getInformations(StoryEntity storyEntity, UserStoryEntity usEntity) {

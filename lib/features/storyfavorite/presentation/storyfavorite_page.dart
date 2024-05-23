@@ -65,7 +65,7 @@ class _State extends BaseState<StoryFavoriteState, StoryFavoriteCubit,
           );
         },
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 1, childAspectRatio: 2.3, crossAxisSpacing: 0),
+            crossAxisCount: 1, childAspectRatio: 2.32, crossAxisSpacing: 0),
       );
     } else {
       return Container(
@@ -79,29 +79,28 @@ class _State extends BaseState<StoryFavoriteState, StoryFavoriteCubit,
 
   Widget storyButton(StoryButtonObject item, {bool isLast = false}) {
     return GestureDetector(
-        onTap: () async {
-          cubit.showLoading();
-          await _onChangeBottomBarState();
-          await cubit.setCurrentStory(context, item.id!);
-          await _navigateToOverviewPage();
-          await _onChangeBottomBarState();
-          cubit.hideLoading();
-        },
-        child: Column(children: [
-          Container(
-              margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(state.width * 0.04),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 5,
-                        offset: const Offset(0, 3))
-                  ]),
-              width: state.width * 0.9,
-              child: BasicStoryButton(item: item)),
-        ]));
+      onTap: () async {
+        await _onChangeBottomBarState();
+        cubit.showLoading();
+        await cubit.setCurrentStory(context, item.id!);
+        await _navigateToOverviewPage();
+        await _onChangeBottomBarState();
+        cubit.hideLoading();
+      },
+      child: Container(
+          margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(state.width * 0.04),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 5,
+                    offset: const Offset(0, 3))
+              ]),
+          width: state.width * 0.9,
+          child: BasicStoryButton(item: item)),
+    );
   }
 
   Future<void> _navigateToOverviewPage() async {

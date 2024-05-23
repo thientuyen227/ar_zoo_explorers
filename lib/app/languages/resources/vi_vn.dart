@@ -261,17 +261,30 @@ const Map<String, String> vi_vn = {
   'duration': 'Thời lượng',
   'recommended': 'Gợi ý',
   'empty_favorite_stories': 'Danh sách truyện yêu thích đang trống',
+  'empty_listening_stories': 'Danh sách truyện đang nghe trống',
+  'enter_keyword': 'Nhập từ khóa tại đây',
   'explore': 'Khám phá',
   'favorite': 'Yêu thích',
   'listening': 'Đang nghe',
+  'listens': 'Lượt nghe',
+
+  'msg_no_story_has': 'Không tìm thấy truyện có từ khóa',
+  'msg_stories_updating':
+      'Danh sách truyện đang cập nhật, bạn vui lòng quay lại sau nhé',
+
   'minute': 'Phút',
   'minutes': 'Phút',
+  'play': 'Nghe',
   'reader': 'Người đọc',
   'second': 'giây',
   'seconds': 'giây',
 
   'story_examples_1': 'Rùa va Thỏ, Thánh Gióng',
+  'story_overview': 'Tổng quan truyện',
 
+  'summary': 'Tóm tắt',
   'topics': 'Chủ đề',
+  'topic': 'Chủ đề',
   'view': 'Xem',
+  'volume': 'Âm lượng',
 };

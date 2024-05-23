@@ -379,8 +379,8 @@ class _State
 
   void setVolume() {
     setState(() {
-      cubit.volumeValue = 0.5;
-      audioPlayer.setVolume(0.5);
+      cubit.volumeValue = 1.0;
+      audioPlayer.setVolume(1.0);
     });
   }
 
@@ -454,10 +454,14 @@ class _State
               position: Duration.zero);
         } else {
           setState(() {
-            cubit.audioState = PlayerState.stopped;
+            // cubit.audioState = PlayerState.stopped;
+            state = PlayerState.paused;
+            cubit.audioState = PlayerState.paused;
+            cubit.position = const Duration(seconds: 0, minutes: 0);
           });
         }
       }
+      print(state);
     });
   }
 
@@ -480,6 +484,8 @@ class _State
   }
 
   void stopTimer() => timer.cancel();
+
+  Future<void> stopAudio() async => await audioPlayer.dispose();
 
   _getInformations(StoryEntity storyEntity, UserStoryEntity usEntity) {
     setState(() {
@@ -506,7 +512,6 @@ class _State
   @override
   void initState() {
     super.initState();
-    loadingController.showLoading();
     setDimension();
     _getInformations(storyController.currentStory.value,
         userStoryController.currentUserStory.value);
@@ -514,13 +519,12 @@ class _State
     setVolume();
     playAudio();
     completeAudio();
-    loadingController.hideLoading();
   }
 
   @override
   void dispose() {
     super.dispose();
-    audioPlayer.dispose();
+    stopAudio();
     stopTimer();
   }
 }

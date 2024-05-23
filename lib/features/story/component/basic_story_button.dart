@@ -1,4 +1,5 @@
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
+import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/features/story/model/storybuttonobject.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,57 +18,65 @@ class _BasicStoryButtonState extends State<BasicStoryButton> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(width * 0.04),
-            color: Colors.white),
-        constraints: BoxConstraints(minHeight: height * 0.18),
-        width: width,
-        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-        child: Row(children: [
-          const SizedBox(width: 20),
-          imageStory(widget.item.avatar),
-          const SizedBox(width: 10),
-          Expanded(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                buttonFieldName(widget.item.name, isTitle: true),
-                Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  buttonFieldName("${LanguageKeys.author.tr} : "),
-                  Expanded(
-                      child: Text(
-                    widget.item.author,
-                    style: const TextStyle(
-                        fontSize: 14, fontWeight: FontWeight.bold),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ))
-                ]),
-                Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  buttonFieldName("${LanguageKeys.reader.tr} : "),
-                  Expanded(
-                      child: Text(
-                    widget.item.reader,
-                    style: const TextStyle(
-                        fontSize: 14, fontWeight: FontWeight.bold),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ))
-                ]),
-                Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  buttonFieldName("${LanguageKeys.duration.tr} : "),
-                  Text(
-                      '${(widget.item.duration.inMinutes < 10) ? '0' : ''}${widget.item.duration.inMinutes} : ${(widget.item.duration.inSeconds.remainder(60) < 10) ? '0' : ''}${widget.item.duration.inSeconds.remainder(60)}',
+    return Stack(children: [
+      Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(width * 0.04),
+              color: Colors.white),
+          constraints: BoxConstraints(minHeight: height * 0.18),
+          width: width,
+          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+          child: Row(children: [
+            const SizedBox(width: 20),
+            imageStory(widget.item.avatar),
+            const SizedBox(width: 10),
+            Expanded(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                  buttonFieldName(widget.item.name, isTitle: true),
+                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    buttonFieldName("${LanguageKeys.author.tr} : "),
+                    Expanded(
+                        child: Text(
+                      widget.item.author,
                       style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.green))
-                ]),
-                topicStory(widget.item.topic[0]),
-              ])),
-          const SizedBox(width: 20),
-        ]));
+                          fontSize: 14, fontWeight: FontWeight.bold),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ))
+                  ]),
+                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    buttonFieldName("${LanguageKeys.reader.tr} : "),
+                    Expanded(
+                        child: Text(
+                      widget.item.reader,
+                      style: const TextStyle(
+                          fontSize: 14, fontWeight: FontWeight.bold),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ))
+                  ]),
+                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    buttonFieldName("${LanguageKeys.duration.tr} : "),
+                    Text(
+                        '${(widget.item.duration.inMinutes < 10) ? '0' : ''}${widget.item.duration.inMinutes} : ${(widget.item.duration.inSeconds.remainder(60) < 10) ? '0' : ''}${widget.item.duration.inSeconds.remainder(60)}',
+                        style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green))
+                  ]),
+                  topicStory(widget.item.topic[0]),
+                ])),
+            const SizedBox(width: 20),
+          ])),
+      widget.item.isCompleted
+          ? Positioned(
+              top: width * 0.025,
+              left: width * 0.025,
+              child: Center(child: imageTicked()))
+          : Container(),
+    ]);
   }
 
   Widget buttonFieldName(String name, {bool isTitle = false}) {
@@ -104,12 +113,38 @@ class _BasicStoryButtonState extends State<BasicStoryButton> {
     );
   }
 
-  void _setDimension() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {
-        width = MediaQuery.of(context).size.width;
-        height = MediaQuery.of(context).size.height;
-      });
+  Widget imageTicked() {
+    return Container(
+        height: width * 0.06,
+        width: width * 0.06,
+        decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: [
+          BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 3,
+              blurRadius: 5,
+              offset: const Offset(0, 3))
+        ]),
+        child: ClipOval(
+            child: Image.asset(AppIcons.icChecked64Green, fit: BoxFit.cover)));
+  }
+
+  // void _setDimension() {
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     setState(() {
+  //       width = MediaQuery.of(context).size.width;
+  //       height = MediaQuery.of(context).size.height;
+  //     });
+  //   });
+  // }
+
+  Future<void> _setDimension() async {
+    Size mediaSize = MediaQueryData.fromView(
+            WidgetsBinding.instance.platformDispatcher.views.single)
+        .size;
+
+    setState(() {
+      width = mediaSize.width;
+      height = mediaSize.height;
     });
   }
 

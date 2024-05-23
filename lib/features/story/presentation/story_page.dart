@@ -25,47 +25,54 @@ class _State extends BaseState<StoryState, StoryCubit, StoryPage> {
 
   @override
   Widget buildByState(BuildContext context, StoryState state) {
-    return Scaffold(
-        // extendBodyBehindAppBar: true,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                child: PageView(
-                  controller: _pageController,
-                  physics: const NeverScrollableScrollPhysics(),
-                  onPageChanged: _onPageChanged,
-                  children: _pages,
-                ),
-              ),
-            ],
-          ),
-        ),
-        bottomNavigationBar: Offstage(
-            offstage: !_isBottomBarVisible,
-            child: BottomNavigationBar(
-                items: [
-                  for (var index = 0;
-                      index < cubit.lstBottomItem.length;
-                      index++)
-                    BottomNavigationBarItem(
-                        icon: ColorFiltered(
-                            colorFilter: ColorFilter.mode(
-                                cubit.selectedIndex == index
-                                    ? Colors.blue
-                                    : Colors.grey,
-                                BlendMode.srcIn),
-                            child: Image.asset(
-                                cubit.lstBottomItem[index]['url']!,
-                                height: 16,
-                                width: 16)),
-                        label: cubit.lstBottomItem[index]['name']!),
+    return PopScope(
+        canPop: false,
+        onPopInvoked: (didPop) async {
+          await cubit.showLoading();
+          Navigator.of(context).pop();
+          await cubit.hideLoading();
+        },
+        child: Scaffold(
+            // extendBodyBehindAppBar: true,
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    child: PageView(
+                      controller: _pageController,
+                      physics: const NeverScrollableScrollPhysics(),
+                      onPageChanged: _onPageChanged,
+                      children: _pages,
+                    ),
+                  ),
                 ],
-                currentIndex: cubit.selectedIndex,
-                selectedItemColor: AppColor.primaryColor,
-                onTap: _onItemTapped)));
+              ),
+            ),
+            bottomNavigationBar: Offstage(
+                offstage: !_isBottomBarVisible,
+                child: BottomNavigationBar(
+                    items: [
+                      for (var index = 0;
+                          index < cubit.lstBottomItem.length;
+                          index++)
+                        BottomNavigationBarItem(
+                            icon: ColorFiltered(
+                                colorFilter: ColorFilter.mode(
+                                    cubit.selectedIndex == index
+                                        ? Colors.blue
+                                        : Colors.grey,
+                                    BlendMode.srcIn),
+                                child: Image.asset(
+                                    cubit.lstBottomItem[index]['url']!,
+                                    height: 16,
+                                    width: 16)),
+                            label: cubit.lstBottomItem[index]['name']!),
+                    ],
+                    currentIndex: cubit.selectedIndex,
+                    selectedItemColor: AppColor.primaryColor,
+                    onTap: _onItemTapped))));
   }
 
   Future<void> _onItemTapped(int index) async {

@@ -31,7 +31,7 @@ class StoryFavoriteCubit extends BaseCubit<StoryFavoriteState> {
     await state.setAttributes(
       height: mediaSize.height,
       width: mediaSize.width,
-      listStory: await setStoryButtons(
+      listStory: await _setStoryButtons(
         storyController.listStory.value,
         userStoryController.listFavoriteUserStory.value,
         storyTopicController.listStoryTopic.value,
@@ -47,12 +47,12 @@ class StoryFavoriteCubit extends BaseCubit<StoryFavoriteState> {
         userId: controller.currentUser.value.id, storyId: storyId);
   }
 
-  Future<List<StoryButtonObject>> setStoryButtons(
+  Future<List<StoryButtonObject>> _setStoryButtons(
     List<StoryEntity> lstStory,
     List<UserStoryEntity> lstUS,
     List<StoryTopicEntity> lstTopic,
   ) async {
-    List<StoryButtonObject> stories = await setStories(lstStory, lstUS);
+    List<StoryButtonObject> stories = await _setStories(lstStory, lstUS);
 
     Map<String, StoryTopicEntity> topicMap = {};
     for (var topic in lstTopic) {
@@ -68,12 +68,12 @@ class StoryFavoriteCubit extends BaseCubit<StoryFavoriteState> {
         }
       }
 
-      story.topic = [getTopics(topicNames)];
+      story.topic = [_getTopics(topicNames)];
     }
     return stories;
   }
 
-  Future<List<StoryButtonObject>> setStories(
+  Future<List<StoryButtonObject>> _setStories(
       List<StoryEntity> lstStory, List<UserStoryEntity> lstUS) async {
     List<StoryButtonObject> stories = [];
     for (var itemA in lstUS) {
@@ -87,6 +87,7 @@ class StoryFavoriteCubit extends BaseCubit<StoryFavoriteState> {
             reader: itemB.reader,
             duration: Duration(seconds: itemB.duration),
             topic: itemB.topicId,
+            isCompleted: itemA.isCompleted,
           ));
         }
       }
@@ -99,7 +100,7 @@ class StoryFavoriteCubit extends BaseCubit<StoryFavoriteState> {
         userId: controller.currentUser.value.id, isFavorited: true);
   }
 
-  String getTopics(List<String> lstTopicName) {
+  String _getTopics(List<String> lstTopicName) {
     String topics = lstTopicName[0];
     for (int i = 1; i < lstTopicName.length; i++) {
       topics = "$topics, ${lstTopicName[i]}";

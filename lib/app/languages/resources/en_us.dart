@@ -261,17 +261,30 @@ const Map<String, String> en_us = {
   'duration': 'Duration',
   'recommended': 'Recommended',
   'empty_favorite_stories': 'List of Favorite Story Is Empty',
+  'empty_listening_stories': 'List of Listening Story Is Empty',
+  'enter_keyword': 'Enter keyword here',
   'explore': 'Explore',
   'favorite': 'Favorite',
   'listening': 'Listening',
+  'listens': 'Listens',
+
+  'msg_no_story_has': 'No stories found with keyword',
+  'msg_stories_updating':
+      'The list of stories is being updated, please come back later',
+
   'minute': 'Minute',
   'minutes': 'Minutes',
+  'play': 'Play',
   'reader': 'Reader',
   'second': 'second',
   'seconds': 'seconds',
 
   'story_examples_1': 'Rua va tho, Thanh Giong',
+  'story_overview': 'Story Overview',
 
+  'summary': 'Summary',
   'topics': 'Topics',
+  'topic': 'Topic',
   'view': 'View',
+  'volume': 'Volume',
 };

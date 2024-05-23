@@ -29,7 +29,7 @@ class StorySearchingCubit extends BaseCubit<StorySearchingState> {
             WidgetsBinding.instance.platformDispatcher.views.single)
         .size;
 
-    List<StoryButtonObject> lstFull = await setAllStories(
+    List<StoryButtonObject> lstFull = await _setAllStories(
         storyController.listStory.value,
         storyTopicController.listStoryTopic.value);
 
@@ -41,30 +41,30 @@ class StorySearchingCubit extends BaseCubit<StorySearchingState> {
         listFullStory: lstFull);
 
     List<StoryButtonObject> lstSearch = storyController.searchStatus.value
-        ? await setSearchStories(storyController.txtSearch.value)
+        ? await _setSearchStories(storyController.txtSearch.value)
         : [];
 
     await state.setAttributes(listSearchStory: lstSearch);
-    print("Cubit.Init() : Get data");
+    print("Cubit.Init() : Get data, ${storyController.searchStatus.value}");
     hideLoading();
   }
 
-  Future<void> setSearchWord(String word) async {
+  Future<void> _setSearchWord(String word) async {
     showLoading();
-    await state.setAttributes(txtSearch: word);
+    await state.setAttributes(txtSearch: word, searchStatus: true);
     hideLoading();
   }
 
   Future<void> onSearch(BuildContext context, String searchValue) async {
     showLoading();
     await storyController.updateSearching(context, text: searchValue);
-    await setSearchWord(searchValue);
-    List<StoryButtonObject> stories = await setSearchStories(searchValue);
+    await _setSearchWord(searchValue);
+    List<StoryButtonObject> stories = await _setSearchStories(searchValue);
     await state.setAttributes(listSearchStory: stories);
     hideLoading();
   }
 
-  Future<List<StoryButtonObject>> setSearchStories(String searchValue) async {
+  Future<List<StoryButtonObject>> _setSearchStories(String searchValue) async {
     List<StoryButtonObject> stories = [];
     for (int i = 0; i < state.listFullStory.length; i++) {
       if (convertDiacritics(state.listFullStory[i].name)
@@ -82,7 +82,7 @@ class StorySearchingCubit extends BaseCubit<StorySearchingState> {
     return stories;
   }
 
-  Future<List<StoryButtonObject>> setAllStories(
+  Future<List<StoryButtonObject>> _setAllStories(
       List<StoryEntity> lstStory, List<StoryTopicEntity> lstTopic) async {
     List<StoryButtonObject> stories = [];
     for (var item in lstStory) {
@@ -116,6 +116,15 @@ class StorySearchingCubit extends BaseCubit<StorySearchingState> {
       story.topic = [getTopics(topicNames)];
     }
     return stories;
+  }
+
+  Future<void> getStory(BuildContext context, String id) async {
+    await storyController.getStory(context, id: id);
+  }
+
+  Future<void> createOrGetUserStory(BuildContext context, String id) async {
+    await userStoryController.createOrGetUserStory(context,
+        userId: controller.currentUser.value.id, storyId: id);
   }
 
   String getTopics(List<String> lstTopicName) {

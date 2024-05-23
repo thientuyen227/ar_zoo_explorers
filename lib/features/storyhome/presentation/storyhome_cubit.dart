@@ -30,18 +30,18 @@ class StoryHomeCubit extends BaseCubit<StoryHomeState> {
         height: mediaSize.height,
         width: mediaSize.width,
         user: controller.currentUser.value,
-        lstRecommend: await getStoriesByReleaseDate(),
-        lstTopic: await getAllStoryTopics());
+        lstRecommend: await _getStoriesByReleaseDate(),
+        lstTopic: await _getAllStoryTopics());
     print("Cubit.Init() : Get data");
     hideLoading();
   }
 
-  Future<List<StoryButtonObject>> getStoriesByReleaseDate() async {
+  Future<List<StoryButtonObject>> _getStoriesByReleaseDate() async {
     await storyController.getStoriesByReleaseDate(null, true);
-    return await getRecommend(storyController.listStory.value.sublist(0, 5));
+    return await _getRecommend(storyController.listStory.value.sublist(0, 5));
   }
 
-  Future<List<StoryButtonObject>> getRecommend(
+  Future<List<StoryButtonObject>> _getRecommend(
       List<StoryEntity> stories) async {
     List<StoryButtonObject> items = [];
     for (var item in stories) {
@@ -54,14 +54,14 @@ class StoryHomeCubit extends BaseCubit<StoryHomeState> {
     return items;
   }
 
-  Future<List<TopicButtonObject>> getAllStoryTopics() async {
+  Future<List<TopicButtonObject>> _getAllStoryTopics() async {
     await storyTopicController.getAllStoryTopics(null);
     List<TopicButtonObject> items =
-        await getTopics(storyTopicController.listStoryTopic.value);
+        await _getTopics(storyTopicController.listStoryTopic.value);
     return items;
   }
 
-  Future<List<TopicButtonObject>> getTopics(
+  Future<List<TopicButtonObject>> _getTopics(
       List<StoryTopicEntity> topics) async {
     List<TopicButtonObject> items = [];
     StoryTopicEntity tmp = StoryTopicEntity(

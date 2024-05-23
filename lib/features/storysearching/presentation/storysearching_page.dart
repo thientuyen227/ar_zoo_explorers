@@ -71,7 +71,7 @@ class _State extends BaseState<StorySearchingState, StorySearchingCubit,
             builder: (BuildContext context) {
               return SearchBottomSheet(onClosed: (String? value) async {
                 if (value != null) {
-                  await onSearch(value);
+                  await _onSearch(value);
                 }
               });
             },
@@ -85,42 +85,57 @@ class _State extends BaseState<StorySearchingState, StorySearchingCubit,
   }
 
   Widget listStoryButton() {
-    List<Widget> lstStory = [];
-
-    for (int i = 0; i < state.listSearchStory.length; i++) {
-      lstStory.add(storyButton(state.listSearchStory[i],
-          isLast: (i == state.listSearchStory.length - 1) ? true : false));
+    if (state.listSearchStory.isNotEmpty) {
+      return GridView.builder(
+        shrinkWrap: true,
+        itemCount: state.listSearchStory.length,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.all(0.0),
+            child: Column(
+              children: [storyButton(state.listSearchStory[index])],
+            ),
+          );
+        },
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 1, childAspectRatio: 2.32, crossAxisSpacing: 0),
+      );
+    } else if (state.searchStatus) {
+      return Container(
+          width: state.width * 0.9,
+          height: state.height,
+          alignment: Alignment.center,
+          child: Text(
+              '${LanguageKeys.msg_no_story_has.tr} "${state.txtSearch}"',
+              style: const TextStyle(fontSize: 20)));
+    } else {
+      return Container();
     }
-    return Column(children: lstStory);
   }
 
   Widget storyButton(StoryButtonObject item, {bool isLast = false}) {
-    return ElevatedButton(
-        style: ButtonStyle(
-            padding: MaterialStateProperty.all(EdgeInsets.zero),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(0.0),
-                    side: const BorderSide(
-                        color: Colors.transparent, width: 0.0)))),
-        onPressed: () async {
-          await storyController.getStory(context, id: item.id!);
-          await userStoryController.createOrGetUserStory(context,
-              userId: controller.currentUser.value.id, storyId: item.id!);
-          await _navigateToOverviewPage();
+    return GestureDetector(
+        onTap: () async {
+          await _onClickButton(context, item.id!);
         },
-        child: Column(children: [
-          BasicStoryButton(item: item),
-          isLast
-              ? Container()
-              : Container(
-                  width: state.width * 0.9,
-                  height: 0.5,
-                  color: Colors.grey.shade500)
-        ]));
+        child: Container(
+          margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(state.width * 0.04),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 5,
+                    offset: const Offset(0, 3))
+              ]),
+          width: state.width * 0.9,
+          child: BasicStoryButton(item: item),
+        ));
   }
 
-  Future<void> onSearch(String? value) async {
+  Future<void> _onSearch(String? value) async {
     await cubit.onSearch(context, value ?? "").then((value) => setState(() {}));
   }
 
@@ -143,7 +158,7 @@ class _State extends BaseState<StorySearchingState, StorySearchingCubit,
           builder: (BuildContext context) {
             return SearchBottomSheet(onClosed: (String? value) async {
               if (value != null) {
-                await onSearch(value);
+                await _onSearch(value);
               }
             });
           },
@@ -152,11 +167,25 @@ class _State extends BaseState<StorySearchingState, StorySearchingCubit,
     });
   }
 
-  Future<void> _initCubit() async {
-    await cubit.init(context);
+  Future<void> _onClickButton(BuildContext context, String itemId) async {
+    await _onChangeBottomBarState();
+    cubit.showLoading();
+    await cubit.getStory(context, itemId);
+    await cubit.createOrGetUserStory(context, itemId);
+    await _navigateToOverviewPage();
+    await _onChangeBottomBarState();
+    cubit.hideLoading();
+  }
+
+  Future<void> _onChangeBottomBarState() async {
     setState(() {
       widget.toggleBottomBarVisibility();
     });
+  }
+
+  Future<void> _initCubit() async {
+    await cubit.init(context);
+    await _onChangeBottomBarState();
     _setSearchStatus();
   }
 

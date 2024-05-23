@@ -53,9 +53,9 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
                           fontWeight: FontWeight.bold)),
                   backgroundColor: AppColor.appBarColor,
                   elevation: 1,
-                  leading: const Column(
+                  leading: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [CustomBackButton()]),
+                      children: [backButton()]),
                   actions: [profileCustom(), const SizedBox(width: 15)]),
               body: FormBuilder(
                 key: _formKey,
@@ -79,6 +79,14 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
                 ),
               ),
             )));
+  }
+
+  Widget backButton() {
+    return CustomBackButton(onPressed: () async {
+      await cubit.showLoading();
+      Navigator.of(context).pop(true);
+      await cubit.hideLoading();
+    });
   }
 
   Widget profileCustom() {
@@ -135,34 +143,41 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
   }
 
   Widget listTopicButton(List<TopicButtonObject> list) {
-    List<Widget> listRow = [];
-    for (int i = 0; i < list.length - 1; i = i + 2) {
-      listRow.add(Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [topicButton(list[i]), topicButton(list[i + 1])]));
-      listRow.add(const SizedBox(height: 20));
+    if (list.isNotEmpty) {
+      return GridView.builder(
+        shrinkWrap: true,
+        itemCount: list.length,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.all(0.0),
+            child: Column(
+              children: [topicButton(list[index])],
+            ),
+          );
+        },
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, childAspectRatio: 0.95, crossAxisSpacing: 14),
+      );
+    } else {
+      return Container(
+          width: state.width * 0.9,
+          height: state.height,
+          alignment: Alignment.center,
+          child: Text(LanguageKeys.empty_favorite_stories.tr,
+              style: const TextStyle(fontSize: 20)));
     }
-    if ((list.length) % 2 != 0) {
-      listRow.add(Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            topicButton(list[list.length - 1]),
-            const SizedBox(height: 150, width: 150)
-          ]));
-      listRow.add(const SizedBox(height: 20));
-    }
-    return Column(children: listRow);
   }
 
   Widget topicButton(TopicButtonObject btnObject) {
     return GestureDetector(
         onTap: () async {
+          await _onChangeBottomBarState();
           cubit.showLoading();
           await _setCurrentStoryTopic(btnObject.id);
           context.router.pushNamed(Routes.storytopic);
           cubit.hideLoading();
+          await _onChangeBottomBarState();
         },
         child: Container(
             width: state.width * 0.39,
@@ -189,11 +204,13 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
   Widget storyButton(StoryButtonObject btnObject) {
     return GestureDetector(
         onTap: () async {
+          await _onChangeBottomBarState();
           cubit.showLoading();
           await cubit.getStory(context, btnObject.id!);
           await cubit.createOrGetUserStory(context, btnObject.id!);
           await _navigateToOverviewPage();
           cubit.hideLoading();
+          await _onChangeBottomBarState();
         },
         child: Container(
             width: state.width * 0.37,
@@ -318,11 +335,15 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
     await cubit.updateCurrentStoryTopic(context, id);
   }
 
-  Future<void> _initCubit() async {
-    await cubit.init(context);
+  Future<void> _onChangeBottomBarState() async {
     setState(() {
       widget.toggleBottomBarVisibility();
     });
+  }
+
+  Future<void> _initCubit() async {
+    await cubit.init(context);
+    await _onChangeBottomBarState();
   }
 
   @override

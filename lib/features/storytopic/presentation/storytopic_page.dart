@@ -1,3 +1,4 @@
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/core/data/controller/auth_controller.dart';
 import 'package:ar_zoo_explorers/core/data/controller/story_controller.dart';
@@ -11,6 +12,7 @@ import 'package:ar_zoo_explorers/features/storytopic/presentation/storytopic_sta
 import 'package:ar_zoo_explorers/utils/widget/custom_back_button.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 @RoutePage()
 class StoryTopicPage extends StatefulWidget {
@@ -65,20 +67,17 @@ class _State
     if (lstStory.isNotEmpty) {
       return Column(children: lstStory);
     } else {
-      print("The list story is empty");
-      return Container(
-          alignment: Alignment.centerLeft,
-          margin: const EdgeInsets.only(top: 10, bottom: 10),
-          width: cubit.WIDTH * 0.9,
-          child: const Text("Đang cập nhật", style: TextStyle(fontSize: 20)));
+      return Container();
     }
   }
 
   Widget storyButton(StoryButtonObject item, {bool isLast = false}) {
     return GestureDetector(
         onTap: () async {
+          await cubit.showLoading();
           await _setCurrentStory(item.id!, controller.currentUser.value.id);
           await _navigateToOverviewPage();
+          await cubit.hideLoading();
         },
         child: Column(children: [
           Container(
@@ -118,12 +117,25 @@ class _State
     );
   }
 
-  void _setDimension() {
+  Future<void> _showNullMessage() async {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
-        cubit.WIDTH = MediaQuery.of(context).size.width;
-        cubit.HEIGHT = MediaQuery.of(context).size.height;
+        if (cubit.listStory.isEmpty) {
+          print("The list story is empty");
+          cubit.showToast(LanguageKeys.msg_stories_updating.tr);
+          Navigator.of(context).pop(true);
+        }
       });
+    });
+  }
+
+  void _setDimension() {
+    Size mediaSize = MediaQueryData.fromView(
+            WidgetsBinding.instance.platformDispatcher.views.single)
+        .size;
+    setState(() {
+      cubit.WIDTH = mediaSize.width;
+      cubit.HEIGHT = mediaSize.height;
     });
   }
 
@@ -132,5 +144,6 @@ class _State
     super.initState();
     _setDimension();
     _setListStory();
+    _showNullMessage();
   }
 }

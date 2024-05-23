@@ -1,5 +1,7 @@
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class VolumeSlider extends StatefulWidget {
   final double initialValue;
@@ -16,8 +18,8 @@ class VolumeSlider extends StatefulWidget {
 }
 
 class _VolumeSliderState extends State<VolumeSlider> {
-  double _currentSliderValue = 0.5;
-  double _tmpVolumeValue = 0.5;
+  double _currentSliderValue = 1.0;
+  double _tmpVolumeValue = 1.0;
   double width = 0;
   double height = 0;
 
@@ -27,8 +29,9 @@ class _VolumeSliderState extends State<VolumeSlider> {
         height: 150.0,
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          const Text('Volume',
-              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
+          Text(LanguageKeys.volume.tr,
+              style:
+                  const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
           const SizedBox(height: 15.0),
           Row(children: [
             btnVolume(),
@@ -36,13 +39,13 @@ class _VolumeSliderState extends State<VolumeSlider> {
                 child: Slider(
               value: _currentSliderValue,
               min: 0,
-              max: 1,
+              max: 2,
               onChanged: (double value) {
                 setState(() {
                   _currentSliderValue = value;
                 });
                 if (_currentSliderValue == 0) {
-                  _tmpVolumeValue = 0.5;
+                  _tmpVolumeValue = 1.0;
                 }
                 widget.onChanged(value);
               },

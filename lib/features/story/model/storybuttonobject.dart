@@ -8,6 +8,7 @@ class StoryButtonObject {
   Duration duration;
   List<String> topic;
   Duration timestamp;
+  bool isCompleted;
 
   StoryButtonObject(
       {this.id,
@@ -18,5 +19,6 @@ class StoryButtonObject {
       this.duration = const Duration(seconds: 0, minutes: 0, hours: 0),
       this.timestamp = const Duration(seconds: 0, minutes: 0, hours: 0),
       required this.topic,
-      this.listenCount = 0});
+      this.listenCount = 0,
+      this.isCompleted = false});
 }

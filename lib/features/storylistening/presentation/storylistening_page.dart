@@ -73,7 +73,7 @@ class _State extends BaseState<StoryListeningState, StoryListeningCubit,
           width: state.width * 0.9,
           height: state.height,
           alignment: Alignment.center,
-          child: Text(LanguageKeys.empty_favorite_stories.tr,
+          child: Text(LanguageKeys.empty_listening_stories.tr,
               style: const TextStyle(fontSize: 20)));
     }
   }
@@ -81,8 +81,8 @@ class _State extends BaseState<StoryListeningState, StoryListeningCubit,
   Widget storyButton(StoryButtonObject item) {
     return GestureDetector(
         onTap: () async {
-          cubit.showLoading();
           await _onChangeBottomBarState();
+          cubit.showLoading();
           await cubit.setCurrentStory(context, item.id!);
           await _navigateToOverviewPage();
           await _onChangeBottomBarState();
