@@ -241,11 +241,13 @@ class _State
   }
 
   Future<void> onSearch(String? value) async {
-    await animalController.setSearchValue(
-        context, _formKey.currentState!.fields['search']?.value);
-    setState(() {
-      cubit.onSearch(value ?? "");
-    });
+    if (mounted) {
+      await animalController.setSearchValue(
+          context, _formKey.currentState!.fields['search']?.value);
+      setState(() {
+        cubit.onSearch(value ?? "");
+      });
+    }
   }
 
   _getIsLoved(String userId, int index) async {
