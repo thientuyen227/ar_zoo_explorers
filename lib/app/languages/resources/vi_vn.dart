@@ -287,4 +287,8 @@ const Map<String, String> vi_vn = {
   'topic': 'Chủ đề',
   'view': 'Xem',
   'volume': 'Âm lượng',
+
+  //MODEL
+  'model_in_category_empty': 'Danh mục hiện không có model',
+  'models_no_has_keyword': 'Model không tồn tại với từ khóa'
 };

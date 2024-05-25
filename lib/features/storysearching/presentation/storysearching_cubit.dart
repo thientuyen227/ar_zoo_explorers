@@ -45,7 +45,7 @@ class StorySearchingCubit extends BaseCubit<StorySearchingState> {
         : [];
 
     await state.setAttributes(listSearchStory: lstSearch);
-    print("Cubit.Init() : Get data, ${storyController.searchStatus.value}");
+    // print("Cubit.Init() : Get data, ${storyController.searchStatus.value}");
     hideLoading();
   }
 

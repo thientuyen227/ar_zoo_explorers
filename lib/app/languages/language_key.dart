@@ -315,4 +315,8 @@ class LanguageKeys {
   static const String topic = 'topic';
   static const String view = 'view';
   static const String volume = 'volume';
+
+  //MODEL
+  static const String model_in_category_empty = 'model_in_category_empty';
+  static const String models_no_has_keyword = 'models_no_has_keyword';
 }

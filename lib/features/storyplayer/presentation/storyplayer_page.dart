@@ -1,13 +1,10 @@
 import 'dart:async';
 
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
+import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
-import 'package:ar_zoo_explorers/core/data/controller/auth_controller.dart';
-import 'package:ar_zoo_explorers/core/data/controller/story_controller.dart';
-import 'package:ar_zoo_explorers/core/data/controller/story_topic_controller.dart';
-import 'package:ar_zoo_explorers/core/data/controller/user_story_controller.dart';
-import 'package:ar_zoo_explorers/domain/entities/story_entity.dart';
-import 'package:ar_zoo_explorers/domain/entities/user_story_entity.dart';
+import 'package:ar_zoo_explorers/features/modelbottomsheet/presentation/model_bottom_sheet.dart';
 import 'package:ar_zoo_explorers/features/story/component/volume_slider.dart';
 import 'package:ar_zoo_explorers/features/storyplayer/presentation/storyplayer_cubit.dart';
 import 'package:ar_zoo_explorers/features/storyplayer/presentation/storyplayer_state.dart';
@@ -15,6 +12,7 @@ import 'package:ar_zoo_explorers/utils/widget/button_widget.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 @RoutePage()
 class StoryPlayerPage extends StatefulWidget {
@@ -30,24 +28,19 @@ class _State
 
   Timer timer = Timer(Duration.zero, () {});
 
-  final controller = AuthController.findOrInitialize;
-  final storyTopicController = StoryTopicController.findOrInitialize;
-  final userStoryController = UserStoryController.findOrInitialize;
-  final storyController = StoryController.findOrInitialize;
-
   @override
   Widget buildByState(BuildContext context, StoryPlayerState state) {
     return PopScope(
         canPop: false,
         onPopInvoked: (didPop) async {
-          await _updatePausedTime();
+          await _updatePausedTime(context);
           Navigator.of(context).pop();
         },
         child: Scaffold(
             extendBodyBehindAppBar: true,
             appBar: AppBar(
                 centerTitle: true,
-                title: Text(cubit.name,
+                title: Text(state.name,
                     style: const TextStyle(
                         fontSize: 20,
                         color: Colors.white,
@@ -60,19 +53,70 @@ class _State
                 actions: const []),
             body: Stack(children: [
               ClipRect(
-                  child: Image.network(cubit.avatar,
-                      width: cubit.WIDTH,
-                      height: cubit.HEIGHT,
+                  child: Image.network(state.avatar,
+                      width: state.width,
+                      height: state.height,
                       fit: BoxFit.cover)),
-              backgroundPage(context)
+              backgroundPage(context),
+              Positioned(
+                  top: state.height * 0.065,
+                  right: state.width * 0.05,
+                  child: Center(child: viewModelButton()))
             ])));
+  }
+
+  Widget viewModelButton() {
+    return GestureDetector(
+        onTap: () async {
+          await _showModelBottomSheet();
+        },
+        child: Container(
+          height: state.width * 0.16,
+          constraints: BoxConstraints(minWidth: state.width * 0.3),
+          padding: EdgeInsets.all(state.width * 0.01),
+          decoration: BoxDecoration(
+              color: AppColor.primaryColor,
+              borderRadius: BorderRadius.circular(state.width * 0.08),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 3,
+                    offset: const Offset(0, 3))
+              ]),
+          child: Row(children: [
+            SizedBox(width: state.width * 0.02),
+            Container(
+                child: const Text("View model",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: AppColor.white))),
+            SizedBox(width: state.width * 0.01),
+            imageViewModelButton(),
+          ]),
+        ));
+  }
+
+  Widget imageViewModelButton() {
+    return Container(
+      width: state.width * 0.14,
+      height: state.width * 0.14,
+      padding: const EdgeInsets.all(5),
+      decoration:
+          const BoxDecoration(shape: BoxShape.circle, color: AppColor.white),
+      child: ClipOval(
+          child: Image.asset(AppIcons.icLion64Color, fit: BoxFit.cover)),
+    );
   }
 
   Widget backButton() {
     return AppIconButton(
       onPressed: () async {
-        await _updatePausedTime();
-        context.router.pop();
+        await cubit.showLoading();
+        await _updatePausedTime(context);
+        Navigator.of(context).pop(true);
+        await cubit.hideLoading();
       },
       icon: Container(
           margin: const EdgeInsets.only(left: 0),
@@ -87,8 +131,8 @@ class _State
     return SingleChildScrollView(
         child: Column(children: [
       Container(
-          constraints: BoxConstraints(minHeight: cubit.HEIGHT),
-          width: cubit.WIDTH,
+          constraints: BoxConstraints(minHeight: state.height),
+          width: state.width,
           decoration: BoxDecoration(
               gradient: LinearGradient(colors: [
             Colors.blue.shade700.withOpacity(0.4),
@@ -100,7 +144,7 @@ class _State
 
   Widget whiteLayoutPage() {
     return Container(
-      constraints: BoxConstraints(maxHeight: cubit.HEIGHT * 0.85),
+      constraints: BoxConstraints(maxHeight: state.height * 0.85),
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),
@@ -112,12 +156,12 @@ class _State
                 offset: const Offset(0, 3))
           ]),
       margin: EdgeInsets.only(
-          top: cubit.HEIGHT * 0.12, left: 20, right: 20, bottom: 25),
+          top: state.height * 0.12, left: 20, right: 20, bottom: 25),
       // padding: const EdgeInsets.only(left: 20, right: 20, bottom: 25),
       child: Column(
         // mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const SizedBox(height: 10),
+          const SizedBox(height: 30),
           imgStory(),
           const SizedBox(height: 10),
           txtStoryName(),
@@ -134,19 +178,19 @@ class _State
 
   Widget imgStory() {
     return SizedBox(
-        width: cubit.HEIGHT * 0.15,
-        height: cubit.HEIGHT * 0.15,
+        width: state.height * 0.15,
+        height: state.height * 0.15,
         child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image.network(cubit.avatar, fit: BoxFit.cover)));
+            child: Image.network(state.avatar, fit: BoxFit.cover)));
   }
 
   Widget txtStoryName() {
     return Container(
-        width: cubit.WIDTH,
-        height: cubit.HEIGHT * 0.07,
+        width: state.width,
+        height: state.height * 0.07,
         padding: const EdgeInsets.only(left: 20, right: 20),
-        child: Text(cubit.name,
+        child: Text(state.name,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
@@ -154,7 +198,7 @@ class _State
   }
 
   Widget contentStory() {
-    List<String> txtLines = cubit.content.split('\n');
+    List<String> txtLines = state.content.split('\n');
     List<Widget> lines = [const SizedBox(height: 15)];
     String space = " " * 3;
     for (int i = 0; i < txtLines.length; i++) {
@@ -165,8 +209,8 @@ class _State
     }
     lines.add(const SizedBox(height: 15));
     return Container(
-        width: cubit.WIDTH,
-        height: cubit.HEIGHT * 0.4,
+        width: state.width,
+        height: state.height * 0.4,
         decoration: BoxDecoration(
             border: Border.all(), borderRadius: BorderRadius.circular(15)),
         margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
@@ -179,25 +223,25 @@ class _State
 
   Widget progressBar() {
     return SizedBox(
-        width: cubit.WIDTH * 0.9,
-        height: cubit.HEIGHT * 0.05,
+        width: state.width * 0.9,
+        height: state.height * 0.05,
         // decoration: BoxDecoration(border: Border.all()),
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Container(
-              width: cubit.WIDTH * 0.13,
+              width: state.width * 0.13,
               alignment: Alignment.center,
               // decoration: BoxDecoration(border: Border.all()),
               child: Text(
-                  '${cubit.position.inMinutes} : ${cubit.position.inSeconds.remainder(60)}',
+                  '${state.position.inMinutes} : ${state.position.inSeconds.remainder(60)}',
                   style: const TextStyle(fontSize: 14))),
           progressSlider(),
           Container(
-              width: cubit.WIDTH * 0.13,
+              width: state.width * 0.13,
               alignment: Alignment.center,
               // decoration: BoxDecoration(border: Border.all()),
               child: Text(
-                  '${cubit.duration.inMinutes} : ${cubit.duration.inSeconds.remainder(60)}',
+                  '${state.duration.inMinutes} : ${state.duration.inSeconds.remainder(60)}',
                   style: const TextStyle(fontSize: 14))),
         ]));
   }
@@ -217,9 +261,9 @@ class _State
               trackShape: const RoundedRectSliderTrackShape(),
             ),
             child: Slider(
-              value: cubit.position.inSeconds.toDouble(),
+              value: state.position.inSeconds.toDouble(),
               min: 0.0,
-              max: cubit.duration.inSeconds.toDouble(),
+              max: state.duration.inSeconds.toDouble(),
               onChanged: (double value) {
                 setState(() {
                   seekToSecond(value.toInt());
@@ -230,8 +274,8 @@ class _State
 
   Widget audioSection() {
     return SizedBox(
-      width: cubit.WIDTH,
-      height: cubit.HEIGHT * 0.08,
+      width: state.width,
+      height: state.height * 0.08,
       // decoration: BoxDecoration(border: Border.all()),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -249,7 +293,7 @@ class _State
   Widget playButtonState() {
     return Center(
         child:
-            cubit.audioState == PlayerState.playing ? btnPause() : btnPlay());
+            state.audioState == PlayerState.playing ? btnPause() : btnPlay());
   }
 
   Widget btnPlay() {
@@ -262,8 +306,8 @@ class _State
                     const ColorFilter.mode(Colors.blue, BlendMode.srcIn),
                 child: Image.asset(AppIcons.icPlay64, fit: BoxFit.cover))),
         onPressed: () async {
-          await audioPlayer.play(UrlSource(cubit.audioUrl),
-              position: cubit.position);
+          await audioPlayer.play(UrlSource(state.audioUrl),
+              position: state.position);
         });
   }
 
@@ -288,12 +332,12 @@ class _State
           width: 30,
           child: ColorFiltered(
               colorFilter: ColorFilter.mode(
-                  cubit.isLoop ? Colors.blue : Colors.grey, BlendMode.srcIn),
+                  state.isLoop ? Colors.blue : Colors.grey, BlendMode.srcIn),
               child: Image.asset(AppIcons.icRefresh64, fit: BoxFit.cover))),
       onPressed: () async {
-        setState(() {
-          cubit.isLoop = !cubit.isLoop;
-        });
+        await cubit
+            .onChangeIsLoop(!state.isLoop)
+            .then((value) => setState(() {}));
       },
     );
   }
@@ -356,10 +400,10 @@ class _State
           height: 32,
           child: ColorFiltered(
               colorFilter: ColorFilter.mode(
-                  (cubit.volumeValue > 0) ? Colors.blue : Colors.grey,
+                  (state.volumeValue > 0) ? Colors.blue : Colors.grey,
                   BlendMode.srcIn),
               child: Image.asset(
-                  (cubit.volumeValue > 0)
+                  (state.volumeValue > 0)
                       ? AppIcons.icVolume64
                       : AppIcons.icMute64,
                   fit: BoxFit.cover))),
@@ -368,7 +412,7 @@ class _State
           context: context,
           builder: (BuildContext context) {
             return VolumeSlider(
-              initialValue: cubit.volumeValue,
+              initialValue: state.volumeValue,
               onChanged: _updateSliderValue,
             );
           },
@@ -377,58 +421,88 @@ class _State
     );
   }
 
-  void setVolume() {
-    setState(() {
-      cubit.volumeValue = 1.0;
-      audioPlayer.setVolume(1.0);
-    });
+  Future<void> setVolume(double value) async {
+    await cubit.onChangeVolume(value).then((value) => setState(() {}));
+    await audioPlayer.setVolume(value).then((value) => setState(() {}));
   }
 
-  void onPlayerStateChanged() {
-    audioPlayer.onPlayerStateChanged.listen((PlayerState state) {
-      if (state == PlayerState.playing) {
-        setState(() {
-          cubit.audioState = PlayerState.playing;
-          cubit.isPlaying = true;
-        });
-        startTimer();
-      } else {
-        stopTimer();
-        cubit.isPlaying = false;
-        if (state == PlayerState.paused) {
-          setState(() {
-            cubit.audioState = PlayerState.paused;
-          });
-        } else if (state == PlayerState.stopped) {
-          setState(() {
-            cubit.audioState = PlayerState.stopped;
-          });
-        }
+  Future<void> _onChangePlaying() async {
+    await cubit.onChangeAudioState(PlayerState.playing);
+    await cubit.onChangeIsPlaying(true);
+    if (mounted) setState(() {});
+    await startTimer();
+  }
+
+  Future<void> _onChangeIsPaused() async {
+    await cubit.onChangeAudioState(PlayerState.paused);
+    await cubit.onChangeIsPlaying(false);
+    if (mounted) setState(() {});
+    await stopTimer();
+  }
+
+  Future<void> _onChangeIsStopped() async {
+    await cubit.onChangeAudioState(PlayerState.stopped);
+    await cubit.onChangeIsPlaying(false);
+    if (mounted) setState(() {});
+    await stopTimer();
+  }
+
+  Future<void> _onChangeCompleted() async {
+    await cubit.onChangePosition(const Duration(seconds: 0, minutes: 0));
+    await _updateComplete();
+    if (state.isLoop) {
+      await audioPlayer.play(UrlSource(state.audioUrl),
+          position: Duration.zero);
+      print("Loop");
+    } else {
+      await _onChangeIsPaused();
+      await _showModelBottomSheet().then((value) => setState(() {
+            print("No Loop");
+          }));
+    }
+  }
+
+  Future<void> _onPlayerStateChanged() async {
+    audioPlayer.onPlayerStateChanged.listen((PlayerState state) async {
+      if (!mounted) return;
+      switch (state) {
+        case PlayerState.playing:
+          await _onChangePlaying();
+          break;
+        case PlayerState.paused:
+          await _onChangeIsPaused();
+          break;
+        case PlayerState.stopped:
+          await _onChangeIsStopped();
+          break;
+        case PlayerState.completed:
+          await _onChangeCompleted();
+          break;
+        default:
+          await _onChangeIsStopped();
+          print("audio state: $state");
       }
-    }, onError: (msg) {
-      setState(() {
-        cubit.audioState = PlayerState.stopped;
-        print("audio error:msg.toString()");
-      });
+      if (mounted) setState(() {});
+    }, onError: (msg) async {
+      if (!mounted) return;
+      await _onChangeIsStopped();
+      if (mounted) setState(() {});
     });
   }
 
-  void _updateSliderValue(double value) {
-    setState(() {
-      cubit.volumeValue = value;
-      audioPlayer.setVolume(value);
-    });
+  Future<void> _updateSliderValue(double value) async {
+    await setVolume(value);
   }
 
   Future<void> skipAudio15s(bool skipForward) async {
     // Duration? currentPosition = await audioPlayer.getCurrentPosition();
-    Duration? currentPosition = cubit.position;
-    Duration newPosition = cubit.position;
+    Duration? currentPosition = state.position;
+    Duration newPosition = state.position;
     print(currentPosition);
     if (skipForward) {
       newPosition = currentPosition + const Duration(seconds: 15);
-      if (newPosition.inSeconds > cubit.duration.inSeconds) {
-        newPosition = cubit.duration;
+      if (newPosition.inSeconds > state.duration.inSeconds) {
+        newPosition = state.duration;
       }
     } else {
       newPosition = currentPosition - const Duration(seconds: 15);
@@ -437,94 +511,84 @@ class _State
       }
     }
     await audioPlayer.seek(newPosition);
-    setState(() {
-      cubit.position = newPosition;
-    });
+    await cubit.onChangePosition(newPosition).then((value) => setState(() {}));
   }
 
-  Future<void> playAudio() async {
-    audioPlayer.play(UrlSource(cubit.audioUrl), position: cubit.position);
+  Future<void> _playAudio() async {
+    audioPlayer.play(UrlSource(state.audioUrl), position: state.position);
   }
 
-  Future<void> completeAudio() async {
-    audioPlayer.onPlayerStateChanged.listen((PlayerState state) async {
-      if (state == PlayerState.completed) {
-        if (cubit.isLoop) {
-          await audioPlayer.play(UrlSource(cubit.audioUrl),
-              position: Duration.zero);
-        } else {
-          setState(() {
-            // cubit.audioState = PlayerState.stopped;
-            state = PlayerState.paused;
-            cubit.audioState = PlayerState.paused;
-            cubit.position = const Duration(seconds: 0, minutes: 0);
-          });
-        }
-      }
-      print(state);
-    });
-  }
-
-  void seekToSecond(int second) {
+  Future<void> seekToSecond(int second) async {
     Duration newDuration = Duration(seconds: second);
-    cubit.position = newDuration;
+    await cubit.onChangePosition(newDuration).then((value) => setState(() {}));
     audioPlayer.seek(newDuration);
   }
 
-  void startTimer() {
-    timer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
-      audioPlayer.getCurrentPosition().then((Duration? duration) {
+  Future<void> startTimer() async {
+    timer = Timer.periodic(const Duration(milliseconds: 500), (timer) async {
+      await audioPlayer.getCurrentPosition().then((Duration? duration) {
         if (duration != null && audioPlayer.state == PlayerState.playing) {
-          setState(() {
-            cubit.position = duration;
+          cubit.onChangePosition(duration).then((value) {
+            if (mounted) setState(() {});
           });
         }
       });
     });
   }
 
-  void stopTimer() => timer.cancel();
+  Future<void> stopTimer() async => timer.cancel();
 
   Future<void> stopAudio() async => await audioPlayer.dispose();
 
-  _getInformations(StoryEntity storyEntity, UserStoryEntity usEntity) {
-    setState(() {
-      cubit.getInformations(storyEntity, usEntity);
-    });
-  }
-
-  Future<void> _updatePausedTime() async {
+  Future<void> _updatePausedTime(BuildContext context) async {
     await audioPlayer.stop();
-    await userStoryController.updatePausedTime(context,
-        id: userStoryController.currentUserStory.value.id,
-        pausedTime: cubit.position.inSeconds);
+    await cubit.updatePausedTime(context);
   }
 
-  void setDimension() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {
-        cubit.WIDTH = MediaQuery.of(context).size.width;
-        cubit.HEIGHT = MediaQuery.of(context).size.height;
-      });
-    });
+  Future<void> _showModelBottomSheet() async {
+    if (cubit.storyController.currentStory.value.modelId.isNotEmpty) {
+      await showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+                top: Radius.circular(state.height * 0.025))),
+        barrierColor: Colors.grey.withOpacity(0.15),
+        builder: (BuildContext context) {
+          return const ModelBottomSheet();
+        },
+      );
+    } else {
+      cubit.showToast(LanguageKeys.msg_stories_updating.tr);
+    }
+  }
+
+  Future<void> _updateComplete() async {
+    await cubit.updateComplete(context);
+  }
+
+  Future<void> _initCubit() async {
+    await cubit.init(context).then((value) => setState(() {}));
+    await cubit.showLoading();
+    await _onPlayerStateChanged();
+    // await _playAudio();
+    await cubit.hideLoading();
+  }
+
+  Future<void> _disposePage() async {
+    await stopTimer();
+    await stopAudio();
   }
 
   @override
   void initState() {
     super.initState();
-    setDimension();
-    _getInformations(storyController.currentStory.value,
-        userStoryController.currentUserStory.value);
-    onPlayerStateChanged();
-    setVolume();
-    playAudio();
-    completeAudio();
+    _initCubit();
   }
 
   @override
   void dispose() {
+    _disposePage();
     super.dispose();
-    stopAudio();
-    stopTimer();
   }
 }

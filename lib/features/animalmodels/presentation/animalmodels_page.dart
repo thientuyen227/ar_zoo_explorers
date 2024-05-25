@@ -1,14 +1,16 @@
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
+import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/core/data/controller/animal_category_controller.dart';
 import 'package:ar_zoo_explorers/core/data/controller/animal_controller.dart';
 import 'package:ar_zoo_explorers/features/animalmodels/presentation/animalmodels_cubit.dart';
 import 'package:ar_zoo_explorers/features/animalmodels/presentation/animalmodels_state.dart';
+import 'package:ar_zoo_explorers/utils/widget/custom_back_button.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/get.dart';
 
-import '../../../app/config/app_router.gr.dart';
 import '../../../app/config/routes.dart';
 import '../../../app/theme/dimens.dart';
 import '../../../app/theme/icons.dart';
@@ -51,13 +53,17 @@ class _State
             scaffold: Scaffold(
                 appBar: AppBar(
                     centerTitle: true,
+                    backgroundColor: AppColor.appBarColor,
                     title: Text(
-                        cateController.currentAnimalCategory.value.title,
-                        style:
-                            const TextStyle(fontSize: 20, color: Colors.white)),
-                    leading: Column(
+                        cateController.currentAnimalCategory.value.title
+                            .toUpperCase(),
+                        style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold)),
+                    leading: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [turnBack()]),
+                        children: [CustomBackButton()]),
                     actions: [
                       profileCustom(),
                       const SizedBox(width: 10),
@@ -77,32 +83,37 @@ class _State
 
   // DANH SÁCH BUTTON MODEL
   Widget listModelButton(List<ButtonObject> list) {
-    List<Widget> listRow = [];
-    for (int i = 0; i < list.length - 1; i = i + 2) {
-      listRow.add(Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround, // Căn đều 2 bên
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [modelButton(i), modelButton(i + 1)]));
-      listRow.add(const SizedBox(height: 20));
-    }
-    if ((list.length) % 2 != 0) {
-      listRow.add(Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround, // Căn đều 2 bên
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            modelButton(list.length - 1),
-            const SizedBox(height: 150, width: 150)
-          ]));
-      listRow.add(const SizedBox(height: 20));
-    }
-    if (listRow.isEmpty &&
-        _formKey.currentState?.fields['search']?.value != null) {
-      return const Text(
-        "This model does not exist!",
-        style: TextStyle(color: Colors.black),
+    if (list.isNotEmpty) {
+      return GridView.builder(
+        shrinkWrap: true,
+        itemCount: list.length,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.all(0.0),
+            child: Column(
+              children: [modelButton(index)],
+            ),
+          );
+        },
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, childAspectRatio: 0.95, crossAxisSpacing: 14),
       );
+    } else if (_formKey.currentState?.fields['search']?.value != null) {
+      return Container(
+          width: cubit.WIDTH * 0.9,
+          constraints: BoxConstraints(minHeight: cubit.HEIGHT * 0.2),
+          alignment: Alignment.center,
+          child: Text(
+              '${LanguageKeys.models_no_has_keyword.tr} "${_formKey.currentState?.fields['search']?.value}"',
+              style: const TextStyle(fontSize: 20)));
     } else {
-      return Column(children: listRow);
+      return Container(
+          width: cubit.WIDTH * 0.9,
+          constraints: BoxConstraints(minHeight: cubit.HEIGHT * 0.2),
+          alignment: Alignment.center,
+          child: Text(LanguageKeys.model_in_category_empty.tr,
+              style: const TextStyle(fontSize: 20)));
     }
   }
 
@@ -110,8 +121,10 @@ class _State
   Widget modelButton(int index) {
     return GestureDetector(
         onTap: () async {
+          await cubit.showLoading();
           await setCurrentAnimal(index);
           context.router.pushNamed(Routes.modeldetail);
+          await cubit.hideLoading();
         },
         child: Container(
             width: cubit.WIDTH * 0.4 + 5,
@@ -215,7 +228,8 @@ class _State
     return AppIconButton(
         onPressed: () => context.router.pushNamed(Routes.userprofile),
         icon: Row(children: [
-          Text(cubit.nameCustom(controller.currentUser.value.fullname)),
+          Text(cubit.nameCustom(controller.currentUser.value.fullname),
+              style: const TextStyle(color: AppColor.white)),
           const SizedBox(width: 5),
           userImage()
         ]));
@@ -247,16 +261,6 @@ class _State
         ]));
   }
 
-  Widget turnBack() {
-    return AppIconButton(
-        onPressed: () async {
-          await cateController.resetCurrentAnimalCategory(context);
-          //context.router.pop();
-          context.router.popAndPush(const HomeRoute());
-        },
-        icon: Image.asset(AppIcons.icBack_png, scale: 0.65));
-  }
-
   void setAnimal(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await animalController.getAllAnimals(context);
@@ -282,10 +286,13 @@ class _State
         context, cubit.listSearchAnimal[index].id!);
   }
 
-  void setDimension() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      cubit.WIDTH = MediaQuery.of(context).size.width;
-      cubit.HEIGHT = MediaQuery.of(context).size.height;
+  Future<void> setDimension() async {
+    Size mediaSize = MediaQueryData.fromView(
+            WidgetsBinding.instance.platformDispatcher.views.single)
+        .size;
+    setState(() {
+      cubit.WIDTH = mediaSize.width;
+      cubit.HEIGHT = mediaSize.height;
     });
   }
 

@@ -287,4 +287,8 @@ const Map<String, String> en_us = {
   'topic': 'Topic',
   'view': 'View',
   'volume': 'Volume',
+
+  //MODEL
+  'model_in_category_empty': 'Models in this category is empty',
+  'models_no_has_keyword': 'Models does not exist with keyword'
 };

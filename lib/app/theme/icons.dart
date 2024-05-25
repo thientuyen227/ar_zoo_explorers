@@ -66,6 +66,7 @@ class AppIcons {
   static const String icUpdate64White = "assets/icons/ic_update_x64_white.png";
   static const String icChecked64Green =
       "assets/icons/ic_checked_x64_green.png";
+  static const String icLion64Color = "assets/icons/ic_lion_x64_color.png";
 
   //Account Manager
   static const String icUserProfile = "assets/icons/ic_userprofile.png";
