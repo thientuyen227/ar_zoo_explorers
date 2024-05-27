@@ -1,5 +1,7 @@
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/features/authentication/register/presentation/register_state.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../app/theme/icons.dart';
@@ -17,23 +19,23 @@ class RegisterCubit extends BaseCubit<RegisterState> {
   List<FormBuilderTextFieldModel> ListFormItem = [
     FormBuilderTextFieldModel(
         name: 'email',
-        hint_text: "Email address",
+        hint_text: LanguageKeys.emailAddress.tr,
         icon_prefix: AppIcons.icMail,
         TIT: TextInputType.emailAddress,
         isObscured: false),
     FormBuilderTextFieldModel(
         name: 'fullname',
-        hint_text: "Full name",
+        hint_text: LanguageKeys.fullname.tr,
         icon_prefix: AppIcons.icUser,
         isObscured: false),
     FormBuilderTextFieldModel(
         name: 'password',
-        hint_text: 'Password',
+        hint_text: LanguageKeys.password.tr,
         icon_prefix: AppIcons.icLock,
         isObscured: true),
     FormBuilderTextFieldModel(
         name: 'confirmPassword',
-        hint_text: 'Confirm password',
+        hint_text: LanguageKeys.confirmPassword.tr,
         icon_prefix: AppIcons.icLock,
         isObscured: true)
   ];
@@ -51,7 +53,7 @@ class RegisterCubit extends BaseCubit<RegisterState> {
   String? onCheckEmail(String? value) {
     if (value != null && value.isNotEmpty) {
       if (!value.contains("@") || !value.contains(".")) {
-        return "The email address is invalid!";
+        return "${LanguageKeys.msg_invalidEmail.tr} !";
       }
     } else {
       return null;
@@ -75,18 +77,18 @@ class RegisterCubit extends BaseCubit<RegisterState> {
     if (value != null && value.isNotEmpty) {
       final regex1 = RegExp(r'[a-z]');
       final regex2 = RegExp(r'[A-Z]');
-      final regex3 = RegExp(r'[A-Z]');
+      final regex3 = RegExp(r'[0-9]');
       final regex4 = RegExp(r'[@*&^]');
       if (value.length < 8) {
-        return "Minimum 8 characters!";
+        return "${LanguageKeys.msg_atLeast8Characters.tr} !";
       } else if (!regex1.hasMatch(value)) {
-        return "Missing lowercase character!";
+        return "${LanguageKeys.msg_missLowerCharacters} !";
       } else if (!regex2.hasMatch(value)) {
-        return "Missing uppercase character!";
+        return "${LanguageKeys.msg_missUpperCharacters.tr} !";
       } else if (!regex3.hasMatch(value)) {
-        return "Password must include a number!";
+        return "${LanguageKeys.msg_includeANumber} !";
       } else if (!regex4.hasMatch(value)) {
-        return "Must include special characters @*&^";
+        return LanguageKeys.msg_includeSpecialCharacters;
       }
     } else {
       return null;
@@ -100,7 +102,7 @@ class RegisterCubit extends BaseCubit<RegisterState> {
         confirmPassword != null &&
         confirmPassword.isNotEmpty) {
       if (!(password.compareTo(confirmPassword) == 0)) {
-        return "Password confirmation does not match!";
+        return "${LanguageKeys.msg_passwordNotMatch.tr} !";
       }
     } else {
       return null;

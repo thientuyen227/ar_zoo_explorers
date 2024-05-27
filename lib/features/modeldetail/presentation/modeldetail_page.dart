@@ -285,10 +285,13 @@ class _State
     });
   }
 
-  void setDimension() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      cubit.WIDTH = MediaQuery.of(context).size.width;
-      cubit.HEIGHT = MediaQuery.of(context).size.height;
+  Future<void> setDimension() async {
+    Size mediaSize = MediaQueryData.fromView(
+            WidgetsBinding.instance.platformDispatcher.views.single)
+        .size;
+    setState(() {
+      cubit.WIDTH = mediaSize.width;
+      cubit.HEIGHT = mediaSize.height;
     });
   }
 

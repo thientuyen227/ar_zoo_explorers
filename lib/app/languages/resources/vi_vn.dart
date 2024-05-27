@@ -59,6 +59,23 @@ const Map<String, String> vi_vn = {
   'more': "Xem thêm",
   'next': "Tiếp theo",
   'report': "Báo cáo",
+  'back': 'quay lại',
+  'update': 'Cập nhật',
+  'birthday': 'Ngày sinh',
+  'submit': 'Gửi',
+
+  'goToLogin': 'Đi tới đăng nhập',
+  'rememberPass': 'Nhớ mật khẩu',
+  'forgetPass': 'Quên mật khẩu',
+  'signUp': 'Đăng ký',
+  'signUpWith': 'đăng nhập với',
+  'updateLater': 'Tính năng này sẽ cập nhật sau',
+  'createAccount': 'Tạo tài khoản của bạn',
+
+  'notAgreeTheTerms': 'Bạn chưa đồng ý với điều khoản',
+
+  'i_understood_the': 'Tôi đã hiểu',
+  'example': 'Ví dụ:',
 
   // Welcome
   'welcome_start': 'Bắt đầu',
@@ -140,4 +157,138 @@ const Map<String, String> vi_vn = {
   "updateAccountSuccessMessage": "Thông tin tài khoản đã được cập nhật",
   "changePasswordFailedMessage": "Đổi mật khẩu thất bại",
   "wrongOldPassword": "Mật khẩu cũ không chính xác",
+
+  //HELP
+  'introduction': 'Hướng Dẫn',
+
+  //TERMS OF SERVICE
+  'term1Title': 'Chấp nhận Điều khoản',
+  'term1Content':
+      'Trước khi sử dụng ứng dụng ArZoo, bạn cần đồng ý và tuân thủ các điều khoản sau đây.',
+
+  'term2Title': 'Sử dụng Ứng dụng',
+  'term2Content':
+      'Bạn được cấp quyền sử dụng ứng dụng AR cho mục đích cá nhân hoặc thương mại. Ứng dụng không được sử dụng cho các mục đích bất hợp pháp hoặc để gây hại cho người khác.',
+
+  'term3Title': 'Quyền Sở hữu',
+  'term3Content':
+      'Ứng dụng AR là tài sản của chúng tôi và được bảo vệ bởi luật bản quyền. Việc sao chép hoặc chỉnh sửa ứng dụng mà không có sự cho phép là bị cấm.',
+
+  'term4Title': 'Quyền Riêng tư',
+  'term4Content':
+      'Chúng tôi bảo vệ quyền riêng tư của bạn theo chính sách bảo mật của chúng tôi. Dữ liệu cá nhân của bạn có thể được thu thập, nhưng chúng tôi cam kết bảo vệ nó.',
+
+  'term5Title': 'Thay đổi Điều khoản',
+  'term5Content':
+      'Chúng tôi có quyền thay đổi các điều khoản và sẽ thông báo cho bạn về bất kỳ thay đổi nào.',
+
+  'term6Title': 'Chấm dứt việc sử dụng',
+  'term6Content': 'Bạn có thể ngừng sử dụng ứng dụng bất cứ lúc nào.',
+
+  'term7Title': 'Bảo mật Dữ liệu',
+  'term7Content':
+      "Dữ liệu cá nhân của người dùng là ưu tiên hàng đầu của chúng tôi. Chúng tôi chỉ thu thập thông tin cần thiết để cung cấp dịch vụ và cá nhân hóa trải nghiệm người dùng. Tất cả thông tin này được bảo vệ một cách an toàn và chúng tôi cam kết không chia sẻ hoặc bán thông tin cá nhân cho bất kỳ bên thứ ba nào mà không có sự đồng ý rõ ràng từ người dùng.",
+
+  'term8Title': 'Chất lượng Dịch vụ',
+  'term8Content':
+      'Chúng tôi cam kết cung cấp ứng dụng AR với chất lượng tốt nhất.',
+
+  'term9Title': 'Hạn chế Sử dụng',
+  'term9Content':
+      'Bạn không được phép chạy nhiều phiên bản của ứng dụng trên cùng một thiết bị.',
+
+  'term10Title': 'Hỗ trợ Kỹ thuật',
+  'term10Content':
+      'Chúng tôi cung cấp hỗ trợ kỹ thuật cho người dùng qua email hoặc hotline.',
+
+  'term11Title': 'Thanh toán (nếu có)',
+  'term11Content':
+      'Nếu ứng dụng AR là miễn phí, bạn phải thanh toán theo giá quy định nếu có.',
+
+  'term12Title': 'Chấp nhận Các Sự cố',
+  'term12Content':
+      'Quý vị chấp nhận giới hạn rủi ro khi sử dụng ứng dụng AR và không được đòi hỏi bồi thường cho thiệt hại hoặc mất mát nào.',
+
+  'term13Title': 'Bản quyền và Tài khoản',
+  'term13Content':
+      'Tất cả các quyền bản quyền đều thuộc sở hữu của chúng tôi. Mỗi tài khoản người dùng chỉ dành cho việc sử dụng của một người dùng duy nhất.',
+
+  'term14Title': 'Cảnh báo Điều khoản',
+  'term14Content':
+      'Bạn phải tuân thủ tất cả các điều khoản và cảnh báo trong ứng dụng AR.',
+
+  'term15Title': 'Sử dụng Công cụ',
+  'term15Content':
+      'Chúng tôi có thể cung cấp các công cụ để hỗ trợ việc sử dụng tối ưu của ứng dụng AR.',
+
+  //VALIDATE MESSAGE
+  'change': 'Thay đổi',
+  'enterTheOldPassword': 'Nhập mật khẩu cũ',
+  'enterTheNewPassword': 'Nhập mật khẩu mới',
+  'enterTheConfirmPassword': 'Nhập lại mật khẩu mới',
+
+  'msg_atLeast8Characters': 'Ít nhất 8 ký tự',
+  'msg_includeANumber': 'Phải bao gồm 1 ký tự số',
+  'msg_includeSpecialCharacters': 'Phải bao gồm các ký tự đặc biệt @*&^',
+  'msg_missLowerCharacters': 'Thiếu ký tự thường',
+  'msg_missUpperCharacters': 'Thiếu ký tự in hoa',
+  'msg_passwordNotMatch': 'Xác nhận mật khẩu không khớp',
+  'msg_invalidProvinceCity': 'Tỉnh / Thành phố không đúng',
+  'msg_fullNameIncorrect': 'Họ và tên không hợp lệ',
+  'msg_notBeEmpty': 'Trường không được để trống',
+  'msg_invalidEmail': 'Địa chỉ email không hợp lệ',
+
+  'requiredField': 'Không thể để trống',
+  'updating': 'Đang cập nhật',
+
+  //USER INFORMATION
+  'updateInformation': 'Cập nhật thông tin',
+  'emailAddress': 'Địa chỉ email',
+  'gender': 'Giới tính',
+  'province': 'Tỉnh',
+  'city': 'Thành phố',
+  'address': 'Địa chỉ',
+  'selectProvincial': 'Chọn tỉnh thành phố',
+  'selectDate': 'Chọn ngày',
+  'male': 'Nam',
+  'female': 'Nữ',
+  'msg_notSelectedAGender': 'Bạn chưa chọn giới tính',
+  'msg_phoneNumberIncorrect': 'Số điện thoại không đúng',
+  'enter_your_email': 'Nhập địa chỉ email tại đây',
+
+  //STORY
+  'author': 'Tác giả',
+  'duration': 'Thời lượng',
+  'recommended': 'Gợi ý',
+  'empty_favorite_stories': 'Danh sách truyện yêu thích đang trống',
+  'empty_listening_stories': 'Danh sách truyện đang nghe trống',
+  'enter_keyword': 'Nhập từ khóa tại đây',
+  'explore': 'Khám phá',
+  'favorite': 'Yêu thích',
+  'listening': 'Đang nghe',
+  'listens': 'Lượt nghe',
+
+  'msg_no_story_has': 'Không tìm thấy truyện có từ khóa',
+  'msg_stories_updating':
+      'Danh sách truyện đang cập nhật, bạn vui lòng quay lại sau nhé',
+
+  'minute': 'Phút',
+  'minutes': 'Phút',
+  'play': 'Nghe',
+  'reader': 'Người đọc',
+  'second': 'giây',
+  'seconds': 'giây',
+
+  'story_examples_1': 'Rùa va Thỏ, Thánh Gióng',
+  'story_overview': 'Tổng quan truyện',
+
+  'summary': 'Tóm tắt',
+  'topics': 'Chủ đề',
+  'topic': 'Chủ đề',
+  'view': 'Xem',
+  'volume': 'Âm lượng',
+
+  //MODEL
+  'model_in_category_empty': 'Danh mục hiện không có model',
+  'models_no_has_keyword': 'Model không tồn tại với từ khóa'
 };

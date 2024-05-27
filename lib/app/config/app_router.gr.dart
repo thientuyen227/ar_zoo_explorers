@@ -233,9 +233,13 @@ abstract class $AppRouter extends _i39.RootStackRouter {
       );
     },
     StoryFavoriteRoute.name: (routeData) {
+      final args = routeData.argsAs<StoryFavoriteRouteArgs>();
       return _i39.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i25.StoryFavoritePage(),
+        child: _i25.StoryFavoritePage(
+          key: args.key,
+          toggleBottomBarVisibility: args.toggleBottomBarVisibility,
+        ),
       );
     },
     StoryHomeRoute.name: (routeData) {
@@ -245,20 +249,25 @@ abstract class $AppRouter extends _i39.RootStackRouter {
         child: _i26.StoryHomePage(
           key: args.key,
           onPageChanged: args.onPageChanged,
+          toggleBottomBarVisibility: args.toggleBottomBarVisibility,
         ),
       );
     },
     StoryListeningRoute.name: (routeData) {
+      final args = routeData.argsAs<StoryListeningRouteArgs>();
       return _i39.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i27.StoryListeningPage(),
+        child: _i27.StoryListeningPage(
+          key: args.key,
+          toggleBottomBarVisibility: args.toggleBottomBarVisibility,
+        ),
       );
     },
     StoryOverviewRoute.name: (routeData) {
       final args = routeData.argsAs<StoryOverviewRouteArgs>();
-      return _i38.AutoRoutePage<dynamic>(
+      return _i39.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i27.StoryOverviewPage(
+        child: _i28.StoryOverviewPage(
           key: args.key,
           onClosed: args.onClosed,
         ),
@@ -277,9 +286,13 @@ abstract class $AppRouter extends _i39.RootStackRouter {
       );
     },
     StorySearchingRoute.name: (routeData) {
+      final args = routeData.argsAs<StorySearchingRouteArgs>();
       return _i39.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i31.StorySearchingPage(),
+        child: _i31.StorySearchingPage(
+          key: args.key,
+          toggleBottomBarVisibility: args.toggleBottomBarVisibility,
+        ),
       );
     },
     StoryTopicRoute.name: (routeData) {
@@ -665,16 +678,40 @@ class SplashRoute extends _i39.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i25.StoryFavoritePage]
-class StoryFavoriteRoute extends _i39.PageRouteInfo<void> {
-  const StoryFavoriteRoute({List<_i39.PageRouteInfo>? children})
-      : super(
+class StoryFavoriteRoute extends _i39.PageRouteInfo<StoryFavoriteRouteArgs> {
+  StoryFavoriteRoute({
+    _i40.Key? key,
+    required void Function() toggleBottomBarVisibility,
+    List<_i39.PageRouteInfo>? children,
+  }) : super(
           StoryFavoriteRoute.name,
+          args: StoryFavoriteRouteArgs(
+            key: key,
+            toggleBottomBarVisibility: toggleBottomBarVisibility,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'StoryFavoriteRoute';
 
-  static const _i39.PageInfo<void> page = _i39.PageInfo<void>(name);
+  static const _i39.PageInfo<StoryFavoriteRouteArgs> page =
+      _i39.PageInfo<StoryFavoriteRouteArgs>(name);
+}
+
+class StoryFavoriteRouteArgs {
+  const StoryFavoriteRouteArgs({
+    this.key,
+    required this.toggleBottomBarVisibility,
+  });
+
+  final _i40.Key? key;
+
+  final void Function() toggleBottomBarVisibility;
+
+  @override
+  String toString() {
+    return 'StoryFavoriteRouteArgs{key: $key, toggleBottomBarVisibility: $toggleBottomBarVisibility}';
+  }
 }
 
 /// generated route for
@@ -683,12 +720,14 @@ class StoryHomeRoute extends _i39.PageRouteInfo<StoryHomeRouteArgs> {
   StoryHomeRoute({
     _i40.Key? key,
     required dynamic Function(int) onPageChanged,
+    required void Function() toggleBottomBarVisibility,
     List<_i39.PageRouteInfo>? children,
   }) : super(
           StoryHomeRoute.name,
           args: StoryHomeRouteArgs(
             key: key,
             onPageChanged: onPageChanged,
+            toggleBottomBarVisibility: toggleBottomBarVisibility,
           ),
           initialChildren: children,
         );
@@ -703,39 +742,66 @@ class StoryHomeRouteArgs {
   const StoryHomeRouteArgs({
     this.key,
     required this.onPageChanged,
+    required this.toggleBottomBarVisibility,
   });
 
   final _i40.Key? key;
 
   final dynamic Function(int) onPageChanged;
 
+  final void Function() toggleBottomBarVisibility;
+
   @override
   String toString() {
-    return 'StoryHomeRouteArgs{key: $key, onPageChanged: $onPageChanged}';
+    return 'StoryHomeRouteArgs{key: $key, onPageChanged: $onPageChanged, toggleBottomBarVisibility: $toggleBottomBarVisibility}';
   }
 }
 
 /// generated route for
 /// [_i27.StoryListeningPage]
-class StoryListeningRoute extends _i39.PageRouteInfo<void> {
-  const StoryListeningRoute({List<_i39.PageRouteInfo>? children})
-      : super(
+class StoryListeningRoute extends _i39.PageRouteInfo<StoryListeningRouteArgs> {
+  StoryListeningRoute({
+    _i40.Key? key,
+    required void Function() toggleBottomBarVisibility,
+    List<_i39.PageRouteInfo>? children,
+  }) : super(
           StoryListeningRoute.name,
+          args: StoryListeningRouteArgs(
+            key: key,
+            toggleBottomBarVisibility: toggleBottomBarVisibility,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'StoryListeningRoute';
 
-  static const _i39.PageInfo<void> page = _i39.PageInfo<void>(name);
+  static const _i39.PageInfo<StoryListeningRouteArgs> page =
+      _i39.PageInfo<StoryListeningRouteArgs>(name);
+}
+
+class StoryListeningRouteArgs {
+  const StoryListeningRouteArgs({
+    this.key,
+    required this.toggleBottomBarVisibility,
+  });
+
+  final _i40.Key? key;
+
+  final void Function() toggleBottomBarVisibility;
+
+  @override
+  String toString() {
+    return 'StoryListeningRouteArgs{key: $key, toggleBottomBarVisibility: $toggleBottomBarVisibility}';
+  }
 }
 
 /// generated route for
-/// [_i27.StoryOverviewPage]
-class StoryOverviewRoute extends _i38.PageRouteInfo<StoryOverviewRouteArgs> {
+/// [_i28.StoryOverviewPage]
+class StoryOverviewRoute extends _i39.PageRouteInfo<StoryOverviewRouteArgs> {
   StoryOverviewRoute({
-    _i39.Key? key,
+    _i40.Key? key,
     required dynamic Function(String) onClosed,
-    List<_i38.PageRouteInfo>? children,
+    List<_i39.PageRouteInfo>? children,
   }) : super(
           StoryOverviewRoute.name,
           args: StoryOverviewRouteArgs(
@@ -747,8 +813,8 @@ class StoryOverviewRoute extends _i38.PageRouteInfo<StoryOverviewRouteArgs> {
 
   static const String name = 'StoryOverviewRoute';
 
-  static const _i38.PageInfo<StoryOverviewRouteArgs> page =
-      _i38.PageInfo<StoryOverviewRouteArgs>(name);
+  static const _i39.PageInfo<StoryOverviewRouteArgs> page =
+      _i39.PageInfo<StoryOverviewRouteArgs>(name);
 }
 
 class StoryOverviewRouteArgs {
@@ -757,7 +823,7 @@ class StoryOverviewRouteArgs {
     required this.onClosed,
   });
 
-  final _i39.Key? key;
+  final _i40.Key? key;
 
   final dynamic Function(String) onClosed;
 
@@ -797,16 +863,40 @@ class StoryPlayerRoute extends _i39.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i31.StorySearchingPage]
-class StorySearchingRoute extends _i39.PageRouteInfo<void> {
-  const StorySearchingRoute({List<_i39.PageRouteInfo>? children})
-      : super(
+class StorySearchingRoute extends _i39.PageRouteInfo<StorySearchingRouteArgs> {
+  StorySearchingRoute({
+    _i40.Key? key,
+    required void Function() toggleBottomBarVisibility,
+    List<_i39.PageRouteInfo>? children,
+  }) : super(
           StorySearchingRoute.name,
+          args: StorySearchingRouteArgs(
+            key: key,
+            toggleBottomBarVisibility: toggleBottomBarVisibility,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'StorySearchingRoute';
 
-  static const _i39.PageInfo<void> page = _i39.PageInfo<void>(name);
+  static const _i39.PageInfo<StorySearchingRouteArgs> page =
+      _i39.PageInfo<StorySearchingRouteArgs>(name);
+}
+
+class StorySearchingRouteArgs {
+  const StorySearchingRouteArgs({
+    this.key,
+    required this.toggleBottomBarVisibility,
+  });
+
+  final _i40.Key? key;
+
+  final void Function() toggleBottomBarVisibility;
+
+  @override
+  String toString() {
+    return 'StorySearchingRouteArgs{key: $key, toggleBottomBarVisibility: $toggleBottomBarVisibility}';
+  }
 }
 
 /// generated route for

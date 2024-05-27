@@ -2,9 +2,11 @@ import 'package:ar_zoo_explorers/app/config/routes.dart';
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
+import 'package:ar_zoo_explorers/domain/entities/learning_category_entity.dart';
 import 'package:ar_zoo_explorers/features/puzzleword/presentation/puzzle_word_cubit.dart';
 import 'package:ar_zoo_explorers/features/puzzleword/presentation/puzzle_word_state.dart';
 import 'package:ar_zoo_explorers/utils/widget/custom_back_button.dart';
+import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,14 +21,6 @@ class PuzzleWordPage extends StatefulWidget {
 
 class _State
     extends BaseState<PuzzleWordState, PuzzleWordCubit, PuzzleWordPage> {
-  // final controller = AuthController.findOrInitialize;
-
-  // final _formKey = GlobalKey<FormBuilderState>();
-  List<String> answers = ["Bear", "Lion", "Giraffe", "Elephant"];
-  // String? selectedAnswer;
-  // String answerTrue = "Lion";
-  // bool? isSelected;
-  // bool? isCorrect;
   int? selectedAnswerIndex;
   int questionIndex = 0;
   void pickAnswer(int value) {
@@ -36,9 +30,13 @@ class _State
   }
 
   @override
+  void initState() {
+    super.initState();
+    cubit.init();
+  }
+
+  @override
   Widget buildByState(BuildContext context, PuzzleWordState state) {
-    // final question = questions[questionIndex];
-    var items = cubit.topics;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -75,16 +73,16 @@ class _State
                     crossAxisCount: 2,
                     childAspectRatio: 0.8,
                     crossAxisSpacing: 20),
-                itemCount: items.length,
+                itemCount: state.learningcategories!.length,
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
                       context.router.pushNamed(Routes.puzzleworddetail);
                     },
                     child: _renderTopic(
-                        title: items[index].title!,
-                        image: items[index].image!,
-                        level: items[index].level!),
+                        title: state.learningcategories![index].nameLocalize,
+                        image: state.learningcategories![index].imagePath,
+                        level: "level1"),
                   );
                 },
               ),
@@ -111,8 +109,8 @@ class _State
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(
-                image,
+              ImageSvgUrlCustom(
+                imagePath: image,
                 height: 95,
                 width: 95,
               ),

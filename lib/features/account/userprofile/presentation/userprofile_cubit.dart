@@ -6,6 +6,9 @@ import '../../../../base/base_cubit.dart';
 @injectable
 class UserProfileCubit extends BaseCubit<UserProfileState> {
   UserProfileCubit() : super(UserProfileState());
+  double HEIGHT = 0;
+  double WIDTH = 0;
+
   String userAvatar = "";
 
   void setUserAvatar(String? url) {

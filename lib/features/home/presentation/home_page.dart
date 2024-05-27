@@ -59,7 +59,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
                     centerTitle: true,
                     elevation: 1,
                     title: Text(
-                      LanguageKeys.home.tr,
+                      LanguageKeys.home.tr.toUpperCase(),
                       style: const TextStyle(
                           fontSize: 20,
                           color: AppColor.white,
@@ -118,11 +118,13 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
             fixedSize: Size(cubit.WIDTH * 0.85, cubit.HEIGHT * 0.1),
             shadowColor: Colors.black),
         onPressed: () async {
+          await cubit.showLoading();
           context.router.pushNamed(routePage);
           if (routePage == Routes.story) {
             await _getAllTopics(context);
             await _getStoriesByReleaseDate(context);
           }
+          await cubit.hideLoading();
         },
         child: Row(
           children: [
@@ -156,7 +158,11 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
 
   Widget profileCustom() {
     return AppIconButton(
-        onPressed: () => context.router.pushNamed(Routes.userprofile),
+        onPressed: () async {
+          await cubit.showLoading();
+          context.router.pushNamed(Routes.userprofile);
+          await cubit.hideLoading();
+        },
         icon: Row(children: [
           Text(cubit.nameCustom(controller.currentUser.value.fullname, 8),
               style: const TextStyle(color: AppColor.white)),
@@ -180,7 +186,11 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
 
   Widget settingButton() {
     return AppIconButton(
-        onPressed: () => {_turnSettingPage()},
+        onPressed: () async {
+          await cubit.showLoading();
+          _turnSettingPage();
+          await cubit.hideLoading();
+        },
         icon: const Icon(Icons.settings, color: AppColor.white),
         borderRadius: AppDimens.radius200,
         padding: const EdgeInsets.all(AppDimens.spacing5),
@@ -248,8 +258,10 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
             hintText: item.hint_text,
             suffixIcon: IconButton(
                 onPressed: () async {
+                  await cubit.showLoading();
                   await _onSearch(
                       _formKey.currentState!.fields['search']?.value);
+                  await cubit.hideLoading();
                 },
                 icon: Image.asset(item.icon_suffix)),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
@@ -306,8 +318,10 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   Widget modelButton(int index) {
     return GestureDetector(
         onTap: () async => {
+              await cubit.showLoading(),
               await _setCurrentCategory(index),
-              context.router.pushNamed(Routes.animalmodels)
+              context.router.pushNamed(Routes.animalmodels),
+              await cubit.hideLoading(),
             },
         child: Container(
             width: cubit.WIDTH * 0.37,

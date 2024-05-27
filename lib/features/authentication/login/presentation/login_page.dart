@@ -39,40 +39,46 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
     return Obx(() => GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         child: PageLoadingIndicator(
-          future: controller.loginFuture.value,
-          scaffold: Scaffold(
-            body: FormBuilder(
-                key: _formKey,
-                child: SingleChildScrollView(
-                  child: Container(
-                      color: Colors.white,
-                      width: MediaQuery.of(context).size.width,
-                      constraints: BoxConstraints(
-                          minHeight: MediaQuery.of(context).size.height),
-                      padding: const EdgeInsets.only(
-                          left: 35, right: 35, bottom: 50),
-                      child: Column(children: [
-                        const SizedBox(height: 12),
-                        appLogo(),
-                        loginHeader(),
-                        emailForm(cubit.ListFormItem[0]),
-                        passwordForm(cubit.ListFormItem[1]),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [rememberPass(), forgotPassword()]),
-                        const SizedBox(height: 24),
-                        FutureBuilder(
-                            future: controller.loginFuture.value,
-                            builder: (context, snapshot) =>
-                                Align(child: submitButton(context, snapshot))),
-                        const SizedBox(height: 24),
-                        listOtherLoginButton(context),
-                        const SizedBox(height: 25),
-                        register(),
-                      ])),
-                )),
-          ),
-        )));
+            future: controller.loginFuture.value,
+            scaffold: Scaffold(
+              body: PopScope(
+                canPop: false,
+                onPopInvoked: (didPop) async {
+                  context.router.pushNamed(Routes.languageselection);
+                },
+                child: FormBuilder(
+                    key: _formKey,
+                    child: SingleChildScrollView(
+                      child: Container(
+                          color: Colors.white,
+                          width: MediaQuery.of(context).size.width,
+                          constraints: BoxConstraints(
+                              minHeight: MediaQuery.of(context).size.height),
+                          padding: const EdgeInsets.only(
+                              left: 35, right: 35, bottom: 50),
+                          child: Column(children: [
+                            const SizedBox(height: 12),
+                            appLogo(),
+                            loginHeader(),
+                            emailForm(cubit.listFormItem[0]),
+                            passwordForm(cubit.listFormItem[1]),
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [rememberPass(), forgotPassword()]),
+                            const SizedBox(height: 24),
+                            FutureBuilder(
+                                future: controller.loginFuture.value,
+                                builder: (context, snapshot) => Align(
+                                    child: submitButton(context, snapshot))),
+                            const SizedBox(height: 24),
+                            listOtherLoginButton(context),
+                            const SizedBox(height: 25),
+                            register(),
+                          ])),
+                    )),
+              ),
+            ))));
   }
 
   Widget appLogo() {
@@ -123,7 +129,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
         name: items.name,
         controller: _textEditingController,
         onChanged: (value) {
-          List<String> filteredSuggestions = cubit.ListEmail;
+          List<String> filteredSuggestions = cubit.listEmail;
         },
         itemBuilder: (context, suggestion) {
           return ListTile(title: Text(suggestion));
@@ -131,8 +137,8 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
         suggestionsCallback: (pattern) async {
           _formKey.currentState!.fields['email']!
               .setValue(_textEditingController.text);
-          return cubit.ListEmail.where(
-              (suggestion) => suggestion.startsWith(pattern));
+          return cubit.listEmail
+              .where((suggestion) => suggestion.startsWith(pattern));
         },
         onSuggestionSelected: (suggestion) async {
           _formKey.currentState?.patchValue(
@@ -176,7 +182,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
                     cubit.onChangeObscuredStatus(index);
                   });
                 },
-                icon: Icon(cubit.ListFormItem[index].isObscured
+                icon: Icon(cubit.listFormItem[index].isObscured
                     ? Icons.visibility_off
                     : Icons.visibility)),
             prefixIcon: Image.asset(items.icon_prefix, height: 20, width: 20),
@@ -203,8 +209,8 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
             elevation: MaterialStateProperty.all(5),
             shape: MaterialStateProperty.all(RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20)))),
-        child: const Text("Submit",
-            style: TextStyle(fontSize: 20, color: Colors.white)));
+        child: Text(LanguageKeys.login.tr,
+            style: const TextStyle(fontSize: 20, color: Colors.white)));
   }
 
   Widget rememberPass() {
@@ -218,8 +224,8 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
             });
           },
           activeColor: Colors.blue[700]),
-      const Text('Remember Me',
-          style: TextStyle(color: Colors.black, fontSize: 15.5))
+      Text(LanguageKeys.rememberPass.tr,
+          style: const TextStyle(color: Colors.black, fontSize: 15.5))
     ]);
   }
 
@@ -228,29 +234,29 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
         onTap: () {
           context.router.pushNamed(Routes.forgotpassword);
         },
-        child: const Row(children: [
-          Text('Forgot password',
-              style: TextStyle(
+        child: Row(children: [
+          Text(LanguageKeys.forgotPassword.tr,
+              style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontStyle: FontStyle.italic,
                   fontSize: 16.5,
                   color: Colors.grey,
                   decoration: TextDecoration.none)),
-          SizedBox(width: 10)
+          const SizedBox(width: 10)
         ]));
   }
 
   Widget register() {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      const Text("Don't have an account?",
-          style: TextStyle(fontSize: 16.5, color: Colors.black)),
+      Text(LanguageKeys.doNotHaveAnAccount.tr,
+          style: const TextStyle(fontSize: 16.5, color: Colors.black)),
       const SizedBox(width: 7),
       GestureDetector(
           onTap: () {
             context.router.pushNamed(Routes.register);
           },
-          child: const Text('SIGN UP',
-              style: TextStyle(
+          child: Text(LanguageKeys.signUp.tr.toUpperCase(),
+              style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontStyle: FontStyle.italic,
                   fontSize: 20,
@@ -306,7 +312,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
       Container(
           color: Colors.white,
           padding: const EdgeInsets.all(8.0),
-          child: Text('or sign up with',
+          child: Text(LanguageKeys.signUpWith.tr,
               style: TextStyle(fontSize: 17, color: Colors.grey[700]),
               textAlign: TextAlign.center))
     ]);
@@ -351,7 +357,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
         controller.loginWithGoogle(context);
         break;
       case 2:
-        Fluttertoast.showToast(msg: "The feature will be updated later.");
+        Fluttertoast.showToast(msg: LanguageKeys.updateLater.tr);
         break;
       default:
         return;
@@ -365,9 +371,9 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
   Future<void> _loadListEmail() async {
     Map<String, String> allValues = await _secureStorage.readAll();
     if (allValues != null || allValues.isNotEmpty) {
-      cubit.ListEmail = allValues.keys.toList();
+      cubit.listEmail = allValues.keys.toList();
     } else {
-      cubit.ListEmail = [];
+      cubit.listEmail = [];
     }
   }
 

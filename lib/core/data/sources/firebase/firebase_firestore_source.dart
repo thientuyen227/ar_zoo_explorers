@@ -4,6 +4,8 @@ import 'package:ar_zoo_explorers/core/data/models/story_topic_model.dart';
 import 'package:ar_zoo_explorers/core/data/models/user_model.dart';
 import 'package:ar_zoo_explorers/core/data/models/user_story_model.dart';
 import 'package:ar_zoo_explorers/domain/entities/chars_entity.dart';
+import 'package:ar_zoo_explorers/domain/entities/learning_category_entity.dart';
+import 'package:ar_zoo_explorers/domain/entities/question_entity.dart';
 import 'package:ar_zoo_explorers/domain/entities/vocabulary_entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -41,6 +43,10 @@ class FirebaseFirestoreSource {
       FirebaseFirestore.instance.collection('chars');
   final CollectionReference<Map<String, dynamic>> _vocabularyColectionRef =
       FirebaseFirestore.instance.collection('vocabulary');
+  final CollectionReference<Map<String, dynamic>> _learningColectionRef =
+      FirebaseFirestore.instance.collection('learningcategory');
+  final CollectionReference<Map<String, dynamic>> _questionColectionRef =
+      FirebaseFirestore.instance.collection('question');
 
   Future<String> get generateUniqueAnimalModelId async =>
       _animalModelCollectionRef.add({}).then((value) => value.id);
@@ -813,6 +819,88 @@ class FirebaseFirestoreSource {
       print(e);
     }
     return null;
+  }
+
+  //LearningCategory
+  Future<LearningCategoryEntity?> getLearningCategory(String id) async {
+    var document = await _learningColectionRef.doc(id).get();
+    if (document.exists && document.data() != null) {
+      return LearningCategoryEntity.fromMap(document.data()!);
+    } else {
+      return null;
+    }
+  }
+
+  Future<List<LearningCategoryEntity>?> getAllLearningCategory() async {
+    try {
+      var querySnapshot = await _learningColectionRef.get();
+      List<LearningCategoryEntity> learning = querySnapshot.docs
+          .map((doc) => LearningCategoryEntity.fromMap(doc.data()))
+          .toList();
+      return learning;
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
+  //Question
+  Future<QuestionEntity?> getQuestion(String id) async {
+    var document = await _questionColectionRef.doc(id).get();
+    if (document.exists && document.data() != null) {
+      return QuestionEntity.fromMap(document.data()!);
+    } else {
+      return null;
+    }
+  }
+
+  Future<List<QuestionEntity>?> getAllQuestion() async {
+    try {
+      var querySnapshot = await _questionColectionRef.get();
+      List<QuestionEntity> questions = querySnapshot.docs
+          .map((doc) => QuestionEntity.fromMap(doc.data()))
+          .toList();
+      return questions;
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
+  Future<QuestionEntity> createQuestion(QuestionEntity questionEntity) async {
+    await _questionColectionRef
+        .doc(questionEntity.id)
+        .set(questionEntity.toMap());
+    return questionEntity;
+  }
+
+  Future<QuestionEntity?> updateQuestion(QuestionEntity questionEntity) async {
+    await _questionColectionRef.doc(questionEntity.id).update({
+      'id': questionEntity.id,
+      'question': questionEntity.question,
+      'options': questionEntity.options,
+      'categoryQuestion': questionEntity.categoryQuestion,
+      'categoryId': questionEntity.categoryId,
+      'image': questionEntity.image,
+      'answer': questionEntity.answer,
+      'puzzles': questionEntity.puzzles,
+    });
+    return getQuestion(questionEntity.id);
+  }
+
+  Future<bool> deleteQuestion(String learningId) async {
+    try {
+      var querySnapshot =
+          await _questionColectionRef.where('id', isEqualTo: learningId).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        await querySnapshot.docs.first.reference.delete();
+      }
+      await _questionColectionRef.doc(learningId).delete();
+
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }
 

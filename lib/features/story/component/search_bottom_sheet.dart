@@ -1,3 +1,4 @@
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/core/data/controller/story_controller.dart';
 import 'package:ar_zoo_explorers/features/base-model/form_builder_text_field_model.dart';
@@ -5,6 +6,7 @@ import 'package:ar_zoo_explorers/utils/widget/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:get/get.dart';
 
 class SearchBottomSheet extends StatefulWidget {
   final Function(String?) onClosed;
@@ -45,14 +47,14 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(margin: const EdgeInsets.only(left: 24)),
-                          Center(child: _txtSheetTitle("Tìm kiếm")),
+                          Center(child: _txtSheetTitle(LanguageKeys.search.tr)),
                           backButton(),
                         ]),
                     const SizedBox(height: 10.0),
                     _searchBar(FormBuilderTextFieldModel(
                         TIT: TextInputType.text,
                         txtValue: "",
-                        hint_text: "Nhập từ khóa")),
+                        hint_text: LanguageKeys.enter_keyword.tr)),
                     // SizedBox(height: height * 0.7),
                   ],
                 ),
