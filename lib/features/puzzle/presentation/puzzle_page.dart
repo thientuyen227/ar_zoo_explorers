@@ -1,0 +1,248 @@
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
+import 'package:ar_zoo_explorers/app/theme/colors.dart';
+import 'package:ar_zoo_explorers/app/theme/icons.dart';
+import 'package:ar_zoo_explorers/base/base_state.dart';
+import 'package:ar_zoo_explorers/domain/entities/question_entity.dart';
+import 'package:ar_zoo_explorers/features/puzzle/presentation/puzzle_cubit.dart';
+import 'package:ar_zoo_explorers/features/puzzle/presentation/puzzle_state.dart';
+import 'package:ar_zoo_explorers/utils/widget/custom_back_button.dart';
+import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+
+@RoutePage()
+class PuzzlePage extends StatefulWidget {
+  const PuzzlePage({super.key});
+
+  @override
+  State createState() => _State();
+}
+
+class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
+  // final controller = AuthController.findOrInitialize;
+  int? selectedAnswerIndex;
+  String? selectedAnswer;
+  int questionIndex = 0;
+  void pickAnswer({String? value, int? index}) {
+    selectedAnswer = value;
+    selectedAnswerIndex = index;
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    cubit.init();
+  }
+
+  @override
+  Widget buildByState(BuildContext context, PuzzleState state) {
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(LanguageKeys.puzzle.tr,
+            style: const TextStyle(
+                fontSize: 20,
+                color: Colors.white,
+                fontWeight: FontWeight.bold)),
+        backgroundColor: const Color.fromARGB(255, 109, 189, 255),
+        elevation: 1,
+        leading: const Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [CustomBackButton()]),
+      ),
+      body: state.questionEntities != null && state.questionEntities!.isNotEmpty
+          ? Column(
+              children: [
+                const SizedBox(
+                  height: 80,
+                ),
+                SizedBox(
+                  height: 300,
+                  width: double.infinity,
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        left: 35,
+                        top: 35,
+                        child: Container(
+                          height: 226,
+                          width: 336,
+                          decoration: BoxDecoration(
+                            border: Border.all(),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                            color: AppColor.white,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                          left: 45,
+                          top: 45,
+                          child: Container(
+                            height: 226,
+                            width: 336,
+                            padding: const EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              border: Border.all(),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10)),
+                              color: AppColor.tinintIce,
+                            ),
+                            child: renderVocabulary(),
+                          )),
+                      Positioned(
+                          top: 120,
+                          child: Image.asset(
+                            AppImages.imgPuzzleDesign,
+                            height: 80,
+                            width: 80,
+                          )),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 2.3,
+                    crossAxisSpacing: 4.8,
+                  ),
+                  itemCount:
+                      state.questionEntities![questionIndex].options!.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: selectedAnswerIndex == null
+                          ? () => pickAnswer(
+                              value: state.questionEntities![questionIndex]
+                                  .options![index]["en"]!,
+                              index: index)
+                          : null,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          children: [
+                            renderAnswer(
+                              option: state.questionEntities![questionIndex]
+                                  .options![index]["en"]!,
+                              question: state.questionEntities![questionIndex]
+                                  .questionLocalize,
+                              isSelected: selectedAnswerIndex == index,
+                              selectedAnswerIndex: selectedAnswer,
+                              correctAnswer:
+                                  state.questionEntities![questionIndex].answer,
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                )
+              ],
+            )
+          : Container(),
+    );
+  }
+
+  Widget renderAnswer({
+    required String option,
+    required String question,
+    required bool isSelected,
+    required String correctAnswer,
+    required String? selectedAnswerIndex,
+  }) {
+    bool isCorrectAnswer = option == correctAnswer;
+    bool isWrongAnswer = !isCorrectAnswer && isSelected;
+
+    return selectedAnswerIndex != null
+        ? Container(
+            decoration: BoxDecoration(
+                color: isCorrectAnswer
+                    ? AppColor.completed
+                    : isWrongAnswer
+                        ? AppColor.isFalse
+                        : AppColor.vibrantYellow,
+                border: Border.all(),
+                borderRadius: const BorderRadius.all(Radius.circular(10))),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  right: 50, left: 50, top: 15, bottom: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    option,
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                ],
+              ),
+            ),
+          )
+        : Container(
+            decoration: BoxDecoration(
+                color: AppColor.vibrantYellow,
+                border: Border.all(),
+                borderRadius: const BorderRadius.all(Radius.circular(10))),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  right: 50, left: 50, top: 15, bottom: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    option,
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                ],
+              ),
+            ),
+          );
+  }
+
+  Widget renderVocabulary() {
+    return Column(
+      children: [
+        Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: ImageSvgUrlCustom(
+              imagePath: state.questionEntities![questionIndex].image!,
+              width: 80,
+              height: 80,
+            )),
+        const Text(
+          "/ˈlaɪən/",
+          style: TextStyle(fontSize: 18),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 30.0, left: 30),
+          child: Row(
+            children: [
+              GestureDetector(
+                onTap: () {},
+                child: Image.asset(
+                  AppIcons.icSnail,
+                  height: 45,
+                  width: 45,
+                ),
+              ),
+              const Spacer(),
+              SvgPicture.asset(
+                AppIcons.icSound,
+                height: 45,
+                width: 45,
+              )
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}

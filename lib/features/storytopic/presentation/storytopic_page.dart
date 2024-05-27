@@ -1,8 +1,18 @@
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
+import 'package:ar_zoo_explorers/core/data/controller/auth_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/story_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/story_topic_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/user_story_controller.dart';
+import 'package:ar_zoo_explorers/features/story/component/basic_story_button.dart';
+import 'package:ar_zoo_explorers/features/story/model/storybuttonobject.dart';
+import 'package:ar_zoo_explorers/features/storyoverview/presentation/storyoverview_page.dart';
 import 'package:ar_zoo_explorers/features/storytopic/presentation/storytopic_cubit.dart';
 import 'package:ar_zoo_explorers/features/storytopic/presentation/storytopic_state.dart';
+import 'package:ar_zoo_explorers/utils/widget/custom_back_button.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 @RoutePage()
 class StoryTopicPage extends StatefulWidget {
@@ -12,11 +22,128 @@ class StoryTopicPage extends StatefulWidget {
   State createState() => _State();
 }
 
-class _State extends BaseState<StoryTopicState, StoryTopicCubit,
-    StoryTopicPage> {
-      @override
-      Widget buildByState(BuildContext context, StoryTopicState state) {
-    // TODO: implement buildByState
-    throw UnimplementedError();
-      }
+class _State
+    extends BaseState<StoryTopicState, StoryTopicCubit, StoryTopicPage> {
+  final controller = AuthController.findOrInitialize;
+  final storyTopicController = StoryTopicController.findOrInitialize;
+  final userStoryController = UserStoryController.findOrInitialize;
+  final storyController = StoryController.findOrInitialize;
+
+  @override
+  Widget buildByState(BuildContext context, StoryTopicState state) {
+    return Scaffold(
+        // extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(storyTopicController.currentStoryTopic.value.title,
+              style: const TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold)),
+          backgroundColor: const Color.fromARGB(255, 109, 189, 255),
+          elevation: 1,
+          leading: const CustomBackButton(),
+        ),
+        body: Container(
+            color: Colors.grey.shade50,
+            width: cubit.WIDTH,
+            alignment: Alignment.topCenter,
+            constraints: BoxConstraints(minHeight: cubit.HEIGHT),
+            child: SingleChildScrollView(
+              padding:
+                  const EdgeInsets.only(bottom: kBottomNavigationBarHeight),
+              child: Column(children: [
+                listStoryButton(),
+              ]),
+            )));
+  }
+
+  Widget listStoryButton() {
+    List<Widget> lstStory = [];
+    for (int i = 0; i < cubit.listStory.length; i++) {
+      lstStory.add(storyButton(cubit.listStory[i],
+          isLast: (i == cubit.listStory.length - 1) ? true : false));
     }
+    if (lstStory.isNotEmpty) {
+      return Column(children: lstStory);
+    } else {
+      return Container();
+    }
+  }
+
+  Widget storyButton(StoryButtonObject item, {bool isLast = false}) {
+    return GestureDetector(
+        onTap: () async {
+          await cubit.showLoading();
+          await _setCurrentStory(item.id!, controller.currentUser.value.id);
+          await _navigateToOverviewPage();
+          await cubit.hideLoading();
+        },
+        child: Column(children: [
+          Container(
+              margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+              decoration: BoxDecoration(boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: const Offset(0, 3))
+              ]),
+              width: cubit.WIDTH * 0.9,
+              child: BasicStoryButton(item: item)),
+        ]));
+  }
+
+  Future<void> _setCurrentStory(String storyId, String userId) async {
+    await storyController.getStory(context, id: storyId);
+    await userStoryController.createOrGetUserStory(context,
+        userId: controller.currentUser.value.id, storyId: storyId);
+  }
+
+  void _setListStory() {
+    setState(() {
+      cubit.setStory(storyController.listStory.value,
+          storyTopicController.currentStoryTopic.value);
+    });
+  }
+
+  Future<void> _navigateToOverviewPage() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => StoryOverviewPage(onClosed: (String value) async {
+          setState(() {});
+        }),
+      ),
+    );
+  }
+
+  Future<void> _showNullMessage() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        if (cubit.listStory.isEmpty) {
+          print("The list story is empty");
+          cubit.showToast(LanguageKeys.msg_stories_updating.tr);
+          Navigator.of(context).pop(true);
+        }
+      });
+    });
+  }
+
+  void _setDimension() {
+    Size mediaSize = MediaQueryData.fromView(
+            WidgetsBinding.instance.platformDispatcher.views.single)
+        .size;
+    setState(() {
+      cubit.WIDTH = mediaSize.width;
+      cubit.HEIGHT = mediaSize.height;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _setDimension();
+    _setListStory();
+    _showNullMessage();
+  }
+}

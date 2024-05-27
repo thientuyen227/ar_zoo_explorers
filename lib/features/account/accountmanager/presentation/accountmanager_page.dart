@@ -1,10 +1,13 @@
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
+import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/features/account/accountmanager/model/accountmanager_type.dart';
 import 'package:ar_zoo_explorers/features/account/accountmanager/presentation/accountmanager_cubit.dart';
 import 'package:ar_zoo_explorers/features/account/accountmanager/presentation/accountmanager_state.dart';
-import 'package:ar_zoo_explorers/utils/widget/button_widget.dart';
+import 'package:ar_zoo_explorers/utils/widget/custom_back_button.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../../app/config/routes.dart';
 import '../../../../app/theme/icons.dart';
@@ -28,8 +31,12 @@ class _State extends BaseState<AccountManagerState, AccountManagerCubit,
     return Scaffold(
         appBar: AppBar(
             centerTitle: true,
-            title: const Text('Quản lý tài khoản',
-                style: TextStyle(fontSize: 20, color: Colors.white)),
+            backgroundColor: AppColor.appBarColor,
+            title: Text(LanguageKeys.settings.tr.toUpperCase(),
+                style: const TextStyle(
+                    fontSize: 20,
+                    color: AppColor.white,
+                    fontWeight: FontWeight.bold)),
             actions: const [SizedBox(width: 45)],
             leading: turnBack()),
         body: SingleChildScrollView(
@@ -71,7 +78,7 @@ class _State extends BaseState<AccountManagerState, AccountManagerCubit,
         width: MediaQuery.of(context).size.height * 0.155,
         height: MediaQuery.of(context).size.height * 0.155,
         decoration: BoxDecoration(
-            border: Border.all(color: Colors.white, width: 5),
+            border: Border.all(color: AppColor.white, width: 5),
             shape: BoxShape.circle),
         child: ClipOval(
           child: (controller.currentUser.value.avatarUrl == "")
@@ -89,30 +96,33 @@ class _State extends BaseState<AccountManagerState, AccountManagerCubit,
             child: Padding(
                 padding: const EdgeInsets.only(right: 25, left: 25, bottom: 25),
                 child: Column(children: [
-                  optionButton(context, "User Progile", AppIcons.icUserProfile,
+                  optionButton(
+                      context,
+                      LanguageKeys.userProfile.tr,
+                      AppIcons.icUserProfile,
                       AccountManagerType.UserProfilePage),
                   optionButton(
                       context,
-                      "Change Password",
+                      LanguageKeys.changePassword.tr,
                       AppIcons.icChangePassword,
                       AccountManagerType.ChangePassword),
                   const SizedBox(height: 15),
-                  optionButton(context, "Notify", AppIcons.icAnnouncement,
-                      AccountManagerType.Announcement),
-                  optionButton(context, "Event", AppIcons.icEvent,
+                  optionButton(context, LanguageKeys.notify.tr,
+                      AppIcons.icAnnouncement, AccountManagerType.Announcement),
+                  optionButton(context, LanguageKeys.event.tr, AppIcons.icEvent,
                       AccountManagerType.Event),
                   const SizedBox(height: 15),
-                  optionButton(context, "Change Language", AppIcons.icLanguage,
-                      AccountManagerType.ChangeLanguage),
-                  optionButton(context, "Terms of Service",
+                  optionButton(context, LanguageKeys.changeLanguage.tr,
+                      AppIcons.icLanguage, AccountManagerType.ChangeLanguage),
+                  optionButton(context, LanguageKeys.termsOfService.tr,
                       AppIcons.icTermsOfUse, AccountManagerType.ViewTerm),
-                  optionButton(context, "Rating", AppIcons.icRating,
-                      AccountManagerType.RatingApplication),
-                  optionButton(context, "Support", AppIcons.icHelp,
-                      AccountManagerType.Assistance),
+                  optionButton(context, LanguageKeys.rating.tr,
+                      AppIcons.icRating, AccountManagerType.RatingApplication),
+                  optionButton(context, LanguageKeys.support.tr,
+                      AppIcons.icHelp, AccountManagerType.Assistance),
                   const SizedBox(height: 15),
-                  optionButton(context, "Logout", AppIcons.icLogout,
-                      AccountManagerType.Logout)
+                  optionButton(context, LanguageKeys.logout.tr,
+                      AppIcons.icLogout, AccountManagerType.Logout)
                 ]))));
   }
 
@@ -126,8 +136,7 @@ class _State extends BaseState<AccountManagerState, AccountManagerCubit,
                 _onTapSettings(context, type);
               },
               style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                      const Color.fromARGB(250, 250, 250, 250)),
+                  backgroundColor: MaterialStateProperty.all(AppColor.white),
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)))),
               child: Row(children: [
@@ -153,12 +162,9 @@ class _State extends BaseState<AccountManagerState, AccountManagerCubit,
   }
 
   Widget turnBack() {
-    return AppIconButton(
-        onPressed: () {
-          context.router.pushNamed(Routes.home);
-        },
-        icon: Transform.scale(
-            scale: 1.5, child: Image.asset(AppIcons.icBack_png, height: 55)));
+    return CustomBackButton(onPressed: () {
+      Navigator.of(context).pop(true);
+    });
   }
 
   Future<void> _onTapSettings(
@@ -182,6 +188,9 @@ class _State extends BaseState<AccountManagerState, AccountManagerCubit,
         break;
       case AccountManagerType.ChangeLanguage:
         context.router.pushNamed(Routes.changelanguage);
+        break;
+      case AccountManagerType.Assistance:
+        context.router.pushNamed(Routes.help);
         break;
       default:
     }

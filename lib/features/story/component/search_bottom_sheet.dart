@@ -1,12 +1,15 @@
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
+import 'package:ar_zoo_explorers/core/data/controller/story_controller.dart';
 import 'package:ar_zoo_explorers/features/base-model/form_builder_text_field_model.dart';
 import 'package:ar_zoo_explorers/utils/widget/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:get/get.dart';
 
 class SearchBottomSheet extends StatefulWidget {
-  final Function(String) onClosed;
+  final Function(String?) onClosed;
   const SearchBottomSheet({Key? key, required this.onClosed}) : super(key: key);
 
   @override
@@ -18,8 +21,13 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
 
   final _formKey = GlobalKey<FormBuilderState>();
 
+  final storyController = StoryController.findOrInitialize;
+
   double width = 0;
   double height = 0;
+
+  String initValue = "";
+  bool status = false;
 
   @override
   Widget build(BuildContext context) {
@@ -39,14 +47,14 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(margin: const EdgeInsets.only(left: 24)),
-                          Center(child: _txtSheetTitle("Tìm kiếm")),
+                          Center(child: _txtSheetTitle(LanguageKeys.search.tr)),
                           backButton(),
                         ]),
                     const SizedBox(height: 10.0),
                     _searchBar(FormBuilderTextFieldModel(
                         TIT: TextInputType.text,
                         txtValue: "",
-                        hint_text: "Nhập từ khóa")),
+                        hint_text: LanguageKeys.enter_keyword.tr)),
                     // SizedBox(height: height * 0.7),
                   ],
                 ),
@@ -80,6 +88,7 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 10, horizontal: 25)),
         style: const TextStyle(fontSize: 16),
+        initialValue: status ? initValue : "",
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: FormBuilderValidators.compose([]));
   }
@@ -100,11 +109,16 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
   Future<void> _onSearch(String? value) async {
     if (value != null) {
       value = value.trim();
-    } else {
-      value = "";
     }
     widget.onClosed(value);
     Navigator.of(context).pop();
+  }
+
+  void _initValue() async {
+    setState(() {
+      initValue = storyController.txtSearch.value;
+      status = storyController.searchStatus.value;
+    });
   }
 
   void _setDimension() {
@@ -126,5 +140,6 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
   void initState() {
     super.initState();
     _setDimension();
+    _initValue();
   }
 }

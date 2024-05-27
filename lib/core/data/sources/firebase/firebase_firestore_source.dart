@@ -3,8 +3,13 @@ import 'package:ar_zoo_explorers/core/data/models/story_model.dart';
 import 'package:ar_zoo_explorers/core/data/models/story_topic_model.dart';
 import 'package:ar_zoo_explorers/core/data/models/user_model.dart';
 import 'package:ar_zoo_explorers/core/data/models/user_story_model.dart';
+import 'package:ar_zoo_explorers/domain/entities/chars_entity.dart';
+import 'package:ar_zoo_explorers/domain/entities/learning_category_entity.dart';
+import 'package:ar_zoo_explorers/domain/entities/question_entity.dart';
+import 'package:ar_zoo_explorers/domain/entities/vocabulary_entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../models/animal_detail_model.dart';
 import '../../models/animal_model.dart';
@@ -34,6 +39,14 @@ class FirebaseFirestoreSource {
 
   final CollectionReference<Map<String, dynamic>> _userStoryCollectionRef =
       FirebaseFirestore.instance.collection('user_story');
+  final CollectionReference<Map<String, dynamic>> _charsColectionRef =
+      FirebaseFirestore.instance.collection('chars');
+  final CollectionReference<Map<String, dynamic>> _vocabularyColectionRef =
+      FirebaseFirestore.instance.collection('vocabulary');
+  final CollectionReference<Map<String, dynamic>> _learningColectionRef =
+      FirebaseFirestore.instance.collection('learningcategory');
+  final CollectionReference<Map<String, dynamic>> _questionColectionRef =
+      FirebaseFirestore.instance.collection('question');
 
   Future<String> get generateUniqueAnimalModelId async =>
       _animalModelCollectionRef.add({}).then((value) => value.id);
@@ -560,6 +573,8 @@ class FirebaseFirestoreSource {
           'pausedTime': userStory.pausedTime,
           'isCompleted': userStory.isCompleted,
           'isFavorited': userStory.isFavorited,
+          'createdAt': userStory.createdAt,
+          'updatedAt': userStory.updatedAt,
           'status': userStory.status,
         });
         String newDocumentId = documentReference.id;
@@ -572,6 +587,8 @@ class FirebaseFirestoreSource {
           pausedTime: userStory.pausedTime,
           isCompleted: userStory.isCompleted,
           isFavorited: userStory.isFavorited,
+          createdAt: userStory.createdAt,
+          updatedAt: userStory.updatedAt,
           status: userStory.status,
         );
         return userStory;
@@ -592,6 +609,8 @@ class FirebaseFirestoreSource {
       required int pausedTime,
       required bool isCompleted,
       required bool isFavorited,
+      required Timestamp createdAt,
+      required Timestamp updatedAt,
       required bool status}) async {
     try {
       await _userStoryCollectionRef.doc(id).update({
@@ -601,6 +620,8 @@ class FirebaseFirestoreSource {
         'pausedTime': pausedTime,
         'isCompleted': isCompleted,
         'isFavorited': isFavorited,
+        'createdAt': createdAt,
+        'updatedAt': updatedAt,
         'status': status,
       });
       return getUserStory(id);
@@ -631,11 +652,13 @@ class FirebaseFirestoreSource {
   Future<UserStoryModel?> updateUserStoryWithIsCompleted({
     required String id,
     required bool isCompleted,
+    required Timestamp updatedAt,
   }) async {
     try {
       await _userStoryCollectionRef.doc(id).update({
         'id': id,
         'isCompleted': isCompleted,
+        'updatedAt': updatedAt,
       });
       return getUserStory(id);
     } catch (e, stackTrace) {
@@ -646,11 +669,14 @@ class FirebaseFirestoreSource {
   }
 
   Future<UserStoryModel?> updateUserStoryWithPausedTime(
-      {required String id, required int pausedTime}) async {
+      {required String id,
+      required int pausedTime,
+      required Timestamp updatedAt}) async {
     try {
       await _userStoryCollectionRef.doc(id).update({
         'id': id,
         'pausedTime': pausedTime,
+        'updatedAt': updatedAt,
       });
       return getUserStory(id);
     } catch (e, stackTrace) {
@@ -726,22 +752,155 @@ class FirebaseFirestoreSource {
     try {
       var querySnapshot = await _userStoryCollectionRef
           .where('userId', isEqualTo: userId)
-          // .where('isFavorited', isEqualTo: isFavorited)
           .get();
+
       if (querySnapshot.docs.isNotEmpty) {
         List<UserStoryModel> userStory = querySnapshot.docs
             .map((doc) => UserStoryModel.fromMap(doc.data()))
             .toList();
+
+        userStory.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+
         return userStory;
       } else {
         return [];
       }
     } catch (e, stackTrace) {
-      print(
-          'Get User Animal By User Id = "$userId" And isFavorited Failed: $e');
+      print('Get User Story By User Id = "$userId": $e');
       FirebaseCrashlytics.instance.recordError(e, stackTrace);
     }
     return null;
+  }
+
+  //Chars
+  Future<CharsEntity?> getChars(String id) async {
+    try {
+      var document = await _charsColectionRef.doc(id).get();
+      if (document.exists && document.data() != null) {
+        return CharsEntity.fromMap(document.data()!);
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: "$e");
+    }
+    return null;
+  }
+
+  Future<List<CharsEntity>?> getAllChars() async {
+    try {
+      var querySnapshot = await _charsColectionRef.get();
+      List<CharsEntity> userAnimals = querySnapshot.docs
+          .map((doc) => CharsEntity.fromMap(doc.data()))
+          .toList();
+      return userAnimals;
+    } catch (e) {
+      Fluttertoast.showToast(msg: "$e");
+    }
+    return null;
+  }
+
+  //Vocabulary
+  Future<VocabularyEntity?> getVocabulary(String id) async {
+    var document = await _vocabularyColectionRef.doc(id).get();
+    if (document.exists && document.data() != null) {
+      return VocabularyEntity.fromMap(document.data()!);
+    } else {
+      return null;
+    }
+  }
+
+  Future<List<VocabularyEntity>?> getAllVocabulary() async {
+    try {
+      var querySnapshot = await _vocabularyColectionRef.get();
+      List<VocabularyEntity> vocabularies = querySnapshot.docs
+          .map((doc) => VocabularyEntity.fromMap(doc.data()))
+          .toList();
+      return vocabularies;
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
+  //LearningCategory
+  Future<LearningCategoryEntity?> getLearningCategory(String id) async {
+    var document = await _learningColectionRef.doc(id).get();
+    if (document.exists && document.data() != null) {
+      return LearningCategoryEntity.fromMap(document.data()!);
+    } else {
+      return null;
+    }
+  }
+
+  Future<List<LearningCategoryEntity>?> getAllLearningCategory() async {
+    try {
+      var querySnapshot = await _learningColectionRef.get();
+      List<LearningCategoryEntity> learning = querySnapshot.docs
+          .map((doc) => LearningCategoryEntity.fromMap(doc.data()))
+          .toList();
+      return learning;
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
+  //Question
+  Future<QuestionEntity?> getQuestion(String id) async {
+    var document = await _questionColectionRef.doc(id).get();
+    if (document.exists && document.data() != null) {
+      return QuestionEntity.fromMap(document.data()!);
+    } else {
+      return null;
+    }
+  }
+
+  Future<List<QuestionEntity>?> getAllQuestion() async {
+    try {
+      var querySnapshot = await _questionColectionRef.get();
+      List<QuestionEntity> questions = querySnapshot.docs
+          .map((doc) => QuestionEntity.fromMap(doc.data()))
+          .toList();
+      return questions;
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
+  Future<QuestionEntity> createQuestion(QuestionEntity questionEntity) async {
+    await _questionColectionRef
+        .doc(questionEntity.id)
+        .set(questionEntity.toMap());
+    return questionEntity;
+  }
+
+  Future<QuestionEntity?> updateQuestion(QuestionEntity questionEntity) async {
+    await _questionColectionRef.doc(questionEntity.id).update({
+      'id': questionEntity.id,
+      'question': questionEntity.question,
+      'options': questionEntity.options,
+      'categoryQuestion': questionEntity.categoryQuestion,
+      'categoryId': questionEntity.categoryId,
+      'image': questionEntity.image,
+      'answer': questionEntity.answer,
+      'puzzles': questionEntity.puzzles,
+    });
+    return getQuestion(questionEntity.id);
+  }
+
+  Future<bool> deleteQuestion(String learningId) async {
+    try {
+      var querySnapshot =
+          await _questionColectionRef.where('id', isEqualTo: learningId).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        await querySnapshot.docs.first.reference.delete();
+      }
+      await _questionColectionRef.doc(learningId).delete();
+
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }
 

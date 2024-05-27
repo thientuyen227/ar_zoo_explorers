@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:ar_zoo_explorers/core/data/models/user_story_model.dart';
 import 'package:ar_zoo_explorers/core/data/sources/firebase/firebase_firestore_source.dart';
 import 'package:ar_zoo_explorers/core/failures.dart';
@@ -5,6 +7,7 @@ import 'package:ar_zoo_explorers/core/helpers/exception_handler.dart';
 import 'package:ar_zoo_explorers/core/success.dart';
 import 'package:ar_zoo_explorers/domain/entities/user_story_entity.dart';
 import 'package:ar_zoo_explorers/domain/repositories/user_story_repository.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 
 class UserStoryRepositoryImplement implements UserStoryRepository {
@@ -17,17 +20,22 @@ class UserStoryRepositoryImplement implements UserStoryRepository {
       required int pausedTime,
       required bool isCompleted,
       required bool isFavorited,
+      required Timestamp createdAt,
+      required Timestamp updatedAt,
       required bool status}) {
     return ResponseHandler.processResponse(() async {
       return Success(
           data: await _firestoreSource.createOrGetUserStory(UserStoryModel(
-                  id: '',
-                  storyId: storyId,
-                  userId: userId,
-                  pausedTime: pausedTime,
-                  isCompleted: isCompleted,
-                  isFavorited: isFavorited,
-                  status: status)) ??
+                id: '',
+                storyId: storyId,
+                userId: userId,
+                pausedTime: pausedTime,
+                isCompleted: isCompleted,
+                isFavorited: isFavorited,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                status: status,
+              )) ??
               UserStoryModel(
                   id: '',
                   storyId: '',
@@ -35,6 +43,8 @@ class UserStoryRepositoryImplement implements UserStoryRepository {
                   pausedTime: 0,
                   isCompleted: false,
                   isFavorited: false,
+                  createdAt: Timestamp.now(),
+                  updatedAt: Timestamp.now(),
                   status: true));
     });
   }
@@ -45,13 +55,16 @@ class UserStoryRepositoryImplement implements UserStoryRepository {
       return Success(
           data: await _firestoreSource.getUserStory(id) ??
               UserStoryModel(
-                  id: '',
-                  storyId: '',
-                  userId: '',
-                  pausedTime: 0,
-                  isCompleted: false,
-                  isFavorited: false,
-                  status: true));
+                id: '',
+                storyId: '',
+                userId: '',
+                pausedTime: 0,
+                isCompleted: false,
+                isFavorited: false,
+                createdAt: Timestamp.now(),
+                updatedAt: Timestamp.now(),
+                status: true,
+              ));
     });
   }
 
@@ -89,6 +102,8 @@ class UserStoryRepositoryImplement implements UserStoryRepository {
                   pausedTime: 0,
                   isCompleted: false,
                   isFavorited: false,
+                  createdAt: Timestamp.now(),
+                  updatedAt: Timestamp.now(),
                   status: true));
     });
   }
@@ -107,6 +122,8 @@ class UserStoryRepositoryImplement implements UserStoryRepository {
                   pausedTime: 0,
                   isCompleted: false,
                   isFavorited: false,
+                  createdAt: Timestamp.now(),
+                  updatedAt: Timestamp.now(),
                   status: true));
     });
   }
@@ -119,6 +136,8 @@ class UserStoryRepositoryImplement implements UserStoryRepository {
       required int pausedTime,
       required bool isCompleted,
       required bool isFavorited,
+      required Timestamp createdAt,
+      required Timestamp updatedAt,
       required bool status}) {
     return ResponseHandler.processResponse(() async {
       return Success(
@@ -129,6 +148,8 @@ class UserStoryRepositoryImplement implements UserStoryRepository {
                   pausedTime: pausedTime,
                   isCompleted: isCompleted,
                   isFavorited: isFavorited,
+                  createdAt: createdAt,
+                  updatedAt: updatedAt,
                   status: status) ??
               UserStoryModel(
                   id: '',
@@ -137,17 +158,21 @@ class UserStoryRepositoryImplement implements UserStoryRepository {
                   pausedTime: 0,
                   isCompleted: false,
                   isFavorited: false,
+                  createdAt: Timestamp.now(),
+                  updatedAt: Timestamp.now(),
                   status: true));
     });
   }
 
   @override
   Future<Either<Failure, Success<UserStoryEntity>>> updateCompleteOfUserStory(
-      {required String id, required bool isCompleted}) {
+      {required String id,
+      required bool isCompleted,
+      required Timestamp updatedAt}) {
     return ResponseHandler.processResponse(() async {
       return Success(
           data: await _firestoreSource.updateUserStoryWithIsCompleted(
-                  id: id, isCompleted: isCompleted) ??
+                  id: id, isCompleted: isCompleted, updatedAt: updatedAt) ??
               UserStoryModel(
                   id: '',
                   storyId: '',
@@ -155,17 +180,21 @@ class UserStoryRepositoryImplement implements UserStoryRepository {
                   pausedTime: 0,
                   isCompleted: false,
                   isFavorited: false,
+                  createdAt: Timestamp.now(),
+                  updatedAt: Timestamp.now(),
                   status: true));
     });
   }
 
   @override
   Future<Either<Failure, Success<UserStoryEntity>>> updatePausedTimeOfUserStory(
-      {required String id, required int pausedTime}) {
+      {required String id,
+      required int pausedTime,
+      required Timestamp updatedAt}) {
     return ResponseHandler.processResponse(() async {
       return Success(
           data: await _firestoreSource.updateUserStoryWithPausedTime(
-                  id: id, pausedTime: pausedTime) ??
+                  id: id, pausedTime: pausedTime, updatedAt: updatedAt) ??
               UserStoryModel(
                   id: '',
                   storyId: '',
@@ -173,6 +202,8 @@ class UserStoryRepositoryImplement implements UserStoryRepository {
                   pausedTime: 0,
                   isCompleted: false,
                   isFavorited: false,
+                  createdAt: Timestamp.now(),
+                  updatedAt: Timestamp.now(),
                   status: true));
     });
   }

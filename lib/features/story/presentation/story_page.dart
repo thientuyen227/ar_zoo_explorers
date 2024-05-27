@@ -1,3 +1,4 @@
+import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/features/story/presentation/story_cubit.dart';
 import 'package:ar_zoo_explorers/features/story/presentation/story_state.dart';
@@ -20,55 +21,71 @@ class _State extends BaseState<StoryState, StoryCubit, StoryPage> {
   final PageController _pageController = PageController();
 
   late List<Widget> _pages;
+  bool _isBottomBarVisible = false;
 
   @override
   Widget buildByState(BuildContext context, StoryState state) {
-    return Scaffold(
-        // extendBodyBehindAppBar: true,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                child: PageView(
-                  controller: _pageController,
-                  onPageChanged: _onPageChanged,
-                  children: _pages,
-                ),
+    return PopScope(
+        canPop: false,
+        onPopInvoked: (didPop) async {
+          await cubit.showLoading();
+          Navigator.of(context).pop();
+          await cubit.hideLoading();
+        },
+        child: Scaffold(
+            // extendBodyBehindAppBar: true,
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    child: PageView(
+                      controller: _pageController,
+                      physics: const NeverScrollableScrollPhysics(),
+                      onPageChanged: _onPageChanged,
+                      children: _pages,
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-            items: [
-              for (var index = 0; index < cubit.lstBottomItem.length; index++)
-                BottomNavigationBarItem(
-                    icon: ColorFiltered(
-                        colorFilter: ColorFilter.mode(
-                            cubit.selectedIndex == index
-                                ? Colors.blue
-                                : Colors.grey,
-                            BlendMode.srcIn),
-                        child: Image.asset(cubit.lstBottomItem[index]['url']!,
-                            height: 16, width: 16)),
-                    label: cubit.lstBottomItem[index]['name']!),
-            ],
-            currentIndex: cubit.selectedIndex,
-            selectedItemColor: Colors.blue,
-            onTap: _onItemTapped));
+            ),
+            bottomNavigationBar: Offstage(
+                offstage: !_isBottomBarVisible,
+                child: BottomNavigationBar(
+                    items: [
+                      for (var index = 0;
+                          index < cubit.lstBottomItem.length;
+                          index++)
+                        BottomNavigationBarItem(
+                            icon: ColorFiltered(
+                                colorFilter: ColorFilter.mode(
+                                    cubit.selectedIndex == index
+                                        ? Colors.blue
+                                        : Colors.grey,
+                                    BlendMode.srcIn),
+                                child: Image.asset(
+                                    cubit.lstBottomItem[index]['url']!,
+                                    height: 16,
+                                    width: 16)),
+                            label: cubit.lstBottomItem[index]['name']!),
+                    ],
+                    currentIndex: cubit.selectedIndex,
+                    selectedItemColor: AppColor.primaryColor,
+                    onTap: _onItemTapped))));
   }
 
-  void _onItemTapped(int index) {
+  Future<void> _onItemTapped(int index) async {
+    if (index != cubit.selectedIndex) {
+      await _toggleBottomBarVisibility();
+    }
     _pageController.jumpToPage(index);
-    // print("_onItemTapped $index");
   }
 
-  void _onPageChanged(int index) {
+  Future<void> _onPageChanged(int index) async {
     setState(() {
       cubit.selectedIndex = index;
     });
-    // print("_onPageChanged $index");
   }
 
   void _onJump(int index) {
@@ -79,14 +96,29 @@ class _State extends BaseState<StoryState, StoryCubit, StoryPage> {
     // print("_onPageChanged $index");
   }
 
+  Future<void> _toggleBottomBarVisibility() async {
+    setState(() {
+      _isBottomBarVisible = !_isBottomBarVisible;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     _pages = [
-      StoryHomePage(onPageChanged: _onJump),
-      const StoryFavoritePage(),
-      const StorySearchingPage(),
-      const StoryListeningPage(),
+      StoryHomePage(
+        onPageChanged: _onJump,
+        toggleBottomBarVisibility: _toggleBottomBarVisibility,
+      ),
+      StoryFavoritePage(
+        toggleBottomBarVisibility: _toggleBottomBarVisibility,
+      ),
+      StorySearchingPage(
+        toggleBottomBarVisibility: _toggleBottomBarVisibility,
+      ),
+      StoryListeningPage(
+        toggleBottomBarVisibility: _toggleBottomBarVisibility,
+      ),
     ];
   }
 }

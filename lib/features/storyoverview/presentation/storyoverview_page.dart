@@ -1,4 +1,5 @@
 import 'package:ar_zoo_explorers/app/config/routes.dart';
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/core/data/controller/auth_controller.dart';
@@ -10,13 +11,14 @@ import 'package:ar_zoo_explorers/domain/entities/user_story_entity.dart';
 import 'package:ar_zoo_explorers/features/storyoverview/presentation/storyoverview_cubit.dart';
 import 'package:ar_zoo_explorers/features/storyoverview/presentation/storyoverview_state.dart';
 import 'package:ar_zoo_explorers/utils/widget/custom_back_button.dart';
-import 'package:ar_zoo_explorers/utils/widget/loading_widget.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 @RoutePage()
 class StoryOverviewPage extends StatefulWidget {
-  const StoryOverviewPage({super.key});
+  final Function(String) onClosed;
+  const StoryOverviewPage({super.key, required this.onClosed});
 
   @override
   State createState() => _State();
@@ -29,8 +31,8 @@ class _State extends BaseState<StoryOverviewState, StoryOverviewCubit,
   final userStoryController = UserStoryController.findOrInitialize;
   final storyController = StoryController.findOrInitialize;
 
-  @override
-  final loadingController = AppLoadingController();
+  // @override
+  // final loadingController = AppLoadingController();
 
   @override
   Widget buildByState(BuildContext context, StoryOverviewState state) {
@@ -38,18 +40,27 @@ class _State extends BaseState<StoryOverviewState, StoryOverviewCubit,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
             centerTitle: true,
-            title: const Text("Thông tin Chi Tiết",
-                style: TextStyle(
+            title: Text(LanguageKeys.story_overview.tr.toUpperCase(),
+                style: const TextStyle(
                     fontSize: 20,
                     color: Colors.white,
                     fontWeight: FontWeight.bold)),
             backgroundColor: Colors.transparent,
             elevation: 0,
-            leading: const Column(
+            leading: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [CustomBackButton()]),
+                children: [backButton()]),
             actions: [loveButton()]),
         body: backgroundPage(context));
+  }
+
+  Widget backButton() {
+    return CustomBackButton(onPressed: () async {
+      await cubit.showLoading();
+      await widget.onClosed(storyController.currentStory.value.id);
+      Navigator.of(context).pop();
+      await cubit.hideLoading();
+    });
   }
 
   Widget backgroundPage(BuildContext context) {
@@ -111,33 +122,36 @@ class _State extends BaseState<StoryOverviewState, StoryOverviewCubit,
       imgStory(),
       storyName(),
       Row(children: [
-        fieldName("Tác giả : "),
+        fieldName("${LanguageKeys.author.tr} : "),
         Expanded(
             child: Text(cubit.author,
                 style:
                     const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)))
       ]),
       Row(children: [
-        fieldName("Người đọc : "),
+        fieldName("${LanguageKeys.reader.tr} : "),
         Expanded(
             child: Text(cubit.reader,
                 style:
                     const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)))
       ]),
       Row(children: [
-        fieldName("Thời lượng : "),
+        fieldName("${LanguageKeys.duration.tr} : "),
         Text(
-            '${cubit.duration.inMinutes} phút ${cubit.duration.inSeconds.remainder(60)} giây',
+            '${cubit.duration.inMinutes} ${(cubit.duration.inMinutes > 1) ? LanguageKeys.minutes.tr.toLowerCase() : LanguageKeys.minute.tr.toLowerCase()} ${cubit.duration.inSeconds.remainder(60)} ${(cubit.duration.inSeconds.remainder(60) > 1) ? LanguageKeys.seconds.tr.toLowerCase() : LanguageKeys.second.tr.toLowerCase()}',
             style: const TextStyle(
                 fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green))
       ]),
       Row(children: [
-        fieldName("Lượt nghe : "),
+        fieldName("${LanguageKeys.listens.tr} : "),
         Text('${cubit.listenCount}',
             style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold))
       ]),
-      Row(children: [fieldName("Danh mục : "), topicStory(cubit.topic)]),
-      Row(children: [fieldName("Tóm tắt : ")]),
+      Row(children: [
+        fieldName("${LanguageKeys.topic.tr} : "),
+        topicStory(cubit.topic)
+      ]),
+      Row(children: [fieldName("${LanguageKeys.summary.tr} : ")]),
       overview(),
       SizedBox(height: cubit.HEIGHT * 0.1),
       btnListen(),
@@ -217,7 +231,7 @@ class _State extends BaseState<StoryOverviewState, StoryOverviewCubit,
           children: [
             imgButton(AppIcons.icPlay64),
             const SizedBox(width: 10),
-            contentButton("Nghe"),
+            contentButton(LanguageKeys.play.tr.toUpperCase()),
           ],
         ));
   }
@@ -270,12 +284,9 @@ class _State extends BaseState<StoryOverviewState, StoryOverviewCubit,
     List<String> lstTopicName = [];
 
     for (var itemA in lstTopicId) {
-      print("item A : $itemA");
       for (var itemB in storyTopicController.listStoryTopic.value) {
         if (itemA == itemB.id) {
           lstTopicName.add(itemB.title);
-          print("item B : ${itemB.id}");
-          // break;
         }
       }
     }
@@ -283,12 +294,14 @@ class _State extends BaseState<StoryOverviewState, StoryOverviewCubit,
   }
 
   Future<void> _listenStory() async {
+    await cubit.showLoading();
     await storyController.updateListenCount(
         context, storyController.currentStory.value.id);
     setState(() {
       cubit.listenCount = storyController.currentStory.value.listenCount;
     });
     context.router.pushNamed(Routes.storyplayer);
+    await cubit.hideLoading();
   }
 
   @override

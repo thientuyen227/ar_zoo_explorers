@@ -1,6 +1,8 @@
 import 'package:ar_zoo_explorers/app/config/routes.dart';
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
+import 'package:ar_zoo_explorers/domain/api/api_service.dart';
+import 'package:ar_zoo_explorers/domain/entities/chatbox_entity.dart';
 import 'package:ar_zoo_explorers/features/learning/presentation/learning_cubit.dart';
 import 'package:ar_zoo_explorers/features/learning/presentation/learning_state.dart';
 import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
@@ -21,6 +23,10 @@ class LearningPage extends StatefulWidget {
 }
 
 class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
+  ApiService apiService = ApiService();
+  TextEditingController textTest = TextEditingController();
+  List<ChatBoxEntity> chatBoxEntity = [];
+
   @override
   Widget buildByState(BuildContext context, LearningState state) {
     return Scaffold(
@@ -36,25 +42,60 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
           actions: const []),
       body: Padding(
         padding: const EdgeInsets.all(17.0),
-        child: Column(
-          children: [
-            _renderPoints(),
-            const SizedBox(
-              height: 24,
-            ),
-            _renderTitleAndIcon(
-                icon: AppImages.imgPhonics,
-                title: LanguageKeys.phonics.tr,
-                router: Routes.phonics),
-            _renderTitleAndIcon(
-                title: LanguageKeys.vocabulary,
-                icon: AppImages.imgDictionary,
-                router: Routes.vocabulary),
-            _renderTitleAndIcon(
-                icon: AppImages.imgPuzzle,
-                title: LanguageKeys.puzzle,
-                router: Routes.puzzleword),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              _renderPoints(),
+              const SizedBox(
+                height: 24,
+              ),
+              _renderTitleAndIcon(
+                  icon: AppImages.imgPhonics,
+                  title: LanguageKeys.phonics.tr,
+                  router: Routes.phonics),
+              _renderTitleAndIcon(
+                  title: LanguageKeys.vocabulary,
+                  icon: AppImages.imgDictionary,
+                  router: Routes.vocabulary),
+              _renderTitleAndIcon(
+                  icon: AppImages.imgPuzzle,
+                  title: LanguageKeys.puzzle,
+                  router: Routes.puzzleword),
+              TextFormField(
+                controller: textTest,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    hintText: 'Test thử xem',
+                    prefixIcon: Image.asset(AppIcons.icCalendar),
+                    contentPadding: const EdgeInsets.all(10)),
+              ),
+              const SizedBox(height: 24),
+              ElevatedButton(
+                onPressed: () {
+                  _sendTextToImage(
+                      textTest.text); // Thay đổi văn bản nếu bạn muốn
+                },
+                child: const Text("Send Text"),
+              ),
+              chatBoxEntity.isNotEmpty
+                  ? ListView.separated(
+                      itemBuilder: ((context, index) {
+                        ImageSvgUrlCustom(
+                            imagePath: chatBoxEntity[index]
+                                .generatedFiles![index]
+                                .fileUrl);
+                        return null;
+                      }),
+                      separatorBuilder: (context, index) {
+                        return const SizedBox(
+                          width: 8,
+                        );
+                      },
+                      itemCount: chatBoxEntity.length)
+                  : Container()
+            ],
+          ),
         ),
       ),
     );
@@ -145,10 +186,36 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
     );
+  }
+
+  void _sendTextToImage(String text) async {
+    try {
+      // Gọi API texttoimage bằng ApiService
+      chatBoxEntity = await apiService.getTextToImageResponse(text);
+      setState(() {});
+    } catch (e) {
+      // Xử lý lỗi nếu cần
+      print("Error sending text to image: $e");
+      // Hiển thị thông báo lỗi
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Error"),
+          content: const Text(
+              "Failed to send text to image. Please try again later."),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("OK"),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }

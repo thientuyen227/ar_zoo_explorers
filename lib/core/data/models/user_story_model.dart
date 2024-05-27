@@ -1,4 +1,5 @@
 import 'package:ar_zoo_explorers/domain/entities/user_story_entity.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserStoryModel extends UserStoryEntity {
   UserStoryModel({
@@ -8,6 +9,8 @@ class UserStoryModel extends UserStoryEntity {
     required super.pausedTime,
     required super.isCompleted,
     required super.isFavorited,
+    required super.createdAt,
+    required super.updatedAt,
     required super.status,
   });
 
@@ -20,6 +23,8 @@ class UserStoryModel extends UserStoryEntity {
       'pausedTime': pausedTime,
       'isCompleted': isCompleted,
       'isFavorited': isFavorited,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
       'status': status,
     };
   }
@@ -32,6 +37,8 @@ class UserStoryModel extends UserStoryEntity {
       pausedTime: map['pausedTime'] ?? 0,
       isCompleted: map['isCompleted'] ?? false,
       isFavorited: map['isFavorited'] ?? false,
+      createdAt: map['createdAt'] ?? Timestamp.now(),
+      updatedAt: map['updatedAt'] ?? Timestamp.now(),
       status: map['status'],
     );
   }

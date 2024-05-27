@@ -1,11 +1,14 @@
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
+import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/features/authentication/changepassword/presentation/changepassword_cubit.dart';
 import 'package:ar_zoo_explorers/features/authentication/changepassword/presentation/changepassword_state.dart';
+import 'package:ar_zoo_explorers/utils/widget/custom_back_button.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/get.dart';
 
 import '../../../../app/config/routes.dart';
 import '../../../../app/theme/icons.dart';
@@ -29,41 +32,35 @@ class _State extends BaseState<ChangePasswordState, ChangePasswordCubit,
   @override
   Widget buildByState(BuildContext context, ChangePasswordState state) {
     return Obx(() => GestureDetector(
-        onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-        child: PageLoadingIndicator(
-          future: controller.loginFuture.value,
-          scaffold: Scaffold(
-            appBar: AppBar(
-                centerTitle: true,
-                title: const Text("Change Password",
-                    style: TextStyle(fontSize: 18, color: Colors.white)),
-                leading: Column(children: [turnBack()]),
-                actions: const []),
-            body: FormBuilder(
-                key: _formKey,
-                child: SingleChildScrollView(
-                  child: Container(
-                      constraints: BoxConstraints(
-                          minHeight: MediaQuery.of(context).size.height),
-                      width: MediaQuery.of(context).size.width,
-                      color: Colors.blue[600],
+          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+          child: PageLoadingIndicator(
+            future: controller.loginFuture.value,
+            scaffold: Scaffold(
+                appBar: AppBar(
+                    centerTitle: true,
+                    backgroundColor: AppColor.appBarColor,
+                    title: Text(LanguageKeys.changePassword.tr.toUpperCase(),
+                        style: const TextStyle(
+                            fontSize: 18,
+                            color: AppColor.white,
+                            fontWeight: FontWeight.bold)),
+                    leading: const Column(children: [CustomBackButton()]),
+                    actions: const []),
+                body: FormBuilder(
+                  key: _formKey,
+                  child: SingleChildScrollView(
                       child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black.withOpacity(0.8),
-                                    spreadRadius: 5,
-                                    blurRadius: 7,
-                                    offset: const Offset(0, 3))
-                              ]),
-                          margin: const EdgeInsets.all(20.0),
+                          color: Colors.white,
+                          width: MediaQuery.of(context).size.width,
+                          constraints: BoxConstraints(
+                              minHeight: MediaQuery.of(context).size.height),
                           padding: const EdgeInsets.only(
-                              left: 20, right: 20, bottom: 25),
+                              left: 35, right: 35, bottom: 50),
                           child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
+                                appLogo(),
                                 //NHẬP MẬT KHẨU CŨ
                                 passwordForm(cubit.ListFormItem[0], 0),
                                 // NHẬP MẬT KHẨU MỚI
@@ -80,20 +77,7 @@ class _State extends BaseState<ChangePasswordState, ChangePasswordCubit,
                               ]))),
                 )),
           ),
-        )));
-  }
-
-  Widget turnBack() {
-    return ElevatedButton(
-        onPressed: () {
-          context.router.pop();
-        },
-        style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.blue),
-            elevation: MaterialStateProperty.all(0),
-            shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(0)))),
-        child: Image.asset(AppIcons.icBack_png));
+        ));
   }
 
   Widget passwordForm(FormBuilderTextFieldModel items, int index) {
@@ -119,7 +103,8 @@ class _State extends BaseState<ChangePasswordState, ChangePasswordCubit,
               contentPadding: const EdgeInsets.all(10)),
           autovalidateMode: AutovalidateMode.onUserInteraction,
           validator: FormBuilderValidators.compose([
-            FormBuilderValidators.required(errorText: "Required field"),
+            FormBuilderValidators.required(
+                errorText: LanguageKeys.requiredField.tr),
             (value) {
               return _onHandleValidator(index, value);
             }
@@ -133,19 +118,35 @@ class _State extends BaseState<ChangePasswordState, ChangePasswordCubit,
         onPressed: snapshot.connectionState != ConnectionState.waiting
             ? () => _onUpdatePassword(context)
             : () => {
-                  Fluttertoast.showToast(msg: "Updating"),
+                  Fluttertoast.showToast(msg: LanguageKeys.updating.tr),
                   _onUpdatePassword(context)
                 },
         style: ButtonStyle(
-            fixedSize: MaterialStateProperty.all(const Size(140, 50)),
+            fixedSize: MaterialStateProperty.all(const Size(160, 50)),
             backgroundColor: MaterialStateProperty.all(Colors.blue),
             elevation: MaterialStateProperty.all(5),
             shape: MaterialStateProperty.all(RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20)))),
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Image.asset(AppIcons.icWhiteSubmit),
-          const Text("Change", style: TextStyle(fontSize: 18))
+          Text(LanguageKeys.change.tr.toUpperCase(),
+              style: const TextStyle(fontSize: 18, color: AppColor.white))
         ]));
+  }
+
+  Widget appLogo() {
+    return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      const SizedBox(height: 48),
+      Transform.scale(
+        scale: 2,
+        child: Image.asset(
+          AppImages.imgAppLogo,
+          height: cubit.HEIGHT * 0.25,
+          width: cubit.WIDTH,
+        ),
+      ),
+      const SizedBox(height: 10),
+    ]);
   }
 
   Future<void> _onUpdatePassword(BuildContext context) async {
@@ -168,5 +169,21 @@ class _State extends BaseState<ChangePasswordState, ChangePasswordCubit,
       default:
         return null;
     }
+  }
+
+  void setDimension() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        cubit.WIDTH = MediaQuery.of(context).size.width;
+        cubit.HEIGHT = MediaQuery.of(context).size.height;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    setDimension();
   }
 }

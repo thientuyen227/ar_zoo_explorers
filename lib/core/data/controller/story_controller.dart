@@ -29,6 +29,10 @@ class StoryController extends ControllerHelper {
 
   Rx<List<StoryEntity>> listStory = Rx([]);
 
+  Rx<String> txtSearch = Rx("");
+
+  Rx<bool> searchStatus = Rx(false);
+
   Future<StoryEntity> getStory(BuildContext context, {required String id}) {
     return processRequest<StoryEntity>(
         request: () => _storyRepository.getStory(id),
@@ -72,7 +76,7 @@ class StoryController extends ControllerHelper {
   }
 
   Future<List<StoryEntity>> getStoriesByReleaseDate(
-      BuildContext context, bool isDec) {
+      BuildContext? context, bool isDec) {
     return processRequest<List<StoryEntity>>(
         request: () => _storyRepository.getStoriesByReleaseDate(isDec),
         onFailure: (failure) =>
@@ -82,8 +86,13 @@ class StoryController extends ControllerHelper {
             });
   }
 
-  _setListStory(BuildContext context, List<StoryEntity> lstEntity) {
+  _setListStory(BuildContext? context, List<StoryEntity> lstEntity) {
     listStory.value = lstEntity;
+    update();
+  }
+
+  Future<void> setSearchValue(BuildContext context, String txt) async {
+    txtSearch.value = txt;
     update();
   }
 
@@ -132,6 +141,23 @@ class StoryController extends ControllerHelper {
         onSuccess: (success) => {_setCurrentStory(context, success.data)},
         onFailure: (failure) =>
             Fluttertoast.showToast(msg: "Truy cập thông tin thất bại!"));
+  }
+
+  Future<void> updateSearching(BuildContext context, {String text = ""}) async {
+    txtSearch.value = text;
+    searchStatus.value = true;
+    update();
+  }
+
+  Future<void> updateSearchStatus(BuildContext context) async {
+    searchStatus.value = !searchStatus.value;
+    update();
+  }
+
+  Future<void> resetSearching(BuildContext context) async {
+    txtSearch.value = "";
+    searchStatus.value = false;
+    update();
   }
 
   Future<void> _setCurrentStory(

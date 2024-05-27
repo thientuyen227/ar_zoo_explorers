@@ -78,6 +78,10 @@ class AppColor {
   static const darkBG = Color(0xFF1A1A1A);
   static const brown = Color(0xFFB16E3D);
 
+//App Color
+  static const appBarColor = Color.fromARGB(255, 109, 189, 255);
+  static const primaryColor = Color.fromARGB(255, 89, 178, 252);
+
   static Color parseColor(String color) {
     String hex = color.replaceAll("#", "");
     if (hex.isEmpty) hex = "ffffff";

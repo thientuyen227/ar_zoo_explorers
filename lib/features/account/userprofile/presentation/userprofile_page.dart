@@ -1,14 +1,18 @@
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
+import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/features/account/userprofile/presentation/userprofile_cubit.dart';
 import 'package:ar_zoo_explorers/features/account/userprofile/presentation/userprofile_state.dart';
+import 'package:ar_zoo_explorers/utils/widget/button_widget.dart';
+import 'package:ar_zoo_explorers/utils/widget/custom_back_button.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../../app/config/app_router.gr.dart';
 import '../../../../app/theme/icons.dart';
 import '../../../../base/base_state.dart';
 import '../../../../base/widgets/page_loading_indicator.dart';
 import '../../../../core/data/controller/auth_controller.dart';
-import '../../../../utils/widget/button_widget.dart';
 
 @RoutePage()
 class UserProfilePage extends StatefulWidget {
@@ -27,19 +31,17 @@ class _State
     return PageLoadingIndicator(
         future: controller.getCurrentUser(context),
         scaffold: Scaffold(
+          extendBodyBehindAppBar: true,
           appBar: AppBar(
               centerTitle: true,
-              title: const Text('User Profile',
-                  style: TextStyle(fontSize: 20, color: Colors.white)),
-              actions: const [SizedBox(width: 55)],
-              leading: AppIconButton(
-                  onPressed: () {
-                    // context.router.pushNamed(Routes.home);
-                    context.router.pop();
-                  },
-                  icon: Transform.scale(
-                      scale: 1.5,
-                      child: Image.asset(AppIcons.icBack_png, height: 55)))),
+              backgroundColor: Colors.transparent,
+              title: Text(LanguageKeys.userProfile.tr.toUpperCase(),
+                  style: const TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold)),
+              leading: const CustomBackButton(),
+              actions: [btnUpdate()]),
           body: SingleChildScrollView(
             child: FutureBuilder(
               future: controller.getCurrentUser(context),
@@ -48,18 +50,8 @@ class _State
                   return Container(
                       constraints: BoxConstraints(
                           minHeight: MediaQuery.of(context).size.height),
-                      decoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                              colors: [
-                            Color.fromARGB(255, 255, 255, 255),
-                            Color.fromARGB(255, 109, 182, 255)
-                          ],
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter)),
-                      child: Column(children: [
-                        profileHeader(),
-                        userInformation(context),
-                      ]));
+                      decoration: BoxDecoration(color: Colors.grey.shade50),
+                      child: Column(children: [profileHeader()]));
                 } else {
                   return const CircularProgressIndicator();
                 }
@@ -71,136 +63,83 @@ class _State
 
   Widget profileHeader() {
     return Stack(children: [
-      SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.21,
-      ),
-      Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height * 0.16,
-          decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey, width: 2),
-              borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(15.0),
-                  bottomRight: Radius.circular(15.0)),
-              image: const DecorationImage(
-                  image: AssetImage(AppImages.imgAppLogoBG),
-                  fit: BoxFit.cover))),
+      SizedBox(width: cubit.WIDTH, height: cubit.HEIGHT * 0.3),
+      profileBackground(),
       Positioned(
-          left: 0, right: 0, bottom: 0, child: Center(child: userAvatar())),
+          left: cubit.WIDTH * 0.05,
+          bottom: cubit.HEIGHT * 0.04,
+          child: Center(child: userAvatar())),
+      Positioned(
+          left: cubit.WIDTH * 0.38,
+          bottom: cubit.HEIGHT * 0.1,
+          child: Center(child: username())),
+      Positioned(
+          left: cubit.WIDTH * 0.38,
+          top: cubit.HEIGHT * 0.21,
+          child: Center(child: userEmailAddress())),
     ]);
   }
 
-  Widget userInformation(BuildContext context) {
+  Widget username() {
     return SizedBox(
-        width: MediaQuery.of(context).size.width,
-        child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black.withOpacity(0.35),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: const Offset(0, 3))
-              ],
-            ),
-            margin: const EdgeInsets.all(20.0),
-            padding: const EdgeInsets.all(15.0),
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              const Text(
-                "User Information",
-                style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 20),
-              userInformationCustom(context),
-              Container(height: 2, width: double.infinity, color: Colors.grey),
-              updateInformation(),
-            ])));
+        width: cubit.WIDTH * 0.55,
+        child: Text(controller.currentUser.value.fullname,
+            style: const TextStyle(
+                color: AppColor.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold),
+            textAlign: TextAlign.start,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2));
   }
 
-  Widget userInformationCustom(BuildContext context) {
-    return Column(children: [
-      userInformationItem(
-          context, "Full Name", controller.currentUser.value.fullname),
-      const SizedBox(height: 13),
-      userInformationItem(
-          context, "Birthday", controller.currentUser.value.birth),
-      const SizedBox(height: 13),
-      userInformationItem(context, "Gender",
-          cubit.getGender(controller.currentUser.value.gender)),
-      const SizedBox(height: 13),
-      userInformationItem(
-          context, "Email Address", controller.currentUser.value.email),
-      const SizedBox(height: 13),
-      userInformationItem(
-          context, "Phone Number", controller.currentUser.value.phone),
-      const SizedBox(height: 13),
-      userInformationItem(
-          context, "Address", controller.currentUser.value.address),
-      const SizedBox(height: 13)
-    ]);
+  Widget userEmailAddress() {
+    return SizedBox(
+        width: cubit.WIDTH * 0.55,
+        child: Text(controller.currentUser.value.email,
+            style: const TextStyle(color: AppColor.black, fontSize: 17),
+            textAlign: TextAlign.start,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2));
   }
 
-  Widget updateInformation() {
-    return Center(
-        child: MaterialButton(
-            onPressed: () {
-              context.router.popAndPush(const UserInformationRoute());
-            },
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              const Text("Update Information",
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black)),
-              ColorFiltered(
-                colorFilter:
-                    const ColorFilter.mode(Colors.black, BlendMode.srcIn),
-                child: Image.asset(AppIcons.icNext_png),
-              )
-            ])));
-  }
-
-  Widget userInformationItem(
-      BuildContext context, String title, String content) {
-    String showContent = content;
-    if (content == '') {
-      showContent = "Chưa cập nhật";
-    }
-    return Padding(
-        padding: const EdgeInsets.only(left: 15, right: 15),
-        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Expanded(
-            flex: 3,
-            child: SizedBox(
-              child: Text(title,
-                  style: TextStyle(
-                      fontSize: 17,
-                      color: Colors.grey[900],
-                      fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.start),
-            ),
-          ),
-          Expanded(
-              flex: 5,
-              child: Text(showContent,
-                  style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.grey[900],
-                      fontStyle: FontStyle.italic))),
+  Widget profileBackground() {
+    return Container(
+        decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey, width: 2),
+            borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(5.0),
+                bottomRight: Radius.circular(5.0))),
+        child: Column(children: [
+          gradientBackground(cubit.HEIGHT * 0.13, cubit.WIDTH, 0,
+              AppColor.appBarColor, Colors.blue.shade200),
+          gradientBackground(cubit.HEIGHT * 0.07, cubit.WIDTH, 5,
+              Colors.blue.shade200, Colors.blue.shade800)
         ]));
+  }
+
+  Widget gradientBackground(double height, double width, double borderRadius,
+      Color topColor, Color bottomColor) {
+    return Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(borderRadius),
+                bottomRight: Radius.circular(borderRadius)),
+            gradient: LinearGradient(
+                colors: [topColor, bottomColor],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter)
+            // image: const DecorationImage(
+            //     image: AssetImage(AppImages.imgAppLogoBG), fit: BoxFit.cover),
+            ));
   }
 
   Widget userAvatar() {
     return Container(
-        width: MediaQuery.of(context).size.height * 0.155,
-        height: MediaQuery.of(context).size.height * 0.155,
+        width: cubit.HEIGHT * 0.155,
+        height: cubit.HEIGHT * 0.155,
         decoration: BoxDecoration(
             border: Border.all(color: Colors.white, width: 5),
             shape: BoxShape.circle),
@@ -211,9 +150,29 @@ class _State
         ));
   }
 
+  Widget btnUpdate() {
+    return AppIconButton(
+        onPressed: () {
+          context.router.popAndPush(const UserInformationRoute());
+        },
+        icon: Container(
+            padding: const EdgeInsets.all(10),
+            child: Image.asset(AppIcons.icUpdate64White, fit: BoxFit.cover)));
+  }
+
+  void setDimension() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        cubit.WIDTH = MediaQuery.of(context).size.width;
+        cubit.HEIGHT = MediaQuery.of(context).size.height;
+      });
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    setDimension();
     cubit.setUserAvatar(controller.currentUser.value.avatarUrl);
   }
 }

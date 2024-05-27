@@ -1,86 +1,143 @@
 import 'package:ar_zoo_explorers/base/base_cubit.dart';
+import 'package:ar_zoo_explorers/core/data/controller/auth_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/story_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/story_topic_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/user_story_controller.dart';
+import 'package:ar_zoo_explorers/domain/entities/story_entity.dart';
+import 'package:ar_zoo_explorers/domain/entities/story_topic_entity.dart';
 import 'package:ar_zoo_explorers/features/story/model/storybuttonobject.dart';
 import 'package:ar_zoo_explorers/features/storysearching/presentation/storysearching_state.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
+import 'package:remove_diacritic/remove_diacritic.dart';
 
 @injectable
 class StorySearchingCubit extends BaseCubit<StorySearchingState> {
   StorySearchingCubit() : super(StorySearchingState());
 
-  List<StoryButtonObject> listSearchStory = [];
-  List<StoryButtonObject> listFullStory = [
-    StoryButtonObject(
-        avatar:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFKGwd9XsayxfZ2m8XD3PQegpGYz4Dzwy6hR85H7bgIg&s",
-        name: 'Rùa Và Thỏ',
-        topic: ['Ngụ Ngôn'],
-        duration: const Duration(minutes: 4, seconds: 34)),
-    StoryButtonObject(
-        avatar:
-            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi657OFIAxdkCx6UKg-O3E8lyNvAnr_r8i4DeAMRJUD5JURpRnfnhl6HR78IYhIp2pFJ9Ad7pq8xQaV2_04HWbE_o-jweJ4injvlT2qg4AAUkEHz8grsEVLDeMxK9YtLlj-FS5XlKoMe2-k/s1600/bac_voi_tot_bung_4.jpg",
-        name: 'Bác Voi Tốt Bụng',
-        topic: ['Đạo Đức'],
-        duration: const Duration(minutes: 4, seconds: 34)),
-    StoryButtonObject(
-        avatar:
-            "https://4.bp.blogspot.com/-cCt_3UncqGg/Ws225-kNSEI/AAAAAAAAYUg/45QproQK3c4YzLfalVeDe72FjkHkwt96ACLcBGAs/s1600/IMG_5779a.JPG?w=900",
-        name: 'Chú Gà Trống Kiêu Căng',
-        topic: ['Đạo Đức'],
-        duration: const Duration(minutes: 4, seconds: 34)),
-    StoryButtonObject(
-        avatar:
-            "https://static.8cache.com/cover/o/eJzLyTDW1_VIzDROLfM3Noh31A8LM8zQLQlx8Uj11HeEgrw8V_0o5-Ck1IDyQEf3bP1iAwDLihCU/de-men-phieu-luu-ky.jpg",
-        name: 'Dế Mèn Phiêu Lưu Ký',
-        topic: ['Giả Tưởng'],
-        duration: const Duration(minutes: 4, seconds: 34)),
-    StoryButtonObject(
-        avatar:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_UcA0g2_L59hUx_BS15EW-VSh4HQAVcrSP6Rc79-4uQ&s",
-        name: 'Chú Chó Hachiko',
-        topic: ['Đạo Đức'],
-        duration: const Duration(minutes: 4, seconds: 34)),
-    StoryButtonObject(
-        avatar:
-            "https://cdn.eva.vn/upload/1-2022/images/2022-01-02/truyen-co-tich-vit-con-xau-xi-v---t-1-1641101885-38-width600height339.jpg",
-        name: 'Vịt Con Xấu Xí',
-        topic: ['Giả Tưởng'],
-        duration: const Duration(minutes: 4, seconds: 34))
-  ];
+  final controller = AuthController.findOrInitialize;
+  final storyTopicController = StoryTopicController.findOrInitialize;
+  final userStoryController = UserStoryController.findOrInitialize;
+  final storyController = StoryController.findOrInitialize;
 
-  double WIDTH = 0;
-  double HEIGHT = 0;
+  Future<void> init(BuildContext context) async {
+    showLoading();
+    await storyController.getAllStories(context);
+    await storyTopicController.getAllStoryTopics(context);
 
-  String txtSearch = "";
+    Size mediaSize = MediaQueryData.fromView(
+            WidgetsBinding.instance.platformDispatcher.views.single)
+        .size;
 
-  // void setListStory(List<AnimalEntity> list, String searchValue) {
-  //   if (list.isNotEmpty) {
-  //     for (int i = 0; i < list.length; i++) {
-  //       listFullAnimal.add(ButtonObject(
-  //           title: list[i].title, icon: list[i].icon, id: list[i].id));
-  //       if (list[i].title.toLowerCase().contains(searchValue.toLowerCase())) {
-  //         listSearchAnimal.add(ButtonObject(
-  //             title: list[i].title, icon: list[i].icon, id: list[i].id));
-  //       }
-  //     }
-  //   }
-  // }
+    List<StoryButtonObject> lstFull = await _setAllStories(
+        storyController.listStory.value,
+        storyTopicController.listStoryTopic.value);
 
-  void onSearch(String searchValue) {
-    listSearchStory = [];
-    for (int i = 0; i < listFullStory.length; i++) {
-      if (listFullStory[i]
-          .name
-          .toLowerCase()
-          .contains(searchValue.trim().toLowerCase())) {
-        listSearchStory.add(StoryButtonObject(
-            id: listFullStory[i].id,
-            name: listFullStory[i].name,
-            avatar: listFullStory[i].avatar,
-            author: listFullStory[i].author,
-            reader: listFullStory[i].reader,
-            topic: listFullStory[i].topic,
-            duration: listFullStory[i].duration));
+    await state.setAttributes(
+        height: mediaSize.height,
+        width: mediaSize.width,
+        searchStatus: storyController.searchStatus.value,
+        txtSearch: storyController.txtSearch.value,
+        listFullStory: lstFull);
+
+    List<StoryButtonObject> lstSearch = storyController.searchStatus.value
+        ? await _setSearchStories(storyController.txtSearch.value)
+        : [];
+
+    await state.setAttributes(listSearchStory: lstSearch);
+    // print("Cubit.Init() : Get data, ${storyController.searchStatus.value}");
+    hideLoading();
+  }
+
+  Future<void> _setSearchWord(String word) async {
+    showLoading();
+    await state.setAttributes(txtSearch: word, searchStatus: true);
+    hideLoading();
+  }
+
+  Future<void> onSearch(BuildContext context, String searchValue) async {
+    showLoading();
+    await storyController.updateSearching(context, text: searchValue);
+    await _setSearchWord(searchValue);
+    List<StoryButtonObject> stories = await _setSearchStories(searchValue);
+    await state.setAttributes(listSearchStory: stories);
+    hideLoading();
+  }
+
+  Future<List<StoryButtonObject>> _setSearchStories(String searchValue) async {
+    List<StoryButtonObject> stories = [];
+    for (int i = 0; i < state.listFullStory.length; i++) {
+      if (convertDiacritics(state.listFullStory[i].name)
+          .contains(convertDiacritics(searchValue))) {
+        stories.add(StoryButtonObject(
+            id: state.listFullStory[i].id,
+            name: state.listFullStory[i].name,
+            avatar: state.listFullStory[i].avatar,
+            author: state.listFullStory[i].author,
+            reader: state.listFullStory[i].reader,
+            topic: state.listFullStory[i].topic,
+            duration: state.listFullStory[i].duration));
       }
     }
+    return stories;
+  }
+
+  Future<List<StoryButtonObject>> _setAllStories(
+      List<StoryEntity> lstStory, List<StoryTopicEntity> lstTopic) async {
+    List<StoryButtonObject> stories = [];
+    for (var item in lstStory) {
+      var tmpObject = StoryButtonObject(
+        id: item.id,
+        name: item.title,
+        avatar: item.avatar,
+        author: item.author,
+        reader: item.reader,
+        listenCount: item.listenCount,
+        duration: Duration(seconds: item.duration),
+        timestamp: Duration(seconds: item.duration),
+        topic: item.topicId,
+      );
+      stories.add(tmpObject);
+    }
+
+    Map<String, StoryTopicEntity> topicMap = {};
+    for (var topic in lstTopic) {
+      topicMap[topic.id] = topic;
+    }
+
+    for (var story in stories) {
+      List<String> topicNames = [];
+      for (var topicId in story.topic) {
+        var topic = topicMap[topicId];
+        if (topic != null) {
+          topicNames.add(topic.title);
+        }
+      }
+      story.topic = [getTopics(topicNames)];
+    }
+    return stories;
+  }
+
+  Future<void> getStory(BuildContext context, String id) async {
+    await storyController.getStory(context, id: id);
+  }
+
+  Future<void> createOrGetUserStory(BuildContext context, String id) async {
+    await userStoryController.createOrGetUserStory(context,
+        userId: controller.currentUser.value.id, storyId: id);
+  }
+
+  String getTopics(List<String> lstTopicName) {
+    String topics = lstTopicName[0];
+    for (int i = 1; i < lstTopicName.length; i++) {
+      topics = "$topics, ${lstTopicName[i]}";
+    }
+    return topics;
+  }
+
+  String convertDiacritics(String input) {
+    // print(input);
+    // print(input.trim().toLowerCase());
+    return removeDiacritics(input.trim().toLowerCase());
   }
 }
