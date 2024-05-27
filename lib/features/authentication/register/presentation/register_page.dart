@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/base/widgets/page_loading_indicator.dart';
@@ -13,7 +14,6 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
 import '../../../../app/config/routes.dart';
 import '../../../../core/data/controller/auth_controller.dart';
@@ -114,7 +114,7 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(width: MediaQuery.of(context).size.width),
-        primaryGradientText("Create your account !", 32.0),
+        primaryGradientText("${LanguageKeys.createAccount.tr} !", 32.0),
         const SizedBox(height: 36),
       ],
     );
@@ -153,7 +153,8 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
               contentPadding: const EdgeInsets.all(12)),
           autovalidateMode: AutovalidateMode.onUserInteraction,
           validator: FormBuilderValidators.compose([
-            FormBuilderValidators.required(errorText: "Field cannot be empty"),
+            FormBuilderValidators.required(
+                errorText: LanguageKeys.msg_notBeEmpty.tr),
             (value) {
               return _onHandleValidator(index, value);
             }
@@ -187,7 +188,8 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
               contentPadding: const EdgeInsets.all(12)),
           autovalidateMode: AutovalidateMode.onUserInteraction,
           validator: FormBuilderValidators.compose([
-            FormBuilderValidators.required(errorText: "Field cannot be empty"),
+            FormBuilderValidators.required(
+                errorText: LanguageKeys.msg_notBeEmpty.tr),
             (value) {
               return _onHandleValidator(index, value);
             }
@@ -206,13 +208,13 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
               cubit.isChecked = value!;
             });
           }),
-      Text("I understood the ",
+      Text("${LanguageKeys.i_understood_the.tr} ",
           style: TextStyle(fontSize: 16, color: Colors.grey[700])),
       GestureDetector(
           onTap: () {
             context.router.pushNamed(Routes.termofservice);
           },
-          child: Text("term & policy",
+          child: Text(LanguageKeys.termsOfService.tr,
               style: TextStyle(
                   fontSize: 17,
                   color: Colors.blue[700],
@@ -255,8 +257,8 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
                 borderRadius: BorderRadius.circular(20)))),
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Image.asset(AppIcons.icWhiteSubmit),
-          const Text("Sign up",
-              style: TextStyle(fontSize: 18, color: Colors.white))
+          Text(LanguageKeys.signUp.tr,
+              style: const TextStyle(fontSize: 18, color: Colors.white))
         ]));
   }
 
@@ -284,7 +286,7 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
       Container(
           color: Colors.white,
           padding: const EdgeInsets.all(8.0),
-          child: Text('or sign up with',
+          child: Text(LanguageKeys.signUpWith.tr,
               style: TextStyle(fontSize: 17, color: Colors.grey[700]),
               textAlign: TextAlign.center))
     ]);
@@ -315,7 +317,7 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
         await controller.loginWithGoogle(context);
         break;
       case 2:
-        Fluttertoast.showToast(msg: "The feature will be updated later.");
+        Fluttertoast.showToast(msg: LanguageKeys.updateLater.tr);
         break;
       default:
         return;
@@ -325,7 +327,7 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
   void _onSignUpPressed() {
     if (_formKey.currentState!.validate()) {
       if (!cubit.isChecked) {
-        Fluttertoast.showToast(msg: "You have not agreed to the terms!");
+        Fluttertoast.showToast(msg: "${LanguageKeys.notAgreeTheTerms.tr} !");
       } else {
         controller.signUp(context,
             fullname: _formKey.currentState!.fields['fullname']!.value,

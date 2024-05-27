@@ -56,6 +56,24 @@ const Map<String, String> en_us = {
   "delete": "Delete",
   'chooseLanguage': 'Language',
   "deleteMessage": "Do you sure you want to delete this record?",
+  'back': 'back',
+  'update': 'Update',
+  'birthday': 'Birthday',
+  'submit': 'Submit',
+  'example': 'Example',
+
+  'goToLogin': 'Go to login',
+  'rememberPass': 'Remember me',
+  'forgetPass': 'Forgot password',
+  'signUp': 'Sign up',
+  'signUpWith': 'or sign up with',
+  'updateLater': 'The feature will be updated later',
+  'createAccount': 'Create your account',
+
+  'notAgreeTheTerms': 'You have not agreed to the terms',
+
+  'i_understood_the': 'I understand the',
+
   // Welcome
   'welcome_start': 'Start',
 
@@ -139,4 +157,138 @@ const Map<String, String> en_us = {
   "formPhoneError": "Vaid phone number",
   "formShortPasswordError": "Password is too short (Atleast 6 characters)",
   "formPasswordDoesNotMatchError": "Password doesn't match",
+
+  //HELP
+  'introduction': 'Introduction',
+
+  //TERMS OF SERVICE
+  'term1Title': 'Accept Terms',
+  'term1Content':
+      'Before using the ArZoo app, you need to agree to and comply with the following terms.',
+
+  'term2Title': 'Using the App',
+  'term2Content':
+      'You are granted the right to use the AR app for personal or commercial purposes. The app must not be used for illegal purposes or to harm others.',
+
+  'term3Title': 'Ownership Rights',
+  'term3Content':
+      'The AR app is our property and is protected by copyright. Copying or modifying the app without permission is prohibited.',
+
+  'term4Title': 'Privacy Rights',
+  'term4Content':
+      'We protect your privacy according to our privacy policy. Your personal data may be collected, but we commit to safeguarding it.',
+
+  'term5Title': 'Change of Terms',
+  'term5Content':
+      'We reserve the right to change the terms and will notify you of any changes.',
+
+  'term6Title': 'Termination of Use',
+  'term6Content': 'You may cease using the app at any time.',
+
+  'term7Title': 'Data Security',
+  'term7Content':
+      "The user's personal data is our top priority. We only collect necessary information to provide services and personalize the user experience. All this information is securely protected, and we commit not to share or sell personal information to any third party without clear consent from the user.",
+
+  'term8Title': 'Service Quality',
+  'term8Content':
+      'We are committed to providing the AR app with the highest quality.',
+
+  'term9Title': 'Usage Restrictions',
+  'term9Content':
+      'You are not allowed to run multiple instances of the app on the same device.',
+
+  'term10Title': 'Technical Support',
+  'term10Content':
+      'We provide technical support for users via email or hotline.',
+
+  'term11Title': 'Payment (if applicable)',
+  'term11Content':
+      'If the AR app is free, you must pay according to the specified price if applicable.',
+
+  'term12Title': 'Acceptance of Incidents',
+  'term12Content':
+      'Acceptance of risk limitations when using the AR app, and no compensation can be claimed for damage or loss.',
+
+  'term13Title': 'Copyright and Accounts',
+  'term13Content':
+      'All copyright rights are owned by us. Each user account is for single-user use only.',
+
+  'term14Title': 'Warning Terms',
+  'term14Content':
+      'You must adhere to all terms and warnings within the AR app.',
+
+  'term15Title': 'Tool Usage',
+  'term15Content':
+      'We can provide tools to support the optimal usage of the AR app',
+
+  //VALIDATE MESSAGE
+  'change ': 'Change',
+  'enterTheOldPassword': 'Enter the old password',
+  'enterTheNewPassword': 'Enter the new password',
+  'enterTheConfirmPassword': 'Enter the confirm password',
+
+  'msg_atLeast8Characters': 'At least 8 characters',
+  'msg_includeANumber': 'Must include a number',
+  'msg_includeSpecialCharacters': 'Must include special characters @*&^',
+  'msg_missLowerCharacters': 'Missing lowercase character',
+  'msg_missUpperCharacters': 'Missing uppercase character',
+  'msg_passwordNotMatch': 'Password confirmation does not match',
+  'msg_invalidProvinceCity': 'Invalid Province / City',
+  'msg_notSelectedAGender': 'You have not selected a gender',
+  'msg_phoneNumberIncorrect': 'Phone number is incorrect',
+  'msg_fullNameIncorrect': 'Full name is incorrect',
+  'msg_notBeEmpty': 'Field cannot be empty',
+  'msg_invalidEmail': 'The email address is invalid',
+
+  'requiredField': 'Required field',
+  'updating': 'Updating',
+
+  //USER INFORMATION
+  'updateInformation': 'Updating information',
+  'emailAddress': 'Email address',
+  'gender': 'Gender',
+  'province': 'Province',
+  'city': 'City',
+  'address': 'Address',
+  'selectProvincial': 'Select Provincial',
+  'selectDate': 'Select date',
+  'male': 'Male',
+  'female': 'Female',
+  'enter_your_email': 'Enter your email address here',
+
+  //STORY
+  'author': 'Author',
+  'duration': 'Duration',
+  'recommended': 'Recommended',
+  'empty_favorite_stories': 'List of Favorite Story Is Empty',
+  'empty_listening_stories': 'List of Listening Story Is Empty',
+  'enter_keyword': 'Enter keyword here',
+  'explore': 'Explore',
+  'favorite': 'Favorite',
+  'listening': 'Listening',
+  'listens': 'Listens',
+
+  'msg_no_story_has': 'No stories found with keyword',
+  'msg_stories_updating':
+      'The list of stories is being updated, please come back later',
+
+  'minute': 'Minute',
+  'minutes': 'Minutes',
+  'play': 'Play',
+  'reader': 'Reader',
+  'second': 'second',
+  'seconds': 'seconds',
+
+  'story_examples_1': 'Rua va tho, Thanh Giong',
+  'story_overview': 'Story Overview',
+
+  'summary': 'Summary',
+  'topics': 'Topics',
+  'topic': 'Topic',
+  'view': 'View',
+  'volume': 'Volume',
+
+  //MODEL
+  'model_in_category_empty': 'Models in this category is empty',
+  'models_no_has_keyword': 'Models does not exist with keyword'
 };

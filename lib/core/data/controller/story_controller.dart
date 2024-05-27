@@ -76,7 +76,7 @@ class StoryController extends ControllerHelper {
   }
 
   Future<List<StoryEntity>> getStoriesByReleaseDate(
-      BuildContext context, bool isDec) {
+      BuildContext? context, bool isDec) {
     return processRequest<List<StoryEntity>>(
         request: () => _storyRepository.getStoriesByReleaseDate(isDec),
         onFailure: (failure) =>
@@ -86,7 +86,7 @@ class StoryController extends ControllerHelper {
             });
   }
 
-  _setListStory(BuildContext context, List<StoryEntity> lstEntity) {
+  _setListStory(BuildContext? context, List<StoryEntity> lstEntity) {
     listStory.value = lstEntity;
     update();
   }

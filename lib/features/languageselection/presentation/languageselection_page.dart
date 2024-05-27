@@ -26,29 +26,35 @@ class _State extends BaseState<LanguageSelectionState, LanguageSelectionCubit,
 
   @override
   Widget buildByState(BuildContext context, LanguageSelectionState state) {
-    return Scaffold(
-        body: SingleChildScrollView(
-      child: Container(
-          color: Colors.white,
-          width: MediaQuery.of(context).size.width,
-          constraints:
-              BoxConstraints(minHeight: MediaQuery.of(context).size.height),
-          padding: const EdgeInsets.only(left: 35, right: 35, bottom: 50),
-          child: Column(children: [
-            const SizedBox(height: 12),
-            appLogo(),
-            bodyHeader(),
-            const SizedBox(height: 12),
-            languageSelection(),
-            SizedBox(height: cubit.HEIGHT * 0.25),
-            startButton(
-              context,
-            )
-          ])),
-    ));
+    return PopScope(
+        canPop: false,
+        onPopInvoked: (didPop) async {
+          Navigator.of(context).pop(true);
+        },
+        child: Scaffold(
+            body: SingleChildScrollView(
+          child: Container(
+              color: Colors.white,
+              width: MediaQuery.of(context).size.width,
+              constraints:
+                  BoxConstraints(minHeight: MediaQuery.of(context).size.height),
+              padding: const EdgeInsets.only(left: 35, right: 35, bottom: 50),
+              child: Column(children: [
+                const SizedBox(height: 12),
+                appLogo(),
+                bodyHeader(),
+                const SizedBox(height: 12),
+                languageSelection(),
+                SizedBox(height: cubit.HEIGHT * 0.25),
+                startButton(
+                  context,
+                )
+              ])),
+        )));
   }
 
   Widget appLogo() {
+    // print(Get.locale?.languageCode);
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       const SizedBox(height: 48),
       Transform.scale(
@@ -68,7 +74,7 @@ class _State extends BaseState<LanguageSelectionState, LanguageSelectionCubit,
       // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // SizedBox(width: MediaQuery.of(context).size.width),
-        primaryGradientText("Select Language!", 32.0),
+        primaryGradientText("${LanguageKeys.chooseLanguage.tr}!", 32.0),
         const SizedBox(height: 36),
       ],
     );
@@ -98,14 +104,18 @@ class _State extends BaseState<LanguageSelectionState, LanguageSelectionCubit,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              _selectedLocale.languageCode == 'en'
+              // _selectedLocale.languageCode == 'en'
+              Get.locale?.languageCode == 'en'
                   ? AppImages.flagUK
                   : AppImages.flagVN,
               width: 41,
               height: 27,
             ),
             const SizedBox(width: 5),
-            Text(_selectedLocale.countryCode.toString(),
+            Text(
+                (Get.locale?.languageCode != null)
+                    ? Get.locale!.displayLanguageCountry
+                    : _selectedLocale.countryCode.toString(),
                 style: const TextStyle(fontSize: 18)),
             IconButton(
               onPressed: () {
@@ -135,8 +145,8 @@ class _State extends BaseState<LanguageSelectionState, LanguageSelectionCubit,
             elevation: MaterialStateProperty.all(5),
             shape: MaterialStateProperty.all(RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20)))),
-        child: const Text("Go To Login",
-            style: TextStyle(fontSize: 20, color: Colors.white)));
+        child: Text(LanguageKeys.goToLogin.tr,
+            style: const TextStyle(fontSize: 20, color: Colors.white)));
   }
 
   void _showDropdownBottomSheet(BuildContext context) {

@@ -31,10 +31,12 @@ class StoryFavoriteState {
   }
 
   setAttributes({
+    PageStatus? pageStatus,
     double? height,
     double? width,
     List<StoryButtonObject>? listStory,
   }) async {
+    this.pageStatus ?? this.pageStatus;
     this.height = height ?? this.height;
     this.width = width ?? this.width;
     this.listStory = listStory ?? this.listStory;

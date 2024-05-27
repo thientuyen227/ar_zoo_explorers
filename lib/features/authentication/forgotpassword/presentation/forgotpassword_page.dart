@@ -1,11 +1,13 @@
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/features/authentication/forgotpassword/presentation/forgotpassword_cubit.dart';
 import 'package:ar_zoo_explorers/features/authentication/forgotpassword/presentation/forgotpassword_state.dart';
+import 'package:ar_zoo_explorers/utils/widget/custom_back_button.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/get.dart';
 
 import '../../../../app/theme/icons.dart';
 import '../../../../base/widgets/page_loading_indicator.dart';
@@ -29,61 +31,81 @@ class _State extends BaseState<ForgotPasswordState, ForgotPasswordCubit,
   Widget buildByState(BuildContext context, ForgotPasswordState state) {
     return Obx(() => GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-        child: PageLoadingIndicator(
-          future: controller.loginFuture.value,
-          scaffold: Scaffold(
-            appBar: AppBar(
-                centerTitle: true,
-                title: const Text("Forgot Password",
-                    style: TextStyle(fontSize: 18, color: Colors.white)),
-                leading: Column(children: [turnBack()]),
-                actions: const []),
-            body: FormBuilder(
-                key: _formKey,
-                child: SingleChildScrollView(
-                  child: Container(
-                      constraints: BoxConstraints(
-                          minHeight: MediaQuery.of(context).size.height),
-                      width: MediaQuery.of(context).size.width,
-                      color: Colors.blue[600],
-                      child: Container(
-                          decoration: BoxDecoration(
+        child: PopScope(
+            canPop: false,
+            onPopInvoked: (didPop) async {
+              Navigator.of(context).pop(true);
+            },
+            child: PageLoadingIndicator(
+              future: controller.loginFuture.value,
+              scaffold: Scaffold(
+                extendBodyBehindAppBar: true,
+                appBar: AppBar(
+                    centerTitle: true,
+                    backgroundColor: Colors.black.withOpacity(0),
+                    title: Text(LanguageKeys.forgotPassword.tr.toUpperCase(),
+                        style: const TextStyle(
+                            fontSize: 18,
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.black.withOpacity(0.8),
-                                  spreadRadius: 5,
-                                  blurRadius: 7,
-                                  offset: const Offset(0, 3))
-                            ],
-                          ),
-                          margin: const EdgeInsets.all(20.0),
-                          padding: const EdgeInsets.only(
-                              left: 20, right: 20, bottom: 25),
-                          child: Column(children: [
+                            fontWeight: FontWeight.bold)),
+                    leading: const Column(children: [CustomBackButton()]),
+                    actions: const []),
+                body: FormBuilder(
+                    key: _formKey,
+                    child: SingleChildScrollView(
+                      child: SizedBox(
+                          width: cubit.WIDTH,
+                          height: cubit.HEIGHT,
+                          child: Stack(children: [
                             SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.2),
-                            emailForm(FormBuilderTextFieldModel(
-                                name: 'email',
-                                hint_text: "user123@gmail.com",
-                                icon_prefix: AppIcons.icUser,
-                                isObscured: false)),
-                            const SizedBox(height: 20),
-                            sendEmailButton(context)
-                          ]))),
-                )),
-          ),
-        )));
+                                width: cubit.WIDTH,
+                                height: cubit.HEIGHT,
+                                child: Image.asset(AppImages.imgAppLogoBG,
+                                    fit: BoxFit.cover)),
+                            Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(15),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.black.withOpacity(0.8),
+                                        spreadRadius: 5,
+                                        blurRadius: 7,
+                                        offset: const Offset(0, 3))
+                                  ],
+                                ),
+                                margin: EdgeInsets.only(
+                                    top: cubit.HEIGHT * 0.07,
+                                    bottom: cubit.HEIGHT * 0.05,
+                                    left: cubit.WIDTH * 0.05,
+                                    right: cubit.WIDTH * 0.05),
+                                padding: const EdgeInsets.only(
+                                    left: 20, right: 20, bottom: 25),
+                                child: Column(children: [
+                                  SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.2),
+                                  emailForm(FormBuilderTextFieldModel(
+                                      name: 'email',
+                                      hint_text: "user123@gmail.com",
+                                      icon_prefix: AppIcons.icUser,
+                                      isObscured: false)),
+                                  const SizedBox(height: 20),
+                                  sendEmailButton(context)
+                                ]))
+                          ])),
+                    )),
+              ),
+            ))));
   }
 
   Widget emailForm(FormBuilderTextFieldModel items) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      const Row(children: [
-        SizedBox(width: 15),
-        Text("Enter your email address here",
-            style: TextStyle(
+      Row(children: [
+        const SizedBox(width: 15),
+        Text(LanguageKeys.enter_your_email.tr,
+            style: const TextStyle(
                 fontSize: 16,
                 color: Colors.black,
                 fontStyle: FontStyle.italic,
@@ -95,13 +117,14 @@ class _State extends BaseState<ForgotPasswordState, ForgotPasswordCubit,
         valueTransformer: (suggestion) => suggestion,
         decoration: InputDecoration(
             hintText: items.hint_text,
-            labelText: "email",
+            labelText: "Email",
             prefixIcon: Image.asset(items.icon_prefix, height: 20, width: 20),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
             contentPadding: const EdgeInsets.all(10)),
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: FormBuilderValidators.compose([
-          FormBuilderValidators.required(errorText: "Please enter the email."),
+          FormBuilderValidators.required(
+              errorText: LanguageKeys.auth_enterEmail.tr),
           FormBuilderValidators.email()
         ]),
       ),
@@ -121,21 +144,11 @@ class _State extends BaseState<ForgotPasswordState, ForgotPasswordCubit,
             elevation: MaterialStateProperty.all(5),
             shape: MaterialStateProperty.all(RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20)))),
-        child: const Text("Submit",
-            style: TextStyle(fontSize: 16, color: Colors.white)));
-  }
-
-  Widget turnBack() {
-    return ElevatedButton(
-        onPressed: () {
-          context.router.pop();
-        },
-        style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.blue),
-            elevation: MaterialStateProperty.all(0),
-            shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(0)))),
-        child: Image.asset(AppIcons.icBack_png));
+        child: Text(LanguageKeys.submit.tr,
+            style: const TextStyle(
+                fontSize: 16,
+                color: Colors.white,
+                fontWeight: FontWeight.bold)));
   }
 
   void _resetPassword(BuildContext context) {
@@ -143,5 +156,21 @@ class _State extends BaseState<ForgotPasswordState, ForgotPasswordCubit,
       controller.sendPasswordResetEmail(
           context, _formKey.currentState!.fields['email']!.value);
     }
+  }
+
+  void setDimension() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        cubit.WIDTH = MediaQuery.of(context).size.width;
+        cubit.HEIGHT = MediaQuery.of(context).size.height;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    setDimension();
   }
 }

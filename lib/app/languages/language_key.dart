@@ -39,6 +39,21 @@ class LanguageKeys {
   static const String previous = 'previous';
   static const String report = 'report';
   static const String chooseLanguage = "chooseLanguage";
+  static const String back = "back";
+  static const String change = "change";
+  static const String update = "update";
+  static const String birthday = "birthday";
+
+  static const String goToLogin = "goToLogin";
+  static const String rememberPass = "rememberPass";
+  static const String forgetPass = "forgetPass";
+  static const String signUp = "signUp";
+  static const String signUpWith = 'signUpWith';
+  static const String updateLater = "updateLater";
+  static const String createAccount = "createAccount";
+  static const String notAgreeTheTerms = 'notAgreeTheTerms';
+  static const String i_understood_the = 'i_understood_the';
+  static const String example = "example";
 
   // Welcome Page
   static const String welcome_title = 'welcome_title';
@@ -168,6 +183,140 @@ class LanguageKeys {
   static var youDontHaveAnyNotifcation = "youDontHaveAnyNotifcation";
 
   static var status = "status";
+  static var submit = "submit";
+
+  //HELP
+  static const String instruction = 'introduction';
+
+  //TERMS OF SERVICE
+
+  //1
+  static const String term1_title = 'term1Title';
+  static const String term1_content = 'term1Content';
+
+  //2
+  static const String term2_title = 'term2Title';
+  static const String term2_content = 'term2Content';
+
+  //3
+  static const String term3_title = 'term3Title';
+  static const String term3_content = 'term3Content';
+
+  //4
+  static const String term4_title = 'term4Title';
+  static const String term4_content = 'term4Content';
+
+  //5
+  static const String term5_title = 'term5Title';
+  static const String term5_content = 'term5Content';
+
+  //6
+  static const String term6_title = 'term6Title';
+  static const String term6_content = 'term6Content';
+
+  //7
+  static const String term7_title = 'term7Title';
+  static const String term7_content = 'term7Content';
+
+  //8
+  static const String term8_title = 'term8Title';
+  static const String term8_content = 'term8Content';
+
+  //9
+  static const String term9_title = 'term9Title';
+  static const String term9_content = 'term9Content';
+
+  //10
+  static const String term10_title = 'term10Title';
+  static const String term10_content = 'term10Content';
+
+  //11
+  static const String term11_title = 'term11Title';
+  static const String term11_content = 'term11Content';
+
+  //12
+  static const String term12_title = 'term12Title';
+  static const String term12_content = 'term12Content';
+
+  //13
+  static const String term13_title = 'term13Title';
+  static const String term13_content = 'term13Content';
+
+  //14
+  static const String term14_title = 'term14Title';
+  static const String term14_content = 'term14Content';
+
+  //15
+  static const String term15_title = 'term15Title';
+  static const String term15_content = 'term15Content';
+
+  //VALIDATE MESSAGE
+  static const String enterTheOldPassword = 'enterTheOldPassword';
+  static const String enterTheNewPassword = 'enterTheNewPassword';
+  static const String enterTheConfirmPassword = 'enterTheConfirmPassword';
+
+  static const String msg_atLeast8Characters = 'msg_atLeast8Characters';
+  static const String msg_includeANumber = 'msg_includeANumber';
+  static const String msg_includeSpecialCharacters =
+      'msg_includeSpecialCharacters';
+  static const String msg_missLowerCharacters = 'msg_missLowerCharacters';
+  static const String msg_missUpperCharacters = 'msg_missUpperCharacters';
+  static const String msg_passwordNotMatch = 'msg_passwordNotMatch';
+  static const String msg_invalidProvinceCity = 'msg_invalidProvinceCity';
+  static const String msg_notSelectedAGender = 'msg_notSelectedAGender';
+  static const String msg_phoneNumberIncorrect = "msg_phoneNumberIncorrect";
+  static const String msg_fullNameIncorrect = "msg_fullNameIncorrect";
+  static const String msg_notBeEmpty = "msg_notBeEmpty";
+  static const String msg_invalidEmail = "msg_invalidEmail";
+
+  static const String requiredField = 'requiredField';
+  static const String updating = 'updating';
+
+  //USER INFORMATION
+  static const String updateInformation = 'updateInformation';
+  static const String emailAddress = 'emailAddress';
+  static const String gender = 'gender';
+  static const String province = 'province';
+  static const String city = 'city';
+  static const String address = 'address';
+  static const String selectProvincial = 'selectProvincial';
+  static const String selectDate = 'selectDate';
+  static const String male = 'male';
+  static const String female = 'female';
+  static const String enter_your_email = 'enter_your_email';
 
   // STORY
+  static const String author = 'author';
+  static const String duration = 'duration';
+  static const String recommended = "recommended";
+  static const String empty_favorite_stories = 'empty_favorite_stories';
+  static const String empty_listening_stories = 'empty_listening_stories';
+  static const String enter_keyword = 'enter_keyword';
+  static const String explore = 'explore';
+  static const String favorite = "favorite";
+  static const String listening = "listening";
+  static const String listens = "listens";
+
+  static const String msg_no_story_has = 'msg_no_story_has';
+  static const String msg_stories_updating = 'msg_stories_updating';
+
+  static const String minute = "minute";
+  static const String minutes = "minutes";
+  static const String play = 'play';
+  static const String reader = "reader";
+  static const String second = "second";
+  static const String seconds = "seconds";
+
+  static const String story_examples_1 = 'story_examples_1';
+  static const String story_overview = 'story_overview';
+
+  static const String summary = 'summary';
+  static const String topics = 'topics';
+  static const String topic = 'topic';
+  static const String view = 'view';
+  static const String volume = 'volume';
+
+  //MODEL
+  static const String model_in_category_empty = 'model_in_category_empty';
+  static const String models_no_has_keyword = 'models_no_has_keyword';
 }

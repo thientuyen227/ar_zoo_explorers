@@ -31,7 +31,7 @@ class StoryTopicController extends ControllerHelper {
             Fluttertoast.showToast(msg: "Truy cập thông tin thất bại!"));
   }
 
-  Future<List<StoryTopicEntity>> getAllStoryTopics(BuildContext context) {
+  Future<List<StoryTopicEntity>> getAllStoryTopics(BuildContext? context) {
     return processRequest<List<StoryTopicEntity>>(
         request: () => _storyTopicRepository.getAllStoryTopics(),
         onFailure: (failure) =>
@@ -41,7 +41,7 @@ class StoryTopicController extends ControllerHelper {
             });
   }
 
-  _setListStoryTopic(BuildContext context, List<StoryTopicEntity> lstEntity) {
+  _setListStoryTopic(BuildContext? context, List<StoryTopicEntity> lstEntity) {
     listStoryTopic.value = lstEntity;
     update();
   }
