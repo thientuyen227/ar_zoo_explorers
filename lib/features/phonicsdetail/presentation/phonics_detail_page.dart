@@ -41,7 +41,7 @@ class _State extends BaseState<PhonicsDetailState, PhonicsDetailCubit,
 
   Future<void> fetchData() async {
     xalphabet = await charsController.getAllChars(context);
-    setState(() {}); // Yêu cầu build lại UI sau khi nhận được dữ liệu
+    setState(() {});
   }
 
   void onPlayerStateChanged() {

@@ -2,10 +2,11 @@ import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
-import 'package:ar_zoo_explorers/features/puzzle/model/questions.dart';
+import 'package:ar_zoo_explorers/domain/entities/question_entity.dart';
 import 'package:ar_zoo_explorers/features/puzzle/presentation/puzzle_cubit.dart';
 import 'package:ar_zoo_explorers/features/puzzle/presentation/puzzle_state.dart';
 import 'package:ar_zoo_explorers/utils/widget/custom_back_button.dart';
+import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -21,20 +22,23 @@ class PuzzlePage extends StatefulWidget {
 
 class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
   // final controller = AuthController.findOrInitialize;
-
-  // final _formKey = GlobalKey<FormBuilderState>();
-  // List<String> answers = ["Bear", "Lion", "Giraffe", "Elephant"];
   int? selectedAnswerIndex;
+  String? selectedAnswer;
   int questionIndex = 0;
-  void pickAnswer(int value) {
-    selectedAnswerIndex = value;
-
+  void pickAnswer({String? value, int? index}) {
+    selectedAnswer = value;
+    selectedAnswerIndex = index;
     setState(() {});
   }
 
   @override
+  void initState() {
+    super.initState();
+    cubit.init();
+  }
+
+  @override
   Widget buildByState(BuildContext context, PuzzleState state) {
-    final question = questions[questionIndex];
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -49,101 +53,111 @@ class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [CustomBackButton()]),
       ),
-      body: Column(
-        children: [
-          const SizedBox(
-            height: 80,
-          ),
-          SizedBox(
-            height: 300,
-            width: double.infinity,
-            child: Stack(
+      body: state.questionEntities != null && state.questionEntities!.isNotEmpty
+          ? Column(
               children: [
-                Positioned(
-                  left: 35,
-                  top: 35,
-                  child: Container(
-                    height: 226,
-                    width: 336,
-                    decoration: BoxDecoration(
-                      border: Border.all(),
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      color: AppColor.white,
-                    ),
-                  ),
+                const SizedBox(
+                  height: 80,
                 ),
-                Positioned(
-                    left: 45,
-                    top: 45,
-                    child: Container(
-                      height: 226,
-                      width: 336,
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        border: Border.all(),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
-                        color: AppColor.tinintIce,
-                      ),
-                      child: renderVocabulary(),
-                    )),
-                Positioned(
-                    top: 120,
-                    child: Image.asset(
-                      AppImages.imgPuzzleDesign,
-                      height: 80,
-                      width: 80,
-                    )),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 30,
-          ),
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 2.35,
-              crossAxisSpacing: 5,
-            ),
-            itemCount: question.options!.length,
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: selectedAnswerIndex == null
-                    ? () => pickAnswer(index)
-                    : null,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
+                SizedBox(
+                  height: 300,
+                  width: double.infinity,
+                  child: Stack(
                     children: [
-                      renderAnswer(
-                        currentIndex: index,
-                        question: question.options![index],
-                        isSelected: selectedAnswerIndex == index,
-                        selectedAnswerIndex: selectedAnswerIndex,
-                        correctAnswerIndex: question.correctAnswerIndex,
-                      )
+                      Positioned(
+                        left: 35,
+                        top: 35,
+                        child: Container(
+                          height: 226,
+                          width: 336,
+                          decoration: BoxDecoration(
+                            border: Border.all(),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                            color: AppColor.white,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                          left: 45,
+                          top: 45,
+                          child: Container(
+                            height: 226,
+                            width: 336,
+                            padding: const EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              border: Border.all(),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10)),
+                              color: AppColor.tinintIce,
+                            ),
+                            child: renderVocabulary(),
+                          )),
+                      Positioned(
+                          top: 120,
+                          child: Image.asset(
+                            AppImages.imgPuzzleDesign,
+                            height: 80,
+                            width: 80,
+                          )),
                     ],
                   ),
                 ),
-              );
-            },
-          )
-        ],
-      ),
+                const SizedBox(
+                  height: 30,
+                ),
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 2.3,
+                    crossAxisSpacing: 4.8,
+                  ),
+                  itemCount:
+                      state.questionEntities![questionIndex].options!.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: selectedAnswerIndex == null
+                          ? () => pickAnswer(
+                              value: state.questionEntities![questionIndex]
+                                  .options![index]["en"]!,
+                              index: index)
+                          : null,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          children: [
+                            renderAnswer(
+                              option: state.questionEntities![questionIndex]
+                                  .options![index]["en"]!,
+                              question: state.questionEntities![questionIndex]
+                                  .questionLocalize,
+                              isSelected: selectedAnswerIndex == index,
+                              selectedAnswerIndex: selectedAnswer,
+                              correctAnswer:
+                                  state.questionEntities![questionIndex].answer,
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                )
+              ],
+            )
+          : Container(),
     );
   }
 
   Widget renderAnswer({
+    required String option,
     required String question,
     required bool isSelected,
-    required int? correctAnswerIndex,
-    required int? selectedAnswerIndex,
-    required int currentIndex,
+    required String correctAnswer,
+    required String? selectedAnswerIndex,
   }) {
-    bool isCorrectAnswer = currentIndex == correctAnswerIndex;
+    bool isCorrectAnswer = option == correctAnswer;
     bool isWrongAnswer = !isCorrectAnswer && isSelected;
 
     return selectedAnswerIndex != null
@@ -163,7 +177,7 @@ class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    question,
+                    option,
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w600),
                   ),
@@ -183,7 +197,7 @@ class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    question,
+                    option,
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w600),
                   ),
@@ -197,13 +211,12 @@ class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: SvgPicture.asset(
-            AppImages.imgLionBaby,
-            height: 80,
-            width: 80,
-          ),
-        ),
+            padding: const EdgeInsets.all(15.0),
+            child: ImageSvgUrlCustom(
+              imagePath: state.questionEntities![questionIndex].image!,
+              width: 80,
+              height: 80,
+            )),
         const Text(
           "/ˈlaɪən/",
           style: TextStyle(fontSize: 18),

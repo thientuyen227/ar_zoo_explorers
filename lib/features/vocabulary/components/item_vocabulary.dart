@@ -1,14 +1,15 @@
 import 'package:ar_zoo_explorers/app/config/routes.dart';
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
-import 'package:ar_zoo_explorers/app/theme/icons.dart';
+import 'package:ar_zoo_explorers/domain/entities/learning_category_entity.dart';
+import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class ItemVocabulary extends StatefulWidget {
-  const ItemVocabulary({super.key});
+  final LearningCategoryEntity learningCategoryEntity;
+  const ItemVocabulary({super.key, required this.learningCategoryEntity});
 
   @override
   State<ItemVocabulary> createState() => _ItemVocabularyState();
@@ -32,9 +33,13 @@ class _ItemVocabularyState extends State<ItemVocabulary> {
         child: Center(
           child: Column(
             children: [
-              SvgPicture.asset(AppImages.imgLionBaby),
+              ImageSvgUrlCustom(
+                imagePath: widget.learningCategoryEntity.imagePath,
+                height: 80,
+                width: 80,
+              ),
               Text(
-                LanguageKeys.animals.tr,
+                widget.learningCategoryEntity.nameLocalize,
                 style:
                     const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
               ),

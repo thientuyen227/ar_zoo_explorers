@@ -1,5 +1,6 @@
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
+import 'package:ar_zoo_explorers/core/data/controller/vocabulary_controller.dart';
 import 'package:ar_zoo_explorers/domain/entities/vocabulary_entity.dart';
 import 'package:ar_zoo_explorers/features/vocabularydetail/components/dialog_animal.dart';
 import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
@@ -18,6 +19,7 @@ class ItemVocabularyDetail extends StatefulWidget {
 class _ItemVocabularyDetailState extends State<ItemVocabularyDetail> {
   var isComplete = false;
   final languageCode = Get.locale?.languageCode;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -77,9 +79,11 @@ class _ItemVocabularyDetailState extends State<ItemVocabularyDetail> {
 
 void _showDialogAndBottomSheet(
     BuildContext context, VocabularyEntity vocabularyEntities) {
+  final vocabularyController = VocabularyController.findOrInitialize;
   showDialog(
     context: context,
     builder: (BuildContext context) {
+      vocabularyController.getVocabulary(context, vocabularyEntities.id);
       return DialogAnimal(vocabularyEntity: vocabularyEntities);
     },
   );

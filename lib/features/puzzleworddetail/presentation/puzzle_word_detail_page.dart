@@ -1,15 +1,17 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
+import 'package:ar_zoo_explorers/core/data/controller/question_controller.dart';
 import 'package:ar_zoo_explorers/domain/entities/question_entity.dart';
-import 'package:ar_zoo_explorers/features/puzzle/model/questions.dart';
 import 'package:ar_zoo_explorers/features/puzzleworddetail/presentation/puzzle_word_detail_cubit.dart';
 import 'package:ar_zoo_explorers/features/puzzleworddetail/presentation/puzzle_word_detail_state.dart';
 import 'package:ar_zoo_explorers/utils/widget/custom_back_button.dart';
 import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,107 +27,202 @@ class PuzzleWordDetailPage extends StatefulWidget {
 
 class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
     PuzzleWordDetailPage> {
-  late List<QuestionEntity> listQuestions;
+  final questionController = QuestionController.findOrInitialize;
+  AudioPlayer audioPlayer = AudioPlayer();
   List<String>? arrayBtns;
   int indexQues = 0; // current index question
   int hintCount = 0;
   bool isFull = false;
   bool isDone = false;
-  // List<WordFindChar>? keywords;
+  QuestionEntity? currentQues;
 
   @override
   void initState() {
     super.initState();
-    listQuestions = questions;
-    int totalKeywords = 16;
-    arrayBtns = cubit.generateKeywords(questions[0].answer!, totalKeywords);
-    generateHint(answer: questions[0].answer!);
+    cubit.init();
+    onPlayerStateChanged();
+    setVolume();
+    completeAudio();
+  }
+
+  void onPlayerStateChanged() {
+    audioPlayer.onPlayerStateChanged.listen((PlayerState state) {
+      if (state == PlayerState.playing) {
+        setState(() {
+          cubit.audioState = PlayerState.playing;
+          cubit.isPlaying = true;
+        });
+      } else {
+        cubit.isPlaying = false;
+        if (state == PlayerState.paused) {
+          setState(() {
+            cubit.audioState = PlayerState.paused;
+          });
+        } else if (state == PlayerState.stopped) {
+          setState(() {
+            cubit.audioState = PlayerState.stopped;
+          });
+        }
+      }
+    }, onError: (msg) {
+      setState(() {
+        cubit.audioState = PlayerState.stopped;
+        print("audio error:msg.toString()");
+      });
+    });
+  }
+
+  Future<void> completeAudio() async {
+    audioPlayer.onPlayerStateChanged.listen((PlayerState state) async {
+      if (state == PlayerState.completed) {
+        if (cubit.isLoop) {
+          await audioPlayer.play(UrlSource(cubit.audioUrl),
+              position: Duration.zero);
+        } else {
+          setState(() {
+            cubit.audioState = PlayerState.stopped;
+          });
+        }
+      }
+    });
+  }
+
+  void setVolume() {
+    setState(() {
+      cubit.volumeValue = 0.9;
+      audioPlayer.setVolume(0.9);
+    });
+  }
+
+  void onDurationChanged() {
+    audioPlayer.onDurationChanged.listen((Duration d) {
+      setState(() {
+        cubit.position = d;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    audioPlayer.dispose();
   }
 
   @override
   Widget buildByState(BuildContext context, PuzzleWordDetailState state) {
-    // final question = questions[questionIndex];
-    // var items = cubit.topics;
+    if (state.questionEntities != null && state.questionEntities!.isNotEmpty) {
+      currentQues = state.questionEntities![indexQues];
+      if (arrayBtns == null) {
+        int totalKeywords = 16;
+        arrayBtns = cubit.generateKeywords(currentQues!.answer, totalKeywords);
+        generateHint(answer: currentQues!.answer);
+      }
+    }
 
-    var question = "Which animal is this?";
-    QuestionEntity currentQues = listQuestions[indexQues];
-    // currentQues.puzzles = answer;
-
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(LanguageKeys.puzzle.tr,
-            style: const TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-                fontWeight: FontWeight.bold)),
-        backgroundColor: const Color.fromARGB(255, 109, 189, 255),
-        elevation: 1,
-        leading: const Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [CustomBackButton()]),
-      ),
-      body: Stack(
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        Navigator.of(context).pop();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(LanguageKeys.puzzle.tr,
+              style: const TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold)),
+          backgroundColor: const Color.fromARGB(255, 109, 189, 255),
+          elevation: 1,
+          leading: const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [CustomBackButton()]),
+        ),
+        body: currentQues != null &&
+                state.questionEntities != null &&
+                state.questionEntities!.isNotEmpty
+            ? Stack(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Center(
-                        child: Column(
-                          children: [
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            _renderQuestion(question: question),
-                            _renderImage(image: listQuestions[0].image!),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: SizedBox(
-                                width: 500,
-                                child: Wrap(
-                                    spacing: 10,
-                                    alignment: WrapAlignment.center,
-                                    children: [
-                                      _renderAnswer(currentQues: currentQues),
-                                    ]),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Center(
+                                child: Column(
+                                  children: [
+                                    const SizedBox(
+                                      height: 30,
+                                    ),
+                                    _renderQuestion(
+                                        question: state
+                                            .questionEntities![indexQues]
+                                            .questionLocalize),
+                                    _renderImage(
+                                        image: state
+                                            .questionEntities![indexQues]
+                                            .image!),
+                                    const SizedBox(
+                                      height: 30,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: SizedBox(
+                                        width: 500,
+                                        child: Wrap(
+                                            spacing: 10,
+                                            alignment: WrapAlignment.center,
+                                            children: [
+                                              _renderAnswer(
+                                                  currentQues: currentQues!),
+                                            ]),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 30,
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
+                      _renderKeyword(currentQues: currentQues!),
                     ],
                   ),
-                ),
-              ),
-              _renderKeyword(currentQues: currentQues),
-            ],
-          ),
-          if (isDone)
-            Positioned(
-                bottom: 140,
-                child: Lottie.asset(AppLotties.congratulation,
-                    height: 100, width: 100))
-        ],
+                  if (isDone) Positioned(bottom: 100, child: congratulation()),
+                ],
+              )
+            : Container(),
       ),
     );
   }
 
+  Widget congratulation() {
+    return FutureBuilder(
+      future: Future.delayed(const Duration(milliseconds: 1)),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          audioPlayer.play(UrlSource(cubit.audioUrl));
+          return Lottie.asset(AppLotties.congratulation,
+              height: 400, width: 400);
+        } else {
+          return Container();
+        }
+      },
+    );
+  }
+
   generateHint({required String answer}) async {
-    QuestionEntity currentQues = listQuestions[indexQues];
+    QuestionEntity currentQues = state.questionEntities![indexQues];
     final List<String> wl = [answer];
     currentQues.puzzles = List.generate(wl[0].split("").length, (index) {
-      return WordFindChar(correctValue: currentQues.answer!.split("")[index]);
+      return WordFindChar(
+          correctValue: currentQues.answer.split("")[index].toUpperCase());
     });
 
     List<WordFindChar> puzzleNoHints = currentQues.puzzles!
@@ -142,9 +239,9 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
 
         if (indexHint == countTemp - 1) {
           puzzle.hintShow = true;
-          puzzle.currentValue = puzzle.correctValue;
-          puzzle.currentIndex =
-              arrayBtns!.indexWhere((btn) => btn == puzzle.correctValue);
+          puzzle.currentValue = puzzle.correctValue?.toUpperCase();
+          puzzle.currentIndex = arrayBtns!
+              .indexWhere((btn) => btn == puzzle.correctValue?.toUpperCase());
         }
 
         return puzzle;
@@ -155,24 +252,35 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
   }
 
   Future<void> setBtnClick(int index) async {
-    QuestionEntity currentQues = listQuestions[indexQues];
+    QuestionEntity currentQues = state.questionEntities![indexQues];
 
     int currentIndexEmpty = currentQues.puzzles!
         .indexWhere((puzzle) => puzzle.currentValue == null);
 
     if (currentIndexEmpty >= 0 && arrayBtns!.isNotEmpty) {
       currentQues.puzzles![currentIndexEmpty].currentIndex = index;
-      currentQues.puzzles![currentIndexEmpty].currentValue =
-          arrayBtns![index].toUpperCase();
+      currentQues.puzzles![currentIndexEmpty].currentValue = arrayBtns![index];
+
+      setState(() {});
 
       if (fieldCompleteCorrect(currentQues: currentQues)) {
         isDone = true;
-
-        setState(() {});
+        setState(() {
+          Timer(const Duration(seconds: 2), () {
+            audioPlayer.stop();
+            setState(() {
+              isDone = false;
+              indexQues++;
+              if (indexQues >= state.questionEntities!.length) {
+                indexQues = 0;
+              }
+              resetStateForNextQuestion();
+            });
+          });
+        });
 
         await Future.delayed(const Duration(seconds: 1));
       }
-      setState(() {});
     }
   }
 
@@ -188,7 +296,7 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
     isFull = true;
     String answeredString =
         currentQues.puzzles!.map((puzzle) => puzzle.currentValue).join("");
-    return answeredString == currentQues.answer;
+    return answeredString == currentQues.answer.toUpperCase();
   }
 
   Widget _renderKeyword({required QuestionEntity currentQues}) {
@@ -202,59 +310,53 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
           crossAxisSpacing: 4,
           mainAxisSpacing: 4,
         ),
-        itemCount: 16, // later change
+        itemCount: arrayBtns!.length, // Đảm bảo số lượng động nếu cần
         shrinkWrap: true,
         itemBuilder: (context, index) {
           bool statusBtn = currentQues.puzzles!
                   .indexWhere((puzzle) => puzzle.currentIndex == index) >=
               0;
 
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              Color color =
-                  statusBtn ? Colors.white70 : const Color(0xff7EE7FD);
+          Color color = statusBtn ? Colors.white70 : const Color(0xff7EE7FD);
 
-              return Container(
-                decoration: BoxDecoration(
-                  color: color,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                alignment: Alignment.center,
-                child: TextButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                      (Set<MaterialState> states) {
-                        // Set the button's background color based on its state
-                        if (states.contains(MaterialState.pressed)) {
-                          return Theme.of(context)
-                              .colorScheme
-                              .primary
-                              .withOpacity(0.5);
-                        }
-                        return const Color(0xff7EE7FD);
-                      },
-                    ),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
-                  ),
-                  onPressed: () {
-                    if (!statusBtn) {
-                      setBtnClick(index);
+          return Container(
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            alignment: Alignment.center,
+            child: TextButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                  (Set<MaterialState> states) {
+                    if (states.contains(MaterialState.pressed)) {
+                      return Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withOpacity(0.5);
                     }
+                    return const Color(0xff7EE7FD);
                   },
-                  child: Text(
-                    arrayBtns![index].toUpperCase(),
-                    style: const TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                    ),
+                ),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
-              );
-            },
+              ),
+              onPressed: () {
+                if (!statusBtn) {
+                  setBtnClick(index);
+                }
+              },
+              child: Text(
+                arrayBtns![index],
+                style: const TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
           );
         },
       ),
@@ -309,19 +411,17 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: currentQues.puzzles!.map((puzzle) {
-              // later change color based condition
               Color color;
 
               if (isDone) {
                 color = AppColor.green;
-                Lottie.asset(AppLotties.congratulation,
-                    height: 100, width: 100);
-              } else if (puzzle.hintShow)
+              } else if (puzzle.hintShow) {
                 color = AppColor.vibrantYellow;
-              else if (isFull)
+              } else if (isFull) {
                 color = Colors.red;
-              else
+              } else {
                 color = const Color(0xff7EE7FD);
+              }
 
               return InkWell(
                 onTap: () {
@@ -341,7 +441,6 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
                   height: constraints.biggest.width / 7 - 6,
                   margin: const EdgeInsets.all(3),
                   child: Text(
-                    // arrayBtns![index].toUpperCase(),
                     (puzzle.currentValue ?? '').toUpperCase(),
                     style: const TextStyle(
                       fontSize: 25,
@@ -355,5 +454,13 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
         },
       ),
     );
+  }
+
+  void resetStateForNextQuestion() {
+    arrayBtns = null;
+    hintCount = 0;
+    isFull = false;
+    isDone = false;
+    currentQues = null;
   }
 }

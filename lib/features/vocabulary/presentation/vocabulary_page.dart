@@ -50,14 +50,16 @@ class _State
             ),
             GridView.builder(
               shrinkWrap: true,
-              itemCount: state.vocabularies.length,
+              itemCount: state.learningcategories.length,
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
-                return const Padding(
-                  padding: EdgeInsets.all(16.0),
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
-                      ItemVocabulary(),
+                      ItemVocabulary(
+                        learningCategoryEntity: state.learningcategories[index],
+                      ),
                     ],
                   ),
                 );
