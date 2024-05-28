@@ -9,6 +9,7 @@ import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:language_detector/language_detector.dart';
 
 import '../../../app/theme/icons.dart';
 import '../../../base/base_state.dart';
@@ -25,7 +26,7 @@ class LearningPage extends StatefulWidget {
 class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
   ApiService apiService = ApiService();
   TextEditingController textTest = TextEditingController();
-  List<ChatBoxEntity> chatBoxEntity = [];
+  ChatBoxEntity? chatBoxEntity;
 
   @override
   Widget buildByState(BuildContext context, LearningState state) {
@@ -78,21 +79,13 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
                 },
                 child: const Text("Send Text"),
               ),
-              chatBoxEntity.isNotEmpty
-                  ? ListView.separated(
-                      itemBuilder: ((context, index) {
-                        ImageSvgUrlCustom(
-                            imagePath: chatBoxEntity[index]
-                                .generatedFiles![index]
-                                .fileUrl);
-                        return null;
-                      }),
-                      separatorBuilder: (context, index) {
-                        return const SizedBox(
-                          width: 8,
-                        );
-                      },
-                      itemCount: chatBoxEntity.length)
+              chatBoxEntity != null
+                  ? ImageSvgUrlCustom(
+                      imagePath: chatBoxEntity!.generatedFiles![0].fileUrl,
+                      size: 100,
+                      height: 50,
+                      width: 50,
+                    )
                   : Container()
             ],
           ),
@@ -196,12 +189,13 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
   void _sendTextToImage(String text) async {
     try {
       // Gọi API texttoimage bằng ApiService
-      chatBoxEntity = await apiService.getTextToImageResponse(text);
+      String detectedLanguage =
+          await LanguageDetector.getLanguageCode(content: text);
+      chatBoxEntity =
+          await apiService.getTextToImageResponse(text, detectedLanguage);
       setState(() {});
     } catch (e) {
-      // Xử lý lỗi nếu cần
       print("Error sending text to image: $e");
-      // Hiển thị thông báo lỗi
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
