@@ -5,7 +5,6 @@ import 'package:ar_zoo_explorers/domain/entities/message_entity.dart';
 import 'package:ar_zoo_explorers/features/base-model/message_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 
 class ChatAIABottomBar extends StatefulWidget {
@@ -23,7 +22,7 @@ class _ChatAIABottomBarState extends State<ChatAIABottomBar> {
 
   final _formKey = GlobalKey<FormBuilderState>();
 
-  TextEditingController? editingController;
+  TextEditingController editingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -67,9 +66,9 @@ class _ChatAIABottomBarState extends State<ChatAIABottomBar> {
           )),
       onPressed: () async {
         widget.onSendMassage(MessageEntity(
-            content: editingController!.text,
+            content: editingController.text,
             contentType: MsgType.text.typeString));
-        editingController!.clear();
+        editingController.clear();
         FocusScope.of(context).requestFocus(FocusNode());
       },
     );
@@ -95,21 +94,14 @@ class _ChatAIABottomBarState extends State<ChatAIABottomBar> {
   }
 
   Widget boxChat() {
-    return FormBuilderTextField(
-        name: 'chat',
-        controller: editingController,
-        keyboardType: TextInputType.text,
-        decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.grey.shade50,
-            hintText: LanguageKeys.write_message.tr,
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 10, horizontal: 25)),
-        style: const TextStyle(fontSize: 16),
-        initialValue: "",
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        validator: FormBuilderValidators.compose([]));
+    return TextFormField(
+      controller: editingController,
+      decoration: InputDecoration(
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+          hintText: LanguageKeys.write_message.tr,
+          prefixIcon: Image.asset(AppIcons.icCalendar),
+          contentPadding: const EdgeInsets.all(10)),
+    );
   }
 
   Future<void> _setDimension() async {

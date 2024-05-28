@@ -1,6 +1,8 @@
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
+import 'package:ar_zoo_explorers/domain/api/api_service.dart';
+import 'package:ar_zoo_explorers/domain/entities/chatbox_entity.dart';
 import 'package:ar_zoo_explorers/domain/entities/message_entity.dart';
 import 'package:ar_zoo_explorers/features/base-model/message_type.dart';
 import 'package:ar_zoo_explorers/features/chatAI/component/chai_ai_app_bar.dart';
@@ -11,6 +13,7 @@ import 'package:ar_zoo_explorers/features/chatAI/presentation/chat_ai_cubit.dart
 import 'package:ar_zoo_explorers/features/chatAI/presentation/chat_ai_state.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:language_detector/language_detector.dart';
 
 @RoutePage()
 class ChatAIPage extends StatefulWidget {
@@ -22,6 +25,8 @@ class ChatAIPage extends StatefulWidget {
 
 class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
   List<Widget> lstMessages = [];
+  ChatBoxEntity? chatBoxEntity;
+  ApiService apiService = ApiService();
 
   @override
   Widget buildByState(BuildContext context, ChatAIState state) {
@@ -41,8 +46,15 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
         ),
       ))),
       bottomNavigationBar: ChatAIABottomBar(
-        onSendMassage: (MessageEntity value) async {
-          await _sendMessages(value);
+        onSendMassage: (MessageEntity message) {
+          _sendMessages(message).then((value) {
+            setState(() {});
+            _sendTextToImage(message.content).then((value) {
+              setState(() {
+                _buildMessages();
+              });
+            });
+          });
         },
       ),
       resizeToAvoidBottomInset: true,
@@ -97,68 +109,63 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
     } else {
       lstMessages.add(Row(children: [
         const Spacer(),
-        ImageMessage(entity: value),
+        ImageMessage(
+            entity: MessageEntity(
+          content: chatBoxEntity!.generatedFiles![0].fileUrl,
+        )),
         userAvatar()
       ]));
     }
   }
 
   Future<void> _buildMessages() async {
-    for (var item in state.messages) {
-      if (item.isAI) {
-        if (item.contentType == MsgType.text.typeString) {
-          lstMessages.add(Row(children: [
-            aiAvatar(),
-            TextMessage(entity: item),
-            const Spacer()
-          ]));
-        } else {
-          lstMessages.add(Row(children: [
-            aiAvatar(),
-            ImageMessage(entity: item),
-            const Spacer()
-          ]));
-        }
-      } else {
-        if (item.contentType == MsgType.text.typeString) {
-          lstMessages.add(Row(children: [
-            const Spacer(),
-            TextMessage(entity: item),
-            userAvatar()
-          ]));
-        } else {
-          lstMessages.add(Row(children: [
-            const Spacer(),
-            ImageMessage(entity: item),
-            userAvatar()
-          ]));
-        }
-      }
-    }
+    lstMessages.add(Row(children: [
+      aiAvatar(),
+      Column(
+        children: [
+          TextMessage(
+              entity: MessageEntity(content: chatBoxEntity!.prediction)),
+          chatBoxEntity!.generatedFiles!.isNotEmpty
+              ? ImageMessage(
+                  entity: MessageEntity(
+                  content: chatBoxEntity!.generatedFiles![0].fileUrl,
+                ))
+              : Container(),
+        ],
+      ),
+      const Spacer()
+    ]));
   }
 
   Future<void> _initCubit() async {
-    await cubit.init(context).then((value) => setState(() {
-          _buildMessages();
-        }));
+    await cubit.init(context).then((value) => setState(() {}));
   }
 
-  Widget gradientBackground(double height, double width, double borderRadius,
-      Color topColor, Color bottomColor) {
-    return Container(
-        height: height,
-        width: width,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(borderRadius),
-                bottomRight: Radius.circular(borderRadius)),
-            gradient: LinearGradient(
-                colors: [topColor, bottomColor],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter)
-            // image: const DecorationImage(
-            //     image: AssetImage(AppImages.imgAppLogoBG), fit: BoxFit.cover),
-            ));
+  Future<void> _sendTextToImage(String text) async {
+    try {
+      cubit.showLoading();
+      String detectedLanguage =
+          await LanguageDetector.getLanguageCode(content: text);
+      chatBoxEntity =
+          await apiService.getTextToImageResponse(text, detectedLanguage);
+      cubit.hideLoading();
+    } catch (e) {
+      cubit.hideLoading();
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Error"),
+          content: const Text(
+              "Failed to send text to image. Please try again later."),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("OK"),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   @override

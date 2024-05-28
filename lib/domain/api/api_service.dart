@@ -28,7 +28,7 @@ class ApiService {
       String text, String detectedLanguage) async {
     var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
     request.fields['data'] =
-        '{"parameters":{"prompt": "$text","lang":"$detectedLanguage","stream":true},"model_id":"chooch-image-chat-4"}';
+        '{"parameters":{"prompt":"$text","lang":"en","stream":true},"model_id":"chooch-image-chat-4"}';
     var response = await request.send();
     if (response.statusCode == 200) {
       var responseData = await response.stream.bytesToString();
