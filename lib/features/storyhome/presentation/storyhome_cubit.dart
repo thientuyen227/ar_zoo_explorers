@@ -26,12 +26,18 @@ class StoryHomeCubit extends BaseCubit<StoryHomeState> {
             WidgetsBinding.instance.platformDispatcher.views.single)
         .size;
     await controller.getCurrentUser(context);
-    await state.setAttributes(
+    emit(state.copyWith(
         height: mediaSize.height,
         width: mediaSize.width,
         user: controller.currentUser.value,
         lstRecommend: await _getStoriesByReleaseDate(),
-        lstTopic: await _getAllStoryTopics());
+        lstTopic: await _getAllStoryTopics()));
+    // await state.setAttributes(
+    //     height: mediaSize.height,
+    //     width: mediaSize.width,
+    //     user: controller.currentUser.value,
+    //     lstRecommend: await _getStoriesByReleaseDate(),
+    //     lstTopic: await _getAllStoryTopics());
     print("Cubit.Init() : Get data");
     hideLoading();
   }

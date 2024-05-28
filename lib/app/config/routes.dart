@@ -39,6 +39,7 @@ class Routes {
   static const String storyfavorite = "/storyfavorite";
   static const String storytopic = "/storytopic";
   static const String phonicsdetail = "/phonicsdetail";
+  static const String chatai = "/chatai";
 
   static Route<T> fadeThrough<T>(RouteSettings settings, WidgetBuilder page,
       {int duration = 300}) {

@@ -28,15 +28,23 @@ class StoryFavoriteCubit extends BaseCubit<StoryFavoriteState> {
     Size mediaSize = MediaQueryData.fromView(
             WidgetsBinding.instance.platformDispatcher.views.single)
         .size;
-    await state.setAttributes(
-      height: mediaSize.height,
-      width: mediaSize.width,
-      listStory: await _setStoryButtons(
-        storyController.listStory.value,
-        userStoryController.listFavoriteUserStory.value,
-        storyTopicController.listStoryTopic.value,
-      ),
-    );
+    emit(state.copyWith(
+        height: mediaSize.height,
+        width: mediaSize.width,
+        listStory: await _setStoryButtons(
+          storyController.listStory.value,
+          userStoryController.listFavoriteUserStory.value,
+          storyTopicController.listStoryTopic.value,
+        )));
+    // await state.setAttributes(
+    //   height: mediaSize.height,
+    //   width: mediaSize.width,
+    //   listStory: await _setStoryButtons(
+    //     storyController.listStory.value,
+    //     userStoryController.listFavoriteUserStory.value,
+    //     storyTopicController.listStoryTopic.value,
+    //   ),
+    // );
     print("Cubit.Init() : Get data");
     hideLoading();
   }

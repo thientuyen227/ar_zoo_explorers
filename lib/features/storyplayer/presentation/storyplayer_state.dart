@@ -84,7 +84,7 @@ class StoryPlayerState {
     double? volumeValue,
     bool? isLoop,
   }) async {
-    this.pageStatus ?? this.pageStatus;
+    this.pageStatus;
     this.height = height ?? this.height;
     this.width = width ?? this.width;
     this.name = name ?? this.name;

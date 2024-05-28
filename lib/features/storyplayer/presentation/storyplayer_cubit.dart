@@ -22,7 +22,25 @@ class StoryPlayerCubit extends BaseCubit<StoryPlayerState> {
     Size mediaSize = MediaQueryData.fromView(
             WidgetsBinding.instance.platformDispatcher.views.single)
         .size;
-    await state.setAttributes(
+
+    // await state.setAttributes(
+    //   height: mediaSize.height,
+    //   width: mediaSize.width,
+    //   name: storyController.currentStory.value.title,
+    //   avatar: storyController.currentStory.value.avatar,
+    //   audioUrl: storyController.currentStory.value.sourceUrl,
+    //   content:
+    //       storyController.currentStory.value.content.replaceAll("\\n", "\n"),
+    //   duration: Duration(seconds: storyController.currentStory.value.duration),
+    //   position: Duration(
+    //       seconds: userStoryController.currentUserStory.value.pausedTime),
+    //   isPlaying: false,
+    //   audioState: PlayerState.stopped,
+    //   volumeValue: 1.0,
+    //   isLoop: false,
+    // );
+
+    emit(state.copyWith(
       height: mediaSize.height,
       width: mediaSize.width,
       name: storyController.currentStory.value.title,
@@ -37,7 +55,8 @@ class StoryPlayerCubit extends BaseCubit<StoryPlayerState> {
       audioState: PlayerState.stopped,
       volumeValue: 1.0,
       isLoop: false,
-    );
+    ));
+
     print("Cubit.Init() : Get data");
     hideLoading();
   }

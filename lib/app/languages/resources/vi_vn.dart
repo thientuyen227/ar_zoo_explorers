@@ -76,6 +76,8 @@ const Map<String, String> vi_vn = {
 
   'i_understood_the': 'Tôi đã hiểu',
   'example': 'Ví dụ:',
+  'get_img_failed': 'Chọn hình ảnh không thành công',
+  'chat_ai': 'Trò chuyện cùng Ar-Baby',
 
   // Welcome
   'welcome_start': 'Bắt đầu',
@@ -290,5 +292,8 @@ const Map<String, String> vi_vn = {
 
   //MODEL
   'model_in_category_empty': 'Danh mục hiện không có model',
-  'models_no_has_keyword': 'Model không tồn tại với từ khóa'
+  'models_no_has_keyword': 'Model không tồn tại với từ khóa',
+
+  //Chat AI
+  'write_message': 'Viết tin nhắn của bạn',
 };
