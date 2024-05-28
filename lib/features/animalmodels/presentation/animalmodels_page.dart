@@ -61,9 +61,9 @@ class _State
                             fontSize: 20,
                             color: Colors.white,
                             fontWeight: FontWeight.bold)),
-                    leading: const Column(
+                    leading: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [CustomBackButton()]),
+                        children: [turnBack()]),
                     actions: [
                       profileCustom(),
                       const SizedBox(width: 10),
@@ -156,6 +156,16 @@ class _State
                     loveButton(index),
                   ]))
             ])));
+  }
+
+  Widget turnBack() {
+    return CustomBackButton(onPressed: () async {
+      await cubit.showLoading();
+      await animalController.resetCurrentValue(context);
+      context.router.pop();
+      context.router.pushNamed(Routes.home);
+      await cubit.hideLoading();
+    });
   }
 
   // ẢNH ĐẠI DIỆN MODEL CỦA BUTTON

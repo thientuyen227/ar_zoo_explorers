@@ -44,7 +44,6 @@ class StorySearchingState {
   }
 
   setAttributes({
-    PageStatus? pageStatus,
     double? height,
     double? width,
     bool? searchStatus,
@@ -52,7 +51,6 @@ class StorySearchingState {
     List<StoryButtonObject>? listSearchStory,
     List<StoryButtonObject>? listFullStory,
   }) async {
-    this.pageStatus ?? this.pageStatus;
     this.height = height ?? this.height;
     this.width = width ?? this.width;
     this.searchStatus = searchStatus ?? this.searchStatus;

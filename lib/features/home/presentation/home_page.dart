@@ -89,6 +89,10 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
     return Column(
       children: [
         componentTitle(LanguageKeys.kidsActivities.tr),
+        const SizedBox(height: 16),
+        optionButton(context, AppImages.imgArBaby_WhiteBG,
+            LanguageKeys.chat_ai.tr, Routes.chatai),
+        const SizedBox(height: 16),
         optionButton(context, AppImages.imgStoryTelling,
             LanguageKeys.tellStoriesForChildren.tr, Routes.story),
         const SizedBox(height: 16),

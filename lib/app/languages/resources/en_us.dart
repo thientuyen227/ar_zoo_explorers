@@ -61,6 +61,7 @@ const Map<String, String> en_us = {
   'birthday': 'Birthday',
   'submit': 'Submit',
   'example': 'Example',
+  'get_img_failed': 'Select image failed',
 
   'goToLogin': 'Go to login',
   'rememberPass': 'Remember me',
@@ -73,6 +74,7 @@ const Map<String, String> en_us = {
   'notAgreeTheTerms': 'You have not agreed to the terms',
 
   'i_understood_the': 'I understand the',
+  'chat_ai': 'Chat with Ar-Baby',
 
   // Welcome
   'welcome_start': 'Start',
@@ -290,5 +292,8 @@ const Map<String, String> en_us = {
 
   //MODEL
   'model_in_category_empty': 'Models in this category is empty',
-  'models_no_has_keyword': 'Models does not exist with keyword'
+  'models_no_has_keyword': 'Models does not exist with keyword',
+
+  //Chat AI
+  'write_message': 'Write your message',
 };

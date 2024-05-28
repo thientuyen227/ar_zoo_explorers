@@ -67,6 +67,7 @@ class AppIcons {
   static const String icChecked64Green =
       "assets/icons/ic_checked_x64_green.png";
   static const String icLion64Color = "assets/icons/ic_lion_x64_color.png";
+  static const String icSend64White = "assets/icons/ic_send_x64_white.png";
 
   //Account Manager
   static const String icUserProfile = "assets/icons/ic_userprofile.png";
@@ -118,6 +119,9 @@ class AppImages {
       "assets/images/img_profile_128x128.png";
   static const String imgStoryTelling = "assets/images/img_story_telling.png";
   static const String imgLearning = "assets/images/img_learning.png";
+  static const String imgArBaby = "assets/images/img_ar_baby.png";
+  static const String imgArBaby_WhiteBG =
+      "assets/images/img_ar_baby_white_bg.png";
 
   //FLAGS
   static const String flagUK = "assets/images/flags/img_greatbritain.png";

@@ -311,7 +311,7 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
         child: GestureDetector(
             onTap: () async {
               await updateAvatar(context);
-              await _uploadInformation(context);
+              // await _uploadInformation(context);
             },
             child: Stack(alignment: Alignment.center, children: [
               Container(
@@ -377,12 +377,17 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
   Future<void> updateAvatar(BuildContext context) async {
     XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     String imageName = cubit.avatarName(controller.currentUser.value.fullname);
-    String? downloadURL =
-        // ignore: use_build_context_synchronously
-        await controller.uploadAvatar(context, image!.path, imageName);
-    setState(() {
-      cubit.userAvatar = downloadURL;
-    });
+    if (image != null) {
+      String? downloadURL =
+          // ignore: use_build_context_synchronously
+          await controller.uploadAvatar(context, image.path, imageName);
+      await _uploadInformation(context);
+      setState(() {
+        cubit.userAvatar = downloadURL;
+      });
+    } else {
+      await cubit.showToast(LanguageKeys.get_img_failed.tr);
+    }
   }
 
   String? _onHandleValidator(int index, String? value) {
