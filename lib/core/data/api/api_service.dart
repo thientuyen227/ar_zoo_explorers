@@ -27,12 +27,19 @@ class ApiService {
   Future<ChatBoxEntity> getTextToImageResponse(
       String text, String detectedLanguage) async {
     var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
-    request.fields['data'] =
-        '{"parameters":{"prompt":"$text","lang":"en","stream":true},"model_id":"chooch-image-chat-4"}';
+    if (detectedLanguage == 'vi') {
+      request.fields['data'] =
+          '{"parameters":{"prompt":"hình ảnh $text","lang":"vi","stream":true},"model_id":"chooch-image-chat-4"}';
+    } else {
+      request.fields['data'] =
+          '{"parameters":{"prompt":"$text","lang":"en","stream":true},"model_id":"chooch-image-chat-4"}';
+    }
+
     var response = await request.send();
     if (response.statusCode == 200) {
       var responseData = await response.stream.bytesToString();
       try {
+        print(responseData);
         var parsedData = jsonDecode(responseData);
         return ChatBoxEntity.fromJson(parsedData);
       } catch (e) {

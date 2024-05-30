@@ -181,9 +181,13 @@ abstract class $AppRouter extends _i40.RootStackRouter {
       );
     },
     PhonicsDetailRoute.name: (routeData) {
+      final args = routeData.argsAs<PhonicsDetailRouteArgs>();
       return _i40.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i16.PhonicsDetailPage(),
+        child: _i16.PhonicsDetailPage(
+          key: args.key,
+          type: args.type,
+        ),
       );
     },
     PhonicsRoute.name: (routeData) {
@@ -560,16 +564,40 @@ class ModelDetailRoute extends _i40.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i16.PhonicsDetailPage]
-class PhonicsDetailRoute extends _i40.PageRouteInfo<void> {
-  const PhonicsDetailRoute({List<_i40.PageRouteInfo>? children})
-      : super(
+class PhonicsDetailRoute extends _i40.PageRouteInfo<PhonicsDetailRouteArgs> {
+  PhonicsDetailRoute({
+    _i41.Key? key,
+    required String type,
+    List<_i40.PageRouteInfo>? children,
+  }) : super(
           PhonicsDetailRoute.name,
+          args: PhonicsDetailRouteArgs(
+            key: key,
+            type: type,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'PhonicsDetailRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i40.PageInfo<PhonicsDetailRouteArgs> page =
+      _i40.PageInfo<PhonicsDetailRouteArgs>(name);
+}
+
+class PhonicsDetailRouteArgs {
+  const PhonicsDetailRouteArgs({
+    this.key,
+    required this.type,
+  });
+
+  final _i41.Key? key;
+
+  final String type;
+
+  @override
+  String toString() {
+    return 'PhonicsDetailRouteArgs{key: $key, type: $type}';
+  }
 }
 
 /// generated route for

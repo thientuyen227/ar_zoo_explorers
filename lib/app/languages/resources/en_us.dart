@@ -113,6 +113,7 @@ const Map<String, String> en_us = {
 
   //Learning
   'your_points': 'Your Points',
+  'learning_home': 'Learning Home',
   'phonics': 'Phonics',
   'vocabulary': 'Vocabulary',
   'puzzle': 'Puzzle',
@@ -120,6 +121,9 @@ const Map<String, String> en_us = {
   'completed': 'Completed',
   'take_the_quiz': 'Take the quiz',
   'choose_topic': 'Choose topic',
+  'uppercaseLetters': 'Uppercase letters',
+  'lowercaseLetters': 'Lowercase letters',
+  'cardinalNumbers': 'Cardinal numbers',
 
   // Setting Pages
   'accountManager': 'Account Manager',

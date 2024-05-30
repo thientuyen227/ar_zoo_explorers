@@ -3,19 +3,18 @@ import 'dart:math';
 
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
-import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/core/data/controller/question_controller.dart';
 import 'package:ar_zoo_explorers/domain/entities/question_entity.dart';
 import 'package:ar_zoo_explorers/features/puzzleworddetail/presentation/puzzle_word_detail_cubit.dart';
 import 'package:ar_zoo_explorers/features/puzzleworddetail/presentation/puzzle_word_detail_state.dart';
+import 'package:ar_zoo_explorers/utils/widget/congratulation_widget.dart';
 import 'package:ar_zoo_explorers/utils/widget/custom_back_button.dart';
 import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 
 @RoutePage()
 class PuzzleWordDetailPage extends StatefulWidget {
@@ -40,66 +39,6 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
   void initState() {
     super.initState();
     cubit.init();
-    onPlayerStateChanged();
-    setVolume();
-    completeAudio();
-  }
-
-  void onPlayerStateChanged() {
-    audioPlayer.onPlayerStateChanged.listen((PlayerState state) {
-      if (state == PlayerState.playing) {
-        setState(() {
-          cubit.audioState = PlayerState.playing;
-          cubit.isPlaying = true;
-        });
-      } else {
-        cubit.isPlaying = false;
-        if (state == PlayerState.paused) {
-          setState(() {
-            cubit.audioState = PlayerState.paused;
-          });
-        } else if (state == PlayerState.stopped) {
-          setState(() {
-            cubit.audioState = PlayerState.stopped;
-          });
-        }
-      }
-    }, onError: (msg) {
-      setState(() {
-        cubit.audioState = PlayerState.stopped;
-        print("audio error:msg.toString()");
-      });
-    });
-  }
-
-  Future<void> completeAudio() async {
-    audioPlayer.onPlayerStateChanged.listen((PlayerState state) async {
-      if (state == PlayerState.completed) {
-        if (cubit.isLoop) {
-          await audioPlayer.play(UrlSource(cubit.audioUrl),
-              position: Duration.zero);
-        } else {
-          setState(() {
-            cubit.audioState = PlayerState.stopped;
-          });
-        }
-      }
-    });
-  }
-
-  void setVolume() {
-    setState(() {
-      cubit.volumeValue = 0.9;
-      audioPlayer.setVolume(0.9);
-    });
-  }
-
-  void onDurationChanged() {
-    audioPlayer.onDurationChanged.listen((Duration d) {
-      setState(() {
-        cubit.position = d;
-      });
-    });
   }
 
   @override
@@ -194,26 +133,13 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
                       _renderKeyword(currentQues: currentQues!),
                     ],
                   ),
-                  if (isDone) Positioned(bottom: 100, child: congratulation()),
+                  if (isDone)
+                    const Positioned(
+                        bottom: 100, child: CongratulationWidget()),
                 ],
               )
             : Container(),
       ),
-    );
-  }
-
-  Widget congratulation() {
-    return FutureBuilder(
-      future: Future.delayed(const Duration(milliseconds: 1)),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          audioPlayer.play(UrlSource(cubit.audioUrl));
-          return Lottie.asset(AppLotties.congratulation,
-              height: 400, width: 400);
-        } else {
-          return Container();
-        }
-      },
     );
   }
 
@@ -266,7 +192,7 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
       if (fieldCompleteCorrect(currentQues: currentQues)) {
         isDone = true;
         setState(() {
-          Timer(const Duration(seconds: 2), () {
+          Timer(const Duration(seconds: 3), () {
             audioPlayer.stop();
             setState(() {
               isDone = false;
@@ -310,7 +236,7 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
           crossAxisSpacing: 4,
           mainAxisSpacing: 4,
         ),
-        itemCount: arrayBtns!.length, // Đảm bảo số lượng động nếu cần
+        itemCount: arrayBtns!.length,
         shrinkWrap: true,
         itemBuilder: (context, index) {
           bool statusBtn = currentQues.puzzles!

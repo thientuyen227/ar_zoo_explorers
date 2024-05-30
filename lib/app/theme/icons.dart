@@ -239,4 +239,7 @@ class AppLotties {
   static const String animationanimal = "assets/lotties/animationanimal.json";
   static const String congratulation = "assets/lotties/congratulation.json";
   static const String xl = "assets/lotties/xl.json";
+  static const String plane = "assets/lotties/plane.json";
+  static const String earth = "assets/lotties/earth.json";
+  static const String snow = "assets/lotties/snow.json";
 }

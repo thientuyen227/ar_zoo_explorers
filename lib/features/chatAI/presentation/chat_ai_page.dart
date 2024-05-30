@@ -1,7 +1,7 @@
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
-import 'package:ar_zoo_explorers/domain/api/api_service.dart';
+import 'package:ar_zoo_explorers/core/data/api/api_service.dart';
 import 'package:ar_zoo_explorers/domain/entities/chatbox_entity.dart';
 import 'package:ar_zoo_explorers/domain/entities/message_entity.dart';
 import 'package:ar_zoo_explorers/features/base-model/message_type.dart';

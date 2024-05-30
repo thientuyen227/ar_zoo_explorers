@@ -1,7 +1,7 @@
 import 'package:ar_zoo_explorers/app/config/routes.dart';
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
-import 'package:ar_zoo_explorers/domain/api/api_service.dart';
+import 'package:ar_zoo_explorers/core/data/api/api_service.dart';
 import 'package:ar_zoo_explorers/domain/entities/chatbox_entity.dart';
 import 'package:ar_zoo_explorers/features/learning/presentation/learning_cubit.dart';
 import 'package:ar_zoo_explorers/features/learning/presentation/learning_state.dart';
@@ -9,7 +9,6 @@ import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:language_detector/language_detector.dart';
 
 import '../../../app/theme/icons.dart';
 import '../../../base/base_state.dart';
@@ -62,31 +61,6 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
                   icon: AppImages.imgPuzzle,
                   title: LanguageKeys.puzzle,
                   router: Routes.puzzleword),
-              TextFormField(
-                controller: textTest,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    hintText: 'Test thử xem',
-                    prefixIcon: Image.asset(AppIcons.icCalendar),
-                    contentPadding: const EdgeInsets.all(10)),
-              ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: () {
-                  _sendTextToImage(
-                      textTest.text); // Thay đổi văn bản nếu bạn muốn
-                },
-                child: const Text("Send Text"),
-              ),
-              chatBoxEntity != null
-                  ? ImageSvgUrlCustom(
-                      imagePath: chatBoxEntity!.generatedFiles![0].fileUrl,
-                      size: 100,
-                      height: 50,
-                      width: 50,
-                    )
-                  : Container()
             ],
           ),
         ),
@@ -184,32 +158,5 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
         ),
       ),
     );
-  }
-
-  void _sendTextToImage(String text) async {
-    try {
-      // Gọi API texttoimage bằng ApiService
-      String detectedLanguage =
-          await LanguageDetector.getLanguageCode(content: text);
-      chatBoxEntity =
-          await apiService.getTextToImageResponse(text, detectedLanguage);
-      setState(() {});
-    } catch (e) {
-      print("Error sending text to image: $e");
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text("Error"),
-          content: const Text(
-              "Failed to send text to image. Please try again later."),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text("OK"),
-            ),
-          ],
-        ),
-      );
-    }
   }
 }
