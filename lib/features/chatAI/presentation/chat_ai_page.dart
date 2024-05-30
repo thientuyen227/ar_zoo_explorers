@@ -43,6 +43,7 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
   ApiService apiService = ApiService();
 
   bool isEnabled = true;
+  bool isImage = false;
 
   @override
   Widget buildByState(BuildContext context, ChatAIState state) {
@@ -66,8 +67,17 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
           child: ChatAIABottomBar(
             onSendMassage: (MessageEntity message) async {
               _sendMessages(message).then((value) {
-                setState(() {});
-                _sendTextToImage(message.content).then((value) {
+                setState(() {
+                  if (message.contentType == MsgType.image_file.typeString ||
+                      message.contentType == MsgType.image_asset.typeString ||
+                      message.contentType == MsgType.image_network.typeString) {
+                    isImage = true;
+                  } else {
+                    isImage = false;
+                  }
+                });
+                _sendTextToImage(message.content, File(message.content))
+                    .then((value) {
                   setState(() {
                     _sendResponse();
                   });
@@ -209,7 +219,7 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
         children: [
           TextMessage(
               entity: MessageEntity(content: chatBoxEntity!.prediction)),
-          chatBoxEntity!.generatedFiles!.isNotEmpty
+          isImage == false && chatBoxEntity!.generatedFiles!.isNotEmpty
               ? GestureDetector(
                   onTap: () async {
                     await _showDownloadSheet();
@@ -246,7 +256,7 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
       );
 
       if (response.statusCode == 200) {
-        final result = await ImageGallerySaver.saveFile(filePath);
+        await ImageGallerySaver.saveFile(filePath);
         setState(() {
           _downloadedFilePath = filePath;
           _selectedImage = File(filePath);
@@ -260,13 +270,17 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
     }
   }
 
-  Future<void> _sendTextToImage(String text) async {
+  Future<void> _sendTextToImage(String text, File? imageFile) async {
     try {
       cubit.showLoading();
-      String detectedLanguage =
-          await LanguageDetector.getLanguageCode(content: text);
-      chatBoxEntity =
-          await apiService.getTextToImageResponse(text, detectedLanguage);
+      if (isImage) {
+        chatBoxEntity = await apiService.getImageToTextResponse(imageFile!);
+      } else {
+        String detectedLanguage =
+            await LanguageDetector.getLanguageCode(content: text);
+        chatBoxEntity =
+            await apiService.getTextToImageResponse(text, detectedLanguage);
+      }
       cubit.hideLoading();
     } catch (e) {
       // cubit.hideLoading();

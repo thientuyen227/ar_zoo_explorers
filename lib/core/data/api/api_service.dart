@@ -8,11 +8,10 @@ class ApiService {
   final String apiUrl =
       'https://imagechatv4.chooch.ai/predict?api_key=3f9d4e54-0194-4130-aa68-5e68852263bb';
 
-  Future<String> getImageToTextResponse(
-      File imageFile, String detectedLanguage) async {
+  Future<ChatBoxEntity> getImageToTextResponse(File imageFile) async {
     var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
     request.fields['data'] = json.encode({
-      'parameters': {'prompt': '', 'lang': detectedLanguage, 'stream': true},
+      'parameters': {'prompt': '', 'lang': 'en', 'stream': true},
       'model_id': 'chooch-image-chat-4'
     });
     request.files.add(http.MultipartFile(
@@ -21,7 +20,28 @@ class ApiService {
 
     var response = await request.send();
     var responseData = await response.stream.bytesToString();
-    return responseData;
+    var jsonStrings = responseData.split('}{').map((str) {
+      if (!str.startsWith('{')) {
+        str = '{$str';
+      }
+      if (!str.endsWith('}')) {
+        str = '$str}';
+      }
+      return str;
+    }).toList();
+    String combinedPredictions = '';
+    String sourceId = '';
+
+    for (var jsonString in jsonStrings) {
+      var parsedData = jsonDecode(jsonString);
+      var entity = ChatBoxEntity.fromJson(parsedData);
+      combinedPredictions += '${entity.prediction} ';
+      if (sourceId.isEmpty) sourceId = entity.sourceId;
+    }
+    return ChatBoxEntity(
+      sourceId: sourceId,
+      prediction: combinedPredictions.trim(),
+    );
   }
 
   Future<ChatBoxEntity> getTextToImageResponse(
@@ -39,9 +59,32 @@ class ApiService {
     if (response.statusCode == 200) {
       var responseData = await response.stream.bytesToString();
       try {
-        print(responseData);
-        var parsedData = jsonDecode(responseData);
-        return ChatBoxEntity.fromJson(parsedData);
+        var jsonStrings = responseData.split('}{').map((str) {
+          if (!str.startsWith('{')) {
+            str = '{$str';
+          }
+          if (!str.endsWith('}')) {
+            str = '$str}';
+          }
+          return str;
+        }).toList();
+        String combinedPredictions = '';
+        String sourceId = '';
+        List<GeneratedFile>? generatedFiles;
+
+        for (var jsonString in jsonStrings) {
+          var parsedData = jsonDecode(jsonString);
+          var entity = ChatBoxEntity.fromJson(parsedData);
+          combinedPredictions += '${entity.prediction} ';
+          if (sourceId.isEmpty) sourceId = entity.sourceId;
+          if (entity.generatedFiles != null) {
+            generatedFiles = entity.generatedFiles;
+          }
+        }
+        return ChatBoxEntity(
+            sourceId: sourceId,
+            prediction: combinedPredictions.trim(),
+            generatedFiles: generatedFiles);
       } catch (e) {
         throw Exception('Failed to decode response JSON: $e');
       }
