@@ -8,7 +8,7 @@ class ApiService {
   final String apiUrl =
       'https://imagechatv4.chooch.ai/predict?api_key=3f9d4e54-0194-4130-aa68-5e68852263bb';
 
-  Future<String> getImageToTextResponse(
+  Future<ChatBoxEntity> getImageToTextResponse(
       File imageFile, String detectedLanguage) async {
     var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
     request.fields['data'] = json.encode({
@@ -21,7 +21,30 @@ class ApiService {
 
     var response = await request.send();
     var responseData = await response.stream.bytesToString();
-    return responseData;
+    var jsonStrings = responseData.split('}{').map((str) {
+      if (!str.startsWith('{')) {
+        str = '{$str';
+      }
+      if (!str.endsWith('}')) {
+        str = '$str}';
+      }
+      return str;
+    }).toList();
+    String combinedPredictions = '';
+    String sourceId = '';
+
+    for (var jsonString in jsonStrings) {
+      var parsedData = jsonDecode(jsonString);
+      var entity = ChatBoxEntity.fromJson(parsedData);
+      combinedPredictions += '${entity.prediction} ';
+      if (sourceId.isEmpty) sourceId = entity.sourceId;
+    }
+
+    // Return a new ChatBoxEntity with combined predictions
+    return ChatBoxEntity(
+      sourceId: sourceId,
+      prediction: combinedPredictions.trim(),
+    );
   }
 
   Future<ChatBoxEntity> getTextToImageResponse(
