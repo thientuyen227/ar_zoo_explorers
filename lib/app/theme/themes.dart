@@ -54,7 +54,7 @@ class AppThemeData {
   ThemeData get themeData => ThemeData(
         brightness: brightness,
         primaryColor: colorScheme.primary,
-        backgroundColor: colorScheme.primary,
+        // backgroundColor: colorScheme.primary,
         colorScheme: ColorScheme.light(
           brightness: brightness,
           primary: colorScheme.primary,
@@ -71,7 +71,7 @@ class AppThemeData {
         scaffoldBackgroundColor: colorScheme.primary,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(colorScheme.btnColor),
+            backgroundColor: WidgetStateProperty.all(colorScheme.btnColor),
           ),
         ),
         textSelectionTheme: TextSelectionThemeData(

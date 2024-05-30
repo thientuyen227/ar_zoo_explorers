@@ -5,7 +5,9 @@ import 'package:ar_zoo_explorers/domain/entities/message_entity.dart';
 import 'package:ar_zoo_explorers/features/base-model/message_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ChatAIABottomBar extends StatefulWidget {
   final ValueChanged<MessageEntity> onSendMassage;
@@ -23,7 +25,7 @@ class _ChatAIABottomBarState extends State<ChatAIABottomBar> {
   final _formKey = GlobalKey<FormBuilderState>();
 
   TextEditingController editingController = TextEditingController();
-
+  final ImagePicker _picker = ImagePicker();
   @override
   Widget build(BuildContext context) {
     return FormBuilder(
@@ -65,11 +67,13 @@ class _ChatAIABottomBarState extends State<ChatAIABottomBar> {
             color: Colors.white,
           )),
       onPressed: () async {
-        widget.onSendMassage(MessageEntity(
-            content: editingController.text,
-            contentType: MsgType.text.typeString));
-        editingController.clear();
-        FocusScope.of(context).requestFocus(FocusNode());
+        if (editingController.text.trim() != '') {
+          widget.onSendMassage(MessageEntity(
+              content: editingController.text,
+              contentType: MsgType.text.typeString));
+          editingController.clear();
+          FocusScope.of(context).requestFocus(FocusNode());
+        }
       },
     );
   }
@@ -89,7 +93,70 @@ class _ChatAIABottomBarState extends State<ChatAIABottomBar> {
           fit: BoxFit.cover,
         )),
       ),
-      onPressed: () async {},
+      onPressed: () async {
+        await _showPhotoSheet();
+      },
+    );
+  }
+
+  Widget btnOpenCamera() {
+    return GestureDetector(
+      child: Container(
+        height: height * 0.06,
+        width: width * 0.4,
+        decoration: BoxDecoration(
+            color: Colors.grey, borderRadius: BorderRadius.circular(20)),
+        padding: const EdgeInsets.all(5),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ClipRRect(child: Image.asset(AppIcons.icCamera, fit: BoxFit.cover)),
+            const SizedBox(width: 5),
+            const SizedBox(
+                child: Text("Camera",
+                    style: TextStyle(fontSize: 18, color: Colors.white)))
+          ],
+        ),
+      ),
+      onTap: () async {
+        Navigator.of(context).pop(true);
+      },
+    );
+  }
+
+  Widget btnOpenGallery() {
+    return GestureDetector(
+      child: Container(
+        height: height * 0.06,
+        width: width * 0.4,
+        decoration: BoxDecoration(
+            color: AppColor.primaryColor,
+            borderRadius: BorderRadius.circular(20)),
+        padding: const EdgeInsets.all(5),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ClipRRect(
+                child: Image.asset(AppIcons.icWhiteGallery, fit: BoxFit.cover)),
+            const SizedBox(width: 5),
+            const SizedBox(
+                child: Text("Gallery",
+                    style: TextStyle(fontSize: 18, color: Colors.white)))
+          ],
+        ),
+      ),
+      onTap: () async {
+        XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+        if (image != null) {
+          widget.onSendMassage(MessageEntity(
+              content: image.path, contentType: MsgType.image_file.typeString));
+          Navigator.of(context).pop(true);
+        } else {
+          await Fluttertoast.showToast(
+            msg: LanguageKeys.get_img_failed.tr,
+          );
+        }
+      },
     );
   }
 
@@ -101,6 +168,31 @@ class _ChatAIABottomBarState extends State<ChatAIABottomBar> {
           hintText: LanguageKeys.write_message.tr,
           prefixIcon: Image.asset(AppIcons.icCalendar),
           contentPadding: const EdgeInsets.all(10)),
+    );
+  }
+
+  Future<void> _showPhotoSheet() async {
+    await showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+              BorderRadius.vertical(top: Radius.circular(height * 0.025))),
+      barrierColor: Colors.grey.withOpacity(0.55),
+      builder: (BuildContext context) {
+        return Container(
+          height: height * 0.15,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(height * 0.025),
+            ),
+          ),
+          child: Center(
+              child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [btnOpenCamera(), btnOpenGallery()],
+          )),
+        );
+      },
     );
   }
 

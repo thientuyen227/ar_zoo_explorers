@@ -51,7 +51,7 @@ class ChatAICubit extends BaseCubit<ChatAIState> {
             userId: '',
             content:
                 'https://firebasestorage.googleapis.com/v0/b/ar-zoo-explorers.appspot.com/o/stories%2Fsutichhohoankiem%2Fsutichhohoankiem.png?alt=media&token=cdfa3057-a3c1-4709-8f66-f40a55aa91db',
-            contentType: MsgType.image.typeString,
+            contentType: MsgType.image_network.typeString,
             isAI: false,
           ),
         ]);

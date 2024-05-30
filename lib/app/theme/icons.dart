@@ -50,6 +50,9 @@ class AppIcons {
   static const String icEye = "assets/icons/ic_eye.png";
   static const String icEye24 = "assets/icons/ic_eye_x24.png";
   static const String icWhiteDownload = "assets/icons/ic_whiteDownload.png";
+  static const String icBlackDownload =
+      "assets/icons/ic_downloads_x64_black.png";
+  static const String icWhiteGallery = "assets/icons/ic_gallery_x64_white.png";
 
   static const String icHeart64 = "assets/icons/ic_heart_x64.png";
   static const String icHome64 = "assets/icons/ic_home_x64.png";
