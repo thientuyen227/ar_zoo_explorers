@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
@@ -9,10 +8,10 @@ class LinkViewWidget extends StatelessWidget {
   final String url;
 
   const LinkViewWidget({
-    Key? key,
+    super.key,
     required this.title,
     required this.url,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +21,7 @@ class LinkViewWidget extends StatelessWidget {
         addCloseBtn: true,
       ),
       body: InAppWebView(
-        initialUrlRequest: URLRequest(url: Uri.tryParse(url)),
+        initialUrlRequest: URLRequest(url: WebUri.uri(Uri.tryParse(url)!)),
       ),
     );
   }

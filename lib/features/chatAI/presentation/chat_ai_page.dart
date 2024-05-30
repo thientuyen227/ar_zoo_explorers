@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
-import 'package:ar_zoo_explorers/domain/api/api_service.dart';
+import 'package:ar_zoo_explorers/core/data/api/api_service.dart';
 import 'package:ar_zoo_explorers/domain/entities/chatbox_entity.dart';
 import 'package:ar_zoo_explorers/domain/entities/message_entity.dart';
 import 'package:ar_zoo_explorers/features/base-model/message_type.dart';
@@ -43,7 +43,6 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
   ApiService apiService = ApiService();
 
   bool isEnabled = true;
-
   bool isImage = false;
 
   @override
@@ -218,7 +217,7 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
         children: [
           TextMessage(
               entity: MessageEntity(content: chatBoxEntity!.prediction)),
-          isImage == false
+          isImage == false && chatBoxEntity!.generatedFiles!.isNotEmpty
               ? GestureDetector(
                   onTap: () async {
                     await _showDownloadSheet();
@@ -255,7 +254,7 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
       );
 
       if (response.statusCode == 200) {
-        final result = await ImageGallerySaver.saveFile(filePath);
+        await ImageGallerySaver.saveFile(filePath);
         setState(() {
           _downloadedFilePath = filePath;
           _selectedImage = File(filePath);
@@ -272,16 +271,14 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
   Future<void> _sendTextToImage(String text, File? imageFile) async {
     try {
       cubit.showLoading();
-      String detectedLanguage =
-          await LanguageDetector.getLanguageCode(content: text);
       if (isImage) {
-        chatBoxEntity = await apiService.getImageToTextResponse(
-            imageFile!, detectedLanguage);
+        chatBoxEntity = await apiService.getImageToTextResponse(imageFile!);
       } else {
+        String detectedLanguage =
+            await LanguageDetector.getLanguageCode(content: text);
         chatBoxEntity =
             await apiService.getTextToImageResponse(text, detectedLanguage);
       }
-
       cubit.hideLoading();
     } catch (e) {
       cubit.hideLoading();

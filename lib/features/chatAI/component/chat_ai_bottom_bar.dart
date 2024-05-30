@@ -119,7 +119,16 @@ class _ChatAIABottomBarState extends State<ChatAIABottomBar> {
         ),
       ),
       onTap: () async {
-        Navigator.of(context).pop(true);
+        XFile? image = await _picker.pickImage(source: ImageSource.camera);
+        if (image != null) {
+          widget.onSendMassage(MessageEntity(
+              content: image.path, contentType: MsgType.image_file.typeString));
+          Navigator.of(context).pop(true);
+        } else {
+          await Fluttertoast.showToast(
+            msg: LanguageKeys.get_img_failed.tr,
+          );
+        }
       },
     );
   }

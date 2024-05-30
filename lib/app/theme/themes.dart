@@ -69,10 +69,10 @@ class AppThemeData {
           labelColor: colorScheme.primary,
         ),
         scaffoldBackgroundColor: colorScheme.primary,
-        elevatedButtonTheme: ElevatedButtonThemeData(
+        elevatedButtonTheme: const ElevatedButtonThemeData(
           style: ButtonStyle(
-            backgroundColor: WidgetStateProperty.all(colorScheme.btnColor),
-          ),
+              // backgroundColor:  WidgetStateProperty.all(colorScheme.btnColor),
+              ),
         ),
         textSelectionTheme: TextSelectionThemeData(
           cursorColor: colorScheme.textColor,

@@ -96,6 +96,7 @@ class LanguageKeys {
   static const String avatar_galleryAvatar = 'avatar_galleryAvatar';
 
   //Learning
+  static const String learning_home = 'learning_home';
   static const String your_points = 'your_points';
   static const String vocabulary = 'vocabulary';
   static const String puzzle = 'puzzle';
@@ -107,6 +108,9 @@ class LanguageKeys {
   static const String toys = 'toys';
   static const String fruit = 'fruit';
   static const String family = 'family';
+  static const String uppercaseLetters = 'uppercaseLetters';
+  static const String lowercaseLetters = 'lowercaseLetters';
+  static const String cardinalNumbers = 'cardinalNumbers';
 
   // Setting Page
   static const String accountManager = 'accountManager';

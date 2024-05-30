@@ -246,12 +246,12 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
                   Fluttertoast.showToast(msg: "${LanguageKeys.updating.tr}!"),
                   _onUpdatePressed(context)
                 },
-        style: ButtonStyle(
-            fixedSize: WidgetStateProperty.all(const Size(140, 43)),
-            backgroundColor: WidgetStateProperty.all(Colors.blue),
-            elevation: WidgetStateProperty.all(5),
-            shape: WidgetStateProperty.all(RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20)))),
+        // style: ButtonStyle(
+        //     fixedSize: WidgetStateProperty.all(const Size(140, 43)),
+        //     backgroundColor: WidgetStateProperty.all(Colors.blue),
+        //     elevation: WidgetStateProperty.all(5),
+        //     shape: WidgetStateProperty.all(RoundedRectangleBorder(
+        //         borderRadius: BorderRadius.circular(20)))),
         child: Text(LanguageKeys.update.tr,
             style: const TextStyle(fontSize: 16, color: Colors.white)));
   }

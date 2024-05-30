@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
@@ -5,8 +7,10 @@ import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/domain/entities/question_entity.dart';
 import 'package:ar_zoo_explorers/features/puzzle/presentation/puzzle_cubit.dart';
 import 'package:ar_zoo_explorers/features/puzzle/presentation/puzzle_state.dart';
+import 'package:ar_zoo_explorers/utils/widget/congratulation_widget.dart';
 import 'package:ar_zoo_explorers/utils/widget/custom_back_button.dart';
 import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -21,20 +25,49 @@ class PuzzlePage extends StatefulWidget {
 }
 
 class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
-  // final controller = AuthController.findOrInitialize;
+  AudioPlayer audioPlayer = AudioPlayer();
   int? selectedAnswerIndex;
   String? selectedAnswer;
   int questionIndex = 0;
-  void pickAnswer({String? value, int? index}) {
-    selectedAnswer = value;
-    selectedAnswerIndex = index;
-    setState(() {});
-  }
+  bool? isCorrectAnswer;
+  bool? isWrongAnswer;
+  int indexQues = 0;
+  final languageCode = Get.locale?.languageCode;
+  Timer? _timer;
 
   @override
   void initState() {
     super.initState();
     cubit.init();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    audioPlayer.dispose();
+    super.dispose();
+  }
+
+  void pickAnswer({String? value, int? index}) {
+    selectedAnswer = value;
+    selectedAnswerIndex = index;
+    setState(() {
+      isCorrectAnswer =
+          selectedAnswer == cubit.state.questionEntities![indexQues].answer;
+
+      if (isCorrectAnswer!) {
+        _timer = Timer(const Duration(seconds: 3), () {
+          audioPlayer.stop();
+          setState(() {
+            isCorrectAnswer = null;
+            indexQues++;
+            if (indexQues >= cubit.state.questionEntities!.length) {
+              indexQues = 0;
+            }
+          });
+        });
+      }
+    });
   }
 
   @override
@@ -54,96 +87,105 @@ class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
             children: [CustomBackButton()]),
       ),
       body: state.questionEntities != null && state.questionEntities!.isNotEmpty
-          ? Column(
+          ? Stack(
               children: [
-                const SizedBox(
-                  height: 80,
-                ),
-                SizedBox(
-                  height: 300,
-                  width: double.infinity,
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        left: 35,
-                        top: 35,
-                        child: Container(
-                          height: 226,
-                          width: 336,
-                          decoration: BoxDecoration(
-                            border: Border.all(),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(10)),
-                            color: AppColor.white,
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                          left: 45,
-                          top: 45,
-                          child: Container(
-                            height: 226,
-                            width: 336,
-                            padding: const EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                              border: Border.all(),
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10)),
-                              color: AppColor.tinintIce,
+                Column(
+                  children: [
+                    const SizedBox(
+                      height: 80,
+                    ),
+                    SizedBox(
+                      height: 300,
+                      width: double.infinity,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            left: 35,
+                            top: 35,
+                            child: Container(
+                              height: 226,
+                              width: 336,
+                              decoration: BoxDecoration(
+                                border: Border.all(),
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(10)),
+                                color: AppColor.white,
+                              ),
                             ),
-                            child: renderVocabulary(),
-                          )),
-                      Positioned(
-                          top: 120,
-                          child: Image.asset(
-                            AppImages.imgPuzzleDesign,
-                            height: 80,
-                            width: 80,
-                          )),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 2.3,
-                    crossAxisSpacing: 4.8,
-                  ),
-                  itemCount:
-                      state.questionEntities![questionIndex].options!.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: selectedAnswerIndex == null
-                          ? () => pickAnswer(
-                              value: state.questionEntities![questionIndex]
-                                  .options![index]["en"]!,
-                              index: index)
-                          : null,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          children: [
-                            renderAnswer(
-                              option: state.questionEntities![questionIndex]
-                                  .options![index]["en"]!,
-                              question: state.questionEntities![questionIndex]
-                                  .questionLocalize,
-                              isSelected: selectedAnswerIndex == index,
-                              selectedAnswerIndex: selectedAnswer,
-                              correctAnswer:
-                                  state.questionEntities![questionIndex].answer,
-                            )
-                          ],
-                        ),
+                          ),
+                          Positioned(
+                              left: 45,
+                              top: 45,
+                              child: Container(
+                                height: 226,
+                                width: 336,
+                                padding: const EdgeInsets.all(20),
+                                decoration: BoxDecoration(
+                                  border: Border.all(),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10)),
+                                  color: AppColor.tinintIce,
+                                ),
+                                child: renderVocabulary(),
+                              )),
+                          Positioned(
+                              top: 120,
+                              child: Image.asset(
+                                AppImages.imgPuzzleDesign,
+                                height: 80,
+                                width: 80,
+                              )),
+                        ],
                       ),
-                    );
-                  },
-                )
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 2.3,
+                        crossAxisSpacing: 4.8,
+                      ),
+                      itemCount: state
+                          .questionEntities![questionIndex].options!.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: selectedAnswerIndex == null
+                              ? () => pickAnswer(
+                                  value: state.questionEntities![questionIndex]
+                                      .options![index]["en"]!,
+                                  index: index)
+                              : null,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              children: [
+                                renderAnswer(
+                                  option: state.questionEntities![questionIndex]
+                                      .options![index]["en"]!,
+                                  question: state
+                                      .questionEntities![questionIndex]
+                                      .questionLocalize,
+                                  isSelected: selectedAnswerIndex == index,
+                                  selectedAnswerIndex: selectedAnswer,
+                                  correctAnswer: state
+                                      .questionEntities![questionIndex].answer,
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    )
+                  ],
+                ),
+                if (isCorrectAnswer != null && isCorrectAnswer == true) ...{
+                  const Positioned(bottom: 30, child: CongratulationWidget())
+                }
               ],
             )
           : Container(),
@@ -157,15 +199,15 @@ class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
     required String correctAnswer,
     required String? selectedAnswerIndex,
   }) {
-    bool isCorrectAnswer = option == correctAnswer;
-    bool isWrongAnswer = !isCorrectAnswer && isSelected;
+    isCorrectAnswer = option == correctAnswer;
+    isWrongAnswer = !isCorrectAnswer! && isSelected;
 
     return selectedAnswerIndex != null
         ? Container(
             decoration: BoxDecoration(
-                color: isCorrectAnswer
+                color: isCorrectAnswer!
                     ? AppColor.completed
-                    : isWrongAnswer
+                    : isWrongAnswer!
                         ? AppColor.isFalse
                         : AppColor.vibrantYellow,
                 border: Border.all(),
@@ -217,10 +259,12 @@ class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
               width: 80,
               height: 80,
             )),
-        const Text(
-          "/ˈlaɪən/",
-          style: TextStyle(fontSize: 18),
-        ),
+        languageCode == 'en'
+            ? const Text(
+                "/ˈlaɪən/",
+                style: TextStyle(fontSize: 18),
+              )
+            : Container(),
         Padding(
           padding: const EdgeInsets.only(right: 30.0, left: 30),
           child: Row(

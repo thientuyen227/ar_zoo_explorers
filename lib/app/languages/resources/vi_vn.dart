@@ -105,6 +105,7 @@ const Map<String, String> vi_vn = {
 
   //Learning
   'your_points': 'Điểm của bạn',
+  'learning_home': 'Học ở nhà',
   'vocabulary': 'Từ vựng',
   'phonics': 'Phát âm',
   'puzzle': 'Trò chơi',
@@ -112,6 +113,9 @@ const Map<String, String> vi_vn = {
   'completed': 'Đã hoàn thành',
   'take_the_quiz': 'Chơi trò chơi',
   'choose_topic': 'Chọn đề tài',
+  'uppercaseLetters': 'Chữ in hoa',
+  'lowercaseLetters': 'Chữ thường',
+  'cardinalNumbers': 'Số đếm',
 
   // Auth
   'auth_enterEmail': "Nhập email của bạn",

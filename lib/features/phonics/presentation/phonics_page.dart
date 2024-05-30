@@ -1,4 +1,5 @@
-import 'package:ar_zoo_explorers/app/config/routes.dart';
+import 'package:ar_zoo_explorers/app/config/app_router.gr.dart';
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
@@ -8,6 +9,7 @@ import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
 @RoutePage()
@@ -81,9 +83,12 @@ class _State extends BaseState<PhonicsState, PhonicsCubit, PhonicsPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                renderMotionAndTitle("Chữ in hoa", AppLotties.animationanimal),
-                renderMotionAndTitle("Chữ thường", AppLotties.animationanimal),
-                renderMotionAndTitle("Số đếm", AppLotties.animationanimal)
+                renderMotionAndTitle(
+                    LanguageKeys.uppercaseLetters, AppLotties.earth),
+                renderMotionAndTitle(
+                    LanguageKeys.lowercaseLetters, AppLotties.plane),
+                renderMotionAndTitle(
+                    LanguageKeys.cardinalNumbers, AppLotties.snow)
               ],
             ),
           ),
@@ -95,7 +100,23 @@ class _State extends BaseState<PhonicsState, PhonicsCubit, PhonicsPage> {
   Widget renderMotionAndTitle(String title, String motion) {
     return InkWell(
       onTap: () {
-        context.router.pushNamed(Routes.phonicsdetail);
+        String type = '';
+        switch (title) {
+          case LanguageKeys.uppercaseLetters:
+            type = 'upper';
+            break;
+          case LanguageKeys.lowercaseLetters:
+            type = 'lower';
+            break;
+          case LanguageKeys.cardinalNumbers:
+            type = 'number';
+            break;
+          default:
+            return;
+        }
+        context.router.push(
+          PhonicsDetailRoute(type: type),
+        );
       },
       child: SizedBox(
         height: height! * 0.9,
@@ -103,7 +124,7 @@ class _State extends BaseState<PhonicsState, PhonicsCubit, PhonicsPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Lottie.asset(motion),
+              Lottie.asset(motion, height: 200, width: 200),
               const SizedBox(
                 height: 25,
               ),
@@ -122,7 +143,7 @@ class _State extends BaseState<PhonicsState, PhonicsCubit, PhonicsPage> {
                     color: AppColor.white),
                 child: Text(
                   textAlign: TextAlign.center,
-                  title,
+                  title.tr,
                   style: const TextStyle(
                       color: AppColor.lightBlue,
                       fontSize: 26,
