@@ -3,7 +3,7 @@ import 'package:ar_zoo_explorers/features/account/userinformation/presentation/u
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:injectable/injectable.dart';
-import 'package:internationalization/internationalization.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../app/theme/icons.dart';
 import '../../../../base/base_cubit.dart';

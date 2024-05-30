@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:ar_zoo_explorers/domain/entities/message_entity.dart';
+import 'package:ar_zoo_explorers/features/base-model/message_type.dart';
 import 'package:flutter/material.dart';
 
 class ImageMessage extends StatefulWidget {
@@ -39,23 +41,43 @@ class _ImageMessageState extends State<ImageMessage> {
     }
 
     return Container(
-        width: containerWidth,
-        height: containerHeight,
-        margin: const EdgeInsets.all(5),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(15),
-          child: Image.network(
-            widget.entity.content,
-            fit: BoxFit.cover,
-          ),
-        ));
+      width: containerWidth,
+      height: containerHeight,
+      margin: const EdgeInsets.all(5),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15),
+        child: (widget.entity.contentType == MsgType.image_network.typeString)
+            ? Image.network(
+                widget.entity.content,
+                fit: BoxFit.cover,
+              )
+            : (widget.entity.contentType == MsgType.image_file.typeString)
+                ? Image.file(
+                    File(widget.entity.content),
+                    fit: BoxFit.cover,
+                  )
+                : (widget.entity.contentType == MsgType.image_asset.typeString)
+                    ? Image.asset(
+                        widget.entity.content,
+                        fit: BoxFit.cover,
+                      )
+                    : null,
+      ),
+    );
   }
 
   Future<void> _getImgSize() async {
     final Completer<ImageInfo> completer = Completer();
-    final Image image = Image.network(widget.entity.content);
+    Image? image;
+    if (widget.entity.contentType == MsgType.image_network.typeString) {
+      image = Image.network(widget.entity.content);
+    } else if (widget.entity.contentType == MsgType.image_asset.typeString) {
+      image = Image.asset(widget.entity.content);
+    } else if (widget.entity.contentType == MsgType.image_file.typeString) {
+      image = Image.file(File(widget.entity.content));
+    }
 
-    image.image.resolve(const ImageConfiguration()).addListener(
+    image!.image.resolve(const ImageConfiguration()).addListener(
       ImageStreamListener((ImageInfo info, bool _) {
         completer.complete(info);
       }),
