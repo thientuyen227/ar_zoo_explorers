@@ -1,51 +1,91 @@
-import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/base/base_cubit.dart';
+import 'package:ar_zoo_explorers/core/data/controller/animal_category_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/animal_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/animal_detail_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/auth_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/story_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/story_topic_controller.dart';
 import 'package:ar_zoo_explorers/features/home/presentation/home_state.dart';
-import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../app/theme/icons.dart';
 import '../../../domain/entities/animal_category_entity.dart';
 import '../../base-model/button_object.dart';
-import '../../base-model/form_builder_text_field_model.dart';
 
 @injectable
 class HomeCubit extends BaseCubit<HomeState> {
   HomeCubit() : super(HomeState());
 
-  String urlAvatarUser = AppIcons.icDefaultUser;
-  int adsCurrentPage = 0;
+  final detailController = AnimalDetailController.findOrInitialize;
+  final controller = AuthController.findOrInitialize;
+  final cateController = AnimalCategoryController.findOrInitialize;
+  final animalController = AnimalController.findOrInitialize;
+  final storyTopicController = StoryTopicController.findOrInitialize;
+  final storyController = StoryController.findOrInitialize;
 
-  FormBuilderTextFieldModel searchBar = FormBuilderTextFieldModel(
-      name: "search",
-      hint_text: LanguageKeys.search.tr,
-      icon_suffix: AppIcons.icSearch);
+  Future<void> init(BuildContext context) async {
+    showLoading();
 
-  double HEIGHT = 0;
-  double WIDTH = 0;
+    await controller.getCurrentUser(context);
+    await detailController.getAllAnimalDetails(context);
+    await cateController.getAllAnimalCategories(context);
 
-  List<ButtonObject> listAnimalCategory = [];
+    Size mediaSize = MediaQueryData.fromView(
+            WidgetsBinding.instance.platformDispatcher.views.single)
+        .size;
 
-  List<String> lstAdvertisement = [
-    AppImages.imgAdvertisement,
-    AppImages.imgAds1,
-    AppImages.imgAds2,
-  ];
-
-  int currentAdsPage = 0;
-
-  void setListAnimalCategory(List<AnimalCategoryEntity> list) {
-    if (list.isNotEmpty) {
-      for (int i = 0; i < list.length; i++) {
-        listAnimalCategory.add(ButtonObject(
-            title: list[i].title, icon: list[i].imageUrl, id: list[i].id));
-      }
-    }
+    await state.setAttributes(
+      height: mediaSize.height,
+      width: mediaSize.width,
+      listAnimalCategory:
+          await setAnimalCategories(cateController.listAnimalCategory.value),
+    );
+    print("Cubit.Init() : Get data");
+    hideLoading();
   }
 
-  void isLoved(int index) {
-    listAnimalCategory[index].isLoved = !listAnimalCategory[index].isLoved;
-    print(listAnimalCategory[index].isLoved);
+  Future<void> onChangeCurrentAdsPage(int newPage) async {
+    await state.setAttributes(currentAdsPage: newPage);
+  }
+
+  Future<List<ButtonObject>> setAnimalCategories(
+      List<AnimalCategoryEntity> list) async {
+    List<ButtonObject> categories = [];
+    if (list.isNotEmpty) {
+      for (var category in list) {
+        categories.add(ButtonObject(
+            title: category.title, icon: category.imageUrl, id: category.id));
+      }
+    }
+    return categories;
+  }
+
+  Future<void> setCurrentCategory(BuildContext context, int index) async {
+    await cateController.updateCurrentAnimalCategory(
+        context, state.listAnimalCategory[index].id!);
+  }
+
+  Future<void> getStoriesByReleaseDate(BuildContext context) async {
+    await storyController.getStoriesByReleaseDate(context, true);
+  }
+
+  Future<void> getAllTopics(BuildContext context) async {
+    await storyTopicController.getAllStoryTopics(context);
+  }
+
+  Future<void> isLoved(int index) async {
+    state.listAnimalCategory[index].isLoved =
+        !state.listAnimalCategory[index].isLoved;
+    // print(listAnimalCategory[index].isLoved);
+  }
+
+  Future<void> onSearch(String? value) async {
+    if (value != null) {
+      value = value.trim();
+    } else {
+      value = "";
+    }
+    animalController.searchValue(value);
   }
 
   String nameCustom(String fullname, int index) {

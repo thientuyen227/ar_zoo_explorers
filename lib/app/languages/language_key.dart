@@ -54,6 +54,8 @@ class LanguageKeys {
   static const String notAgreeTheTerms = 'notAgreeTheTerms';
   static const String i_understood_the = 'i_understood_the';
   static const String example = "example";
+  static const String get_img_failed = 'get_img_failed';
+  static const String chat_ai = 'chat_ai';
 
   // Welcome Page
   static const String welcome_title = 'welcome_title';
@@ -94,6 +96,7 @@ class LanguageKeys {
   static const String avatar_galleryAvatar = 'avatar_galleryAvatar';
 
   //Learning
+  static const String learning_home = 'learning_home';
   static const String your_points = 'your_points';
   static const String vocabulary = 'vocabulary';
   static const String puzzle = 'puzzle';
@@ -105,6 +108,9 @@ class LanguageKeys {
   static const String toys = 'toys';
   static const String fruit = 'fruit';
   static const String family = 'family';
+  static const String uppercaseLetters = 'uppercaseLetters';
+  static const String lowercaseLetters = 'lowercaseLetters';
+  static const String cardinalNumbers = 'cardinalNumbers';
 
   // Setting Page
   static const String accountManager = 'accountManager';
@@ -319,4 +325,7 @@ class LanguageKeys {
   //MODEL
   static const String model_in_category_empty = 'model_in_category_empty';
   static const String models_no_has_keyword = 'models_no_has_keyword';
+
+  //CHAT AI
+  static const String write_message = 'write_message';
 }

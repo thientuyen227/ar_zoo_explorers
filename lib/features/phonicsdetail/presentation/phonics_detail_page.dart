@@ -12,8 +12,8 @@ import 'package:get/get.dart';
 
 @RoutePage()
 class PhonicsDetailPage extends StatefulWidget {
-  const PhonicsDetailPage({super.key});
-
+  PhonicsDetailPage({super.key, required this.type});
+  String type;
   @override
   State createState() => _State();
 }
@@ -112,11 +112,14 @@ class _State extends BaseState<PhonicsDetailState, PhonicsDetailCubit,
   @override
   Widget buildByState(BuildContext context, PhonicsDetailState state) {
     List<String> alphabetChars;
-    if (isNumber == false) {
+    if (widget.type != 'number') {
       if (languageCode == 'en') {
         alphabetChars = englishAlphabet.split('');
       } else {
         alphabetChars = vietnameseAlphabet.split('');
+      }
+      if (widget.type == 'upper') {
+        isUpperCase = true;
       }
     } else {
       alphabetChars = numbers.split(' ');
@@ -164,51 +167,51 @@ class _State extends BaseState<PhonicsDetailState, PhonicsDetailCubit,
                         const SizedBox(
                           width: 10,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isUpperCase = !isUpperCase;
-                            });
-                          },
-                          child: Container(
-                            height: 20,
-                            width: 100,
-                            decoration: BoxDecoration(
-                              border: Border.all(),
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10)),
-                            ),
-                            child: Center(
-                                child: isUpperCase == true
-                                    ? const Text("Chữ in hoa")
-                                    : const Text(
-                                        "Chữ thường",
-                                      )),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isNumber = !isNumber;
-                            });
-                          },
-                          child: Container(
-                            height: 20,
-                            width: 100,
-                            decoration: BoxDecoration(
-                              border: Border.all(),
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10)),
-                            ),
-                            child: const Center(
-                                child: Text(
-                              "Số đếm",
-                            )),
-                          ),
-                        ),
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     setState(() {
+                        //       isUpperCase = !isUpperCase;
+                        //     });
+                        //   },
+                        //   child: Container(
+                        //     height: 20,
+                        //     width: 100,
+                        //     decoration: BoxDecoration(
+                        //       border: Border.all(),
+                        //       borderRadius:
+                        //           const BorderRadius.all(Radius.circular(10)),
+                        //     ),
+                        //     child: Center(
+                        //         child: isUpperCase == true
+                        //             ? const Text("Chữ in hoa")
+                        //             : const Text(
+                        //                 "Chữ thường",
+                        //               )),
+                        //   ),
+                        // ),
+                        // const SizedBox(
+                        //   width: 10,
+                        // ),
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     setState(() {
+                        //       isNumber = !isNumber;
+                        //     });
+                        //   },
+                        //   child: Container(
+                        //     height: 20,
+                        //     width: 100,
+                        //     decoration: BoxDecoration(
+                        //       border: Border.all(),
+                        //       borderRadius:
+                        //           const BorderRadius.all(Radius.circular(10)),
+                        //     ),
+                        //     child: const Center(
+                        //         child: Text(
+                        //       "Số đếm",
+                        //     )),
+                        //   ),
+                        // ),
                       ],
                     ),
                     GridView.builder(

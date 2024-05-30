@@ -226,7 +226,7 @@ class _State
         child: GestureDetector(
             onTap: () async {
               Fluttertoast.showToast(msg: "Downloading animal!");
-              downloadAndUnpack();
+              await downloadAndUnpack();
             },
             child: Stack(alignment: Alignment.center, children: [
               Container(
@@ -241,7 +241,7 @@ class _State
             ])));
   }
 
-  void downloadAndUnpack() async {
+  Future<void> downloadAndUnpack() async {
     await cubit.downloadAndUnpack(animalController.currentAnimal.value.name,
         animalController.currentAnimal.value.type);
     setState(() {

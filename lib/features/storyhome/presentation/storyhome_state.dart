@@ -62,14 +62,12 @@ class StoryHomeState {
   }
 
   setAttributes({
-    PageStatus? pageStatus,
     double? height,
     double? width,
     UserEntity? user,
     List<StoryButtonObject>? lstRecommend,
     List<TopicButtonObject>? lstTopic,
   }) async {
-    this.pageStatus ?? this.pageStatus;
     this.height = height ?? this.height;
     this.width = width ?? this.width;
     this.user = user ?? this.user;
