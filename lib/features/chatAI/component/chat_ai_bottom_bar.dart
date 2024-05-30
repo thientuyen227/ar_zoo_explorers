@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
@@ -26,6 +28,9 @@ class _ChatAIABottomBarState extends State<ChatAIABottomBar> {
 
   TextEditingController editingController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
+  bool isImage = false;
+  XFile? image;
+  MessageEntity? messageEntity;
   @override
   Widget build(BuildContext context) {
     return FormBuilder(
@@ -46,7 +51,13 @@ class _ChatAIABottomBarState extends State<ChatAIABottomBar> {
                       // height: height * 0.1,
                       color: Colors.transparent,
                       child: Row(children: [
-                        btnCamera(),
+                        isImage == false
+                            ? btnCamera()
+                            : Image.file(
+                                File(image!.path),
+                                height: 40,
+                                width: 40,
+                              ),
                         Expanded(child: boxChat()),
                         btnSend()
                       ]),
@@ -68,10 +79,19 @@ class _ChatAIABottomBarState extends State<ChatAIABottomBar> {
           )),
       onPressed: () async {
         if (editingController.text.trim() != '') {
-          widget.onSendMassage(MessageEntity(
-              content: editingController.text,
-              contentType: MsgType.text.typeString));
+          MessageEntity? newEntity;
+          if (isImage) {
+            newEntity = messageEntity!.copyWith(
+                content: editingController.text,
+                contentType: MsgType.text.typeString);
+          } else {
+            newEntity = MessageEntity(
+                content: editingController.text,
+                contentType: MsgType.text.typeString);
+          }
+          widget.onSendMassage(newEntity);
           editingController.clear();
+          isImage = false;
           FocusScope.of(context).requestFocus(FocusNode());
         }
       },
@@ -121,8 +141,10 @@ class _ChatAIABottomBarState extends State<ChatAIABottomBar> {
       onTap: () async {
         XFile? image = await _picker.pickImage(source: ImageSource.camera);
         if (image != null) {
-          widget.onSendMassage(MessageEntity(
-              content: image.path, contentType: MsgType.image_file.typeString));
+          messageEntity = MessageEntity(
+              imagePath: image.path,
+              contentType: MsgType.image_file.typeString);
+          isImage = true;
           Navigator.of(context).pop(true);
         } else {
           await Fluttertoast.showToast(
@@ -155,10 +177,12 @@ class _ChatAIABottomBarState extends State<ChatAIABottomBar> {
         ),
       ),
       onTap: () async {
-        XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+        image = await _picker.pickImage(source: ImageSource.gallery);
         if (image != null) {
-          widget.onSendMassage(MessageEntity(
-              content: image.path, contentType: MsgType.image_file.typeString));
+          messageEntity = MessageEntity(
+              imagePath: image!.path,
+              contentType: MsgType.image_file.typeString);
+          isImage = true;
           Navigator.of(context).pop(true);
         } else {
           await Fluttertoast.showToast(

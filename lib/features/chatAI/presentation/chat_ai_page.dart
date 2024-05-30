@@ -17,7 +17,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:language_detector/language_detector.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -31,11 +30,7 @@ class ChatAIPage extends StatefulWidget {
 }
 
 class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
-  final ImagePicker _picker = ImagePicker();
   final Dio _dio = Dio();
-
-  String? _downloadedFilePath;
-  File? _selectedImage;
 
   List<Widget> lstMessages = [];
   ChatBoxEntity? chatBoxEntity;
@@ -68,15 +63,13 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
             onSendMassage: (MessageEntity message) async {
               _sendMessages(message).then((value) {
                 setState(() {
-                  if (message.contentType == MsgType.image_file.typeString ||
-                      message.contentType == MsgType.image_asset.typeString ||
-                      message.contentType == MsgType.image_network.typeString) {
-                    isImage = true;
-                  } else {
+                  if (message.imagePath!.isEmpty) {
                     isImage = false;
+                  } else {
+                    isImage = true;
                   }
                 });
-                _sendTextToImage(message.content, File(message.content))
+                _sendTextToImage(message.content, File(message.imagePath ?? ''))
                     .then((value) {
                   setState(() {
                     _sendResponse();
@@ -193,23 +186,22 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
 
   Future<void> _sendMessages(MessageEntity value) async {
     _changeEnabledState();
-    if (value.contentType == MsgType.text.typeString) {
-      lstMessages.add(Row(children: [
-        const Spacer(),
-        TextMessage(entity: value),
-        userAvatar()
-      ]));
-    } else {
-      lstMessages.add(Row(children: [
-        const Spacer(),
-        ImageMessage(
-            entity: MessageEntity(
-          content: value.content,
-          contentType: MsgType.image_file.typeString,
-        )),
-        userAvatar()
-      ]));
-    }
+    lstMessages.add(Column(
+      children: [
+        Row(children: [
+          const Spacer(),
+          value.content.isNotEmpty ? TextMessage(entity: value) : Container(),
+          userAvatar()
+        ]),
+        value.imagePath!.isNotEmpty
+            ? ImageMessage(
+                entity: MessageEntity(
+                content: value.imagePath!,
+                contentType: MsgType.image_file.typeString,
+              ))
+            : Container(),
+      ],
+    ));
   }
 
   Future<void> _sendResponse() async {
@@ -257,10 +249,7 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
 
       if (response.statusCode == 200) {
         await ImageGallerySaver.saveFile(filePath);
-        setState(() {
-          _downloadedFilePath = filePath;
-          _selectedImage = File(filePath);
-        });
+        setState(() {});
         print('Download and save completed: $filePath');
       } else {
         print('Error downloading file: ${response.statusCode}');
@@ -273,14 +262,10 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
   Future<void> _sendTextToImage(String text, File? imageFile) async {
     try {
       cubit.showLoading();
-      if (isImage) {
-        chatBoxEntity = await apiService.getImageToTextResponse(imageFile!);
-      } else {
-        String detectedLanguage =
-            await LanguageDetector.getLanguageCode(content: text);
-        chatBoxEntity =
-            await apiService.getTextToImageResponse(text, detectedLanguage);
-      }
+      String detectedLanguage =
+          await LanguageDetector.getLanguageCode(content: text);
+      chatBoxEntity = await apiService.getTextToImageResponse(
+          text, detectedLanguage, imageFile!);
       cubit.hideLoading();
     } catch (e) {
       // cubit.hideLoading();
