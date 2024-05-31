@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class TextMessage extends StatefulWidget {
   MessageEntity entity;
 
-  TextMessage({Key? key, required this.entity}) : super(key: key);
+  TextMessage({super.key, required this.entity});
 
   @override
   _TextMessageState createState() => _TextMessageState();
@@ -20,18 +20,24 @@ class _TextMessageState extends State<TextMessage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        constraints: BoxConstraints(maxWidth: width * 0.5),
+        constraints:
+            BoxConstraints(maxWidth: width * 0.5, minHeight: height * 0.055),
         // width: width * 0.5,
         margin: const EdgeInsets.all(5),
-        padding: const EdgeInsets.all(5),
+        padding: EdgeInsets.fromLTRB(height * 0.01, 5, height * 0.01, 5),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
             color: AppColor.primaryColor),
-        child: Text(
-          widget.entity.content,
-          style: const TextStyle(color: AppColor.white, fontSize: 17),
-          softWrap: true,
-        ));
+        child: Column(
+            mainAxisAlignment:
+                MainAxisAlignment.center, // Căn giữa theo chiều dọc
+            children: [
+              Text(
+                widget.entity.content,
+                style: const TextStyle(color: AppColor.white, fontSize: 17),
+                softWrap: true,
+              )
+            ]));
   }
 
   Future<void> _setDimension() async {
