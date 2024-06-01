@@ -17,7 +17,7 @@ class StoryPlayerCubit extends BaseCubit<StoryPlayerState> {
   final userStoryController = UserStoryController.findOrInitialize;
   final storyController = StoryController.findOrInitialize;
 
-  Future<void> init(BuildContext context) async {
+  void init(BuildContext context) {
     showLoading();
     Size mediaSize = MediaQueryData.fromView(
             WidgetsBinding.instance.platformDispatcher.views.single)
@@ -39,7 +39,6 @@ class StoryPlayerCubit extends BaseCubit<StoryPlayerState> {
     //   volumeValue: 1.0,
     //   isLoop: false,
     // );
-
     emit(state.copyWith(
       height: mediaSize.height,
       width: mediaSize.width,
@@ -56,7 +55,6 @@ class StoryPlayerCubit extends BaseCubit<StoryPlayerState> {
       volumeValue: 1.0,
       isLoop: false,
     ));
-
     print("Cubit.Init() : Get data");
     hideLoading();
   }

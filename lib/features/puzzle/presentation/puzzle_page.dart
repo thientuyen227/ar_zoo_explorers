@@ -148,7 +148,7 @@ class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         childAspectRatio: 2.3,
-                        crossAxisSpacing: 4.8,
+                        crossAxisSpacing: 4.5,
                       ),
                       itemCount: state
                           .questionEntities![questionIndex].options!.length,
@@ -214,7 +214,7 @@ class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
                 borderRadius: const BorderRadius.all(Radius.circular(10))),
             child: Padding(
               padding: const EdgeInsets.only(
-                  right: 50, left: 50, top: 15, bottom: 15),
+                  right: 30, left: 30, top: 15, bottom: 15),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -234,7 +234,7 @@ class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
                 borderRadius: const BorderRadius.all(Radius.circular(10))),
             child: Padding(
               padding: const EdgeInsets.only(
-                  right: 50, left: 50, top: 15, bottom: 15),
+                  right: 30, left: 30, top: 15, bottom: 15),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -259,12 +259,6 @@ class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
               width: 80,
               height: 80,
             )),
-        languageCode == 'en'
-            ? const Text(
-                "/ˈlaɪən/",
-                style: TextStyle(fontSize: 18),
-              )
-            : Container(),
         Padding(
           padding: const EdgeInsets.only(right: 30.0, left: 30),
           child: Row(

@@ -9,7 +9,6 @@ List<QuestionEntity> questions = [
       {"en": 'hello2', "vi": "Xin chào2"},
       {"en": 'hello3', "vi": "Xin chào3"}
     ],
-    categoryQuestion: '',
     question: {'en': "Which animal is this?", 'vi': "Đây là con vật gì?"},
     image: 'assets/images/learning_image/puzzle/fox.png',
     answer: 'hello',
@@ -25,7 +24,6 @@ List<QuestionEntity> questions = [
       {"en": 'hello', "vi": "Xin chào"},
       {"en": 'hello', "vi": "Xin chào"}
     ],
-    categoryQuestion: '',
     question: {'en': "Which animal is this?", 'vi': "Đây là con vật gì?"},
     image: '',
     answer: '',
@@ -41,7 +39,6 @@ List<QuestionEntity> questions = [
       {"en": 'hello', "vi": "Xin chào"},
       {"en": 'hello', "vi": "Xin chào"}
     ],
-    categoryQuestion: '',
     question: {'en': "Which animal is this?", 'vi': "Đây là con vật gì?"},
     image: '',
     answer: '',
@@ -57,7 +54,6 @@ List<QuestionEntity> questions = [
       {"en": 'hello', "vi": "Xin chào"},
       {"en": 'hello', "vi": "Xin chào"}
     ],
-    categoryQuestion: '',
     question: {'en': "Which animal is this?", 'vi': "Đây là con vật gì?"},
     image: '',
     answer: '',

@@ -69,6 +69,7 @@ dependencies:
   image_gallery_saver: ^2.0.3
   injectable_generator: ^2.4.0
   result_type: ^0.2.0
+  # form_builder_validators: ^9.0.0
   form_builder_validators: ^10.0.1
   flutter_archive: ^6.0.3
   get_storage: ^2.1.1

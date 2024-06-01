@@ -11,10 +11,11 @@ class ApiService {
   Future<ChatBoxEntity> getTextToImageResponse(
       String text, String detectedLanguage, File imageFile) async {
     var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
-    if (detectedLanguage == 'vi' && text != '') {
+
+    if (detectedLanguage == 'vi') {
       request.fields['data'] =
           '{"parameters":{"prompt":"hình ảnh $text","lang":"vi","stream":true},"model_id":"chooch-image-chat-4"}';
-    } else if (text != '') {
+    } else {
       request.fields['data'] =
           '{"parameters":{"prompt":"$text","lang":"en","stream":true},"model_id":"chooch-image-chat-4"}';
     }

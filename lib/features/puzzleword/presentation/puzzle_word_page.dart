@@ -1,4 +1,4 @@
-import 'package:ar_zoo_explorers/app/config/routes.dart';
+import 'package:ar_zoo_explorers/app/config/app_router.gr.dart';
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
@@ -77,7 +77,8 @@ class _State
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
-                      context.router.pushNamed(Routes.puzzleworddetail);
+                      context.router.push(PuzzleWordDetailRoute(
+                          categoryId: state.learningcategories![index].id));
                     },
                     child: _renderTopic(
                         title: state.learningcategories![index].nameLocalize,

@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
+import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/core/data/controller/question_controller.dart';
 import 'package:ar_zoo_explorers/domain/entities/question_entity.dart';
@@ -18,7 +19,8 @@ import 'package:get/get.dart';
 
 @RoutePage()
 class PuzzleWordDetailPage extends StatefulWidget {
-  const PuzzleWordDetailPage({super.key});
+  PuzzleWordDetailPage({super.key, required this.categoryId});
+  String categoryId;
 
   @override
   State createState() => _State();
@@ -38,7 +40,7 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
   @override
   void initState() {
     super.initState();
-    cubit.init();
+    cubit.init(categoryId: widget.categoryId);
   }
 
   @override
@@ -130,6 +132,18 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
                           ),
                         ),
                       ),
+                      isFull
+                          ? IconButton(
+                              icon: const ImageSvgUrlCustom(
+                                imagePath: AppIcons.icReload,
+                                size: 20,
+                              ),
+                              iconSize: 40,
+                              onPressed: () {
+                                resetQuestionState();
+                              },
+                            )
+                          : Container(),
                       _renderKeyword(currentQues: currentQues!),
                     ],
                   ),
@@ -222,7 +236,11 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
     isFull = true;
     String answeredString =
         currentQues.puzzles!.map((puzzle) => puzzle.currentValue).join("");
-    return answeredString == currentQues.answer.toUpperCase();
+    if (answeredString == currentQues.answer.toUpperCase()) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   Widget _renderKeyword({required QuestionEntity currentQues}) {
@@ -242,9 +260,7 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
           bool statusBtn = currentQues.puzzles!
                   .indexWhere((puzzle) => puzzle.currentIndex == index) >=
               0;
-
           Color color = statusBtn ? Colors.white70 : const Color(0xff7EE7FD);
-
           return Container(
             decoration: BoxDecoration(
               color: color,
@@ -330,54 +346,49 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
       alignment: Alignment.center,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: currentQues.puzzles!.map((puzzle) {
-              Color color;
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        spacing: 2.5,
+        runSpacing: 3,
+        children: currentQues.puzzles!.map((puzzle) {
+          Color color;
 
-              if (isDone) {
-                color = AppColor.green;
-              } else if (puzzle.hintShow) {
-                color = AppColor.vibrantYellow;
-              } else if (isFull) {
-                color = Colors.red;
-              } else {
-                color = const Color(0xff7EE7FD);
-              }
+          if (isDone) {
+            color = AppColor.green;
+          } else if (puzzle.hintShow) {
+            color = AppColor.vibrantYellow;
+          } else if (isFull) {
+            color = Colors.red;
+          } else {
+            color = const Color(0xff7EE7FD);
+          }
 
-              return InkWell(
-                onTap: () {
-                  if (puzzle.hintShow || isDone) return;
+          return InkWell(
+            onTap: () {
+              if (isDone) return;
 
-                  isFull = false;
-                  puzzle.clearValue();
-                  setState(() {});
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: color,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  width: constraints.biggest.width / 7 - 6,
-                  height: constraints.biggest.width / 7 - 6,
-                  margin: const EdgeInsets.all(3),
-                  child: Text(
-                    (puzzle.currentValue ?? '').toUpperCase(),
-                    style: const TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+              isFull = false;
+              puzzle.clearValue();
+              setState(() {});
+            },
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              width: 50, // Điều chỉnh kích thước của mỗi ô
+              height: 50,
+              child: Text(
+                (puzzle.currentValue ?? '').toUpperCase(),
+                style: const TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
                 ),
-              );
-            }).toList(),
+              ),
+            ),
           );
-        },
+        }).toList(),
       ),
     );
   }
@@ -388,5 +399,19 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
     isFull = false;
     isDone = false;
     currentQues = null;
+  }
+
+  void resetQuestionState() {
+    setState(() {
+      arrayBtns = cubit.generateKeywords(currentQues!.answer, 16);
+
+      isFull = false;
+      isDone = false;
+      for (var puzzle in currentQues!.puzzles!) {
+        puzzle.clearValue();
+        puzzle.hintShow = false;
+      }
+      generateHint(answer: currentQues!.answer);
+    });
   }
 }

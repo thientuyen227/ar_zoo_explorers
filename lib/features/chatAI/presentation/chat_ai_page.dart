@@ -262,12 +262,14 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
 
   Future<void> _sendTextToImage(String text, File? imageFile) async {
     try {
+      String? detectedLanguage;
       cubit.showLoading();
       if (text == '') {
-        text = 'what is this?';
+        detectedLanguage = 'en';
+      } else {
+        detectedLanguage =
+            await LanguageDetector.getLanguageCode(content: text);
       }
-      String detectedLanguage =
-          await LanguageDetector.getLanguageCode(content: text);
 
       chatBoxEntity = await apiService.getTextToImageResponse(
           text, detectedLanguage, imageFile!);

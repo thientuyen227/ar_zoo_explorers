@@ -9,6 +9,7 @@ import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../app/theme/icons.dart';
 import '../../../base/base_state.dart';
@@ -52,15 +53,18 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
               _renderTitleAndIcon(
                   icon: AppImages.imgPhonics,
                   title: LanguageKeys.phonics.tr,
-                  router: Routes.phonics),
+                  router: Routes.phonics,
+                  lotties: AppLotties.animationanimal),
               _renderTitleAndIcon(
                   title: LanguageKeys.vocabulary,
                   icon: AppImages.imgDictionary,
-                  router: Routes.vocabulary),
+                  router: Routes.vocabulary,
+                  lotties: null),
               _renderTitleAndIcon(
                   icon: AppImages.imgPuzzle,
                   title: LanguageKeys.puzzle,
-                  router: Routes.puzzleword),
+                  router: Routes.puzzleword,
+                  lotties: AppLotties.puzzle),
             ],
           ),
         ),
@@ -69,7 +73,10 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
   }
 
   Widget _renderTitleAndIcon(
-      {required String title, required String icon, required String router}) {
+      {required String title,
+      required String icon,
+      required String router,
+      String? lotties}) {
     return Column(
       children: [
         const SizedBox(
@@ -86,10 +93,15 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
                 border: Border.all(),
                 borderRadius: const BorderRadius.all(Radius.circular(10))),
             child: Padding(
-              padding: const EdgeInsets.all(21.0),
+              padding: const EdgeInsets.all(4.0),
               child: Row(
                 children: [
-                  ImageSvgUrlCustom(imagePath: icon),
+                  lotties == null
+                      ? ImageSvgUrlCustom(imagePath: icon)
+                      : Container(
+                          child: Lottie.asset(
+                          lotties,
+                        )),
                   const SizedBox(
                     width: 24,
                   ),

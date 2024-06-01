@@ -568,10 +568,8 @@ class _State
   }
 
   Future<void> _initCubit() async {
-    await cubit.init(context).then((value) => setState(() {
-          print('Height : ${state.height}');
-        }));
     await cubit.showLoading();
+    cubit.init(context);
     await _onPlayerStateChanged();
     // await _playAudio();
     await cubit.hideLoading();
