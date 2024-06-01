@@ -71,6 +71,7 @@ class AppIcons {
       "assets/icons/ic_checked_x64_green.png";
   static const String icLion64Color = "assets/icons/ic_lion_x64_color.png";
   static const String icSend64White = "assets/icons/ic_send_x64_white.png";
+  static const String icReload = "assets/icons/ic_reload.svg";
 
   //Account Manager
   static const String icUserProfile = "assets/icons/ic_userprofile.png";
@@ -245,4 +246,5 @@ class AppLotties {
   static const String plane = "assets/lotties/plane.json";
   static const String earth = "assets/lotties/earth.json";
   static const String snow = "assets/lotties/snow.json";
+  static const String puzzle = "assets/lotties/puzzle.json";
 }

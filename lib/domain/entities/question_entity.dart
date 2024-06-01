@@ -7,7 +7,6 @@ class QuestionEntity {
   String id;
   Map<String, String> question;
   List<Map<String, String>>? options;
-  String categoryQuestion;
   String categoryId;
   String? image;
   String answer;
@@ -17,7 +16,6 @@ class QuestionEntity {
     required this.id,
     required this.question,
     this.options,
-    required this.categoryQuestion,
     required this.categoryId,
     required this.image,
     required this.answer,
@@ -29,7 +27,6 @@ class QuestionEntity {
       'id': id,
       'question': question,
       'options': options,
-      'categoryQuestion': categoryQuestion,
       'categoryId': categoryId,
       'image': image,
       'answer': answer,
@@ -45,7 +42,6 @@ class QuestionEntity {
               .map((x) => Map<String, String>.from(x as Map))
               .toList()
           : null,
-      categoryQuestion: map['categoryQuestion'] as String,
       categoryId: map['categoryId'] as String,
       image: map['image'] as String?,
       answer: map['answer'] as String,
@@ -61,7 +57,6 @@ class QuestionEntity {
     String? id,
     required Map<String, String> question,
     List<Map<String, String>>? options,
-    String? categoryQuestion,
     String? categoryId,
     String? image,
     required String answer,
@@ -70,7 +65,6 @@ class QuestionEntity {
       id: id ?? this.id,
       question: question,
       options: options ?? this.options,
-      categoryQuestion: categoryQuestion ?? this.categoryQuestion,
       categoryId: categoryId ?? this.categoryId,
       image: image ?? this.image,
       answer: answer,

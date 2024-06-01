@@ -72,7 +72,7 @@ dependencies:
   form_builder_validators: ^9.0.0
   flutter_archive: ^5.0.0
   get_storage: ^2.1.1
-  # internationalization: ^4.0.0+1
+  internationalization: ^4.0.0+1
   cloud_firestore: ^4.9.2
   mask_text_input_formatter: ^2.5.0
   dartz: ^0.10.1

@@ -203,9 +203,13 @@ abstract class $AppRouter extends _i40.RootStackRouter {
       );
     },
     PuzzleWordDetailRoute.name: (routeData) {
+      final args = routeData.argsAs<PuzzleWordDetailRouteArgs>();
       return _i40.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i19.PuzzleWordDetailPage(),
+        child: _i19.PuzzleWordDetailPage(
+          key: args.key,
+          categoryId: args.categoryId,
+        ),
       );
     },
     PuzzleWordRoute.name: (routeData) {
@@ -630,16 +634,41 @@ class PuzzleRoute extends _i40.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i19.PuzzleWordDetailPage]
-class PuzzleWordDetailRoute extends _i40.PageRouteInfo<void> {
-  const PuzzleWordDetailRoute({List<_i40.PageRouteInfo>? children})
-      : super(
+class PuzzleWordDetailRoute
+    extends _i40.PageRouteInfo<PuzzleWordDetailRouteArgs> {
+  PuzzleWordDetailRoute({
+    _i41.Key? key,
+    required String categoryId,
+    List<_i40.PageRouteInfo>? children,
+  }) : super(
           PuzzleWordDetailRoute.name,
+          args: PuzzleWordDetailRouteArgs(
+            key: key,
+            categoryId: categoryId,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'PuzzleWordDetailRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i40.PageInfo<PuzzleWordDetailRouteArgs> page =
+      _i40.PageInfo<PuzzleWordDetailRouteArgs>(name);
+}
+
+class PuzzleWordDetailRouteArgs {
+  const PuzzleWordDetailRouteArgs({
+    this.key,
+    required this.categoryId,
+  });
+
+  final _i41.Key? key;
+
+  final String categoryId;
+
+  @override
+  String toString() {
+    return 'PuzzleWordDetailRouteArgs{key: $key, categoryId: $categoryId}';
+  }
 }
 
 /// generated route for

@@ -1141,6 +1141,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.0"
+  internationalization:
+    dependency: "direct main"
+    description:
+      name: internationalization
+      sha256: "83bf1fe0e3f07dc7fcf5ec6b5baf0aaaa17e93665e0d478ca1caadd1de6364c2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.1"
   intl:
     dependency: "direct main"
     description:

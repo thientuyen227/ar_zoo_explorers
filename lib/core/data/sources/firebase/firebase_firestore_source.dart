@@ -879,7 +879,6 @@ class FirebaseFirestoreSource {
       'id': questionEntity.id,
       'question': questionEntity.question,
       'options': questionEntity.options,
-      'categoryQuestion': questionEntity.categoryQuestion,
       'categoryId': questionEntity.categoryId,
       'image': questionEntity.image,
       'answer': questionEntity.answer,
