@@ -13,8 +13,7 @@ import 'package:image_picker/image_picker.dart';
 
 class ChatAIABottomBar extends StatefulWidget {
   final ValueChanged<MessageEntity> onSendMassage;
-  const ChatAIABottomBar({Key? key, required this.onSendMassage})
-      : super(key: key);
+  const ChatAIABottomBar({super.key, required this.onSendMassage});
 
   @override
   _ChatAIABottomBarState createState() => _ChatAIABottomBarState();
@@ -31,6 +30,7 @@ class _ChatAIABottomBarState extends State<ChatAIABottomBar> {
   bool isImage = false;
   XFile? image;
   MessageEntity? messageEntity;
+
   @override
   Widget build(BuildContext context) {
     return FormBuilder(
@@ -51,13 +51,9 @@ class _ChatAIABottomBarState extends State<ChatAIABottomBar> {
                       // height: height * 0.1,
                       color: Colors.transparent,
                       child: Row(children: [
-                        isImage == false
-                            ? btnCamera()
-                            : Image.file(
-                                File(image!.path),
-                                height: 40,
-                                width: 40,
-                              ),
+                        isImage
+                            ? selectedImage(File(image!.path))
+                            : btnCamera(),
                         Expanded(child: boxChat()),
                         btnSend()
                       ]),
@@ -91,6 +87,10 @@ class _ChatAIABottomBarState extends State<ChatAIABottomBar> {
           }
           widget.onSendMassage(newEntity);
           editingController.clear();
+          isImage = false;
+          FocusScope.of(context).requestFocus(FocusNode());
+        } else if (isImage) {
+          widget.onSendMassage(messageEntity!);
           isImage = false;
           FocusScope.of(context).requestFocus(FocusNode());
         }
@@ -139,18 +139,7 @@ class _ChatAIABottomBarState extends State<ChatAIABottomBar> {
         ),
       ),
       onTap: () async {
-        XFile? image = await _picker.pickImage(source: ImageSource.camera);
-        if (image != null) {
-          messageEntity = MessageEntity(
-              imagePath: image.path,
-              contentType: MsgType.image_file.typeString);
-          isImage = true;
-          Navigator.of(context).pop(true);
-        } else {
-          await Fluttertoast.showToast(
-            msg: LanguageKeys.get_img_failed.tr,
-          );
-        }
+        await selectImageCamera();
       },
     );
   }
@@ -177,19 +166,25 @@ class _ChatAIABottomBarState extends State<ChatAIABottomBar> {
         ),
       ),
       onTap: () async {
-        image = await _picker.pickImage(source: ImageSource.gallery);
-        if (image != null) {
-          messageEntity = MessageEntity(
-              imagePath: image!.path,
-              contentType: MsgType.image_file.typeString);
-          isImage = true;
-          Navigator.of(context).pop(true);
-        } else {
-          await Fluttertoast.showToast(
-            msg: LanguageKeys.get_img_failed.tr,
-          );
-        }
+        await selectImageGallery();
       },
+    );
+  }
+
+  Widget selectedImage(File imgFile) {
+    return GestureDetector(
+      onTap: () async {
+        await selectImageGallery();
+      },
+      child: Container(
+        height: height * 0.07,
+        width: height * 0.07,
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
+        padding: const EdgeInsets.all(5),
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: Image.file(imgFile, fit: BoxFit.cover)),
+      ),
     );
   }
 
@@ -199,7 +194,7 @@ class _ChatAIABottomBarState extends State<ChatAIABottomBar> {
       decoration: InputDecoration(
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
           hintText: LanguageKeys.write_message.tr,
-          prefixIcon: Image.asset(AppIcons.icCalendar),
+          // prefixIcon: Image.asset(AppIcons.icCalendar),
           contentPadding: const EdgeInsets.all(10)),
     );
   }
@@ -227,6 +222,42 @@ class _ChatAIABottomBarState extends State<ChatAIABottomBar> {
         );
       },
     );
+  }
+
+  Future<void> selectImageGallery() async {
+    image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      messageEntity = MessageEntity(
+          imagePath: image!.path, contentType: MsgType.image_file.typeString);
+      setState(() {
+        isImage = true;
+      });
+      Navigator.of(context).pop(true);
+    } else {
+      setState(() {
+        isImage = false;
+      });
+      await Fluttertoast.showToast(
+        msg: LanguageKeys.get_img_failed.tr,
+      );
+    }
+  }
+
+  Future<void> selectImageCamera() async {
+    image = await _picker.pickImage(source: ImageSource.camera);
+    if (image != null) {
+      messageEntity = MessageEntity(
+          imagePath: image!.path, contentType: MsgType.image_file.typeString);
+      setState(() {
+        isImage = true;
+      });
+      Navigator.of(context).pop(true);
+    } else {
+      setState(() {
+        isImage = false;
+      });
+      await Fluttertoast.showToast(msg: LanguageKeys.get_img_failed.tr);
+    }
   }
 
   Future<void> _setDimension() async {

@@ -76,7 +76,6 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
                   });
                 });
               });
-              await _changeEnabledState();
             },
           )),
       // resizeToAvoidBottomInset: true,
@@ -185,29 +184,31 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
   }
 
   Future<void> _sendMessages(MessageEntity value) async {
-    _changeEnabledState();
-    lstMessages.add(Column(
-      children: [
-        Row(children: [
-          const Spacer(),
+    // _changeEnabledState();
+    lstMessages.add(
+      Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        const Spacer(),
+        Column(children: [
           value.content.isNotEmpty ? TextMessage(entity: value) : Container(),
-          userAvatar()
+          value.imagePath!.isNotEmpty
+              ? ImageMessage(
+                  entity: MessageEntity(
+                  content: value.imagePath!,
+                  contentType: MsgType.image_file.typeString,
+                ))
+              : Container(),
         ]),
-        value.imagePath!.isNotEmpty
-            ? ImageMessage(
-                entity: MessageEntity(
-                content: value.imagePath!,
-                contentType: MsgType.image_file.typeString,
-              ))
-            : Container(),
-      ],
-    ));
+        userAvatar()
+      ]),
+    );
   }
 
   Future<void> _sendResponse() async {
-    lstMessages.add(Row(children: [
+    lstMessages
+        .add(Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
       aiAvatar(),
       Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextMessage(
               entity: MessageEntity(content: chatBoxEntity!.prediction)),
@@ -262,13 +263,18 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
   Future<void> _sendTextToImage(String text, File? imageFile) async {
     try {
       cubit.showLoading();
+      if (text == '') {
+        text = 'what is this?';
+      }
       String detectedLanguage =
           await LanguageDetector.getLanguageCode(content: text);
+
       chatBoxEntity = await apiService.getTextToImageResponse(
           text, detectedLanguage, imageFile!);
       cubit.hideLoading();
     } catch (e) {
-      // cubit.hideLoading();
+      cubit.hideLoading();
+      chatBoxEntity = null;
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
