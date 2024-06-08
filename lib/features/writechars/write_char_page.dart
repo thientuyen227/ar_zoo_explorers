@@ -49,10 +49,14 @@ class _State
   }
 
   List<Color> generateBlackToWhiteColors() {
-    for (int i = 0; i < 20; i++) {
-      double hue = (360 * i / 20) % 360;
+    // Add white color at the beginning of the list
+    colors.add(Colors.white);
+    for (int i = 1; i < 20; i++) {
+      double hue = (360 * i / 19) % 360;
       colors.add(HSVColor.fromAHSV(1, hue, 1, 1).toColor());
     }
+    // Add white color at the end of the list
+    colors.add(Colors.white);
     return colors;
   }
 
@@ -221,7 +225,7 @@ class _State
                                       if (index == 0 ||
                                           index >= colors.length) {
                                         return SizedBox(
-                                          height: state.width * 0.5,
+                                          height: state.width * 0.6,
                                           child: Center(
                                             child: Container(
                                               width: state.width * 0.4,

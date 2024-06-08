@@ -274,9 +274,9 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
             alignment: Alignment.center,
             child: TextButton(
               style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.resolveWith<Color>(
-                  (Set<WidgetState> states) {
-                    if (states.contains(WidgetState.pressed)) {
+                backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                  (Set<MaterialState> states) {
+                    if (states.contains(MaterialState.pressed)) {
                       return Theme.of(context)
                           .colorScheme
                           .primary
@@ -285,7 +285,7 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
                     return const Color(0xff7EE7FD);
                   },
                 ),
-                shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
