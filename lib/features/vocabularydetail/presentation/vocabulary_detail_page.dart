@@ -11,7 +11,8 @@ import 'package:get/get.dart';
 
 @RoutePage()
 class VocabularyDetailPage extends StatefulWidget {
-  const VocabularyDetailPage({super.key});
+  VocabularyDetailPage({super.key, required this.categoryId});
+  String categoryId;
 
   @override
   State createState() => _State();
@@ -22,7 +23,7 @@ class _State extends BaseState<VocabularyDetailState, VocabularyDetailCubit,
   @override
   void initState() {
     super.initState();
-    cubit.init();
+    cubit.init(categoryId: widget.categoryId);
   }
 
   final languageCode = Get.locale?.languageCode;
@@ -30,7 +31,11 @@ class _State extends BaseState<VocabularyDetailState, VocabularyDetailCubit,
   Widget buildByState(BuildContext context, VocabularyDetailState state) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(LanguageKeys.animals.tr),
+        title: Text(LanguageKeys.animals.tr,
+            style: const TextStyle(
+                fontSize: 20,
+                color: Colors.white,
+                fontWeight: FontWeight.bold)),
         centerTitle: true,
         leading: const CustomBackButton(),
         elevation: 1,

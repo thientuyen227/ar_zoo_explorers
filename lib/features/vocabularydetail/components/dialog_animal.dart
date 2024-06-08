@@ -4,7 +4,10 @@ import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/core/data/controller/vocabulary_controller.dart';
 import 'package:ar_zoo_explorers/domain/entities/vocabulary_entity.dart';
+import 'package:ar_zoo_explorers/features/vocabulary/presentation/vocabulary_cubit.dart';
+import 'package:ar_zoo_explorers/utils/widget/button_widget.dart';
 import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -22,36 +25,48 @@ class _DialogAnimalState extends State<DialogAnimal> {
   final languageCode = Get.locale?.languageCode;
   final vocabularyController = VocabularyController.findOrInitialize;
   late int currentIndex;
+  VocabularyCubit cubit = VocabularyCubit();
+  AudioPlayer audioPlayer = AudioPlayer();
+  List<VocabularyEntity>? vocabularyEntities;
+  VocabularyEntity? vocabularyEntity;
 
   @override
   void initState() {
     super.initState();
-    fetchData();
+    audioPlayer = AudioPlayer();
+    cubit.showLoading();
+    vocabularyEntities = vocabularyController.listVocabulary.value
+        .where((element) =>
+            element.categoryId == widget.vocabularyEntity.categoryId)
+        .toList();
+    currentIndex = vocabularyEntities!
+        .indexWhere((element) => element.id == widget.vocabularyEntity.id);
+    vocabularyEntity = vocabularyEntities![currentIndex];
+    cubit.hideLoading();
   }
 
-  Future<void> fetchData() async {
-    vocabularyController.getAllVocabularys();
-    currentIndex = vocabularyController.listVocabulary.value
-        .indexWhere((element) => element.id == widget.vocabularyEntity.id);
+  @override
+  void dispose() {
+    audioPlayer.dispose();
+    super.dispose();
   }
+
+  void fetchData() {}
 
   void goToVocabulary(bool isNext) {
     setState(() {
       if (isNext) {
-        if (currentIndex <
-            vocabularyController.listVocabulary.value.length - 1) {
+        if (currentIndex < vocabularyEntities!.length - 1) {
           currentIndex++;
+          vocabularyEntity = vocabularyEntities?[currentIndex];
         }
       } else {
         if (currentIndex > 0) {
           currentIndex--;
+          vocabularyEntity = vocabularyEntities?[currentIndex];
         }
       }
     });
-  }
-
-  VocabularyEntity getCurrentVocabulary() {
-    return vocabularyController.listVocabulary.value[currentIndex];
   }
 
   Widget buttonPreviousAndNext() {
@@ -95,8 +110,7 @@ class _DialogAnimalState extends State<DialogAnimal> {
           },
           child: Container(
             decoration: BoxDecoration(
-                color: currentIndex ==
-                        vocabularyController.listVocabulary.value.length - 1
+                color: currentIndex == vocabularyEntities!.length - 1
                     ? AppColor.lightGrey
                     : AppColor.vibrantYellow,
                 border: Border.all(),
@@ -135,9 +149,6 @@ class _DialogAnimalState extends State<DialogAnimal> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(
-            height: 20,
-          ),
           Padding(
             padding: const EdgeInsets.only(top: 20, bottom: 15),
             child: Column(
@@ -152,7 +163,7 @@ class _DialogAnimalState extends State<DialogAnimal> {
                   height: 6,
                 ),
                 Text(
-                  getCurrentVocabulary().meaningLocalize,
+                  vocabularyEntity!.meaningLocalize,
                 ),
               ],
             ),
@@ -171,7 +182,7 @@ class _DialogAnimalState extends State<DialogAnimal> {
                   height: 6,
                 ),
                 Text(
-                  getCurrentVocabulary().exampleLocalize,
+                  vocabularyEntity!.exampleLocalize,
                 ),
               ],
             ),
@@ -196,10 +207,10 @@ class _DialogAnimalState extends State<DialogAnimal> {
           ),
           Center(
               child: ImageSvgUrlCustom(
-                  imagePath: getCurrentVocabulary().thumbnail)),
-          const SizedBox(
-            height: 10,
-          ),
+            imagePath: vocabularyEntity!.thumbnail,
+            height: 80,
+            width: 80,
+          )),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -214,17 +225,23 @@ class _DialogAnimalState extends State<DialogAnimal> {
                 ),
               ),
               Text(
-                getCurrentVocabulary().wordLocalize,
+                vocabularyEntity!.wordLocalize,
                 style:
                     const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
               ),
-              SvgPicture.asset(AppIcons.icSound),
+              AppIconButton(
+                onPressed: () {
+                  audioPlayer
+                      .play(UrlSource(widget.vocabularyEntity.audiosLocalize));
+                },
+                icon: SvgPicture.asset(AppIcons.icSound),
+              ),
             ],
           ),
           languageCode != 'vi'
               ? Center(
                   child: Text(
-                    getCurrentVocabulary().phoneticTranscription ?? "",
+                    vocabularyEntity!.phoneticTranscription ?? "",
                     style: const TextStyle(
                       fontSize: 18,
                     ),
