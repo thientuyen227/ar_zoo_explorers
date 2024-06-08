@@ -33,15 +33,15 @@ class CharsController extends ControllerHelper {
     update();
   }
 
-  Future<List<CharsEntity>?> getAllChars(BuildContext context) {
+  Future<List<CharsEntity>?> getAllChars() {
     return processRequest<List<CharsEntity>?>(
         request: () => _charsRepository.getAllChars(),
         onFailure: (failure) =>
             Fluttertoast.showToast(msg: "Access information failed!"),
-        onSuccess: (success) => {_setListChars(context, success.data!)});
+        onSuccess: (success) => {_setListChars(success.data!)});
   }
 
-  _setListChars(BuildContext context, List<CharsEntity> listEntity) {
+  _setListChars(List<CharsEntity> listEntity) {
     listChars.value = listEntity;
     update();
   }

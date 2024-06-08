@@ -33,16 +33,26 @@ class StorySearchingCubit extends BaseCubit<StorySearchingState> {
         storyController.listStory.value,
         storyTopicController.listStoryTopic.value);
 
-    await state.setAttributes(
-        height: mediaSize.height,
-        width: mediaSize.width,
-        searchStatus: storyController.searchStatus.value,
-        txtSearch: storyController.txtSearch.value,
-        listFullStory: lstFull);
+    emit(state.copyWith(
+      height: mediaSize.height,
+      width: mediaSize.width,
+      searchStatus: storyController.searchStatus.value,
+      txtSearch: storyController.txtSearch.value,
+      listFullStory: lstFull,
+    ));
+
+    // await state.setAttributes(
+    //     height: mediaSize.height,
+    //     width: mediaSize.width,
+    //     searchStatus: storyController.searchStatus.value,
+    //     txtSearch: storyController.txtSearch.value,
+    //     listFullStory: lstFull,);
 
     List<StoryButtonObject> lstSearch = storyController.searchStatus.value
         ? await _setSearchStories(storyController.txtSearch.value)
         : [];
+
+    emit(state.copyWith(listSearchStory: lstSearch));
 
     await state.setAttributes(listSearchStory: lstSearch);
     // print("Cubit.Init() : Get data, ${storyController.searchStatus.value}");

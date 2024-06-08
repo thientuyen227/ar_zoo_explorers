@@ -568,8 +568,8 @@ class _State
   }
 
   Future<void> _initCubit() async {
-    await cubit.init(context).then((value) => setState(() {}));
     await cubit.showLoading();
+    cubit.init(context);
     await _onPlayerStateChanged();
     // await _playAudio();
     await cubit.hideLoading();

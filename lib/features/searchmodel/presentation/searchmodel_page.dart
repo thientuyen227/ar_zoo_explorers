@@ -1,11 +1,14 @@
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
+import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/core/data/controller/user_animal_controller.dart';
 import 'package:ar_zoo_explorers/features/searchmodel/presentation/searchmodel_cubit.dart';
 import 'package:ar_zoo_explorers/features/searchmodel/presentation/searchmodel_state.dart';
+import 'package:ar_zoo_explorers/utils/widget/custom_back_button.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/get.dart';
 
 import '../../../app/config/routes.dart';
 import '../../../app/theme/icons.dart';
@@ -16,7 +19,6 @@ import '../../../core/data/controller/animal_controller.dart';
 import '../../../core/data/controller/animal_detail_controller.dart';
 import '../../../core/data/controller/auth_controller.dart';
 import '../../../domain/entities/animal_detail_entity.dart';
-import '../../../utils/widget/button_widget.dart';
 import '../../base-model/button_object.dart';
 import '../../base-model/form_builder_text_field_model.dart';
 
@@ -47,8 +49,12 @@ class _State
             scaffold: Scaffold(
                 appBar: AppBar(
                     centerTitle: true,
-                    title: const Text("Search",
-                        style: TextStyle(fontSize: 20, color: Colors.white)),
+                    backgroundColor: AppColor.appBarColor,
+                    title: Text('${LanguageKeys.search.tr} model'.toUpperCase(),
+                        style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold)),
                     leading: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [turnBack()]),
@@ -68,13 +74,11 @@ class _State
   }
 
   Widget turnBack() {
-    return AppIconButton(
-        onPressed: () async {
-          await animalController.resetCurrentValue(context);
-          context.router.pop();
-          context.router.pushNamed(Routes.home);
-        },
-        icon: Image.asset(AppIcons.icBack_png, scale: 0.65));
+    return CustomBackButton(onPressed: () async {
+      await animalController.resetCurrentValue(context);
+      context.router.pop();
+      context.router.pushNamed(Routes.home);
+    });
   }
 
   Widget searchBar(FormBuilderTextFieldModel item) {
@@ -99,32 +103,39 @@ class _State
 
   // DANH SÁCH BUTTON MODEL
   Widget listModelButton(List<ButtonObject> list) {
-    List<Widget> listRow = [];
-    for (int i = 0; i < list.length - 1; i = i + 2) {
-      listRow.add(Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround, // Căn đều 2 bên
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [modelButton(i), modelButton(i + 1)]));
-      listRow.add(const SizedBox(height: 20));
-    }
-    if ((list.length) % 2 != 0) {
-      listRow.add(Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround, // Căn đều 2 bên
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            modelButton(list.length - 1),
-            const SizedBox(height: 150, width: 150)
-          ]));
-      listRow.add(const SizedBox(height: 20));
-    }
-    if (listRow.isEmpty &&
-        _formKey.currentState?.fields['search']?.value != null) {
-      return const Text(
-        "This model does not exist!",
-        style: TextStyle(color: Colors.black),
+    if (list.isNotEmpty) {
+      return GridView.builder(
+        shrinkWrap: true,
+        itemCount: list.length,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.all(0.0),
+            child: Column(
+              children: [modelButton(index)],
+            ),
+          );
+        },
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, childAspectRatio: 0.95, crossAxisSpacing: 14),
       );
+    } else if (_formKey.currentState?.fields['search']?.value != null) {
+      return Container(
+          width: MediaQuery.of(context).size.width * 0.9,
+          constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height * 0.2),
+          alignment: Alignment.center,
+          child: Text(
+              '${LanguageKeys.models_no_has_keyword.tr} "${_formKey.currentState?.fields['search']?.value}"',
+              style: const TextStyle(fontSize: 20)));
     } else {
-      return Column(children: listRow);
+      return Container(
+          width: MediaQuery.of(context).size.width * 0.9,
+          constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height * 0.2),
+          alignment: Alignment.center,
+          child: Text(LanguageKeys.model_in_category_empty.tr,
+              style: const TextStyle(fontSize: 20)));
     }
   }
 
@@ -227,9 +238,11 @@ class _State
       setState(() {
         cubit.setListAnimal(animalController.listAnimal.value,
             animalController.searchValue.value);
-        for (int i = 0; i < cubit.listFullAnimal.length; i++) {
-          _getIsLoved(controller.currentUser.value.id, i);
-          _getViews(detailController.listAnimalDetail.value, i);
+        if (cubit.listFullAnimal.isNotEmpty) {
+          for (int i = 0; i < cubit.listFullAnimal.length; i++) {
+            _getIsLoved(controller.currentUser.value.id, i);
+            _getViews(detailController.listAnimalDetail.value, i);
+          }
         }
       });
     });
@@ -241,29 +254,41 @@ class _State
   }
 
   Future<void> onSearch(String? value) async {
-    await animalController.setSearchValue(
-        context, _formKey.currentState!.fields['search']?.value);
-    setState(() {
-      cubit.onSearch(value ?? "");
-    });
+    if (mounted) {
+      await animalController.setSearchValue(
+          context, _formKey.currentState!.fields['search']?.value);
+      setState(() {
+        cubit.onSearch(value ?? "");
+      });
+    }
   }
 
   _getIsLoved(String userId, int index) async {
     bool status = await userAnimalController.getUserAnimalIsLoved(
         userId, cubit.listFullAnimal[index].id!);
+
     setState(() {
-      cubit.listFullAnimal[index].isLoved = status;
-      cubit.listSearchAnimal[index].isLoved = status;
+      if (cubit.listFullAnimal.isNotEmpty) {
+        cubit.listFullAnimal[index].isLoved = status;
+      }
+      if (cubit.listSearchAnimal.isNotEmpty) {
+        cubit.listSearchAnimal[index].isLoved = status;
+      }
     });
   }
 
   _getViews(List<AnimalDetailEntity> lst, int index) {
     for (int i = 0; i < lst.length; i++) {
       cubit.listFullAnimal[index].views = 0;
-      cubit.listSearchAnimal[index].views = 0;
+      if (cubit.listSearchAnimal.isNotEmpty) {
+        cubit.listSearchAnimal[index].views = 0;
+      }
       if (cubit.listFullAnimal[index].id == lst[i].modelId) {
         cubit.listFullAnimal[index].views = lst[i].views;
-        cubit.listSearchAnimal[index].views = lst[i].views;
+        if (cubit.listSearchAnimal.isNotEmpty) {
+          cubit.listSearchAnimal[index].views = lst[i].views;
+        }
+
         break;
       }
     }
@@ -287,6 +312,5 @@ class _State
     controller.getCurrentUser(context);
     animalController.getAllAnimals(context);
     setAnimal(context);
-    //print("2: ${animalController.listAnimal.value.length}");
   }
 }

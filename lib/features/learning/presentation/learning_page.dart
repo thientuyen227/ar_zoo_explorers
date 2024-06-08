@@ -1,14 +1,14 @@
 import 'package:ar_zoo_explorers/app/config/routes.dart';
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
-import 'package:ar_zoo_explorers/domain/api/api_service.dart';
+import 'package:ar_zoo_explorers/core/data/api/api_service.dart';
 import 'package:ar_zoo_explorers/domain/entities/chatbox_entity.dart';
 import 'package:ar_zoo_explorers/features/learning/presentation/learning_cubit.dart';
 import 'package:ar_zoo_explorers/features/learning/presentation/learning_state.dart';
-import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../app/theme/icons.dart';
 import '../../../base/base_state.dart';
@@ -25,7 +25,7 @@ class LearningPage extends StatefulWidget {
 class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
   ApiService apiService = ApiService();
   TextEditingController textTest = TextEditingController();
-  List<ChatBoxEntity> chatBoxEntity = [];
+  ChatBoxEntity? chatBoxEntity;
 
   @override
   Widget buildByState(BuildContext context, LearningState state) {
@@ -33,7 +33,10 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
       appBar: AppBar(
           centerTitle: true,
           title: const Text("Learning Home",
-              style: TextStyle(fontSize: 20, color: Colors.white)),
+              style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold)),
           backgroundColor: Colors.blue[600],
           elevation: 0,
           leading: Column(
@@ -50,50 +53,21 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
                 height: 24,
               ),
               _renderTitleAndIcon(
-                  icon: AppImages.imgPhonics,
                   title: LanguageKeys.phonics.tr,
-                  router: Routes.phonics),
+                  router: Routes.phonics,
+                  lotties: AppLotties.animationanimal),
               _renderTitleAndIcon(
                   title: LanguageKeys.vocabulary,
-                  icon: AppImages.imgDictionary,
-                  router: Routes.vocabulary),
+                  router: Routes.vocabulary,
+                  lotties: AppLotties.vocabulary),
               _renderTitleAndIcon(
-                  icon: AppImages.imgPuzzle,
                   title: LanguageKeys.puzzle,
-                  router: Routes.puzzleword),
-              TextFormField(
-                controller: textTest,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    hintText: 'Test thử xem',
-                    prefixIcon: Image.asset(AppIcons.icCalendar),
-                    contentPadding: const EdgeInsets.all(10)),
-              ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: () {
-                  _sendTextToImage(
-                      textTest.text); // Thay đổi văn bản nếu bạn muốn
-                },
-                child: const Text("Send Text"),
-              ),
-              chatBoxEntity.isNotEmpty
-                  ? ListView.separated(
-                      itemBuilder: ((context, index) {
-                        ImageSvgUrlCustom(
-                            imagePath: chatBoxEntity[index]
-                                .generatedFiles![index]
-                                .fileUrl);
-                        return null;
-                      }),
-                      separatorBuilder: (context, index) {
-                        return const SizedBox(
-                          width: 8,
-                        );
-                      },
-                      itemCount: chatBoxEntity.length)
-                  : Container()
+                  router: Routes.puzzleword,
+                  lotties: AppLotties.puzzle),
+              _renderTitleAndIcon(
+                  title: LanguageKeys.puzzle,
+                  router: Routes.writechars,
+                  lotties: AppLotties.puzzle),
             ],
           ),
         ),
@@ -102,7 +76,9 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
   }
 
   Widget _renderTitleAndIcon(
-      {required String title, required String icon, required String router}) {
+      {required String title,
+      required String router,
+      required String lotties}) {
     return Column(
       children: [
         const SizedBox(
@@ -119,12 +95,15 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
                 border: Border.all(),
                 borderRadius: const BorderRadius.all(Radius.circular(10))),
             child: Padding(
-              padding: const EdgeInsets.all(21.0),
+              padding: const EdgeInsets.all(10.0),
               child: Row(
                 children: [
-                  ImageSvgUrlCustom(imagePath: icon),
+                  Container(
+                      child: Lottie.asset(
+                    lotties,
+                  )),
                   const SizedBox(
-                    width: 24,
+                    width: 12,
                   ),
                   Text(
                     title.tr,
@@ -142,7 +121,7 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
 
   Widget backButton() {
     return AppIconButton(
-      onPressed: () => context.router.pop(),
+      onPressed: () => context.router.maybePop(),
       icon: Container(
           margin: const EdgeInsets.only(left: 0),
           child: Transform.scale(
@@ -191,31 +170,5 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
         ),
       ),
     );
-  }
-
-  void _sendTextToImage(String text) async {
-    try {
-      // Gọi API texttoimage bằng ApiService
-      chatBoxEntity = await apiService.getTextToImageResponse(text);
-      setState(() {});
-    } catch (e) {
-      // Xử lý lỗi nếu cần
-      print("Error sending text to image: $e");
-      // Hiển thị thông báo lỗi
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text("Error"),
-          content: const Text(
-              "Failed to send text to image. Please try again later."),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text("OK"),
-            ),
-          ],
-        ),
-      );
-    }
   }
 }

@@ -28,7 +28,7 @@ class StoryListeningCubit extends BaseCubit<StoryListeningState> {
             WidgetsBinding.instance.platformDispatcher.views.single)
         .size;
 
-    await state.setAttributes(
+    emit(state.copyWith(
       height: mediaSize.height,
       width: mediaSize.width,
       listStory: await _setStoryButtons(
@@ -36,7 +36,16 @@ class StoryListeningCubit extends BaseCubit<StoryListeningState> {
         userStoryController.listUserStory.value,
         storyTopicController.listStoryTopic.value,
       ),
-    );
+    ));
+    // await state.setAttributes(
+    //   height: mediaSize.height,
+    //   width: mediaSize.width,
+    //   listStory: await _setStoryButtons(
+    //     storyController.listStory.value,
+    //     userStoryController.listUserStory.value,
+    //     storyTopicController.listStoryTopic.value,
+    //   ),
+    // );
     print("Cubit.Init() : Get data");
     hideLoading();
   }

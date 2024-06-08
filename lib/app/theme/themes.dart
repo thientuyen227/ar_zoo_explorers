@@ -54,7 +54,7 @@ class AppThemeData {
   ThemeData get themeData => ThemeData(
         brightness: brightness,
         primaryColor: colorScheme.primary,
-        backgroundColor: colorScheme.primary,
+        // backgroundColor: colorScheme.primary,
         colorScheme: ColorScheme.light(
           brightness: brightness,
           primary: colorScheme.primary,
@@ -69,10 +69,10 @@ class AppThemeData {
           labelColor: colorScheme.primary,
         ),
         scaffoldBackgroundColor: colorScheme.primary,
-        elevatedButtonTheme: ElevatedButtonThemeData(
+        elevatedButtonTheme: const ElevatedButtonThemeData(
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(colorScheme.btnColor),
-          ),
+              // backgroundColor:  WidgetStateProperty.all(colorScheme.btnColor),
+              ),
         ),
         textSelectionTheme: TextSelectionThemeData(
           cursorColor: colorScheme.textColor,

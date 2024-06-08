@@ -42,6 +42,7 @@ const Map<String, String> en_us = {
   'loginNow': "Login now",
   'newRegister': 'Register new',
   'edit': "Edit",
+  'error': 'Error',
   'done': "Done",
   'more': "More",
   "changeLanguage": "Change Language",
@@ -61,6 +62,7 @@ const Map<String, String> en_us = {
   'birthday': 'Birthday',
   'submit': 'Submit',
   'example': 'Example',
+  'get_img_failed': 'Select image failed',
 
   'goToLogin': 'Go to login',
   'rememberPass': 'Remember me',
@@ -73,6 +75,7 @@ const Map<String, String> en_us = {
   'notAgreeTheTerms': 'You have not agreed to the terms',
 
   'i_understood_the': 'I understand the',
+  'chat_ai': 'Chat with Ar-Baby',
 
   // Welcome
   'welcome_start': 'Start',
@@ -111,6 +114,7 @@ const Map<String, String> en_us = {
 
   //Learning
   'your_points': 'Your Points',
+  'learning_home': 'Learning Home',
   'phonics': 'Phonics',
   'vocabulary': 'Vocabulary',
   'puzzle': 'Puzzle',
@@ -118,6 +122,9 @@ const Map<String, String> en_us = {
   'completed': 'Completed',
   'take_the_quiz': 'Take the quiz',
   'choose_topic': 'Choose topic',
+  'uppercaseLetters': 'Uppercase letters',
+  'lowercaseLetters': 'Lowercase letters',
+  'cardinalNumbers': 'Cardinal numbers',
 
   // Setting Pages
   'accountManager': 'Account Manager',
@@ -290,5 +297,10 @@ const Map<String, String> en_us = {
 
   //MODEL
   'model_in_category_empty': 'Models in this category is empty',
-  'models_no_has_keyword': 'Models does not exist with keyword'
+  'models_no_has_keyword': 'Models does not exist with keyword',
+
+  //Chat AI
+  'download_image': 'Download this image',
+  'write_message': 'Write your message',
+  'send_message_failed': 'Failed to send text to image. Please try again later',
 };

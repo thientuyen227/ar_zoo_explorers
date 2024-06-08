@@ -1,4 +1,4 @@
-import 'package:ar_zoo_explorers/app/config/routes.dart';
+import 'package:ar_zoo_explorers/app/config/app_router.gr.dart';
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/domain/entities/learning_category_entity.dart';
@@ -21,7 +21,8 @@ class _ItemVocabularyState extends State<ItemVocabulary> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.router.pushNamed(Routes.vocabularydetail);
+        context.router.push(VocabularyDetailRoute(
+            categoryId: widget.learningCategoryEntity.id));
       },
       child: Container(
         padding: const EdgeInsets.only(top: 19, bottom: 9),

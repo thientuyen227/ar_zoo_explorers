@@ -9,17 +9,19 @@ import 'package:ar_zoo_explorers/core/data/controller/question_controller.dart';
 import 'package:ar_zoo_explorers/domain/entities/question_entity.dart';
 import 'package:ar_zoo_explorers/features/puzzleworddetail/presentation/puzzle_word_detail_cubit.dart';
 import 'package:ar_zoo_explorers/features/puzzleworddetail/presentation/puzzle_word_detail_state.dart';
+import 'package:ar_zoo_explorers/utils/widget/congratulation_widget.dart';
 import 'package:ar_zoo_explorers/utils/widget/custom_back_button.dart';
 import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 
 @RoutePage()
 class PuzzleWordDetailPage extends StatefulWidget {
-  const PuzzleWordDetailPage({super.key});
+  PuzzleWordDetailPage({super.key, required this.categoryId});
+  String categoryId;
 
   @override
   State createState() => _State();
@@ -39,67 +41,7 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
   @override
   void initState() {
     super.initState();
-    cubit.init();
-    onPlayerStateChanged();
-    setVolume();
-    completeAudio();
-  }
-
-  void onPlayerStateChanged() {
-    audioPlayer.onPlayerStateChanged.listen((PlayerState state) {
-      if (state == PlayerState.playing) {
-        setState(() {
-          cubit.audioState = PlayerState.playing;
-          cubit.isPlaying = true;
-        });
-      } else {
-        cubit.isPlaying = false;
-        if (state == PlayerState.paused) {
-          setState(() {
-            cubit.audioState = PlayerState.paused;
-          });
-        } else if (state == PlayerState.stopped) {
-          setState(() {
-            cubit.audioState = PlayerState.stopped;
-          });
-        }
-      }
-    }, onError: (msg) {
-      setState(() {
-        cubit.audioState = PlayerState.stopped;
-        print("audio error:msg.toString()");
-      });
-    });
-  }
-
-  Future<void> completeAudio() async {
-    audioPlayer.onPlayerStateChanged.listen((PlayerState state) async {
-      if (state == PlayerState.completed) {
-        if (cubit.isLoop) {
-          await audioPlayer.play(UrlSource(cubit.audioUrl),
-              position: Duration.zero);
-        } else {
-          setState(() {
-            cubit.audioState = PlayerState.stopped;
-          });
-        }
-      }
-    });
-  }
-
-  void setVolume() {
-    setState(() {
-      cubit.volumeValue = 0.9;
-      audioPlayer.setVolume(0.9);
-    });
-  }
-
-  void onDurationChanged() {
-    audioPlayer.onDurationChanged.listen((Duration d) {
-      setState(() {
-        cubit.position = d;
-      });
-    });
+    cubit.init(categoryId: widget.categoryId);
   }
 
   @override
@@ -122,7 +64,11 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) {
-        Navigator.of(context).pop();
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          if (Navigator.canPop(context)) {
+            Navigator.pop(context);
+          }
+        });
       },
       child: Scaffold(
         appBar: AppBar(
@@ -191,29 +137,28 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
                           ),
                         ),
                       ),
+                      isFull
+                          ? IconButton(
+                              icon: const ImageSvgUrlCustom(
+                                imagePath: AppIcons.icReload,
+                                size: 20,
+                              ),
+                              iconSize: 40,
+                              onPressed: () {
+                                resetQuestionState();
+                              },
+                            )
+                          : Container(),
                       _renderKeyword(currentQues: currentQues!),
                     ],
                   ),
-                  if (isDone) Positioned(bottom: 100, child: congratulation()),
+                  if (isDone)
+                    const Positioned(
+                        bottom: 100, child: CongratulationWidget()),
                 ],
               )
             : Container(),
       ),
-    );
-  }
-
-  Widget congratulation() {
-    return FutureBuilder(
-      future: Future.delayed(const Duration(milliseconds: 1)),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          audioPlayer.play(UrlSource(cubit.audioUrl));
-          return Lottie.asset(AppLotties.congratulation,
-              height: 400, width: 400);
-        } else {
-          return Container();
-        }
-      },
     );
   }
 
@@ -266,7 +211,7 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
       if (fieldCompleteCorrect(currentQues: currentQues)) {
         isDone = true;
         setState(() {
-          Timer(const Duration(seconds: 2), () {
+          Timer(const Duration(seconds: 3), () {
             audioPlayer.stop();
             setState(() {
               isDone = false;
@@ -296,7 +241,11 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
     isFull = true;
     String answeredString =
         currentQues.puzzles!.map((puzzle) => puzzle.currentValue).join("");
-    return answeredString == currentQues.answer.toUpperCase();
+    if (answeredString == currentQues.answer.toUpperCase()) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   Widget _renderKeyword({required QuestionEntity currentQues}) {
@@ -310,15 +259,13 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
           crossAxisSpacing: 4,
           mainAxisSpacing: 4,
         ),
-        itemCount: arrayBtns!.length, // Đảm bảo số lượng động nếu cần
+        itemCount: arrayBtns!.length,
         shrinkWrap: true,
         itemBuilder: (context, index) {
           bool statusBtn = currentQues.puzzles!
                   .indexWhere((puzzle) => puzzle.currentIndex == index) >=
               0;
-
           Color color = statusBtn ? Colors.white70 : const Color(0xff7EE7FD);
-
           return Container(
             decoration: BoxDecoration(
               color: color,
@@ -404,54 +351,49 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
       alignment: Alignment.center,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: currentQues.puzzles!.map((puzzle) {
-              Color color;
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        spacing: 2.5,
+        runSpacing: 3,
+        children: currentQues.puzzles!.map((puzzle) {
+          Color color;
 
-              if (isDone) {
-                color = AppColor.green;
-              } else if (puzzle.hintShow) {
-                color = AppColor.vibrantYellow;
-              } else if (isFull) {
-                color = Colors.red;
-              } else {
-                color = const Color(0xff7EE7FD);
-              }
+          if (isDone) {
+            color = AppColor.green;
+          } else if (puzzle.hintShow) {
+            color = AppColor.vibrantYellow;
+          } else if (isFull) {
+            color = Colors.red;
+          } else {
+            color = const Color(0xff7EE7FD);
+          }
 
-              return InkWell(
-                onTap: () {
-                  if (puzzle.hintShow || isDone) return;
+          return InkWell(
+            onTap: () {
+              if (isDone) return;
 
-                  isFull = false;
-                  puzzle.clearValue();
-                  setState(() {});
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: color,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  width: constraints.biggest.width / 7 - 6,
-                  height: constraints.biggest.width / 7 - 6,
-                  margin: const EdgeInsets.all(3),
-                  child: Text(
-                    (puzzle.currentValue ?? '').toUpperCase(),
-                    style: const TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+              isFull = false;
+              puzzle.clearValue();
+              setState(() {});
+            },
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              width: 50, // Điều chỉnh kích thước của mỗi ô
+              height: 50,
+              child: Text(
+                (puzzle.currentValue ?? '').toUpperCase(),
+                style: const TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
                 ),
-              );
-            }).toList(),
+              ),
+            ),
           );
-        },
+        }).toList(),
       ),
     );
   }
@@ -462,5 +404,19 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
     isFull = false;
     isDone = false;
     currentQues = null;
+  }
+
+  void resetQuestionState() {
+    setState(() {
+      arrayBtns = cubit.generateKeywords(currentQues!.answer, 16);
+
+      isFull = false;
+      isDone = false;
+      for (var puzzle in currentQues!.puzzles!) {
+        puzzle.clearValue();
+        puzzle.hintShow = false;
+      }
+      generateHint(answer: currentQues!.answer);
+    });
   }
 }

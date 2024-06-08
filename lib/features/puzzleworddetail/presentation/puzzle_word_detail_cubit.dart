@@ -2,18 +2,30 @@ import 'dart:math';
 
 import 'package:ar_zoo_explorers/base/base_cubit.dart';
 import 'package:ar_zoo_explorers/core/data/controller/question_controller.dart';
+import 'package:ar_zoo_explorers/domain/entities/question_entity.dart';
 import 'package:ar_zoo_explorers/features/puzzleworddetail/presentation/puzzle_word_detail_state.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
 class PuzzleWordDetailCubit extends BaseCubit<PuzzleWordDetailState> {
   PuzzleWordDetailCubit() : super(PuzzleWordDetailState());
-  void init() async {
+
+  void init({required String categoryId}) async {
     final questionController = QuestionController.findOrInitialize;
+    Size mediaSize = MediaQueryData.fromView(
+            WidgetsBinding.instance.platformDispatcher.views.single)
+        .size;
     showLoading();
+    List<QuestionEntity>? questionEntities =
+        await questionController.getAllQuestions();
     emit(state.copyWith(
-        questionEntities: await questionController.getAllQuestions()));
+        height: mediaSize.height,
+        width: mediaSize.width,
+        questionEntities: questionEntities
+            ?.where((element) => element.categoryId == categoryId)
+            .toList()));
     hideLoading();
   }
 

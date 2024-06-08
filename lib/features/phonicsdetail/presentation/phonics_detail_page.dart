@@ -1,6 +1,7 @@
+import 'dart:async';
+
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
-import 'package:ar_zoo_explorers/core/data/controller/chars_controller.dart';
 import 'package:ar_zoo_explorers/domain/entities/chars_entity.dart';
 import 'package:ar_zoo_explorers/features/phonicsdetail/presentation/phonics_detail_cubit.dart';
 import 'package:ar_zoo_explorers/features/phonicsdetail/presentation/phonics_detail_state.dart';
@@ -8,44 +9,40 @@ import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 @RoutePage()
 class PhonicsDetailPage extends StatefulWidget {
-  const PhonicsDetailPage({super.key});
-
+  PhonicsDetailPage({super.key, required this.type});
+  String type;
   @override
   State createState() => _State();
 }
 
 class _State extends BaseState<PhonicsDetailState, PhonicsDetailCubit,
     PhonicsDetailPage> {
-  String vietnameseAlphabet = 'aăâbcdđeêghiklmnoôơpqrstuưvxy';
-  String englishAlphabet = 'abcdefghijklmnopqrstuvwxyz';
-  String numbers = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20';
-  CharsController charsController = CharsController.findOrInitialize;
-  final languageCode = Get.locale?.languageCode;
   AudioPlayer audioPlayer = AudioPlayer();
-  List<CharsEntity>? xalphabet;
-  List<CharsEntity>? listChars;
+  StreamSubscription<PlayerState>? _playerStateSubscription;
+  StreamSubscription<PlayerState>? _completeAudioSubscription;
+  StreamSubscription<Duration>? _durationSubscription;
   // bool _isOrientationLocked = true;
 
   @override
   void initState() {
     super.initState();
-    fetchData();
+    cubit.showLoading();
+    cubit.init(type: widget.type);
     onPlayerStateChanged();
     setVolume();
     completeAudio();
-  }
 
-  Future<void> fetchData() async {
-    xalphabet = await charsController.getAllChars(context);
-    setState(() {});
+    cubit.hideLoading();
   }
 
   void onPlayerStateChanged() {
-    audioPlayer.onPlayerStateChanged.listen((PlayerState state) {
+    _playerStateSubscription =
+        audioPlayer.onPlayerStateChanged.listen((PlayerState state) {
+      if (!mounted) return;
+
       if (state == PlayerState.playing) {
         setState(() {
           cubit.audioState = PlayerState.playing;
@@ -64,15 +61,19 @@ class _State extends BaseState<PhonicsDetailState, PhonicsDetailCubit,
         }
       }
     }, onError: (msg) {
+      if (!mounted) return;
       setState(() {
         cubit.audioState = PlayerState.stopped;
-        print("audio error:msg.toString()");
+        print("audio error: ${msg.toString()}");
       });
     });
   }
 
   Future<void> completeAudio() async {
-    audioPlayer.onPlayerStateChanged.listen((PlayerState state) async {
+    _completeAudioSubscription =
+        audioPlayer.onPlayerStateChanged.listen((PlayerState state) async {
+      if (!mounted) return;
+
       if (state == PlayerState.completed) {
         if (cubit.isLoop) {
           await audioPlayer.play(UrlSource(cubit.audioUrl),
@@ -87,6 +88,7 @@ class _State extends BaseState<PhonicsDetailState, PhonicsDetailCubit,
   }
 
   void setVolume() {
+    if (!mounted) return;
     setState(() {
       cubit.volumeValue = 0.9;
       audioPlayer.setVolume(0.9);
@@ -94,7 +96,8 @@ class _State extends BaseState<PhonicsDetailState, PhonicsDetailCubit,
   }
 
   void onDurationChanged() {
-    audioPlayer.onDurationChanged.listen((Duration d) {
+    _durationSubscription = audioPlayer.onDurationChanged.listen((Duration d) {
+      if (!mounted) return;
       setState(() {
         cubit.position = d;
       });
@@ -103,37 +106,24 @@ class _State extends BaseState<PhonicsDetailState, PhonicsDetailCubit,
 
   @override
   void dispose() {
-    super.dispose();
+    _playerStateSubscription?.cancel();
+    _completeAudioSubscription?.cancel();
+    _durationSubscription?.cancel();
     audioPlayer.dispose();
+    super.dispose();
   }
 
-  bool isUpperCase = false;
-  bool isNumber = false;
   @override
   Widget buildByState(BuildContext context, PhonicsDetailState state) {
-    List<String> alphabetChars;
-    if (isNumber == false) {
-      if (languageCode == 'en') {
-        alphabetChars = englishAlphabet.split('');
-      } else {
-        alphabetChars = vietnameseAlphabet.split('');
-      }
-    } else {
-      alphabetChars = numbers.split(' ');
-    }
-    listChars = xalphabet!.where((element) {
-      return alphabetChars.contains(element.char);
-    }).toList();
-    if (isNumber) {
-      listChars!.sort((a, b) {
+    if (state.isNumber) {
+      state.charsEntities.sort((a, b) {
         return int.parse(a.char).compareTo(int.parse(b.char));
       });
     }
-
     return PopScope(
-        canPop: false,
+        canPop: true,
         onPopInvoked: (didPop) {
-          Navigator.of(context).pop();
+          context.router.pop();
         },
         child: Scaffold(
             body: Stack(
@@ -164,74 +154,31 @@ class _State extends BaseState<PhonicsDetailState, PhonicsDetailCubit,
                         const SizedBox(
                           width: 10,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isUpperCase = !isUpperCase;
-                            });
-                          },
-                          child: Container(
-                            height: 20,
-                            width: 100,
-                            decoration: BoxDecoration(
-                              border: Border.all(),
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10)),
-                            ),
-                            child: Center(
-                                child: isUpperCase == true
-                                    ? const Text("Chữ in hoa")
-                                    : const Text(
-                                        "Chữ thường",
-                                      )),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isNumber = !isNumber;
-                            });
-                          },
-                          child: Container(
-                            height: 20,
-                            width: 100,
-                            decoration: BoxDecoration(
-                              border: Border.all(),
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10)),
-                            ),
-                            child: const Center(
-                                child: Text(
-                              "Số đếm",
-                            )),
-                          ),
-                        ),
                       ],
                     ),
                     GridView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: isNumber == true ? 7 : 8,
+                        crossAxisCount: cubit.isNumber == true ? 7 : 8,
                         childAspectRatio: 1.18,
                         crossAxisSpacing: 1,
                       ),
-                      itemCount: listChars!.length,
+                      itemCount: state.charsEntities.length,
                       itemBuilder: (context, index) {
                         return Column(
                           children: [
                             GestureDetector(
                               onTap: () {
                                 audioPlayer.play(AssetSource(
-                                    listChars![index].audiosLocalize));
+                                    state.charsEntities[index].audiosLocalize));
                               },
                               child: Text(
-                                isUpperCase == true
-                                    ? listChars![index].char.toUpperCase()
-                                    : listChars![index].char.toLowerCase(),
+                                state.isUpperCase == true
+                                    ? state.charsEntities[index].char
+                                        .toUpperCase()
+                                    : state.charsEntities[index].char
+                                        .toLowerCase(),
                                 style: TextStyle(
                                   fontSize: 62,
                                   color: Colors.red,

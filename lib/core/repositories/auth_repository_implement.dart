@@ -13,7 +13,7 @@ import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:internationalization/internationalization.dart';
+import 'package:intl/intl.dart';
 
 class AuthRepositoryImplement implements AuthRepository {
   final FirebaseAuthSource _firebaseAuth = FirebaseAuthSource();

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ar_zoo_explorers/app/config/app_router.gr.dart';
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
@@ -15,7 +17,7 @@ import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:internationalization/internationalization.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../app/theme/icons.dart';
 import '../../../../base/base_state.dart';
@@ -34,6 +36,7 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
   final controller = AuthController.findOrInitialize;
   final _formKey = GlobalKey<FormBuilderState>();
   final ImagePicker _picker = ImagePicker();
+  File? _selectedImage;
 
   @override
   Widget buildByState(BuildContext context, UserInformationState state) {
@@ -243,12 +246,12 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
                   Fluttertoast.showToast(msg: "${LanguageKeys.updating.tr}!"),
                   _onUpdatePressed(context)
                 },
-        style: ButtonStyle(
-            fixedSize: MaterialStateProperty.all(const Size(140, 43)),
-            backgroundColor: MaterialStateProperty.all(Colors.blue),
-            elevation: MaterialStateProperty.all(5),
-            shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20)))),
+        // style: ButtonStyle(
+        //     fixedSize: WidgetStateProperty.all(const Size(140, 43)),
+        //     backgroundColor: WidgetStateProperty.all(Colors.blue),
+        //     elevation: WidgetStateProperty.all(5),
+        //     shape: WidgetStateProperty.all(RoundedRectangleBorder(
+        //         borderRadius: BorderRadius.circular(20)))),
         child: Text(LanguageKeys.update.tr,
             style: const TextStyle(fontSize: 16, color: Colors.white)));
   }
@@ -311,7 +314,7 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
         child: GestureDetector(
             onTap: () async {
               await updateAvatar(context);
-              await _uploadInformation(context);
+              // await _uploadInformation(context);
             },
             child: Stack(alignment: Alignment.center, children: [
               Container(
@@ -377,12 +380,17 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
   Future<void> updateAvatar(BuildContext context) async {
     XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     String imageName = cubit.avatarName(controller.currentUser.value.fullname);
-    String? downloadURL =
-        // ignore: use_build_context_synchronously
-        await controller.uploadAvatar(context, image!.path, imageName);
-    setState(() {
-      cubit.userAvatar = downloadURL;
-    });
+    if (image != null) {
+      String? downloadURL =
+          // ignore: use_build_context_synchronously
+          await controller.uploadAvatar(context, image.path, imageName);
+      await _uploadInformation(context);
+      setState(() {
+        cubit.userAvatar = downloadURL;
+      });
+    } else {
+      await cubit.showToast(LanguageKeys.get_img_failed.tr);
+    }
   }
 
   String? _onHandleValidator(int index, String? value) {

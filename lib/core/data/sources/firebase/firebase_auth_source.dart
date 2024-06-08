@@ -77,7 +77,7 @@ class FirebaseAuthSource {
 
     //create credential from the access token
     final OAuthCredential facebookAuthCredential =
-        FacebookAuthProvider.credential(loginResult.accessToken!.token);
+        FacebookAuthProvider.credential(loginResult.accessToken!.tokenString);
     //Once signed in,  return the UserCredential
     return _firebaseAuth.signInWithCredential(facebookAuthCredential);
   }
