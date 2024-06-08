@@ -34,6 +34,7 @@ class LanguageKeys {
   static const String loginNow = 'loginNow';
   static const String newRegister = 'newRegister';
   static const String edit = 'edit';
+  static const String error = 'error';
   static const String done = 'done';
   static const String next = 'next';
   static const String previous = 'previous';
@@ -327,5 +328,7 @@ class LanguageKeys {
   static const String models_no_has_keyword = 'models_no_has_keyword';
 
   //CHAT AI
+  static const String download_image = 'download_image';
+  static const String send_message_failed = 'send_message_failed';
   static const String write_message = 'write_message';
 }

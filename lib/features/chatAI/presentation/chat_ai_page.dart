@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
@@ -14,12 +15,9 @@ import 'package:ar_zoo_explorers/features/chatAI/component/text_message.dart';
 import 'package:ar_zoo_explorers/features/chatAI/presentation/chat_ai_cubit.dart';
 import 'package:ar_zoo_explorers/features/chatAI/presentation/chat_ai_state.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:get/get.dart';
 import 'package:language_detector/language_detector.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 @RoutePage()
 class ChatAIPage extends StatefulWidget {
@@ -30,15 +28,12 @@ class ChatAIPage extends StatefulWidget {
 }
 
 class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
-  final Dio _dio = Dio();
-
   List<Widget> lstMessages = [];
   ChatBoxEntity? chatBoxEntity;
 
   ApiService apiService = ApiService();
 
-  bool isEnabled = true;
-  bool isImage = false;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget buildByState(BuildContext context, ChatAIState state) {
@@ -54,19 +49,22 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
           width: state.width,
           padding: const EdgeInsets.all(10),
           color: Colors.grey.shade200,
-          child: SingleChildScrollView(child: boxChat()),
+          child: SingleChildScrollView(
+            controller: _scrollController,
+            child: boxChat(),
+          ),
         ),
       ))),
       bottomNavigationBar: Offstage(
-          offstage: !isEnabled,
+          offstage: !state.isEnabled,
           child: ChatAIABottomBar(
             onSendMassage: (MessageEntity message) async {
-              _sendMessages(message).then((value) {
+              await _sendMessages(message).then((value) {
                 setState(() {
                   if (message.imagePath!.isEmpty) {
-                    isImage = false;
+                    cubit.changeIsImage(false);
                   } else {
-                    isImage = true;
+                    cubit.changeIsImage(true);
                   }
                 });
                 _sendTextToImage(message.content, File(message.imagePath ?? ''))
@@ -150,10 +148,10 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
             )),
           ),
           const SizedBox(width: 10),
-          const SizedBox(
+          SizedBox(
               child: Text(
-            "Download this image",
-            style: TextStyle(fontSize: 18, color: Colors.black),
+            LanguageKeys.download_image.tr,
+            style: const TextStyle(fontSize: 18, color: Colors.black),
           ))
         ]),
       ),
@@ -185,79 +183,76 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
 
   Future<void> _sendMessages(MessageEntity value) async {
     // _changeEnabledState();
-    lstMessages.add(
-      Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        const Spacer(),
-        Column(children: [
-          value.content.isNotEmpty ? TextMessage(entity: value) : Container(),
-          value.imagePath!.isNotEmpty
-              ? ImageMessage(
-                  entity: MessageEntity(
-                  content: value.imagePath!,
-                  contentType: MsgType.image_file.typeString,
-                ))
-              : Container(),
-        ]),
-        userAvatar()
-      ]),
-    );
+    setState(() {
+      lstMessages.add(
+        Container(
+          child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const Spacer(),
+            Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+              value.content.isNotEmpty
+                  ? TextMessage(entity: value)
+                  : Container(),
+              value.imagePath!.isNotEmpty
+                  ? ImageMessage(
+                      entity: MessageEntity(
+                      content: value.imagePath!,
+                      contentType: MsgType.image_file.typeString,
+                    ))
+                  : Container(),
+            ]),
+            userAvatar()
+          ]),
+        ),
+      );
+    });
+    await _scrollToBottom();
   }
 
   Future<void> _sendResponse() async {
-    lstMessages
-        .add(Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      aiAvatar(),
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TextMessage(
-              entity: MessageEntity(content: chatBoxEntity!.prediction)),
-          isImage == false && chatBoxEntity!.generatedFiles!.isNotEmpty
-              ? GestureDetector(
-                  onTap: () async {
-                    await _showDownloadSheet();
-                  },
-                  child: ImageMessage(
-                      entity: MessageEntity(
-                    content: chatBoxEntity!.generatedFiles![0].fileUrl,
-                    contentType: MsgType.image_network.typeString,
-                  )))
-              : Container(),
-        ],
-      ),
-      const Spacer()
-    ]));
+    setState(() {
+      lstMessages.add(Container(
+          child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        aiAvatar(),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextMessage(
+                entity: MessageEntity(content: chatBoxEntity!.prediction)),
+            isImage == false && chatBoxEntity!.generatedFiles!.isNotEmpty
+                ? GestureDetector(
+                    onTap: () async {
+                      await _showDownloadSheet();
+                    },
+                    child: ImageMessage(
+                        entity: MessageEntity(
+                      content: chatBoxEntity!.generatedFiles![0].fileUrl,
+                      contentType: MsgType.image_network.typeString,
+                    )))
+                : Container(),
+          ],
+        ),
+        const Spacer()
+      ])));
+    });
+    await _scrollToBottom();
   }
 
   Future<void> _downloadImage(String fileName, String urlPath) async {
-    try {
-      var status = await Permission.storage.status;
-      if (!status.isGranted) {
-        await Permission.storage.request();
-      }
-      final directory = await getApplicationDocumentsDirectory();
-      final filePath = '${directory.path}/$fileName.jpg';
+    String response = await cubit.downloadImage(fileName, urlPath);
+    await cubit.showToast(response);
+    setState(() {});
+  }
 
-      final response = await _dio.download(
-        urlPath,
-        filePath,
-        onReceiveProgress: (received, total) {
-          if (total != -1) {
-            print("${(received / total * 100).toStringAsFixed(0)}%");
-          }
-        },
-      );
-
-      if (response.statusCode == 200) {
-        await ImageGallerySaver.saveFile(filePath);
-        setState(() {});
-        print('Download and save completed: $filePath');
-      } else {
-        print('Error downloading file: ${response.statusCode}');
+  Future<void> _scrollToBottom() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
       }
-    } catch (e) {
-      print('Error: $e');
-    }
+    });
   }
 
   Future<void> _sendTextToImage(String text, File? imageFile) async {
@@ -280,9 +275,8 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("Error"),
-          content: const Text(
-              "Failed to send text to image. Please try again later."),
+          title: Text(LanguageKeys.error.tr),
+          content: Text(LanguageKeys.send_message_failed.tr),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -294,12 +288,12 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
     }
   }
 
-  Future<void> _changeEnabledState() async {
-    setState(() {
-      isEnabled = !isEnabled;
-      print(isEnabled);
-    });
-  }
+  // Future<void> _changeEnabledState() async {
+  //   setState(() {
+  //     isEnabled = !isEnabled;
+  //     print(isEnabled);
+  //   });
+  // }
 
   Future<void> _initCubit() async {
     await cubit.init(context).then((value) => setState(() {}));

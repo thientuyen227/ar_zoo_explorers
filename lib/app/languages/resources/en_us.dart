@@ -42,6 +42,7 @@ const Map<String, String> en_us = {
   'loginNow': "Login now",
   'newRegister': 'Register new',
   'edit': "Edit",
+  'error': 'Error',
   'done': "Done",
   'more': "More",
   "changeLanguage": "Change Language",
@@ -299,5 +300,7 @@ const Map<String, String> en_us = {
   'models_no_has_keyword': 'Models does not exist with keyword',
 
   //Chat AI
+  'download_image': 'Download this image',
   'write_message': 'Write your message',
+  'send_message_failed': 'Failed to send text to image. Please try again later',
 };

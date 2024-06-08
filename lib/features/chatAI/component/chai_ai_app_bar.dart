@@ -3,7 +3,7 @@ import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:flutter/material.dart';
 
 class ChatAIAppBar extends StatefulWidget implements PreferredSizeWidget {
-  const ChatAIAppBar({Key? key}) : super(key: key);
+  const ChatAIAppBar({super.key});
 
   @override
   _ChatAIAppBarState createState() => _ChatAIAppBarState();
@@ -37,7 +37,9 @@ class _ChatAIAppBarState extends State<ChatAIAppBar> {
         ),
         toolbarHeight: height * 0.1,
         backgroundColor: Colors.white,
-        elevation: 0.5,
+        shadowColor: Colors.grey,
+        surfaceTintColor: Colors.white,
+        elevation: 2,
         // leadingWidth: height * 0.075,
         leading: Column(
             mainAxisAlignment: MainAxisAlignment.center,

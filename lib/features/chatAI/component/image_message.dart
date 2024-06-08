@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 class ImageMessage extends StatefulWidget {
   MessageEntity entity;
-  ImageMessage({Key? key, required this.entity}) : super(key: key);
+  ImageMessage({super.key, required this.entity});
 
   @override
   _ImageMessageState createState() => _ImageMessageState();
@@ -23,7 +23,11 @@ class _ImageMessageState extends State<ImageMessage> {
   Widget build(BuildContext context) {
     return Center(
       child: imgSize == Size.zero
-          ? const CircularProgressIndicator()
+          ? Container(
+              width: width * 0.5,
+              height: height * 0.2,
+              margin: const EdgeInsets.all(5),
+              child: const Center(child: CircularProgressIndicator()))
           : _buildImageContainer(width, height),
     );
   }

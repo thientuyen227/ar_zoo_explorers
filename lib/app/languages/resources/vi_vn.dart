@@ -32,6 +32,7 @@ const Map<String, String> vi_vn = {
   'share': 'Chia sẻ',
   'receive': 'Nhận',
   'email': "Email",
+  'error': 'Lỗi',
   'fullname': 'Họ tên',
   'phone': 'Số điện thoại',
   'password': "Mật khẩu",
@@ -299,5 +300,8 @@ const Map<String, String> vi_vn = {
   'models_no_has_keyword': 'Model không tồn tại với từ khóa',
 
   //Chat AI
+  'download_image': 'Tải hình ảnh',
   'write_message': 'Viết tin nhắn của bạn',
+  'send_message_failed':
+      'Không thể gửi văn bản tới hình ảnh. Vui lòng thử lại sau',
 };
