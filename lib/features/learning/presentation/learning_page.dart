@@ -33,8 +33,11 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,
-          title: const Text("Learning Home",
-              style: TextStyle(fontSize: 20, color: Colors.white)),
+          title: Text(LanguageKeys.learning_home.tr.toUpperCase(),
+              style: const TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold)),
           backgroundColor: Colors.blue[600],
           elevation: 0,
           leading: Column(

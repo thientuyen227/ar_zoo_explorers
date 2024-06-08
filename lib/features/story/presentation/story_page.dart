@@ -29,7 +29,7 @@ class _State extends BaseState<StoryState, StoryCubit, StoryPage> {
         canPop: false,
         onPopInvoked: (didPop) async {
           await cubit.showLoading();
-          Navigator.of(context).pop();
+          context.router.pop();
           await cubit.hideLoading();
         },
         child: Scaffold(

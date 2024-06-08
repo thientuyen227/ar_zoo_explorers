@@ -218,7 +218,7 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
           children: [
             TextMessage(
                 entity: MessageEntity(content: chatBoxEntity!.prediction)),
-            isImage == false && chatBoxEntity!.generatedFiles!.isNotEmpty
+            state.isImage == false && chatBoxEntity!.generatedFiles!.isNotEmpty
                 ? GestureDetector(
                     onTap: () async {
                       await _showDownloadSheet();
