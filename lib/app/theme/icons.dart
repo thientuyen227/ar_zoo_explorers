@@ -98,6 +98,17 @@ class AppIcons {
       "assets/images/learning_image/vocabulary/buttonclose.svg";
   static const String icVector =
       "assets/images/learning_image/vocabulary/vector.svg";
+  static const String pencil = "assets/images/learning_image/write/pencil.svg";
+  static const String brushPen =
+      "assets/images/learning_image/write/brush_pen.svg";
+  static const String brushPen2 =
+      "assets/images/learning_image/write/brush_pen_2.svg";
+  static const String selectedPencil =
+      "assets/images/learning_image/write/pencil_selected.svg";
+  static const String selectedBrushPen =
+      "assets/images/learning_image/write/brush_pen_selected.svg";
+  static const String selectedBrushPen2 =
+      "assets/images/learning_image/write/brush_pen_2_selected.svg";
 
   //Icon animals
   static const String icWolf = "assets/icons/animals/wolf.png";
@@ -247,4 +258,5 @@ class AppLotties {
   static const String earth = "assets/lotties/earth.json";
   static const String snow = "assets/lotties/snow.json";
   static const String puzzle = "assets/lotties/puzzle.json";
+  static const String vocabulary = "assets/lotties/vocabulary.json";
 }

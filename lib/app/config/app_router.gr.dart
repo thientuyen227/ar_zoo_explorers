@@ -81,108 +81,110 @@ import 'package:ar_zoo_explorers/features/vocabularydetail/presentation/vocabula
     as _i37;
 import 'package:ar_zoo_explorers/features/welcome/presentation/welcome_page.dart'
     as _i39;
+import 'package:ar_zoo_explorers/features/writechars/write_char_page.dart'
+    as _i40;
 import 'package:ar_zoo_explorers/main_page.dart' as _i14;
-import 'package:auto_route/auto_route.dart' as _i40;
-import 'package:flutter/material.dart' as _i41;
+import 'package:auto_route/auto_route.dart' as _i41;
+import 'package:flutter/material.dart' as _i42;
 
-abstract class $AppRouter extends _i40.RootStackRouter {
+abstract class $AppRouter extends _i41.RootStackRouter {
   $AppRouter({super.navigatorKey});
 
   @override
-  final Map<String, _i40.PageFactory> pagesMap = {
+  final Map<String, _i41.PageFactory> pagesMap = {
     ARRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i1.ARPage(),
       );
     },
     AccountManagerRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i2.AccountManagerPage(),
       );
     },
     AnimalModelsRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i3.AnimalModelsPage(),
       );
     },
     AppRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i4.AppPage(),
       );
     },
     ChangLanguageRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i5.ChangLanguagePage(),
       );
     },
     ChangePasswordRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i6.ChangePasswordPage(),
       );
     },
     ChatAIRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i7.ChatAIPage(),
       );
     },
     ForgotPasswordRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i8.ForgotPasswordPage(),
       );
     },
     HelpRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i9.HelpPage(),
       );
     },
     HomeRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i10.HomePage(),
       );
     },
     LanguageSelectionRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i11.LanguageSelectionPage(),
       );
     },
     LearningRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i12.LearningPage(),
       );
     },
     LoginRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i13.LoginPage(),
       );
     },
     MainRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i14.MainPage(),
       );
     },
     ModelDetailRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i15.ModelDetailPage(),
       );
     },
     PhonicsDetailRoute.name: (routeData) {
       final args = routeData.argsAs<PhonicsDetailRouteArgs>();
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: _i16.PhonicsDetailPage(
           key: args.key,
@@ -191,20 +193,20 @@ abstract class $AppRouter extends _i40.RootStackRouter {
       );
     },
     PhonicsRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i17.PhonicsPage(),
       );
     },
     PuzzleRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i18.PuzzlePage(),
       );
     },
     PuzzleWordDetailRoute.name: (routeData) {
       final args = routeData.argsAs<PuzzleWordDetailRouteArgs>();
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: _i19.PuzzleWordDetailPage(
           key: args.key,
@@ -213,44 +215,44 @@ abstract class $AppRouter extends _i40.RootStackRouter {
       );
     },
     PuzzleWordRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i20.PuzzleWordPage(),
       );
     },
     RegisterRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i21.RegisterPage(),
       );
     },
     ResetPasswordRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i22.ResetPasswordPage(),
       );
     },
     SearchModelRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i23.SearchModelPage(),
       );
     },
     SettingRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i24.SettingPage(),
       );
     },
     SplashRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i25.SplashPage(),
       );
     },
     StoryFavoriteRoute.name: (routeData) {
       final args = routeData.argsAs<StoryFavoriteRouteArgs>();
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: _i26.StoryFavoritePage(
           key: args.key,
@@ -260,7 +262,7 @@ abstract class $AppRouter extends _i40.RootStackRouter {
     },
     StoryHomeRoute.name: (routeData) {
       final args = routeData.argsAs<StoryHomeRouteArgs>();
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: _i27.StoryHomePage(
           key: args.key,
@@ -271,7 +273,7 @@ abstract class $AppRouter extends _i40.RootStackRouter {
     },
     StoryListeningRoute.name: (routeData) {
       final args = routeData.argsAs<StoryListeningRouteArgs>();
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: _i28.StoryListeningPage(
           key: args.key,
@@ -281,7 +283,7 @@ abstract class $AppRouter extends _i40.RootStackRouter {
     },
     StoryOverviewRoute.name: (routeData) {
       final args = routeData.argsAs<StoryOverviewRouteArgs>();
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: _i29.StoryOverviewPage(
           key: args.key,
@@ -290,20 +292,20 @@ abstract class $AppRouter extends _i40.RootStackRouter {
       );
     },
     StoryRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i30.StoryPage(),
       );
     },
     StoryPlayerRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i31.StoryPlayerPage(),
       );
     },
     StorySearchingRoute.name: (routeData) {
       final args = routeData.argsAs<StorySearchingRouteArgs>();
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: _i32.StorySearchingPage(
           key: args.key,
@@ -312,45 +314,55 @@ abstract class $AppRouter extends _i40.RootStackRouter {
       );
     },
     StoryTopicRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i33.StoryTopicPage(),
       );
     },
     TermOfServiceRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i34.TermOfServicePage(),
       );
     },
     UserInformationRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i35.UserInformationPage(),
       );
     },
     UserProfileRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i36.UserProfilePage(),
       );
     },
     VocabularyDetailRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      final args = routeData.argsAs<VocabularyDetailRouteArgs>();
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i37.VocabularyDetailPage(),
+        child: _i37.VocabularyDetailPage(
+          key: args.key,
+          categoryId: args.categoryId,
+        ),
       );
     },
     VocabularyRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i38.VocabularyPage(),
       );
     },
     WelcomeRoute.name: (routeData) {
-      return _i40.AutoRoutePage<dynamic>(
+      return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i39.WelcomePage(),
+      );
+    },
+    WriteCharsRoute.name: (routeData) {
+      return _i41.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i40.WriteCharsPage(),
       );
     },
   };
@@ -358,8 +370,8 @@ abstract class $AppRouter extends _i40.RootStackRouter {
 
 /// generated route for
 /// [_i1.ARPage]
-class ARRoute extends _i40.PageRouteInfo<void> {
-  const ARRoute({List<_i40.PageRouteInfo>? children})
+class ARRoute extends _i41.PageRouteInfo<void> {
+  const ARRoute({List<_i41.PageRouteInfo>? children})
       : super(
           ARRoute.name,
           initialChildren: children,
@@ -367,13 +379,13 @@ class ARRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'ARRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i2.AccountManagerPage]
-class AccountManagerRoute extends _i40.PageRouteInfo<void> {
-  const AccountManagerRoute({List<_i40.PageRouteInfo>? children})
+class AccountManagerRoute extends _i41.PageRouteInfo<void> {
+  const AccountManagerRoute({List<_i41.PageRouteInfo>? children})
       : super(
           AccountManagerRoute.name,
           initialChildren: children,
@@ -381,13 +393,13 @@ class AccountManagerRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'AccountManagerRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i3.AnimalModelsPage]
-class AnimalModelsRoute extends _i40.PageRouteInfo<void> {
-  const AnimalModelsRoute({List<_i40.PageRouteInfo>? children})
+class AnimalModelsRoute extends _i41.PageRouteInfo<void> {
+  const AnimalModelsRoute({List<_i41.PageRouteInfo>? children})
       : super(
           AnimalModelsRoute.name,
           initialChildren: children,
@@ -395,13 +407,13 @@ class AnimalModelsRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'AnimalModelsRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i4.AppPage]
-class AppRoute extends _i40.PageRouteInfo<void> {
-  const AppRoute({List<_i40.PageRouteInfo>? children})
+class AppRoute extends _i41.PageRouteInfo<void> {
+  const AppRoute({List<_i41.PageRouteInfo>? children})
       : super(
           AppRoute.name,
           initialChildren: children,
@@ -409,13 +421,13 @@ class AppRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'AppRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i5.ChangLanguagePage]
-class ChangLanguageRoute extends _i40.PageRouteInfo<void> {
-  const ChangLanguageRoute({List<_i40.PageRouteInfo>? children})
+class ChangLanguageRoute extends _i41.PageRouteInfo<void> {
+  const ChangLanguageRoute({List<_i41.PageRouteInfo>? children})
       : super(
           ChangLanguageRoute.name,
           initialChildren: children,
@@ -423,13 +435,13 @@ class ChangLanguageRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'ChangLanguageRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i6.ChangePasswordPage]
-class ChangePasswordRoute extends _i40.PageRouteInfo<void> {
-  const ChangePasswordRoute({List<_i40.PageRouteInfo>? children})
+class ChangePasswordRoute extends _i41.PageRouteInfo<void> {
+  const ChangePasswordRoute({List<_i41.PageRouteInfo>? children})
       : super(
           ChangePasswordRoute.name,
           initialChildren: children,
@@ -437,13 +449,13 @@ class ChangePasswordRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'ChangePasswordRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i7.ChatAIPage]
-class ChatAIRoute extends _i40.PageRouteInfo<void> {
-  const ChatAIRoute({List<_i40.PageRouteInfo>? children})
+class ChatAIRoute extends _i41.PageRouteInfo<void> {
+  const ChatAIRoute({List<_i41.PageRouteInfo>? children})
       : super(
           ChatAIRoute.name,
           initialChildren: children,
@@ -451,13 +463,13 @@ class ChatAIRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'ChatAIRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i8.ForgotPasswordPage]
-class ForgotPasswordRoute extends _i40.PageRouteInfo<void> {
-  const ForgotPasswordRoute({List<_i40.PageRouteInfo>? children})
+class ForgotPasswordRoute extends _i41.PageRouteInfo<void> {
+  const ForgotPasswordRoute({List<_i41.PageRouteInfo>? children})
       : super(
           ForgotPasswordRoute.name,
           initialChildren: children,
@@ -465,13 +477,13 @@ class ForgotPasswordRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'ForgotPasswordRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i9.HelpPage]
-class HelpRoute extends _i40.PageRouteInfo<void> {
-  const HelpRoute({List<_i40.PageRouteInfo>? children})
+class HelpRoute extends _i41.PageRouteInfo<void> {
+  const HelpRoute({List<_i41.PageRouteInfo>? children})
       : super(
           HelpRoute.name,
           initialChildren: children,
@@ -479,13 +491,13 @@ class HelpRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'HelpRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i10.HomePage]
-class HomeRoute extends _i40.PageRouteInfo<void> {
-  const HomeRoute({List<_i40.PageRouteInfo>? children})
+class HomeRoute extends _i41.PageRouteInfo<void> {
+  const HomeRoute({List<_i41.PageRouteInfo>? children})
       : super(
           HomeRoute.name,
           initialChildren: children,
@@ -493,13 +505,13 @@ class HomeRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'HomeRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i11.LanguageSelectionPage]
-class LanguageSelectionRoute extends _i40.PageRouteInfo<void> {
-  const LanguageSelectionRoute({List<_i40.PageRouteInfo>? children})
+class LanguageSelectionRoute extends _i41.PageRouteInfo<void> {
+  const LanguageSelectionRoute({List<_i41.PageRouteInfo>? children})
       : super(
           LanguageSelectionRoute.name,
           initialChildren: children,
@@ -507,13 +519,13 @@ class LanguageSelectionRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'LanguageSelectionRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i12.LearningPage]
-class LearningRoute extends _i40.PageRouteInfo<void> {
-  const LearningRoute({List<_i40.PageRouteInfo>? children})
+class LearningRoute extends _i41.PageRouteInfo<void> {
+  const LearningRoute({List<_i41.PageRouteInfo>? children})
       : super(
           LearningRoute.name,
           initialChildren: children,
@@ -521,13 +533,13 @@ class LearningRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'LearningRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i13.LoginPage]
-class LoginRoute extends _i40.PageRouteInfo<void> {
-  const LoginRoute({List<_i40.PageRouteInfo>? children})
+class LoginRoute extends _i41.PageRouteInfo<void> {
+  const LoginRoute({List<_i41.PageRouteInfo>? children})
       : super(
           LoginRoute.name,
           initialChildren: children,
@@ -535,13 +547,13 @@ class LoginRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'LoginRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i14.MainPage]
-class MainRoute extends _i40.PageRouteInfo<void> {
-  const MainRoute({List<_i40.PageRouteInfo>? children})
+class MainRoute extends _i41.PageRouteInfo<void> {
+  const MainRoute({List<_i41.PageRouteInfo>? children})
       : super(
           MainRoute.name,
           initialChildren: children,
@@ -549,13 +561,13 @@ class MainRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'MainRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i15.ModelDetailPage]
-class ModelDetailRoute extends _i40.PageRouteInfo<void> {
-  const ModelDetailRoute({List<_i40.PageRouteInfo>? children})
+class ModelDetailRoute extends _i41.PageRouteInfo<void> {
+  const ModelDetailRoute({List<_i41.PageRouteInfo>? children})
       : super(
           ModelDetailRoute.name,
           initialChildren: children,
@@ -563,16 +575,16 @@ class ModelDetailRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'ModelDetailRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i16.PhonicsDetailPage]
-class PhonicsDetailRoute extends _i40.PageRouteInfo<PhonicsDetailRouteArgs> {
+class PhonicsDetailRoute extends _i41.PageRouteInfo<PhonicsDetailRouteArgs> {
   PhonicsDetailRoute({
-    _i41.Key? key,
+    _i42.Key? key,
     required String type,
-    List<_i40.PageRouteInfo>? children,
+    List<_i41.PageRouteInfo>? children,
   }) : super(
           PhonicsDetailRoute.name,
           args: PhonicsDetailRouteArgs(
@@ -584,8 +596,8 @@ class PhonicsDetailRoute extends _i40.PageRouteInfo<PhonicsDetailRouteArgs> {
 
   static const String name = 'PhonicsDetailRoute';
 
-  static const _i40.PageInfo<PhonicsDetailRouteArgs> page =
-      _i40.PageInfo<PhonicsDetailRouteArgs>(name);
+  static const _i41.PageInfo<PhonicsDetailRouteArgs> page =
+      _i41.PageInfo<PhonicsDetailRouteArgs>(name);
 }
 
 class PhonicsDetailRouteArgs {
@@ -594,7 +606,7 @@ class PhonicsDetailRouteArgs {
     required this.type,
   });
 
-  final _i41.Key? key;
+  final _i42.Key? key;
 
   final String type;
 
@@ -606,8 +618,8 @@ class PhonicsDetailRouteArgs {
 
 /// generated route for
 /// [_i17.PhonicsPage]
-class PhonicsRoute extends _i40.PageRouteInfo<void> {
-  const PhonicsRoute({List<_i40.PageRouteInfo>? children})
+class PhonicsRoute extends _i41.PageRouteInfo<void> {
+  const PhonicsRoute({List<_i41.PageRouteInfo>? children})
       : super(
           PhonicsRoute.name,
           initialChildren: children,
@@ -615,13 +627,13 @@ class PhonicsRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'PhonicsRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i18.PuzzlePage]
-class PuzzleRoute extends _i40.PageRouteInfo<void> {
-  const PuzzleRoute({List<_i40.PageRouteInfo>? children})
+class PuzzleRoute extends _i41.PageRouteInfo<void> {
+  const PuzzleRoute({List<_i41.PageRouteInfo>? children})
       : super(
           PuzzleRoute.name,
           initialChildren: children,
@@ -629,17 +641,17 @@ class PuzzleRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'PuzzleRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i19.PuzzleWordDetailPage]
 class PuzzleWordDetailRoute
-    extends _i40.PageRouteInfo<PuzzleWordDetailRouteArgs> {
+    extends _i41.PageRouteInfo<PuzzleWordDetailRouteArgs> {
   PuzzleWordDetailRoute({
-    _i41.Key? key,
+    _i42.Key? key,
     required String categoryId,
-    List<_i40.PageRouteInfo>? children,
+    List<_i41.PageRouteInfo>? children,
   }) : super(
           PuzzleWordDetailRoute.name,
           args: PuzzleWordDetailRouteArgs(
@@ -651,8 +663,8 @@ class PuzzleWordDetailRoute
 
   static const String name = 'PuzzleWordDetailRoute';
 
-  static const _i40.PageInfo<PuzzleWordDetailRouteArgs> page =
-      _i40.PageInfo<PuzzleWordDetailRouteArgs>(name);
+  static const _i41.PageInfo<PuzzleWordDetailRouteArgs> page =
+      _i41.PageInfo<PuzzleWordDetailRouteArgs>(name);
 }
 
 class PuzzleWordDetailRouteArgs {
@@ -661,7 +673,7 @@ class PuzzleWordDetailRouteArgs {
     required this.categoryId,
   });
 
-  final _i41.Key? key;
+  final _i42.Key? key;
 
   final String categoryId;
 
@@ -673,8 +685,8 @@ class PuzzleWordDetailRouteArgs {
 
 /// generated route for
 /// [_i20.PuzzleWordPage]
-class PuzzleWordRoute extends _i40.PageRouteInfo<void> {
-  const PuzzleWordRoute({List<_i40.PageRouteInfo>? children})
+class PuzzleWordRoute extends _i41.PageRouteInfo<void> {
+  const PuzzleWordRoute({List<_i41.PageRouteInfo>? children})
       : super(
           PuzzleWordRoute.name,
           initialChildren: children,
@@ -682,13 +694,13 @@ class PuzzleWordRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'PuzzleWordRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i21.RegisterPage]
-class RegisterRoute extends _i40.PageRouteInfo<void> {
-  const RegisterRoute({List<_i40.PageRouteInfo>? children})
+class RegisterRoute extends _i41.PageRouteInfo<void> {
+  const RegisterRoute({List<_i41.PageRouteInfo>? children})
       : super(
           RegisterRoute.name,
           initialChildren: children,
@@ -696,13 +708,13 @@ class RegisterRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'RegisterRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i22.ResetPasswordPage]
-class ResetPasswordRoute extends _i40.PageRouteInfo<void> {
-  const ResetPasswordRoute({List<_i40.PageRouteInfo>? children})
+class ResetPasswordRoute extends _i41.PageRouteInfo<void> {
+  const ResetPasswordRoute({List<_i41.PageRouteInfo>? children})
       : super(
           ResetPasswordRoute.name,
           initialChildren: children,
@@ -710,13 +722,13 @@ class ResetPasswordRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'ResetPasswordRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i23.SearchModelPage]
-class SearchModelRoute extends _i40.PageRouteInfo<void> {
-  const SearchModelRoute({List<_i40.PageRouteInfo>? children})
+class SearchModelRoute extends _i41.PageRouteInfo<void> {
+  const SearchModelRoute({List<_i41.PageRouteInfo>? children})
       : super(
           SearchModelRoute.name,
           initialChildren: children,
@@ -724,13 +736,13 @@ class SearchModelRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'SearchModelRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i24.SettingPage]
-class SettingRoute extends _i40.PageRouteInfo<void> {
-  const SettingRoute({List<_i40.PageRouteInfo>? children})
+class SettingRoute extends _i41.PageRouteInfo<void> {
+  const SettingRoute({List<_i41.PageRouteInfo>? children})
       : super(
           SettingRoute.name,
           initialChildren: children,
@@ -738,13 +750,13 @@ class SettingRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'SettingRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i25.SplashPage]
-class SplashRoute extends _i40.PageRouteInfo<void> {
-  const SplashRoute({List<_i40.PageRouteInfo>? children})
+class SplashRoute extends _i41.PageRouteInfo<void> {
+  const SplashRoute({List<_i41.PageRouteInfo>? children})
       : super(
           SplashRoute.name,
           initialChildren: children,
@@ -752,16 +764,16 @@ class SplashRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'SplashRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i26.StoryFavoritePage]
-class StoryFavoriteRoute extends _i40.PageRouteInfo<StoryFavoriteRouteArgs> {
+class StoryFavoriteRoute extends _i41.PageRouteInfo<StoryFavoriteRouteArgs> {
   StoryFavoriteRoute({
-    _i41.Key? key,
+    _i42.Key? key,
     required void Function() toggleBottomBarVisibility,
-    List<_i40.PageRouteInfo>? children,
+    List<_i41.PageRouteInfo>? children,
   }) : super(
           StoryFavoriteRoute.name,
           args: StoryFavoriteRouteArgs(
@@ -773,8 +785,8 @@ class StoryFavoriteRoute extends _i40.PageRouteInfo<StoryFavoriteRouteArgs> {
 
   static const String name = 'StoryFavoriteRoute';
 
-  static const _i40.PageInfo<StoryFavoriteRouteArgs> page =
-      _i40.PageInfo<StoryFavoriteRouteArgs>(name);
+  static const _i41.PageInfo<StoryFavoriteRouteArgs> page =
+      _i41.PageInfo<StoryFavoriteRouteArgs>(name);
 }
 
 class StoryFavoriteRouteArgs {
@@ -783,7 +795,7 @@ class StoryFavoriteRouteArgs {
     required this.toggleBottomBarVisibility,
   });
 
-  final _i41.Key? key;
+  final _i42.Key? key;
 
   final void Function() toggleBottomBarVisibility;
 
@@ -795,12 +807,12 @@ class StoryFavoriteRouteArgs {
 
 /// generated route for
 /// [_i27.StoryHomePage]
-class StoryHomeRoute extends _i40.PageRouteInfo<StoryHomeRouteArgs> {
+class StoryHomeRoute extends _i41.PageRouteInfo<StoryHomeRouteArgs> {
   StoryHomeRoute({
-    _i41.Key? key,
+    _i42.Key? key,
     required dynamic Function(int) onPageChanged,
     required void Function() toggleBottomBarVisibility,
-    List<_i40.PageRouteInfo>? children,
+    List<_i41.PageRouteInfo>? children,
   }) : super(
           StoryHomeRoute.name,
           args: StoryHomeRouteArgs(
@@ -813,8 +825,8 @@ class StoryHomeRoute extends _i40.PageRouteInfo<StoryHomeRouteArgs> {
 
   static const String name = 'StoryHomeRoute';
 
-  static const _i40.PageInfo<StoryHomeRouteArgs> page =
-      _i40.PageInfo<StoryHomeRouteArgs>(name);
+  static const _i41.PageInfo<StoryHomeRouteArgs> page =
+      _i41.PageInfo<StoryHomeRouteArgs>(name);
 }
 
 class StoryHomeRouteArgs {
@@ -824,7 +836,7 @@ class StoryHomeRouteArgs {
     required this.toggleBottomBarVisibility,
   });
 
-  final _i41.Key? key;
+  final _i42.Key? key;
 
   final dynamic Function(int) onPageChanged;
 
@@ -838,11 +850,11 @@ class StoryHomeRouteArgs {
 
 /// generated route for
 /// [_i28.StoryListeningPage]
-class StoryListeningRoute extends _i40.PageRouteInfo<StoryListeningRouteArgs> {
+class StoryListeningRoute extends _i41.PageRouteInfo<StoryListeningRouteArgs> {
   StoryListeningRoute({
-    _i41.Key? key,
+    _i42.Key? key,
     required void Function() toggleBottomBarVisibility,
-    List<_i40.PageRouteInfo>? children,
+    List<_i41.PageRouteInfo>? children,
   }) : super(
           StoryListeningRoute.name,
           args: StoryListeningRouteArgs(
@@ -854,8 +866,8 @@ class StoryListeningRoute extends _i40.PageRouteInfo<StoryListeningRouteArgs> {
 
   static const String name = 'StoryListeningRoute';
 
-  static const _i40.PageInfo<StoryListeningRouteArgs> page =
-      _i40.PageInfo<StoryListeningRouteArgs>(name);
+  static const _i41.PageInfo<StoryListeningRouteArgs> page =
+      _i41.PageInfo<StoryListeningRouteArgs>(name);
 }
 
 class StoryListeningRouteArgs {
@@ -864,7 +876,7 @@ class StoryListeningRouteArgs {
     required this.toggleBottomBarVisibility,
   });
 
-  final _i41.Key? key;
+  final _i42.Key? key;
 
   final void Function() toggleBottomBarVisibility;
 
@@ -876,11 +888,11 @@ class StoryListeningRouteArgs {
 
 /// generated route for
 /// [_i29.StoryOverviewPage]
-class StoryOverviewRoute extends _i40.PageRouteInfo<StoryOverviewRouteArgs> {
+class StoryOverviewRoute extends _i41.PageRouteInfo<StoryOverviewRouteArgs> {
   StoryOverviewRoute({
-    _i41.Key? key,
+    _i42.Key? key,
     required dynamic Function(String) onClosed,
-    List<_i40.PageRouteInfo>? children,
+    List<_i41.PageRouteInfo>? children,
   }) : super(
           StoryOverviewRoute.name,
           args: StoryOverviewRouteArgs(
@@ -892,8 +904,8 @@ class StoryOverviewRoute extends _i40.PageRouteInfo<StoryOverviewRouteArgs> {
 
   static const String name = 'StoryOverviewRoute';
 
-  static const _i40.PageInfo<StoryOverviewRouteArgs> page =
-      _i40.PageInfo<StoryOverviewRouteArgs>(name);
+  static const _i41.PageInfo<StoryOverviewRouteArgs> page =
+      _i41.PageInfo<StoryOverviewRouteArgs>(name);
 }
 
 class StoryOverviewRouteArgs {
@@ -902,7 +914,7 @@ class StoryOverviewRouteArgs {
     required this.onClosed,
   });
 
-  final _i41.Key? key;
+  final _i42.Key? key;
 
   final dynamic Function(String) onClosed;
 
@@ -914,8 +926,8 @@ class StoryOverviewRouteArgs {
 
 /// generated route for
 /// [_i30.StoryPage]
-class StoryRoute extends _i40.PageRouteInfo<void> {
-  const StoryRoute({List<_i40.PageRouteInfo>? children})
+class StoryRoute extends _i41.PageRouteInfo<void> {
+  const StoryRoute({List<_i41.PageRouteInfo>? children})
       : super(
           StoryRoute.name,
           initialChildren: children,
@@ -923,13 +935,13 @@ class StoryRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'StoryRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i31.StoryPlayerPage]
-class StoryPlayerRoute extends _i40.PageRouteInfo<void> {
-  const StoryPlayerRoute({List<_i40.PageRouteInfo>? children})
+class StoryPlayerRoute extends _i41.PageRouteInfo<void> {
+  const StoryPlayerRoute({List<_i41.PageRouteInfo>? children})
       : super(
           StoryPlayerRoute.name,
           initialChildren: children,
@@ -937,16 +949,16 @@ class StoryPlayerRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'StoryPlayerRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i32.StorySearchingPage]
-class StorySearchingRoute extends _i40.PageRouteInfo<StorySearchingRouteArgs> {
+class StorySearchingRoute extends _i41.PageRouteInfo<StorySearchingRouteArgs> {
   StorySearchingRoute({
-    _i41.Key? key,
+    _i42.Key? key,
     required void Function() toggleBottomBarVisibility,
-    List<_i40.PageRouteInfo>? children,
+    List<_i41.PageRouteInfo>? children,
   }) : super(
           StorySearchingRoute.name,
           args: StorySearchingRouteArgs(
@@ -958,8 +970,8 @@ class StorySearchingRoute extends _i40.PageRouteInfo<StorySearchingRouteArgs> {
 
   static const String name = 'StorySearchingRoute';
 
-  static const _i40.PageInfo<StorySearchingRouteArgs> page =
-      _i40.PageInfo<StorySearchingRouteArgs>(name);
+  static const _i41.PageInfo<StorySearchingRouteArgs> page =
+      _i41.PageInfo<StorySearchingRouteArgs>(name);
 }
 
 class StorySearchingRouteArgs {
@@ -968,7 +980,7 @@ class StorySearchingRouteArgs {
     required this.toggleBottomBarVisibility,
   });
 
-  final _i41.Key? key;
+  final _i42.Key? key;
 
   final void Function() toggleBottomBarVisibility;
 
@@ -980,8 +992,8 @@ class StorySearchingRouteArgs {
 
 /// generated route for
 /// [_i33.StoryTopicPage]
-class StoryTopicRoute extends _i40.PageRouteInfo<void> {
-  const StoryTopicRoute({List<_i40.PageRouteInfo>? children})
+class StoryTopicRoute extends _i41.PageRouteInfo<void> {
+  const StoryTopicRoute({List<_i41.PageRouteInfo>? children})
       : super(
           StoryTopicRoute.name,
           initialChildren: children,
@@ -989,13 +1001,13 @@ class StoryTopicRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'StoryTopicRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i34.TermOfServicePage]
-class TermOfServiceRoute extends _i40.PageRouteInfo<void> {
-  const TermOfServiceRoute({List<_i40.PageRouteInfo>? children})
+class TermOfServiceRoute extends _i41.PageRouteInfo<void> {
+  const TermOfServiceRoute({List<_i41.PageRouteInfo>? children})
       : super(
           TermOfServiceRoute.name,
           initialChildren: children,
@@ -1003,13 +1015,13 @@ class TermOfServiceRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'TermOfServiceRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i35.UserInformationPage]
-class UserInformationRoute extends _i40.PageRouteInfo<void> {
-  const UserInformationRoute({List<_i40.PageRouteInfo>? children})
+class UserInformationRoute extends _i41.PageRouteInfo<void> {
+  const UserInformationRoute({List<_i41.PageRouteInfo>? children})
       : super(
           UserInformationRoute.name,
           initialChildren: children,
@@ -1017,13 +1029,13 @@ class UserInformationRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'UserInformationRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i36.UserProfilePage]
-class UserProfileRoute extends _i40.PageRouteInfo<void> {
-  const UserProfileRoute({List<_i40.PageRouteInfo>? children})
+class UserProfileRoute extends _i41.PageRouteInfo<void> {
+  const UserProfileRoute({List<_i41.PageRouteInfo>? children})
       : super(
           UserProfileRoute.name,
           initialChildren: children,
@@ -1031,27 +1043,52 @@ class UserProfileRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'UserProfileRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i37.VocabularyDetailPage]
-class VocabularyDetailRoute extends _i40.PageRouteInfo<void> {
-  const VocabularyDetailRoute({List<_i40.PageRouteInfo>? children})
-      : super(
+class VocabularyDetailRoute
+    extends _i41.PageRouteInfo<VocabularyDetailRouteArgs> {
+  VocabularyDetailRoute({
+    _i42.Key? key,
+    required String categoryId,
+    List<_i41.PageRouteInfo>? children,
+  }) : super(
           VocabularyDetailRoute.name,
+          args: VocabularyDetailRouteArgs(
+            key: key,
+            categoryId: categoryId,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'VocabularyDetailRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<VocabularyDetailRouteArgs> page =
+      _i41.PageInfo<VocabularyDetailRouteArgs>(name);
+}
+
+class VocabularyDetailRouteArgs {
+  const VocabularyDetailRouteArgs({
+    this.key,
+    required this.categoryId,
+  });
+
+  final _i42.Key? key;
+
+  final String categoryId;
+
+  @override
+  String toString() {
+    return 'VocabularyDetailRouteArgs{key: $key, categoryId: $categoryId}';
+  }
 }
 
 /// generated route for
 /// [_i38.VocabularyPage]
-class VocabularyRoute extends _i40.PageRouteInfo<void> {
-  const VocabularyRoute({List<_i40.PageRouteInfo>? children})
+class VocabularyRoute extends _i41.PageRouteInfo<void> {
+  const VocabularyRoute({List<_i41.PageRouteInfo>? children})
       : super(
           VocabularyRoute.name,
           initialChildren: children,
@@ -1059,13 +1096,13 @@ class VocabularyRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'VocabularyRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i39.WelcomePage]
-class WelcomeRoute extends _i40.PageRouteInfo<void> {
-  const WelcomeRoute({List<_i40.PageRouteInfo>? children})
+class WelcomeRoute extends _i41.PageRouteInfo<void> {
+  const WelcomeRoute({List<_i41.PageRouteInfo>? children})
       : super(
           WelcomeRoute.name,
           initialChildren: children,
@@ -1073,5 +1110,19 @@ class WelcomeRoute extends _i40.PageRouteInfo<void> {
 
   static const String name = 'WelcomeRoute';
 
-  static const _i40.PageInfo<void> page = _i40.PageInfo<void>(name);
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i40.WriteCharsPage]
+class WriteCharsRoute extends _i41.PageRouteInfo<void> {
+  const WriteCharsRoute({List<_i41.PageRouteInfo>? children})
+      : super(
+          WriteCharsRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'WriteCharsRoute';
+
+  static const _i41.PageInfo<void> page = _i41.PageInfo<void>(name);
 }

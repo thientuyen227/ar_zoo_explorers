@@ -8,6 +8,7 @@ class VocabularyEntity {
   final String id;
   final Map<String, String> words;
   final String thumbnail;
+  String categoryId;
   final String? phoneticTranscription;
   final Map<String, String> audios;
   final Map<String, String> meaning;
@@ -18,6 +19,7 @@ class VocabularyEntity {
       {required this.id,
       required this.words,
       required this.thumbnail,
+      required this.categoryId,
       required this.phoneticTranscription,
       required this.audios,
       required this.meaning,
@@ -28,6 +30,7 @@ class VocabularyEntity {
     return <String, dynamic>{
       'id': id,
       'words': words,
+      'categoryId': categoryId,
       'thumbnail': thumbnail,
       'phoneticTranscription': phoneticTranscription,
       'audios': audios,
@@ -41,6 +44,7 @@ class VocabularyEntity {
     return VocabularyEntity(
       id: map['id'] as String,
       words: Map<String, String>.from((map['words'] ?? "")),
+      categoryId: map['categoryId'] as String,
       thumbnail: map['thumbnail'] as String,
       phoneticTranscription: map['phoneticTranscription'] != null
           ? map['phoneticTranscription'] as String

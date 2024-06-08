@@ -4,6 +4,7 @@ import 'package:ar_zoo_explorers/core/data/controller/vocabulary_controller.dart
 import 'package:ar_zoo_explorers/domain/entities/vocabulary_entity.dart';
 import 'package:ar_zoo_explorers/features/vocabularydetail/components/dialog_animal.dart';
 import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -19,6 +20,18 @@ class ItemVocabularyDetail extends StatefulWidget {
 class _ItemVocabularyDetailState extends State<ItemVocabularyDetail> {
   var isComplete = false;
   final languageCode = Get.locale?.languageCode;
+  AudioPlayer audioPlayer = AudioPlayer();
+  @override
+  void initState() {
+    super.initState();
+    audioPlayer = AudioPlayer();
+  }
+
+  @override
+  void dispose() {
+    audioPlayer.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +79,12 @@ class _ItemVocabularyDetailState extends State<ItemVocabularyDetail> {
                     ),
                   ),
                   const Spacer(),
-                  SvgPicture.asset(AppIcons.icSound)
+                  GestureDetector(
+                      onTap: () {
+                        audioPlayer.play(
+                            UrlSource(widget.vocabularyEntity.audiosLocalize));
+                      },
+                      child: SvgPicture.asset(AppIcons.icSound))
                 ],
               ),
             )
