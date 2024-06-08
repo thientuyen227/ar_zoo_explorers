@@ -15,6 +15,7 @@ import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 
 @RoutePage()
@@ -63,7 +64,11 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) {
-        Navigator.of(context).pop();
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          if (Navigator.canPop(context)) {
+            Navigator.pop(context);
+          }
+        });
       },
       child: Scaffold(
         appBar: AppBar(

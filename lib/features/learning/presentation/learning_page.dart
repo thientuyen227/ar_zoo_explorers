@@ -5,7 +5,6 @@ import 'package:ar_zoo_explorers/core/data/api/api_service.dart';
 import 'package:ar_zoo_explorers/domain/entities/chatbox_entity.dart';
 import 'package:ar_zoo_explorers/features/learning/presentation/learning_cubit.dart';
 import 'package:ar_zoo_explorers/features/learning/presentation/learning_state.dart';
-import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,8 +32,13 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,
+<<<<<<< HEAD
           title: Text(LanguageKeys.learning_home.tr.toUpperCase(),
               style: const TextStyle(
+=======
+          title: const Text("Learning Home",
+              style: TextStyle(
+>>>>>>> develop
                   fontSize: 20,
                   color: Colors.white,
                   fontWeight: FontWeight.bold)),
@@ -54,19 +58,20 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
                 height: 24,
               ),
               _renderTitleAndIcon(
-                  icon: AppImages.imgPhonics,
                   title: LanguageKeys.phonics.tr,
                   router: Routes.phonics,
                   lotties: AppLotties.animationanimal),
               _renderTitleAndIcon(
                   title: LanguageKeys.vocabulary,
-                  icon: AppImages.imgDictionary,
                   router: Routes.vocabulary,
-                  lotties: null),
+                  lotties: AppLotties.vocabulary),
               _renderTitleAndIcon(
-                  icon: AppImages.imgPuzzle,
                   title: LanguageKeys.puzzle,
                   router: Routes.puzzleword,
+                  lotties: AppLotties.puzzle),
+              _renderTitleAndIcon(
+                  title: LanguageKeys.puzzle,
+                  router: Routes.writechars,
                   lotties: AppLotties.puzzle),
             ],
           ),
@@ -77,9 +82,8 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
 
   Widget _renderTitleAndIcon(
       {required String title,
-      required String icon,
       required String router,
-      String? lotties}) {
+      required String lotties}) {
     return Column(
       children: [
         const SizedBox(
@@ -96,17 +100,15 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
                 border: Border.all(),
                 borderRadius: const BorderRadius.all(Radius.circular(10))),
             child: Padding(
-              padding: const EdgeInsets.all(4.0),
+              padding: const EdgeInsets.all(10.0),
               child: Row(
                 children: [
-                  lotties == null
-                      ? ImageSvgUrlCustom(imagePath: icon)
-                      : Container(
-                          child: Lottie.asset(
-                          lotties,
-                        )),
+                  Container(
+                      child: Lottie.asset(
+                    lotties,
+                  )),
                   const SizedBox(
-                    width: 24,
+                    width: 12,
                   ),
                   Text(
                     title.tr,
@@ -124,7 +126,7 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
 
   Widget backButton() {
     return AppIconButton(
-      onPressed: () => context.router.pop(),
+      onPressed: () => context.router.maybePop(),
       icon: Container(
           margin: const EdgeInsets.only(left: 0),
           child: Transform.scale(

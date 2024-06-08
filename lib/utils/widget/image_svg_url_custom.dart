@@ -12,15 +12,14 @@ class ImageSvgUrlCustom extends StatelessWidget {
   final Widget? widget;
   final bool? sizeBaseOnWidth;
   const ImageSvgUrlCustom(
-      {Key? key,
+      {super.key,
       required this.imagePath,
       this.size = 24,
       this.width,
       this.height,
       this.color,
       this.sizeBaseOnWidth = true,
-      this.widget})
-      : super(key: key);
+      this.widget});
 
   @override
   Widget build(BuildContext context) {
@@ -29,16 +28,22 @@ class ImageSvgUrlCustom extends StatelessWidget {
     if (imagePath.isNotEmpty) {
       if (imagePath.endsWith(".svg")) {
         return imagePath.isValidUrl()
-            ? SvgPicture.network(imagePath,
-                width: localwidth, height: localHeight)
+            ? SvgPicture.network(
+                imagePath,
+                width: localwidth,
+                height: localHeight,
+                color: color,
+              )
             : SvgPicture.asset(imagePath,
-                width: localwidth, height: localHeight);
+                width: localwidth, height: localHeight, color: color);
       } else {
         return imagePath.isValidUrl()
-            ? Image.network(imagePath, width: localwidth, height: localHeight)
+            ? Image.network(imagePath,
+                width: localwidth, height: localHeight, color: color)
             : Image.asset(
                 imagePath,
                 width: localwidth,
+                color: color,
                 height: localHeight,
                 errorBuilder: (context, error, stackTrace) {
                   return defaultWidget(height: localHeight, width: localHeight);

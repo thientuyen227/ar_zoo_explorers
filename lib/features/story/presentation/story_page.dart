@@ -26,14 +26,11 @@ class _State extends BaseState<StoryState, StoryCubit, StoryPage> {
   @override
   Widget buildByState(BuildContext context, StoryState state) {
     return PopScope(
-        canPop: false,
+        canPop: true,
         onPopInvoked: (didPop) async {
-          await cubit.showLoading();
           context.router.pop();
-          await cubit.hideLoading();
         },
         child: Scaffold(
-            // extendBodyBehindAppBar: true,
             body: SingleChildScrollView(
               child: Column(
                 children: [

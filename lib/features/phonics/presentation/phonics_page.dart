@@ -22,23 +22,15 @@ class PhonicsPage extends StatefulWidget {
 
 class _State extends BaseState<PhonicsState, PhonicsCubit, PhonicsPage> {
   final bool _isOrientationLocked = true;
-  double? width;
-  double? height;
-  void setDimension() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      width = MediaQuery.of(context).size.width;
-      height = MediaQuery.of(context).size.height;
-    });
-  }
-
   @override
   void initState() {
+    cubit.showLoading();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
-
-    setDimension();
+    cubit.init();
+    cubit.hideLoading();
     super.initState();
   }
 
@@ -78,19 +70,17 @@ class _State extends BaseState<PhonicsState, PhonicsCubit, PhonicsPage> {
         ),
         Padding(
           padding: const EdgeInsets.only(top: 60),
-          child: SingleChildScrollView(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                renderMotionAndTitle(
-                    LanguageKeys.uppercaseLetters, AppLotties.earth),
-                renderMotionAndTitle(
-                    LanguageKeys.lowercaseLetters, AppLotties.plane),
-                renderMotionAndTitle(
-                    LanguageKeys.cardinalNumbers, AppLotties.snow)
-              ],
-            ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              renderMotionAndTitle(
+                  LanguageKeys.uppercaseLetters, AppLotties.earth),
+              renderMotionAndTitle(
+                  LanguageKeys.lowercaseLetters, AppLotties.plane),
+              renderMotionAndTitle(
+                  LanguageKeys.cardinalNumbers, AppLotties.snow)
+            ],
           ),
         )
       ],
@@ -119,12 +109,12 @@ class _State extends BaseState<PhonicsState, PhonicsCubit, PhonicsPage> {
         );
       },
       child: SizedBox(
-        height: height! * 0.9,
-        width: width! * 0.6,
+        height: state.height * 0.9,
+        width: state.width * 0.6,
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Lottie.asset(motion, height: 200, width: 200),
+              Lottie.asset(motion, height: 180, width: 180),
               const SizedBox(
                 height: 25,
               ),
@@ -146,7 +136,7 @@ class _State extends BaseState<PhonicsState, PhonicsCubit, PhonicsPage> {
                   title.tr,
                   style: const TextStyle(
                       color: AppColor.lightBlue,
-                      fontSize: 26,
+                      fontSize: 24,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Coiny-Regular'),
                 ),

@@ -272,11 +272,13 @@ class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
                 ),
               ),
               const Spacer(),
-              SvgPicture.asset(
-                AppIcons.icSound,
-                height: 45,
-                width: 45,
-              )
+              IconButton(
+                  onPressed: () {},
+                  icon: SvgPicture.asset(
+                    AppIcons.icSound,
+                    height: 45,
+                    width: 45,
+                  ))
             ],
           ),
         ),
