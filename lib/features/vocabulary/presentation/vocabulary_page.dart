@@ -23,7 +23,7 @@ class _State
   @override
   void initState() {
     super.initState();
-    cubit.init();
+    cubit.init(context);
   }
 
   @override
@@ -45,31 +45,30 @@ class _State
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(
+            Container(
               height: 20,
             ),
-            GridView.builder(
-              shrinkWrap: true,
-              itemCount: state.learningcategories.length,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      ItemVocabulary(
-                        learningCategoryEntity: state.learningcategories[index],
-                      ),
-                    ],
-                  ),
-                );
-              },
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.9,
-                crossAxisSpacing: 14,
-              ),
-            )
+            state.height != 0
+                ? GridView.builder(
+                    shrinkWrap: true,
+                    itemCount: state.learningcategories.length,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: ItemVocabulary(
+                          state: state,
+                          learningCategoryEntity:
+                              state.learningcategories[index],
+                        ),
+                      );
+                    },
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: state.height > 1000 ? 1.8 : 0.9,
+                    ),
+                  )
+                : Container()
           ],
         ),
       ),

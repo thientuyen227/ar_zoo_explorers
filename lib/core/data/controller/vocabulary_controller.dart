@@ -29,7 +29,8 @@ class VocabularyController extends ControllerHelper {
   Future<VocabularyEntity?> getVocabulary(
       BuildContext context, String vocabularyId) {
     return processRequest<VocabularyEntity?>(
-        request: () => _vocabularyRepository.getVocabulary(vocabularyId),
+        request: () =>
+            _vocabularyRepository.getVocabulary(context, vocabularyId),
         onSuccess: (success) => {_setCurrentVocabulary(context, success.data!)},
         onFailure: (failure) =>
             Fluttertoast.showToast(msg: "Access information failed!"));
@@ -40,9 +41,11 @@ class VocabularyController extends ControllerHelper {
     update();
   }
 
-  Future<List<VocabularyEntity>?> getAllVocabularys() {
+  Future<List<VocabularyEntity>?> getAllVocabularys(
+    BuildContext context,
+  ) {
     return processRequest<List<VocabularyEntity>?>(
-        request: () => _vocabularyRepository.getAllVocabulary(),
+        request: () => _vocabularyRepository.getAllVocabulary(context),
         onFailure: (failure) =>
             Fluttertoast.showToast(msg: "Access information failed!"),
         onSuccess: (success) => {_setListVocabulary(success.data!)});
@@ -58,7 +61,7 @@ class VocabularyController extends ControllerHelper {
 
   Future<void> updateCurrentVocabulary(BuildContext context, String id) async {
     await processRequest<VocabularyEntity?>(
-        request: () => _vocabularyRepository.getVocabulary(id),
+        request: () => _vocabularyRepository.getVocabulary(context, id),
         onSuccess: (success) => {_setCurrentVocabulary(context, success.data!)},
         onFailure: (failure) =>
             Fluttertoast.showToast(msg: "Access information failed!"));

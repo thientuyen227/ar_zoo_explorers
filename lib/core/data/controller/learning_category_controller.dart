@@ -22,10 +22,10 @@ class LearningCategoryController extends ControllerHelper {
   Rx<String> searchValue = Rx("");
 
   Future<LearningCategoryEntity?> getLearningCategory(
-      BuildContext context, String LearningCategoryId) {
+      BuildContext context, String learningCategoryId) {
     return processRequest<LearningCategoryEntity?>(
-        request: () =>
-            _learningCategoryRepository.getLearningCategory(LearningCategoryId),
+        request: () => _learningCategoryRepository.getLearningCategory(
+            context, learningCategoryId),
         onSuccess: (success) =>
             {_setCurrentLearningCategory(context, success.data!)},
         onFailure: (failure) =>
@@ -38,9 +38,12 @@ class LearningCategoryController extends ControllerHelper {
     update();
   }
 
-  Future<List<LearningCategoryEntity>?> getAllLearningCategorys() {
+  Future<List<LearningCategoryEntity>?> getAllLearningCategorys(
+    BuildContext context,
+  ) {
     return processRequest<List<LearningCategoryEntity>?>(
-        request: () => _learningCategoryRepository.getAllLearningCategory(),
+        request: () =>
+            _learningCategoryRepository.getAllLearningCategory(context),
         onFailure: (failure) =>
             Fluttertoast.showToast(msg: "Access information failed!"),
         onSuccess: (success) => {_setListLearningCategory(success.data!)});
@@ -56,7 +59,8 @@ class LearningCategoryController extends ControllerHelper {
   Future<void> updateCurrentLearningCategory(
       BuildContext context, String id) async {
     await processRequest<LearningCategoryEntity?>(
-        request: () => _learningCategoryRepository.getLearningCategory(id),
+        request: () =>
+            _learningCategoryRepository.getLearningCategory(context, id),
         onSuccess: (success) =>
             {_setCurrentLearningCategory(context, success.data!)},
         onFailure: (failure) =>

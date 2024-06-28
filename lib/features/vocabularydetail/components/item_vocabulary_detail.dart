@@ -36,7 +36,7 @@ class _ItemVocabularyDetailState extends State<ItemVocabularyDetail> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(top: 19, bottom: 9),
+      padding: const EdgeInsets.only(top: 9, bottom: 9),
       decoration: BoxDecoration(
         border: Border.all(color: AppColor.vibrantYellow),
         borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -47,44 +47,52 @@ class _ItemVocabularyDetailState extends State<ItemVocabularyDetail> {
           children: [
             ImageSvgUrlCustom(
               imagePath: widget.vocabularyEntity.thumbnail,
-              height: 70,
-              width: 70,
-              size: 70,
+              height: 100,
+              width: 100,
             ),
             languageCode != 'vi'
                 ? Text(widget.vocabularyEntity.phoneticTranscription ?? "")
                 : Container(
                     height: 0,
                   ),
-            Text(
-              widget.vocabularyEntity.wordLocalize,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
             Padding(
-              padding: const EdgeInsets.only(right: 18, left: 18),
+              padding: const EdgeInsets.only(top: 10, right: 8.0, left: 8),
+              child: Text(
+                widget.vocabularyEntity.wordLocalize,
+                style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    overflow: TextOverflow.ellipsis),
+              ),
+            ),
+            const Spacer(),
+            Padding(
+              padding: const EdgeInsets.only(right: 8, left: 8),
               child: Row(
                 children: [
-                  GestureDetector(
-                    onTap: () {
+                  IconButton(
+                    onPressed: () {
                       _showDialogAndBottomSheet(
                           context, widget.vocabularyEntity);
                     },
-                    child: Image.asset(
+                    icon: Image.asset(
                       AppIcons.icSnail,
-                      height: 32,
-                      width: 32,
+                      height: 41,
+                      width: 41,
                     ),
                   ),
                   const Spacer(),
-                  GestureDetector(
-                      onTap: () {
-                        audioPlayer.play(
-                            UrlSource(widget.vocabularyEntity.audiosLocalize));
-                      },
-                      child: SvgPicture.asset(AppIcons.icSound))
+                  IconButton(
+                    onPressed: () {
+                      audioPlayer.play(
+                          UrlSource(widget.vocabularyEntity.audiosLocalize));
+                    },
+                    icon: SvgPicture.asset(
+                      AppIcons.icSound,
+                      height: 40,
+                      width: 40,
+                    ),
+                  ),
                 ],
               ),
             )

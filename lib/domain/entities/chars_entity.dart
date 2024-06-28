@@ -1,27 +1,26 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 class CharsEntity {
   final String id;
   final String char;
-  final String type;
-  final Map<String, String> audios;
+  final Map<String?, String?> audios;
+  Map<String?, String?> imagePaths;
 
   CharsEntity(
       {required this.id,
       required this.char,
-      required this.type,
-      required this.audios});
+      required this.audios,
+      required this.imagePaths});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
       'char': char,
-      'type': type,
       'audios': audios,
+      'imagePaths': imagePaths,
     };
   }
 
@@ -29,8 +28,12 @@ class CharsEntity {
     return CharsEntity(
       id: map['id'] ?? '',
       char: map['char'] ?? '',
-      type: map['type'] ?? '',
-      audios: Map<String, String>.from((map['audios'] ?? {})),
+      imagePaths: map['imagePaths'] != null
+          ? Map<String?, String?>.from(map['imagePaths'] as Map)
+          : <String?, String?>{},
+      audios: map['audios'] != null
+          ? Map<String?, String?>.from(map['audios'] as Map)
+          : <String?, String?>{},
     );
   }
 
@@ -38,22 +41,6 @@ class CharsEntity {
 
   factory CharsEntity.fromJson(String source) =>
       CharsEntity.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is CharsEntity &&
-        other.id == id &&
-        other.char == char &&
-        other.type == type &&
-        mapEquals(other.audios, audios);
-  }
-
-  @override
-  int get hashCode {
-    return id.hashCode ^ char.hashCode ^ type.hashCode ^ audios.hashCode;
-  }
 }
 
 extension CharsEntityExt on CharsEntity {
@@ -65,7 +52,15 @@ extension CharsEntityExt on CharsEntity {
     return audios.values.firstOrNull ?? "";
   }
 
-  // CharacterType get characterType {
-  //   return CharacterType.values.firstWhere((element) => element.name == type);
+  String get imagePathsLocalize {
+    final languageCode = Get.locale?.languageCode;
+    if (imagePaths.containsKey(languageCode)) {
+      return imagePaths[languageCode]!;
+    }
+    return imagePaths.values.firstOrNull ?? "";
+  }
+
+  // CharacterimagePaths get characterimagePaths {
+  //   return CharacterimagePaths.values.firstWhere((element) => element.name == imagePaths);
   // }
 }

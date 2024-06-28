@@ -34,6 +34,11 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
   ApiService apiService = ApiService();
 
   final ScrollController _scrollController = ScrollController();
+  @override
+  void initState() {
+    cubit.init();
+    super.initState();
+  }
 
   @override
   Widget buildByState(BuildContext context, ChatAIState state) {
@@ -295,13 +300,7 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
   //   });
   // }
 
-  Future<void> _initCubit() async {
-    await cubit.init(context).then((value) => setState(() {}));
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _initCubit();
-  }
+  // Future<void> _initCubit() async {
+  //   await cubit.init(context).then((value) => setState(() {}));
+  // }
 }

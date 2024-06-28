@@ -28,14 +28,11 @@ class _State extends BaseState<PhonicsDetailState, PhonicsDetailCubit,
 
   @override
   void initState() {
+    cubit.init(context: context, type: widget.type);
     super.initState();
-    cubit.showLoading();
-    cubit.init(type: widget.type);
     onPlayerStateChanged();
     setVolume();
     completeAudio();
-
-    cubit.hideLoading();
   }
 
   void onPlayerStateChanged() {
@@ -136,72 +133,81 @@ class _State extends BaseState<PhonicsDetailState, PhonicsDetailCubit,
                 ),
               ),
             ),
-            SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
-                      children: [
-                        GestureDetector(
-                            onTap: () {
-                              context.router.pop();
-                            },
-                            child: const ImageSvgUrlCustom(
-                                imagePath: AppIcons.icBackPng)),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                      ],
-                    ),
-                    GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: cubit.isNumber == true ? 7 : 8,
-                        childAspectRatio: 1.18,
-                        crossAxisSpacing: 1,
-                      ),
-                      itemCount: state.charsEntities.length,
-                      itemBuilder: (context, index) {
-                        return Column(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                audioPlayer.play(AssetSource(
-                                    state.charsEntities[index].audiosLocalize));
-                              },
-                              child: Text(
-                                state.isUpperCase == true
-                                    ? state.charsEntities[index].char
-                                        .toUpperCase()
-                                    : state.charsEntities[index].char
-                                        .toLowerCase(),
-                                style: TextStyle(
-                                  fontSize: 62,
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Coiny-Regular",
-                                  shadows: <Shadow>[
-                                    Shadow(
-                                      offset: const Offset(2.0, 2.0),
-                                      blurRadius: 3.0,
-                                      color: Colors.black.withOpacity(0.5),
-                                    ),
-                                  ],
-                                ),
+            state.height != 0
+                ? SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            children: [
+                              GestureDetector(
+                                  onTap: () {
+                                    context.router.pop();
+                                  },
+                                  child: const ImageSvgUrlCustom(
+                                      imagePath: AppIcons.icBackPng)),
+                              const SizedBox(
+                                width: 10,
                               ),
+                            ],
+                          ),
+                          GridView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            padding: EdgeInsets.zero,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: cubit.isNumber == true ? 7 : 8,
+                              childAspectRatio:
+                                  state.height * 1.97 / state.width,
                             ),
-                          ],
-                        );
-                      },
-                    )
-                  ],
-                ),
-              ),
-            ),
+                            itemCount: state.charsEntities.length,
+                            itemBuilder: (context, index) {
+                              return Column(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      audioPlayer.play(UrlSource(state
+                                          .charsEntities[index]
+                                          .audiosLocalize));
+                                    },
+                                    child: Text(
+                                      state.isUpperCase == true
+                                          ? state.charsEntities[index].char
+                                              .toUpperCase()
+                                          : state.charsEntities[index].char
+                                              .toLowerCase(),
+                                      style: TextStyle(
+                                        fontSize: 80,
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Coiny-Regular",
+                                        shadows: <Shadow>[
+                                          Shadow(
+                                            offset: const Offset(2.0, 2.0),
+                                            blurRadius: 3.0,
+                                            color:
+                                                Colors.black.withOpacity(0.5),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                          const SizedBox(
+                            height: 30,
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+                : Container(),
           ],
         )));
   }

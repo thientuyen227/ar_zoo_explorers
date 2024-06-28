@@ -7,6 +7,7 @@ import 'package:ar_zoo_explorers/features/learning/presentation/learning_cubit.d
 import 'package:ar_zoo_explorers/features/learning/presentation/learning_state.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
@@ -29,6 +30,10 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
 
   @override
   Widget buildByState(BuildContext context, LearningState state) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,
@@ -65,9 +70,9 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
                   router: Routes.puzzleword,
                   lotties: AppLotties.puzzle),
               _renderTitleAndIcon(
-                  title: LanguageKeys.puzzle,
-                  router: Routes.writechars,
-                  lotties: AppLotties.puzzle),
+                  title: LanguageKeys.practiceWrite,
+                  router: Routes.writingpractice,
+                  lotties: AppLotties.practiceWrite),
             ],
           ),
         ),

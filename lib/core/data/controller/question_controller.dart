@@ -22,9 +22,9 @@ class QuestionController extends ControllerHelper {
 
   Rx<String> searchValue = Rx("");
 
-  Future<QuestionEntity?> getQuestion(BuildContext context, String QuestionId) {
+  Future<QuestionEntity?> getQuestion(BuildContext context, String questionId) {
     return processRequest<QuestionEntity?>(
-        request: () => _questionRepository.getQuestion(QuestionId),
+        request: () => _questionRepository.getQuestion(context, questionId),
         onSuccess: (success) => {_setCurrentQuestion(context, success.data!)},
         onFailure: (failure) =>
             Fluttertoast.showToast(msg: "Access information failed!"));
@@ -35,9 +35,11 @@ class QuestionController extends ControllerHelper {
     update();
   }
 
-  Future<List<QuestionEntity>?> getAllQuestions() {
+  Future<List<QuestionEntity>?> getAllQuestions(
+    BuildContext context,
+  ) {
     return processRequest<List<QuestionEntity>?>(
-        request: () => _questionRepository.getAllQuestion(),
+        request: () => _questionRepository.getAllQuestion(context),
         onFailure: (failure) =>
             Fluttertoast.showToast(msg: "Access information failed!"),
         onSuccess: (success) => {_setListQuestion(success.data!)});
@@ -46,27 +48,6 @@ class QuestionController extends ControllerHelper {
   _setListQuestion(List<QuestionEntity> listEntity) {
     listQuestion.value = listEntity;
     update();
-  }
-
-  Future<void> updateCurrentQuestion(BuildContext context, String id) async {
-    await processRequest<QuestionEntity?>(
-        request: () => _questionRepository.getQuestion(id),
-        onSuccess: (success) => {_setCurrentQuestion(context, success.data!)},
-        onFailure: (failure) =>
-            Fluttertoast.showToast(msg: "Access information failed!"));
-  }
-
-  Future<QuestionEntity?> updateQuestion(
-      BuildContext context, QuestionEntity questionEntity) async {
-    return await processRequest(
-      request: () => _questionRepository.updateQuestion(questionEntity),
-      onFailure: (failure) =>
-          Fluttertoast.showToast(msg: "category editing failed"),
-      onSuccess: (success) => {
-        _setCurrentQuestion(context, success.data!),
-        Fluttertoast.showToast(msg: "category editing successful"),
-      },
-    );
   }
 
   Future<void> setSearchValue(BuildContext context, String value) async {

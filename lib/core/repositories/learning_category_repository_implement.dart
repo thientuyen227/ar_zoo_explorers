@@ -5,24 +5,29 @@ import 'package:ar_zoo_explorers/core/success.dart';
 import 'package:ar_zoo_explorers/domain/entities/learning_category_entity.dart';
 import 'package:ar_zoo_explorers/domain/repositories/learning_category_repository.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 
 class LearningCategoryRepositoryImplement
     implements LearningCategoryRepository {
   final FirebaseFirestoreSource _firestoreSource = FirebaseFirestoreSource();
   @override
   Future<Either<Failure, Success<LearningCategoryEntity?>>> getLearningCategory(
-      String learningCategoryId) {
+      BuildContext context, String learningCategoryId) {
     return ResponseHandler.processResponse(() async {
       return Success(
-          data: await _firestoreSource.getLearningCategory(learningCategoryId));
+          data: await _firestoreSource.getLearningCategory(
+              context, learningCategoryId));
     });
   }
 
   @override
   Future<Either<Failure, Success<List<LearningCategoryEntity>?>>>
-      getAllLearningCategory() {
+      getAllLearningCategory(
+    BuildContext context,
+  ) {
     return ResponseHandler.processResponse(() async {
-      return Success(data: await _firestoreSource.getAllLearningCategory());
+      return Success(
+          data: await _firestoreSource.getAllLearningCategory(context));
     });
   }
 }

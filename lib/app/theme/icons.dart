@@ -172,7 +172,7 @@ class AppImages {
   static const String imgLionBaby =
       "assets/images/learning_image/vocabulary/lion.svg";
   static const String imgPuzzleDesign =
-      "assets/images/learning_image/puzzle/imgPuzzleDesign.png";
+      "assets/images/learning_image/puzzle/imgPuzzleDesign.svg";
   static const String imgFox = "assets/images/learning_image/puzzle/fox.png";
   static const String imgFruits =
       "assets/images/learning_image/puzzle/fruits.png";
@@ -181,6 +181,12 @@ class AppImages {
       "assets/images/learning_image/puzzle/family.png";
   static const String imgPhonics = "assets/images/learning_image/phonics.jpeg";
   static const String backgroundPhonics = "assets/images/backgroundphonics.jpg";
+  static const String backgroundDialog =
+      "assets/images/learning_image/write/background_dialog.jpg";
+  static const String imgDialogSave =
+      "assets/images/learning_image/write/image_dialog.png";
+
+  static const String imgNoInternet = "assets/images/img_no_internet.png";
 
   //MODELS BUTTONS
   static const String imgAmphibians =
@@ -259,4 +265,7 @@ class AppLotties {
   static const String snow = "assets/lotties/snow.json";
   static const String puzzle = "assets/lotties/puzzle.json";
   static const String vocabulary = "assets/lotties/vocabulary.json";
+  static const String complete = "assets/lotties/complete.json";
+  static const String practiceWrite = "assets/lotties/write_practice.json";
+  static const String loading = "assets/lotties/loading_elephant.json";
 }

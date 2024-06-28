@@ -67,7 +67,10 @@ import '../features/vocabulary/presentation/vocabulary_cubit.dart' as _i39;
 import '../features/vocabularydetail/presentation/vocabulary_detail_cubit.dart'
     as _i40;
 import '../features/welcome/presentation/welcome_cubit.dart' as _i41;
-import '../features/writechars/write_char_cubit.dart' as _i42;
+import '../features/writingpractice/presentation/writing_practice_cubit.dart'
+    as _i42;
+import '../features/writingpracticedetail/presentation/writing_practice_detail_cubit.dart'
+    as _i43;
 
 // initializes the registration of main-scope dependencies inside of GetIt
 _i1.GetIt $initGetit(
@@ -119,6 +122,8 @@ _i1.GetIt $initGetit(
   gh.factory<_i39.VocabularyCubit>(() => _i39.VocabularyCubit());
   gh.factory<_i40.VocabularyDetailCubit>(() => _i40.VocabularyDetailCubit());
   gh.factory<_i41.WelcomeCubit>(() => _i41.WelcomeCubit());
-  gh.factory<_i42.WriteCharsCubit>(() => _i42.WriteCharsCubit());
+  gh.factory<_i42.WritingPracticeCubit>(() => _i42.WritingPracticeCubit());
+  gh.factory<_i43.WritingPracticeDetailCubit>(
+      () => _i43.WritingPracticeDetailCubit());
   return getIt;
 }

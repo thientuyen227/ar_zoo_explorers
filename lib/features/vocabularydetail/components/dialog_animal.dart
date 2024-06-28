@@ -5,7 +5,6 @@ import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/core/data/controller/vocabulary_controller.dart';
 import 'package:ar_zoo_explorers/domain/entities/vocabulary_entity.dart';
 import 'package:ar_zoo_explorers/features/vocabulary/presentation/vocabulary_cubit.dart';
-import 'package:ar_zoo_explorers/utils/widget/button_widget.dart';
 import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:auto_route/auto_route.dart';
@@ -29,12 +28,18 @@ class _DialogAnimalState extends State<DialogAnimal> {
   AudioPlayer audioPlayer = AudioPlayer();
   List<VocabularyEntity>? vocabularyEntities;
   VocabularyEntity? vocabularyEntity;
+  double? height;
+  double? width;
 
   @override
   void initState() {
     super.initState();
     audioPlayer = AudioPlayer();
-    cubit.showLoading();
+    Size mediaSize = MediaQueryData.fromView(
+            WidgetsBinding.instance.platformDispatcher.views.single)
+        .size;
+    height = mediaSize.height;
+    width = mediaSize.width;
     vocabularyEntities = vocabularyController.listVocabulary.value
         .where((element) =>
             element.categoryId == widget.vocabularyEntity.categoryId)
@@ -42,7 +47,6 @@ class _DialogAnimalState extends State<DialogAnimal> {
     currentIndex = vocabularyEntities!
         .indexWhere((element) => element.id == widget.vocabularyEntity.id);
     vocabularyEntity = vocabularyEntities![currentIndex];
-    cubit.hideLoading();
   }
 
   @override
@@ -145,96 +149,107 @@ class _DialogAnimalState extends State<DialogAnimal> {
   }
 
   Widget renderContent() {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 20, bottom: 15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  LanguageKeys.description.tr,
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(
-                  height: 6,
-                ),
-                Text(
-                  vocabularyEntity!.meaningLocalize,
-                ),
-              ],
+    return SizedBox(
+      height: height! * 0.32,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 20, bottom: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    LanguageKeys.description.tr,
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(
+                    height: 6,
+                  ),
+                  Text(
+                    vocabularyEntity!.meaningLocalize,
+                  ),
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  LanguageKeys.location.tr,
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(
-                  height: 6,
-                ),
-                Text(
-                  vocabularyEntity!.exampleLocalize,
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.only(bottom: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    LanguageKeys.location.tr,
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(
+                    height: 6,
+                  ),
+                  Text(
+                    vocabularyEntity!.exampleLocalize,
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget renderTitleAndSpell() {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(11.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Easy",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
           Center(
               child: ImageSvgUrlCustom(
             imagePath: vocabularyEntity!.thumbnail,
-            height: 80,
-            width: 80,
+            height: height! * 0.18,
+            width: width! * 0.4,
           )),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Column(
             children: [
-              GestureDetector(
-                onTap: () {
-                  // _showDialogAndBottomSheet(context);
-                },
-                child: Image.asset(
-                  AppIcons.icSnail,
-                  height: 32,
-                  width: 32,
-                ),
-              ),
-              Text(
-                vocabularyEntity!.wordLocalize,
-                style:
-                    const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
-              ),
-              AppIconButton(
-                onPressed: () {
-                  audioPlayer
-                      .play(UrlSource(widget.vocabularyEntity.audiosLocalize));
-                },
-                icon: SvgPicture.asset(AppIcons.icSound),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    onPressed: () {},
+                    icon: Image.asset(
+                      AppIcons.icSnail,
+                      height: 40,
+                      width: 40,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 130,
+                    child: Center(
+                      child: Text(
+                        vocabularyEntity!.wordLocalize,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        maxLines: 2,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      audioPlayer
+                          .play(UrlSource(vocabularyEntity!.audiosLocalize));
+                    },
+                    icon: SvgPicture.asset(
+                      AppIcons.icSound,
+                      height: 40,
+                      width: 40,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -259,28 +274,34 @@ class _DialogAnimalState extends State<DialogAnimal> {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: <Widget>[
+      children: [
         Positioned(
-            top: 100,
-            left: 16,
-            right: 16,
-            child: SizedBox(
-              height: 700,
-              child: Stack(
+            bottom: height! * 0.1,
+            right: width! * 0.029,
+            left: width! * 0.029,
+            top: height! * 0.06,
+            child: Container(
+              height: height! * 0.9,
+              padding: const EdgeInsets.all(8),
+              color: Colors.transparent,
+              child: Column(
                 children: [
-                  Positioned(
-                      right: 41,
+                  SizedBox(
+                    child: Align(
+                      alignment: Alignment.topRight,
                       child: GestureDetector(
                           onTap: () {
                             Navigator.pop(context);
                           },
-                          child: SvgPicture.asset(AppIcons.icCloseBtn))),
+                          child: SvgPicture.asset(AppIcons.icCloseBtn)),
+                    ),
+                  ),
                   Padding(
                     padding:
-                        const EdgeInsets.only(top: 55.0, right: 41, left: 41),
+                        const EdgeInsets.only(top: 10, right: 41, left: 41),
                     child: Container(
-                        height: MediaQuery.of(context).size.height * 0.6,
-                        width: 293,
+                        height: height! * 0.66,
+                        width: width! * 0.8,
                         decoration: BoxDecoration(
                             color: AppColor.white,
                             borderRadius:

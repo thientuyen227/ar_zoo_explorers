@@ -1,6 +1,6 @@
-import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
+import 'package:ar_zoo_explorers/domain/entities/learning_category_entity.dart';
 import 'package:ar_zoo_explorers/features/vocabularydetail/components/item_vocabulary_detail.dart';
 import 'package:ar_zoo_explorers/features/vocabularydetail/presentation/vocabulary_detail_cubit.dart';
 import 'package:ar_zoo_explorers/features/vocabularydetail/presentation/vocabulary_detail_state.dart';
@@ -11,8 +11,8 @@ import 'package:get/get.dart';
 
 @RoutePage()
 class VocabularyDetailPage extends StatefulWidget {
-  VocabularyDetailPage({super.key, required this.categoryId});
-  String categoryId;
+  VocabularyDetailPage({super.key, required this.category});
+  LearningCategoryEntity category;
 
   @override
   State createState() => _State();
@@ -22,8 +22,8 @@ class _State extends BaseState<VocabularyDetailState, VocabularyDetailCubit,
     VocabularyDetailPage> {
   @override
   void initState() {
+    cubit.init(context: context, categoryId: widget.category.id);
     super.initState();
-    cubit.init(categoryId: widget.categoryId);
   }
 
   final languageCode = Get.locale?.languageCode;
@@ -31,7 +31,7 @@ class _State extends BaseState<VocabularyDetailState, VocabularyDetailCubit,
   Widget buildByState(BuildContext context, VocabularyDetailState state) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(LanguageKeys.animals.tr,
+        title: Text(widget.category.nameLocalize,
             style: const TextStyle(
                 fontSize: 20,
                 color: Colors.white,
@@ -42,54 +42,51 @@ class _State extends BaseState<VocabularyDetailState, VocabularyDetailCubit,
         backgroundColor: const Color.fromARGB(255, 109, 189, 255),
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Center(
-            child: Column(
-              children: [
-                const Text(
-                  "Easy",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+        child: Center(
+          child: Column(
+            children: [
+              const Text(
+                "Easy",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(
+                height: 14,
+              ),
+              Container(
+                padding: const EdgeInsets.all(4),
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  color: Color(0xFF49B0AB),
                 ),
-                const SizedBox(
-                  height: 14,
+                child: const Text(
+                  "150 pts",
+                  style: TextStyle(color: AppColor.white, fontSize: 8),
                 ),
-                Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    color: Color(0xFF49B0AB),
+              ),
+              if (state.vocabularies.isNotEmpty)
+                GridView.builder(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.all(10),
+                  itemCount: state.vocabularies.length,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return ItemVocabularyDetail(
+                      vocabularyEntity: state.vocabularies[index],
+                    );
+                  },
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    childAspectRatio: languageCode == 'vi'
+                        ? state.width * 1.65 / state.height
+                        : state.width * 1.52 / state.height,
                   ),
-                  child: const Text(
-                    "150 pts",
-                    style: TextStyle(color: AppColor.white, fontSize: 8),
-                  ),
                 ),
-                if (state.vocabularies.isNotEmpty)
-                  GridView.builder(
-                    shrinkWrap: true,
-                    itemCount: state.vocabularies.length,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          children: [
-                            ItemVocabularyDetail(
-                              vocabularyEntity: state.vocabularies[index],
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 0.1,
-                      childAspectRatio: languageCode == 'vi' ? 0.87 : 0.85,
-                    ),
-                  )
-              ],
-            ),
+              const SizedBox(
+                height: 30,
+              )
+            ],
           ),
         ),
       ),

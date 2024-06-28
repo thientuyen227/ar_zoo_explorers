@@ -112,6 +112,7 @@ class LanguageKeys {
   static const String uppercaseLetters = 'uppercaseLetters';
   static const String lowercaseLetters = 'lowercaseLetters';
   static const String cardinalNumbers = 'cardinalNumbers';
+  static const String practiceWrite = 'practiceWrite';
 
   // Setting Page
   static const String accountManager = 'accountManager';

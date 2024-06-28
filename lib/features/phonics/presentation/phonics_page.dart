@@ -24,27 +24,23 @@ class _State extends BaseState<PhonicsState, PhonicsCubit, PhonicsPage> {
   final bool _isOrientationLocked = true;
   @override
   void initState() {
-    cubit.showLoading();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
     cubit.init();
-    cubit.hideLoading();
     super.initState();
   }
 
   @override
   void dispose() {
+    super.dispose();
     if (_isOrientationLocked) {
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.portraitUp,
         DeviceOrientation.portraitDown,
-        DeviceOrientation.landscapeLeft,
-        DeviceOrientation.landscapeRight,
       ]);
     }
-    super.dispose();
   }
 
   @override
@@ -68,53 +64,55 @@ class _State extends BaseState<PhonicsState, PhonicsCubit, PhonicsPage> {
               },
               child: const ImageSvgUrlCustom(imagePath: AppIcons.icBackPng)),
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: 60),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              renderMotionAndTitle(
-                  LanguageKeys.uppercaseLetters, AppLotties.earth),
-              renderMotionAndTitle(
-                  LanguageKeys.lowercaseLetters, AppLotties.plane),
-              renderMotionAndTitle(
-                  LanguageKeys.cardinalNumbers, AppLotties.snow)
-            ],
-          ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                renderMotionAndTitle(
+                    LanguageKeys.uppercaseLetters, AppLotties.earth),
+                renderMotionAndTitle(
+                    LanguageKeys.lowercaseLetters, AppLotties.plane),
+                renderMotionAndTitle(
+                    LanguageKeys.cardinalNumbers, AppLotties.snow)
+              ],
+            ),
+          ],
         )
       ],
     ));
   }
 
   Widget renderMotionAndTitle(String title, String motion) {
-    return InkWell(
-      onTap: () {
-        String type = '';
-        switch (title) {
-          case LanguageKeys.uppercaseLetters:
-            type = 'upper';
-            break;
-          case LanguageKeys.lowercaseLetters:
-            type = 'lower';
-            break;
-          case LanguageKeys.cardinalNumbers:
-            type = 'number';
-            break;
-          default:
-            return;
-        }
-        context.router.push(
-          PhonicsDetailRoute(type: type),
-        );
-      },
-      child: SizedBox(
-        height: state.height * 0.9,
-        width: state.width * 0.6,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: InkWell(
+        onTap: () {
+          String type = '';
+          switch (title) {
+            case LanguageKeys.uppercaseLetters:
+              type = 'upper';
+              break;
+            case LanguageKeys.lowercaseLetters:
+              type = 'lower';
+              break;
+            case LanguageKeys.cardinalNumbers:
+              type = 'number';
+              break;
+            default:
+              return;
+          }
+          context.router.push(
+            PhonicsDetailRoute(type: type),
+          );
+        },
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Lottie.asset(motion, height: 180, width: 180),
+              Lottie.asset(motion,
+                  height: state.width * 0.5, width: state.width * 0.5),
               const SizedBox(
                 height: 25,
               ),

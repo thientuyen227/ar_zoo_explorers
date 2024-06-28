@@ -12,7 +12,7 @@ class CharsController extends ControllerHelper {
   Rx<CharsEntity> currentChars = Rx(CharsEntity(
     id: '',
     char: '',
-    type: '',
+    imagePaths: {},
     audios: {},
   ));
 
@@ -20,9 +20,9 @@ class CharsController extends ControllerHelper {
 
   Rx<String> searchValue = Rx("");
 
-  Future<CharsEntity?> getChars(BuildContext context, String CharsId) {
+  Future<CharsEntity?> getChars(BuildContext context, String charsId) {
     return processRequest<CharsEntity?>(
-        request: () => _charsRepository.getChars(CharsId),
+        request: () => _charsRepository.getChars(context, charsId),
         onSuccess: (success) => {_setCurrentChars(context, success.data!)},
         onFailure: (failure) =>
             Fluttertoast.showToast(msg: "Access information failed!"));
@@ -33,9 +33,13 @@ class CharsController extends ControllerHelper {
     update();
   }
 
-  Future<List<CharsEntity>?> getAllChars() {
+  Future<List<CharsEntity>?> getAllChars(
+    BuildContext context,
+  ) {
     return processRequest<List<CharsEntity>?>(
-        request: () => _charsRepository.getAllChars(),
+        request: () => _charsRepository.getAllChars(
+              context,
+            ),
         onFailure: (failure) =>
             Fluttertoast.showToast(msg: "Access information failed!"),
         onSuccess: (success) => {_setListChars(success.data!)});
@@ -44,14 +48,6 @@ class CharsController extends ControllerHelper {
   _setListChars(List<CharsEntity> listEntity) {
     listChars.value = listEntity;
     update();
-  }
-
-  Future<void> updateCurrentChars(BuildContext context, String id) async {
-    await processRequest<CharsEntity?>(
-        request: () => _charsRepository.getChars(id),
-        onSuccess: (success) => {_setCurrentChars(context, success.data!)},
-        onFailure: (failure) =>
-            Fluttertoast.showToast(msg: "Access information failed!"));
   }
 
   static CharsController get findOrInitialize {
