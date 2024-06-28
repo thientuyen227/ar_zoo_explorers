@@ -192,6 +192,24 @@ class AuthController extends ControllerHelper {
             Fluttertoast.showToast(msg: "Failed to update information!"));
   }
 
+  Future<UserEntity> updateUserAvatar(
+    BuildContext context, {
+    required String id,
+    required String avatarUrl,
+  }) async {
+    return processRequest<UserEntity>(
+        request: () => _authRepository.updateAvatar(
+              id: id,
+              avatarUrl: avatarUrl,
+            ),
+        onSuccess: (success) => {
+              _setCurrentUser(context, success.data),
+              Fluttertoast.showToast(msg: "Avatar updated successfully!")
+            },
+        onFailure: (failure) =>
+            Fluttertoast.showToast(msg: "Failed to update avatar!"));
+  }
+
   logout(BuildContext context) async {
     await _authRepository.logout();
     _resetCurrentUser();

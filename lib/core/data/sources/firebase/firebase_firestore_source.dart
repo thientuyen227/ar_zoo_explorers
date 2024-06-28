@@ -91,6 +91,12 @@ class FirebaseFirestoreSource {
     return getUser(id);
   }
 
+  Future<UserModel?> updateAvatar(
+      {required String id, required String avatarUrl}) async {
+    await _userModelCollectionRef.doc(id).update({'avatarUrl': avatarUrl});
+    return getUser(id);
+  }
+
   //đưa danh sách các đối tượng vào firebase
   Future<bool> importAnimalModelList(List<AnimalModel> list) async {
     for (var model in list) {

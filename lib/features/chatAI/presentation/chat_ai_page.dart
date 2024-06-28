@@ -34,11 +34,31 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
   ApiService apiService = ApiService();
 
   final ScrollController _scrollController = ScrollController();
+  @override
+  void initState() {
+    cubit.init();
+    super.initState();
+  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   cubit.init().then((value) => setState(() {
+  //         lstMessages.add(Container(
+  //             child:
+  //                 Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+  //           aiAvatar(),
+  //           TextMessage(
+  //               entity: MessageEntity(
+  //                   content: 'Hello, My name is Ar Baby. Can I help you?')),
+  //           const Spacer()
+  //         ])));
+  //       }));
+  // }
 
   @override
   Widget buildByState(BuildContext context, ChatAIState state) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
+      // extendBodyBehindAppBar: true,
       appBar: const ChatAIAppBar(),
       body: SafeArea(
           child: Center(
@@ -55,27 +75,24 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
           ),
         ),
       ))),
-      bottomNavigationBar: Offstage(
-          offstage: !state.isEnabled,
-          child: ChatAIABottomBar(
-            onSendMassage: (MessageEntity message) async {
-              await _sendMessages(message).then((value) {
-                setState(() {
-                  if (message.imagePath!.isEmpty) {
-                    cubit.changeIsImage(false);
-                  } else {
-                    cubit.changeIsImage(true);
-                  }
-                });
-                _sendTextToImage(message.content, File(message.imagePath ?? ''))
-                    .then((value) {
-                  setState(() {
-                    _sendResponse();
-                  });
-                });
-              });
-            },
-          )),
+      bottomNavigationBar: ChatAIBottomBar(
+        onSendMassage: (MessageEntity message) async {
+          await _sendMessages(message);
+          setState(() {
+            if (message.imagePath!.isEmpty) {
+              cubit.changeIsImage(false);
+            } else {
+              cubit.changeIsImage(true);
+            }
+          });
+          _sendTextToImage(message.content, File(message.imagePath ?? ''))
+              .then((value) {
+            setState(() {
+              _sendResponse();
+            });
+          });
+        },
+      ),
       // resizeToAvoidBottomInset: true,
     );
   }
@@ -184,26 +201,22 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
   Future<void> _sendMessages(MessageEntity value) async {
     // _changeEnabledState();
     setState(() {
-      lstMessages.add(
-        Container(
-          child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            const Spacer(),
-            Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-              value.content.isNotEmpty
-                  ? TextMessage(entity: value)
-                  : Container(),
-              value.imagePath!.isNotEmpty
-                  ? ImageMessage(
-                      entity: MessageEntity(
-                      content: value.imagePath!,
-                      contentType: MsgType.image_file.typeString,
-                    ))
-                  : Container(),
-            ]),
-            userAvatar()
+      lstMessages.add(Container(
+        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const Spacer(),
+          Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+            value.content.isNotEmpty ? TextMessage(entity: value) : Container(),
+            value.imagePath!.isNotEmpty
+                ? ImageMessage(
+                    entity: MessageEntity(
+                    content: value.imagePath!,
+                    contentType: MsgType.image_file.typeString,
+                  ))
+                : Container(),
           ]),
-        ),
-      );
+          userAvatar()
+        ]),
+      ));
     });
     await _scrollToBottom();
   }
@@ -296,12 +309,16 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
   // }
 
   Future<void> _initCubit() async {
-    await cubit.init(context).then((value) => setState(() {}));
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _initCubit();
+    await cubit.init().then((value) => setState(() {
+          lstMessages.add(Container(
+              child:
+                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            aiAvatar(),
+            TextMessage(
+                entity: MessageEntity(
+                    content: 'Hello, My name is Ar Baby. Can I help you?')),
+            const Spacer()
+          ])));
+        }));
   }
 }
