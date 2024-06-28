@@ -17,7 +17,6 @@ Future<void> runMain() async {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
     configureDependencies();
-
     await Firebase.initializeApp();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
 
@@ -30,7 +29,7 @@ Future<void> runMain() async {
 
 @RoutePage()
 class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+  const MainPage({super.key});
 
   @override
   State<MainPage> createState() => _MainPageState();
