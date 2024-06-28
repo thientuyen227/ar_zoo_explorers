@@ -40,8 +40,8 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
 
   @override
   void initState() {
+    cubit.init(context: context, categoryId: widget.categoryId);
     super.initState();
-    cubit.init(categoryId: widget.categoryId);
   }
 
   @override
@@ -253,8 +253,8 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
       padding: const EdgeInsets.all(10),
       alignment: Alignment.center,
       child: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          childAspectRatio: 1,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          childAspectRatio: state.height / (state.width * 2.2),
           crossAxisCount: 8,
           crossAxisSpacing: 4,
           mainAxisSpacing: 4,
@@ -274,9 +274,9 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
             alignment: Alignment.center,
             child: TextButton(
               style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.resolveWith<Color>(
-                  (Set<WidgetState> states) {
-                    if (states.contains(WidgetState.pressed)) {
+                backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                  (Set<MaterialState> states) {
+                    if (states.contains(MaterialState.pressed)) {
                       return Theme.of(context)
                           .colorScheme
                           .primary
@@ -285,7 +285,7 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
                     return const Color(0xff7EE7FD);
                   },
                 ),
-                shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
@@ -382,7 +382,7 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
                 color: color,
                 borderRadius: BorderRadius.circular(10),
               ),
-              width: 50, // Điều chỉnh kích thước của mỗi ô
+              width: 50,
               height: 50,
               child: Text(
                 (puzzle.currentValue ?? '').toUpperCase(),

@@ -31,8 +31,8 @@ class _State
 
   @override
   void initState() {
+    cubit.init(context);
     super.initState();
-    cubit.init();
   }
 
   @override
@@ -64,30 +64,34 @@ class _State
               LanguageKeys.choose_topic.tr,
               style: const TextStyle(fontSize: 14),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 0.8,
-                    crossAxisSpacing: 20),
-                itemCount: state.learningcategories!.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      context.router.push(PuzzleWordDetailRoute(
-                          categoryId: state.learningcategories![index].id));
-                    },
-                    child: _renderTopic(
-                        title: state.learningcategories![index].nameLocalize,
-                        image: state.learningcategories![index].imagePath,
-                        level: "level1"),
-                  );
-                },
-              ),
-            )
+            state.height != 0
+                ? Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: state.width * 1.8 / state.height,
+                          crossAxisSpacing: 20),
+                      itemCount: state.learningcategories!.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            context.router.push(PuzzleWordDetailRoute(
+                                categoryId:
+                                    state.learningcategories![index].id));
+                          },
+                          child: _renderTopic(
+                              title:
+                                  state.learningcategories![index].nameLocalize,
+                              image: state.learningcategories![index].imagePath,
+                              level: "level1"),
+                        );
+                      },
+                    ),
+                  )
+                : Container()
           ],
         ),
       ),

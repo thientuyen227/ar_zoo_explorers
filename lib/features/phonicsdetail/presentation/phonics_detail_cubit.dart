@@ -20,11 +20,12 @@ class PhonicsDetailCubit extends BaseCubit<PhonicsDetailState> {
   String englishAlphabet = 'abcdefghijklmnopqrstuvwxyz';
   String numbers = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20';
   List<String>? alphabetChars;
-  Future<void> init({String? type}) async {
+  Future<void> init({required BuildContext context, String? type}) async {
     Size mediaSize = MediaQueryData.fromView(
             WidgetsBinding.instance.platformDispatcher.views.single)
         .size;
-    List<CharsEntity>? charsEntities = await charsController.getAllChars();
+    List<CharsEntity>? charsEntities =
+        await charsController.getAllChars(context);
     if (type != 'number') {
       if (languageCode == 'en') {
         alphabetChars = englishAlphabet.split('');
@@ -38,14 +39,23 @@ class PhonicsDetailCubit extends BaseCubit<PhonicsDetailState> {
       alphabetChars = numbers.split(' ');
       isNumber = true;
     }
+    List<CharsEntity>? filteredEntities = charsEntities?.where((element) {
+      return alphabetChars!.contains(element.char);
+    }).toList();
+    filteredEntities!.sort((a, b) {
+      String aChar = a.char.toLowerCase();
+      String bChar = b.char.toLowerCase();
+      return alphabetChars!
+          .indexOf(aChar)
+          .compareTo(alphabetChars!.indexOf(bChar));
+    });
+
     emit(state.copyWith(
         height: mediaSize.height,
         width: mediaSize.width,
         isNumber: isNumber,
         isUpperCase: isUpperCase,
-        charsEntities: charsEntities?.where((element) {
-          return alphabetChars!.contains(element.char);
-        }).toList()));
+        charsEntities: filteredEntities));
   }
 
   String audioUrl = "audio/vietnamesealphabet.mp3";

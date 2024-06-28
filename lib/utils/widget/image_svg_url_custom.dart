@@ -51,6 +51,7 @@ class ImageSvgUrlCustom extends StatelessWidget {
               );
       }
     } else {
+      print(imagePath);
       return defaultWidget(height: localHeight, width: localwidth);
     }
   }

@@ -12,14 +12,15 @@ import 'package:injectable/injectable.dart';
 class PuzzleWordDetailCubit extends BaseCubit<PuzzleWordDetailState> {
   PuzzleWordDetailCubit() : super(PuzzleWordDetailState());
 
-  void init({required String categoryId}) async {
+  Future<void> init(
+      {required BuildContext context, required String categoryId}) async {
     final questionController = QuestionController.findOrInitialize;
     Size mediaSize = MediaQueryData.fromView(
             WidgetsBinding.instance.platformDispatcher.views.single)
         .size;
     showLoading();
     List<QuestionEntity>? questionEntities =
-        await questionController.getAllQuestions();
+        await questionController.getAllQuestions(context);
     emit(state.copyWith(
         height: mediaSize.height,
         width: mediaSize.width,

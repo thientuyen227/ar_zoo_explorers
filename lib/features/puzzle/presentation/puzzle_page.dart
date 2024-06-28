@@ -37,8 +37,8 @@ class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
 
   @override
   void initState() {
+    cubit.init(context);
     super.initState();
-    cubit.init();
   }
 
   @override
@@ -92,19 +92,19 @@ class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
                 Column(
                   children: [
                     const SizedBox(
-                      height: 80,
+                      height: 50,
                     ),
                     SizedBox(
-                      height: 300,
-                      width: double.infinity,
+                      height: state.height * 0.45,
+                      width: state.width,
                       child: Stack(
                         children: [
                           Positioned(
-                            left: 35,
-                            top: 35,
+                            left: state.width * 0.15,
+                            top: state.height * 0.1,
                             child: Container(
-                              height: 226,
-                              width: 336,
+                              height: state.height * 0.3,
+                              width: state.width * 0.7,
                               decoration: BoxDecoration(
                                 border: Border.all(),
                                 borderRadius:
@@ -114,27 +114,30 @@ class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
                             ),
                           ),
                           Positioned(
-                              left: 45,
-                              top: 45,
-                              child: Container(
-                                height: 226,
-                                width: 336,
-                                padding: const EdgeInsets.all(20),
-                                decoration: BoxDecoration(
-                                  border: Border.all(),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(10)),
-                                  color: AppColor.tinintIce,
-                                ),
-                                child: renderVocabulary(),
-                              )),
+                            left: state.width * 0.17,
+                            top: state.height * 0.11,
+                            child: Container(
+                              height: state.height * 0.3,
+                              width: state.width * 0.7,
+                              padding: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                border: Border.all(),
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(10)),
+                                color: AppColor.tinintIce,
+                              ),
+                              child: renderVocabulary(),
+                            ),
+                          ),
                           Positioned(
-                              top: 120,
-                              child: Image.asset(
-                                AppImages.imgPuzzleDesign,
-                                height: 80,
-                                width: 80,
-                              )),
+                            top: state.height * 0.25,
+                            left: -20,
+                            child: ImageSvgUrlCustom(
+                              imagePath: AppImages.imgPuzzleDesign,
+                              height: state.height * 0.06,
+                              width: state.width * 0.08,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -150,14 +153,13 @@ class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
                         childAspectRatio: 2.3,
                         crossAxisSpacing: 4.5,
                       ),
-                      itemCount: state
-                          .questionEntities![questionIndex].options!.length,
+                      itemCount: 4,
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: selectedAnswerIndex == null
                               ? () => pickAnswer(
-                                  value: state.questionEntities![questionIndex]
-                                      .options![index]["en"]!,
+                                  value:
+                                      state.answersList[questionIndex]![index],
                                   index: index)
                               : null,
                           child: Padding(
@@ -165,8 +167,8 @@ class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
                             child: Column(
                               children: [
                                 renderAnswer(
-                                  option: state.questionEntities![questionIndex]
-                                      .options![index]["en"]!,
+                                  option:
+                                      state.answersList[questionIndex]![index],
                                   question: state
                                       .questionEntities![questionIndex]
                                       .questionLocalize,
@@ -184,7 +186,11 @@ class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
                   ],
                 ),
                 if (isCorrectAnswer != null && isCorrectAnswer == true) ...{
-                  const Positioned(bottom: 30, child: CongratulationWidget())
+                  Positioned(
+                      left: 20,
+                      right: 20,
+                      bottom: state.height * 0.17,
+                      child: const CongratulationWidget())
                 }
               ],
             )
@@ -253,19 +259,19 @@ class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
     return Column(
       children: [
         Padding(
-            padding: const EdgeInsets.all(15.0),
+            padding: const EdgeInsets.only(top: 15.0),
             child: ImageSvgUrlCustom(
               imagePath: state.questionEntities![questionIndex].image!,
-              width: 80,
-              height: 80,
+              width: state.width * 0.3,
+              height: state.height * 0.15,
             )),
         Padding(
           padding: const EdgeInsets.only(right: 30.0, left: 30),
           child: Row(
             children: [
-              GestureDetector(
-                onTap: () {},
-                child: Image.asset(
+              IconButton(
+                onPressed: () {},
+                icon: Image.asset(
                   AppIcons.icSnail,
                   height: 45,
                   width: 45,

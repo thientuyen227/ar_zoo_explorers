@@ -45,6 +45,9 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: StoryTopicRoute.page, path: '/storytopic'),
         AutoRoute(page: PhonicsDetailRoute.page, path: '/phonicsdetail'),
         AutoRoute(page: ChatAIRoute.page, path: '/chatai'),
-        AutoRoute(page: WriteCharsRoute.page, path: '/writechars'),
+        AutoRoute(page: WritingPracticeRoute.page, path: '/writingpractice'),
+        AutoRoute(
+            page: WritingPracticeDetailRoute.page,
+            path: '/writingpracticedetail'),
       ];
 }

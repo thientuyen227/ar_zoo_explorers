@@ -5,39 +5,25 @@ import 'package:ar_zoo_explorers/core/success.dart';
 import 'package:ar_zoo_explorers/domain/entities/question_entity.dart';
 import 'package:ar_zoo_explorers/domain/repositories/question_repository.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 
 class QuestionRepositoryImplement implements QuestionRepository {
   final FirebaseFirestoreSource _firestoreSource = FirebaseFirestoreSource();
   @override
   Future<Either<Failure, Success<QuestionEntity?>>> getQuestion(
-      String questionId) {
-    return ResponseHandler.processResponse(() async {
-      return Success(data: await _firestoreSource.getQuestion(questionId));
-    });
-  }
-
-  @override
-  Future<Either<Failure, Success<List<QuestionEntity>?>>> getAllQuestion() {
-    return ResponseHandler.processResponse(() async {
-      return Success(data: await _firestoreSource.getAllQuestion());
-    });
-  }
-
-  @override
-  Future<Either<Failure, Success<bool>>> deleteQuestion(
-      String questionEntityId) {
+      BuildContext context, String questionId) {
     return ResponseHandler.processResponse(() async {
       return Success(
-          data: await _firestoreSource.deleteQuestion(questionEntityId));
+          data: await _firestoreSource.getQuestion(context, questionId));
     });
   }
 
   @override
-  Future<Either<Failure, Success<QuestionEntity?>>> updateQuestion(
-      QuestionEntity questionEntity) {
+  Future<Either<Failure, Success<List<QuestionEntity>?>>> getAllQuestion(
+    BuildContext context,
+  ) {
     return ResponseHandler.processResponse(() async {
-      return Success(
-          data: await _firestoreSource.updateQuestion(questionEntity));
+      return Success(data: await _firestoreSource.getAllQuestion(context));
     });
   }
 }

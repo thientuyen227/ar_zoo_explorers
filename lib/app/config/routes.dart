@@ -40,7 +40,8 @@ class Routes {
   static const String storytopic = "/storytopic";
   static const String phonicsdetail = "/phonicsdetail";
   static const String chatai = "/chatai";
-  static const String writechars = "/writechars";
+  static const String writingpracticedetail = "/writingpracticedetail";
+  static const String writingpractice = "/writingpractice";
 
   static Route<T> fadeThrough<T>(RouteSettings settings, WidgetBuilder page,
       {int duration = 300}) {

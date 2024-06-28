@@ -17,23 +17,15 @@ class ChatAICubit extends BaseCubit<ChatAIState> {
   final Dio _dio = Dio();
 
   Future<void> init() async {
-    showLoading();
     Size mediaSize = MediaQueryData.fromView(
             WidgetsBinding.instance.platformDispatcher.views.single)
         .size;
+    showLoading();
     emit(state.copyWith(
-      height: mediaSize.height,
-      width: mediaSize.width,
-      isEnabled: true,
-      isImage: false,
-    ));
-
-    // await state.setAttributes(
-    //   height: mediaSize.height,
-    //   width: mediaSize.width,
-    // );
-
-    print("Cubit.Init() : Get data");
+        height: mediaSize.height,
+        width: mediaSize.width,
+        isImage: false,
+        isEnabled: true));
     hideLoading();
   }
 

@@ -31,7 +31,7 @@ class _CongratulationWidgetState extends State<CongratulationWidget> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           audioPlayer.play(UrlSource(
-              "https://firebasestorage.googleapis.com/v0/b/ar-zoo-explorers.appspot.com/o/effects%2Fsounds%2Fcongratulation.mp3?alt=media&token=b594bde8-46e7-408d-b158-90a172a968c0"));
+              "https://firebasestorage.googleapis.com/v0/b/ar-zoo-explorers.appspot.com/o/effects%2Fsounds%2Fcongratulation.mp3?alt=media"));
           return Lottie.asset(AppLotties.congratulation,
               height: 400, width: 400);
         } else {

@@ -125,6 +125,7 @@ const Map<String, String> en_us = {
   'uppercaseLetters': 'Uppercase letters',
   'lowercaseLetters': 'Lowercase letters',
   'cardinalNumbers': 'Cardinal numbers',
+  'practiceWrite': 'Practice write',
 
   // Setting Pages
   'accountManager': 'Account Manager',

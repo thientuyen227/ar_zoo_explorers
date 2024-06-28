@@ -39,21 +39,6 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
     cubit.init();
     super.initState();
   }
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   cubit.init().then((value) => setState(() {
-  //         lstMessages.add(Container(
-  //             child:
-  //                 Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-  //           aiAvatar(),
-  //           TextMessage(
-  //               entity: MessageEntity(
-  //                   content: 'Hello, My name is Ar Baby. Can I help you?')),
-  //           const Spacer()
-  //         ])));
-  //       }));
-  // }
 
   @override
   Widget buildByState(BuildContext context, ChatAIState state) {
@@ -308,17 +293,7 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
   //   });
   // }
 
-  Future<void> _initCubit() async {
-    await cubit.init().then((value) => setState(() {
-          lstMessages.add(Container(
-              child:
-                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            aiAvatar(),
-            TextMessage(
-                entity: MessageEntity(
-                    content: 'Hello, My name is Ar Baby. Can I help you?')),
-            const Spacer()
-          ])));
-        }));
-  }
+  // Future<void> _initCubit() async {
+  //   await cubit.init(context).then((value) => setState(() {}));
+  // }
 }
