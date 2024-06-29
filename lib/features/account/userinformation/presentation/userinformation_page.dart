@@ -21,7 +21,6 @@ import 'package:intl/intl.dart';
 
 import '../../../../app/theme/icons.dart';
 import '../../../../base/base_state.dart';
-import '../../../../core/data/controller/auth_controller.dart';
 
 @RoutePage()
 class UserInformationPage extends StatefulWidget {
@@ -39,19 +38,16 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
         _formKey.currentState?.patchValue({'provincial': state.provincial});
-        // _formKey.currentState?.patchValue({'address': state.address});
+        _formKey.currentState?.patchValue({'address': state.address});
+        usernameController.text = cubit.controller.currentUser.value.fullname;
       });
     });
     super.initState();
-    cubit.setUserAvatar(controller.currentUser.value.avatarUrl);
-    cubit.setProvider(controller.currentUser.value.provider);
-    cubit.setGender(controller.currentUser.value.gender);
-    // setValueAddress(controller.currentUser.value.address);
   }
 
-  final controller = AuthController.findOrInitialize;
   final _formKey = GlobalKey<FormBuilderState>();
   final ImagePicker _picker = ImagePicker();
+  TextEditingController usernameController = TextEditingController();
   File? _selectedImage;
 
   @override
@@ -80,21 +76,22 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
                     Container(
                         padding: const EdgeInsets.only(left: 30, right: 30),
                         child: Column(children: [
-                          textForm(LanguageKeys.fullname.tr, 0,
-                              controller.currentUser.value.fullname),
+                          // textForm(LanguageKeys.fullname.tr, 0,
+                          //     cubit.controller.currentUser.value.fullname),
+                          usernameForm(),
                           textForm(LanguageKeys.emailAddress.tr, 1,
-                              controller.currentUser.value.email),
+                              cubit.controller.currentUser.value.email),
                           dateForm(),
                           radioForm(LanguageKeys.gender.tr),
                           textForm(LanguageKeys.phone.tr, 2,
-                              controller.currentUser.value.phone),
+                              cubit.controller.currentUser.value.phone),
                           dropdownForm(
                               "${LanguageKeys.province.tr} / ${LanguageKeys.city.tr}"),
                           textForm(LanguageKeys.address.tr, 3, state.address)
                         ])),
                     const SizedBox(height: 20),
                     FutureBuilder(
-                        future: controller.getCurrentUser(context),
+                        future: cubit.controller.getCurrentUser(context),
                         builder: (context, snapshot) =>
                             Align(child: submitButton(context, snapshot))),
                     const SizedBox(height: 40),
@@ -151,6 +148,33 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
     );
   }
 
+  Widget usernameForm() {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      titleForm(LanguageKeys.fullname.tr),
+      const SizedBox(height: 10),
+      TextFormField(
+        controller: usernameController,
+        // initialValue: cubit.controller.currentUser.value.fullname,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+          hintText: state.ListFormItem[0].hint_text,
+          contentPadding: const EdgeInsets.all(10),
+          prefixIcon: Image.asset(state.ListFormItem[0].icon_prefix,
+              height: 20, width: 20),
+        ),
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        validator: FormBuilderValidators.compose([
+          FormBuilderValidators.required(
+              errorText: LanguageKeys.requiredField.tr),
+          (value) {
+            return _onHandleValidator(0, value);
+          }
+        ]),
+      ),
+      const SizedBox(height: 12)
+    ]);
+  }
+
   Widget dropdownForm(String title) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       titleForm(title),
@@ -184,7 +208,6 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
                 return '${LanguageKeys.msg_invalidProvinceCity.tr}!';
               }
               return null;
-              //return null;
             }
           ])),
       const SizedBox(height: 12)
@@ -246,9 +269,9 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
               border: Border.all(color: Colors.white, width: 5),
               shape: BoxShape.circle),
           child: ClipOval(
-            child: (cubit.userAvatar == "")
+            child: (state.userAvatar == "")
                 ? Image.asset(AppImages.imgProfile128x128, fit: BoxFit.cover)
-                : Image.network(cubit.userAvatar, fit: BoxFit.cover),
+                : Image.network(state.userAvatar, fit: BoxFit.cover),
           )),
       updateAvatarButton()
     ]);
@@ -310,7 +333,7 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
       FormBuilderRadioGroup(
           name: 'gender',
           wrapAlignment: WrapAlignment.spaceEvenly,
-          initialValue: cubit.gender,
+          initialValue: state.gender,
           decoration: InputDecoration(
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
@@ -386,48 +409,40 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
   }
 
   Future<void> _uploadInformation(BuildContext context) async {
-    await controller.updateUserProfile(context,
-        id: controller.currentUser.value.id,
-        fullname: _formKey.currentState!.fields['fullname']!.value,
+    await cubit.controller.updateUserProfile(context,
+        id: cubit.controller.currentUser.value.id,
+        fullname: usernameController.value.text,
         phone: _formKey.currentState!.fields['phone']!.value,
-        avatarUrl: cubit.userAvatar,
+        avatarUrl: state.userAvatar,
         address: _getAddress(),
         birth: cubit.getBirthday(),
-        provider: cubit.provider,
+        provider: state.provider,
         gender: _formKey.currentState!.fields['gender']!.value,
-        role: controller.currentUser.value.role,
-        status: controller.currentUser.value.status);
+        role: cubit.controller.currentUser.value.role,
+        status: cubit.controller.currentUser.value.status);
+    // print(usernameController.value.text);
   }
 
   Future<void> _updateAvatar(BuildContext context, String url) async {
-    await controller.updateUserAvatar(
+    await cubit.controller.updateUserAvatar(
       context,
-      id: controller.currentUser.value.id,
+      id: cubit.controller.currentUser.value.id,
       avatarUrl: url,
     );
   }
 
-  void setValueAddress(String address) {
-    cubit.setAddress(address);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {
-        _formKey.currentState?.patchValue({'provincial': state.provincial});
-        // _formKey.currentState?.patchValue({'address': state.address});
-      });
-    });
-  }
-
   Future<void> updateAvatar(BuildContext context) async {
     XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    String imageName = cubit.avatarName(controller.currentUser.value.fullname);
+    String imageName =
+        cubit.avatarName(cubit.controller.currentUser.value.fullname);
     if (image != null) {
       cubit.showLoading();
       String? downloadURL =
           // ignore: use_build_context_synchronously
-          await controller.uploadAvatar(context, image.path, imageName);
+          await cubit.controller.uploadAvatar(context, image.path, imageName);
       await _updateAvatar(context, downloadURL);
       setState(() {
-        cubit.userAvatar = downloadURL;
+        state.userAvatar = downloadURL;
       });
       cubit.hideLoading();
     } else {
@@ -442,7 +457,6 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
         return cubit.onCheckFullname(value);
       case 2:
         return cubit.onCheckPhoneNumber(value);
-
       default:
         return null;
     }
