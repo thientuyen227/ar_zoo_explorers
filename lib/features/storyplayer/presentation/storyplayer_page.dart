@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ar_zoo_explorers/app/config/routes.dart';
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
@@ -68,7 +69,7 @@ class _State
   Widget viewModelButton() {
     return GestureDetector(
         onTap: () async {
-          await _showModelBottomSheet();
+          await _showModelBottomSheet(context);
         },
         child: Container(
           height: state.width * 0.16,
@@ -456,7 +457,7 @@ class _State
       print("Loop");
     } else {
       await _onChangeIsPaused();
-      await _showModelBottomSheet().then((value) => setState(() {
+      await _showModelBottomSheet(context).then((value) => setState(() {
             print("No Loop");
           }));
     }
@@ -492,6 +493,13 @@ class _State
 
   Future<void> _updateSliderValue(double value) async {
     await setVolume(value);
+  }
+
+  Future<void> _navigatorToModel(String modelId) async {
+    cubit.showLoading();
+    await cubit.animalController.updateCurrentAnimal(context, modelId);
+    context.router.pushNamed(Routes.modeldetail);
+    cubit.hideLoading();
   }
 
   Future<void> skipAudio15s(bool skipForward) async {
@@ -545,8 +553,11 @@ class _State
     await cubit.updatePausedTime(context);
   }
 
-  Future<void> _showModelBottomSheet() async {
+  Future<void> _showModelBottomSheet(BuildContext context) async {
     if (cubit.storyController.currentStory.value.modelId.isNotEmpty) {
+      // print(cubit.storyController.currentStory.value.modelId);
+      await cubit.aniCateController.getAllAnimalCategories(context);
+      await cubit.animalController.getAllAnimals(context);
       await showModalBottomSheet(
         context: context,
         isScrollControlled: true,
@@ -555,7 +566,9 @@ class _State
                 top: Radius.circular(state.height * 0.025))),
         barrierColor: Colors.grey.withOpacity(0.15),
         builder: (BuildContext context) {
-          return const ModelBottomSheet();
+          return ModelBottomSheet(
+              lstModelId: cubit.storyController.currentStory.value.modelId,
+              onTapped: _navigatorToModel);
         },
       );
     } else {
