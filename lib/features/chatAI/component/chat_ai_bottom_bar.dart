@@ -10,6 +10,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 class ChatAIBottomBar extends StatefulWidget {
   final ValueChanged<MessageEntity> onSendMassage;
@@ -22,6 +23,8 @@ class ChatAIBottomBar extends StatefulWidget {
 class _ChatAIBottomBarState extends State<ChatAIBottomBar> {
   double width = 0;
   double height = 0;
+  late SpeechToText _speech;
+  bool _isListening = false;
 
   final _formKey = GlobalKey<FormBuilderState>();
 
@@ -30,6 +33,36 @@ class _ChatAIBottomBarState extends State<ChatAIBottomBar> {
   bool isImage = false;
   XFile? image;
   MessageEntity? messageEntity;
+
+  void _initSpeech() async {
+    bool available = await _speech.initialize(
+      onStatus: (val) => print('onStatus: $val'),
+      onError: (val) => print('onError: $val'),
+    );
+    if (available) {
+      setState(() => _isListening = false);
+    }
+  }
+
+  void _startListening() {
+    if (!_speech.isAvailable || _isListening) {
+      return;
+    }
+    setState(() => _isListening = true);
+    _speech.listen(
+      onResult: (val) => setState(() {
+        editingController.text = val.recognizedWords;
+      }),
+    );
+  }
+
+  void _stopListening() {
+    if (_isListening) {
+      _speech.stop();
+      editingController.text = LanguageKeys.write_message.tr;
+      setState(() => _isListening = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +87,12 @@ class _ChatAIBottomBarState extends State<ChatAIBottomBar> {
                         isImage
                             ? selectedImage(File(image!.path))
                             : btnCamera(),
+                        FloatingActionButton(
+                          onPressed:
+                              _isListening ? _stopListening : _startListening,
+                          child:
+                              Icon(_isListening ? Icons.mic : Icons.mic_none),
+                        ),
                         Expanded(child: boxChat()),
                         btnSend()
                       ]),
@@ -280,5 +319,7 @@ class _ChatAIBottomBarState extends State<ChatAIBottomBar> {
   void initState() {
     super.initState();
     _setDimension();
+    _speech = SpeechToText();
+    _initSpeech();
   }
 }
