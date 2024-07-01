@@ -30,6 +30,14 @@ class _State
   Timer timer = Timer(Duration.zero, () {});
 
   @override
+  void initState() {
+    cubit.init(context);
+    _onPlayerStateChanged();
+    super.initState();
+    // _initCubit();
+  }
+
+  @override
   Widget buildByState(BuildContext context, StoryPlayerState state) {
     return PopScope(
         canPop: false,
@@ -69,6 +77,7 @@ class _State
   Widget viewModelButton() {
     return GestureDetector(
         onTap: () async {
+          print(cubit.storyController.currentStory.value.modelId);
           await _showModelBottomSheet(context);
         },
         child: Container(
@@ -580,23 +589,17 @@ class _State
     await cubit.updateComplete(context);
   }
 
-  Future<void> _initCubit() async {
-    await cubit.showLoading();
-    cubit.init(context);
-    await _onPlayerStateChanged();
-    // await _playAudio();
-    await cubit.hideLoading();
-  }
+  // Future<void> _initCubit() async {
+  //   await cubit.showLoading();
+  //   cubit.init(context);
+  //   await _onPlayerStateChanged();
+  //   // await _playAudio();
+  //   await cubit.hideLoading();
+  // }
 
   Future<void> _disposePage() async {
     await stopTimer();
     await stopAudio();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _initCubit();
   }
 
   @override
