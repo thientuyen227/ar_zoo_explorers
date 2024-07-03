@@ -98,7 +98,7 @@ class _ModelDetailLoadingState extends State<ModelDetailLoading> {
     audioPlayer.setVolume(0.9);
     audioPlayer.play(AssetSource(assetSound));
     Future.delayed(const Duration(seconds: 2), () {
-      if (!widget.isClosedLoading.value) {
+      if (widget.isClosedLoading.value) {
         _checkClosedValue();
       }
     });

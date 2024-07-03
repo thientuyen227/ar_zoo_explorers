@@ -9,6 +9,7 @@ class ModelDetailState {
 
   final PageStatus pageStatus;
   bool isLoaded;
+  bool isDownloading;
 
   double height;
   double width;
@@ -28,6 +29,7 @@ class ModelDetailState {
   ModelDetailState({
     this.pageStatus = PageStatus.loading,
     this.isLoaded = false,
+    this.isDownloading = false,
     this.height = 0,
     this.width = 0,
     this.views = 0,
@@ -47,6 +49,7 @@ class ModelDetailState {
   ModelDetailState copyWith({
     PageStatus? pageStatus,
     bool? isLoaded,
+    bool? isDownloading,
     double? height,
     double? width,
     int? views,
@@ -65,6 +68,7 @@ class ModelDetailState {
     return ModelDetailState(
       pageStatus: pageStatus ?? this.pageStatus,
       isLoaded: isLoaded ?? this.isLoaded,
+      isDownloading: isDownloading ?? this.isDownloading,
       height: height ?? this.height,
       width: width ?? this.width,
       views: views ?? this.views,
@@ -85,6 +89,7 @@ class ModelDetailState {
   setAttributes({
     PageStatus? pageStatus,
     bool? isLoaded,
+    bool? isDownloading,
     double? height,
     double? width,
     int? views,
@@ -101,7 +106,8 @@ class ModelDetailState {
     ARGBImage? listBlenderColor,
   }) async {
     this.pageStatus ?? this.pageStatus;
-    this.isLoaded ?? this.isLoaded;
+    this.isLoaded = isLoaded ?? this.isLoaded;
+    this.isDownloading = isDownloading ?? this.isDownloading;
     this.height = height ?? this.height;
     this.width = width ?? this.width;
     this.views = views ?? this.views;

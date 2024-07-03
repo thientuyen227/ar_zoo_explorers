@@ -1,3 +1,4 @@
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/features/modeldetail/components/model_detail_loading.dart';
 import 'package:ar_zoo_explorers/features/modeldetail/presentation/modeldetail_cubit.dart';
@@ -5,6 +6,7 @@ import 'package:ar_zoo_explorers/features/modeldetail/presentation/modeldetail_s
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 
 import '../../../app/config/routes.dart';
 import '../../../base/base_state.dart';
@@ -36,8 +38,11 @@ class _State
             extendBodyBehindAppBar: true,
             appBar: AppBar(
                 centerTitle: true,
-                title: const Text("Animal Detail",
-                    style: TextStyle(fontSize: 20, color: Colors.white)),
+                title: Text(LanguageKeys.model_details.tr,
+                    style: const TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold)),
                 backgroundColor: Colors.transparent,
                 elevation: 0,
                 leading: const Column(
@@ -202,11 +207,30 @@ class _State
   }
 
   Widget arButton(bool isDownload) {
-    if (isDownload == false) {
-      return downloadButton();
+    if (state.isDownloading) {
+      return downloadCircle();
     } else {
-      return cameraButton();
+      if (isDownload == false) {
+        return downloadButton();
+      } else {
+        return cameraButton();
+      }
     }
+  }
+
+  Widget downloadCircle() {
+    return Positioned(
+        top: state.height * 0.15,
+        right: state.width * 0.05,
+        child: SizedBox(
+            width: state.width * 0.11,
+            height: state.width * 0.11,
+            child: const CircularProgressIndicator(
+              backgroundColor: Colors.grey,
+              color: Colors.white,
+              strokeWidth: 6.0,
+              strokeCap: StrokeCap.round,
+            )));
   }
 
   Widget cameraButton() {
@@ -234,7 +258,9 @@ class _State
         right: state.width * 0.05,
         child: GestureDetector(
             onTap: () async {
-              Fluttertoast.showToast(msg: "Downloading animal!");
+              Fluttertoast.showToast(
+                  msg:
+                      "Downloading ${cubit.animalController.currentAnimal.value.name}!");
               await downloadAndUnpack();
             },
             child: Stack(alignment: Alignment.center, children: [

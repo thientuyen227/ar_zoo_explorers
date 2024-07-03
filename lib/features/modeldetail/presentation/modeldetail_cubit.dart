@@ -1,13 +1,16 @@
 import 'dart:io';
 
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/core/data/controller/animal_controller.dart';
 import 'package:ar_zoo_explorers/core/data/controller/animal_detail_controller.dart';
 import 'package:ar_zoo_explorers/features/modeldetail/presentation/modeldetail_state.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as img;
 import 'package:injectable/injectable.dart';
@@ -22,7 +25,7 @@ class ModelDetailCubit extends BaseCubit<ModelDetailState> {
   final animalController = AnimalController.findOrInitialize;
   final detailController = AnimalDetailController.findOrInitialize;
 
-  final ValueNotifier<bool> isClosedLoading = ValueNotifier<bool>(true);
+  final ValueNotifier<bool> isClosedLoading = ValueNotifier<bool>(false);
 
   FirebaseStorage storage = FirebaseStorage.instance;
 
@@ -57,6 +60,7 @@ class ModelDetailCubit extends BaseCubit<ModelDetailState> {
       reproduction: detailController.currentAnimalDetail.value.reproduction,
       culturalFigure: detailController.currentAnimalDetail.value.culturalFigure,
       //INFORMATION OF ANIMAL MODEL
+      isDownloading: false,
       isLoaded: true,
     ));
 
@@ -66,9 +70,17 @@ class ModelDetailCubit extends BaseCubit<ModelDetailState> {
     hideLoading();
   }
 
+  Future<void> onChangeBackgroundColor(Color newColor) async {
+    emit(state.copyWith(backgroundColor: newColor));
+  }
+
+  Future<void> onChangeDownloadStatus(bool status) async {
+    emit(state.copyWith(isDownloading: status));
+  }
+
   Future<void> _setBackgroundColor() async {
     Color newColor = await getBlendedColorFromImage(state.imagePath);
-    state.backgroundColor = newColor;
+    await onChangeBackgroundColor(newColor);
   }
 
   Future<img.Image> getImageFromNetwork(String imageUrl) async {
@@ -128,25 +140,37 @@ class ModelDetailCubit extends BaseCubit<ModelDetailState> {
   }
 
   Future<void> downloadAndUnpack(String filename, String type) async {
-    Map<String, dynamic> filePathInfo = await getFilePath(filename, type);
-    File file = filePathInfo['file'];
-    bool filePath = await checkFileExits(file.path);
-    //get link download
-    String modelUrl = await storage
-        .ref()
-        .child("animal_models/" '$filename.$type')
-        .getDownloadURL();
-    //Fluttertoast.showToast(msg: modelUrl);
-    httpClient = HttpClient();
+    try {
+      await onChangeDownloadStatus(true);
+      Map<String, dynamic> filePathInfo = await getFilePath(filename, type);
+      File file = filePathInfo['file'];
+      bool filePath = await checkFileExits(file.path);
+      //get link download
+      String modelUrl = await storage
+          .ref()
+          .child("animal_models/" '$filename.$type')
+          .getDownloadURL();
+      //Fluttertoast.showToast(msg: modelUrl);
+      httpClient = HttpClient();
 
-    if (!filePath) {
-      var request = await httpClient!.getUrl(Uri.parse(modelUrl));
-      var response = await request.close();
-      var bytes = await consolidateHttpClientResponseBytes(response);
-      await file.writeAsBytes(bytes);
+      if (!filePath) {
+        var request = await httpClient!.getUrl(Uri.parse(modelUrl));
+        var response = await request.close();
+        var bytes = await consolidateHttpClientResponseBytes(response);
+        await file.writeAsBytes(bytes);
+      }
+      await onChangeDownloadStatus(false);
+      print("TTTT model: ${file.path}");
+      Fluttertoast.showToast(
+          msg: "${(LanguageKeys.msg_download_model_success.tr)}!");
+    } catch (e, stackTrace) {
+      print('[Download model Failed: $e]');
+      FirebaseCrashlytics.instance.recordError(e, stackTrace);
+      Fluttertoast.showToast(
+          msg: "${(LanguageKeys.msg_download_model_failed.tr)}!");
+      await Future.delayed(const Duration(milliseconds: 2000));
+      await onChangeDownloadStatus(false);
     }
-    print("TTTT model: ${file.path}");
-    Fluttertoast.showToast(msg: "Download thành công!");
   }
 
   Future<bool> downloadModel(String name, String type) async {
