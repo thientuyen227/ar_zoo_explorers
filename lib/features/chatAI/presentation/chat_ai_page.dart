@@ -10,6 +10,7 @@ import 'package:ar_zoo_explorers/domain/entities/message_entity.dart';
 import 'package:ar_zoo_explorers/features/base-model/message_type.dart';
 import 'package:ar_zoo_explorers/features/chatAI/component/chai_ai_app_bar.dart';
 import 'package:ar_zoo_explorers/features/chatAI/component/chat_ai_bottom_bar.dart';
+import 'package:ar_zoo_explorers/features/chatAI/component/chat_ai_loading.dart';
 import 'package:ar_zoo_explorers/features/chatAI/component/image_message.dart';
 import 'package:ar_zoo_explorers/features/chatAI/component/text_message.dart';
 import 'package:ar_zoo_explorers/features/chatAI/presentation/chat_ai_cubit.dart';
@@ -18,6 +19,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:language_detector/language_detector.dart';
+import 'package:lottie/lottie.dart';
 
 @RoutePage()
 class ChatAIPage extends StatefulWidget {
@@ -42,43 +44,62 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
 
   @override
   Widget buildByState(BuildContext context, ChatAIState state) {
-    return Scaffold(
-      // extendBodyBehindAppBar: true,
-      appBar: const ChatAIAppBar(),
-      body: SafeArea(
-          child: Center(
-              child: GestureDetector(
-        onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-        child: Container(
-          height: state.height,
-          width: state.width,
-          padding: const EdgeInsets.all(10),
-          color: Colors.grey.shade200,
-          child: SingleChildScrollView(
-            controller: _scrollController,
-            child: boxChat(),
-          ),
-        ),
-      ))),
-      bottomNavigationBar: ChatAIBottomBar(
-        onSendMassage: (MessageEntity message) async {
-          await _sendMessages(message);
-          setState(() {
-            if (message.imagePath!.isEmpty) {
-              cubit.changeIsImage(false);
-            } else {
-              cubit.changeIsImage(true);
-            }
-          });
-          _sendTextToImage(message.content, File(message.imagePath ?? ''))
-              .then((value) {
-            setState(() {
-              _sendResponse();
-            });
-          });
-        },
-      ),
-      // resizeToAvoidBottomInset: true,
+    return state.isLoaded
+        ? Scaffold(
+            extendBodyBehindAppBar: true,
+            appBar: const ChatAIAppBar(),
+            body: Center(
+                child: GestureDetector(
+              onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+              child: Stack(
+                children: [
+                  chatBG(),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: kToolbarHeight +
+                            MediaQuery.of(context).padding.top),
+                    child: Container(
+                      height: state.height,
+                      width: state.width,
+                      padding: const EdgeInsets.only(right: 10, left: 10),
+                      color: Colors.grey.shade200.withOpacity(0.1),
+                      child: SingleChildScrollView(
+                        controller: _scrollController,
+                        child: boxChat(),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )),
+            bottomNavigationBar: ChatAIBottomBar(
+              onSendMassage: (MessageEntity message) async {
+                await _sendMessages(message);
+                setState(() {
+                  if (message.imagePath!.isEmpty) {
+                    cubit.changeIsImage(false);
+                  } else {
+                    cubit.changeIsImage(true);
+                  }
+                });
+                _sendTextToImage(message.content, File(message.imagePath ?? ''))
+                    .then((value) {
+                  setState(() {
+                    _sendResponse();
+                  });
+                });
+              },
+            ),
+            // resizeToAvoidBottomInset: true,
+          )
+        : ChatAILoading(isClosedLoading: cubit.isClosedLoading);
+  }
+
+  Widget chatBG() {
+    return SizedBox(
+      width: state.width,
+      height: state.height,
+      child: Lottie.asset(AppLotties.bgForest, fit: BoxFit.cover),
     );
   }
 
@@ -285,15 +306,4 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
       );
     }
   }
-
-  // Future<void> _changeEnabledState() async {
-  //   setState(() {
-  //     isEnabled = !isEnabled;
-  //     print(isEnabled);
-  //   });
-  // }
-
-  // Future<void> _initCubit() async {
-  //   await cubit.init(context).then((value) => setState(() {}));
-  // }
 }

@@ -64,6 +64,8 @@ const Map<String, String> vi_vn = {
   'update': 'Cập nhật',
   'birthday': 'Ngày sinh',
   'submit': 'Gửi',
+  "camera": 'Máy ảnh',
+  "gallery": 'Thư viện',
 
   'goToLogin': 'Đi tới đăng nhập',
   'rememberPass': 'Nhớ mật khẩu',

@@ -27,17 +27,14 @@ class _TextMessageState extends State<TextMessage> {
         padding: EdgeInsets.fromLTRB(height * 0.01, 5, height * 0.01, 5),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
-            color: AppColor.primaryColor),
-        child: Column(
-            mainAxisAlignment:
-                MainAxisAlignment.center, // Căn giữa theo chiều dọc
-            children: [
-              Text(
-                widget.entity.content,
-                style: const TextStyle(color: AppColor.white, fontSize: 17),
-                softWrap: true,
-              )
-            ]));
+            color: Colors.amber.shade600.withOpacity(0.95)),
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Text(
+            widget.entity.content,
+            style: const TextStyle(color: AppColor.white, fontSize: 17),
+            softWrap: true,
+          )
+        ]));
   }
 
   Future<void> _setDimension() async {

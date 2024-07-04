@@ -76,6 +76,8 @@ const Map<String, String> en_us = {
 
   'i_understood_the': 'I understand the',
   'chat_ai': 'Chat with Ar-Baby',
+  "camera": 'Camera',
+  "gallery": 'Gallery',
 
   // Welcome
   'welcome_start': 'Start',

@@ -11,6 +11,8 @@ class ChatAIState {
   bool isEnabled;
   bool isImage;
 
+  bool isLoaded = false;
+
   ConversationEntity userChat;
   List<MessageEntity> messages;
 
@@ -20,6 +22,7 @@ class ChatAIState {
     this.width = 0,
     this.isEnabled = true,
     this.isImage = false,
+    this.isLoaded = false,
     ConversationEntity? userChat,
     this.messages = const [],
   }) : userChat = userChat ??
@@ -38,6 +41,7 @@ class ChatAIState {
     double? width,
     bool? isEnabled,
     bool? isImage,
+    bool? isLoaded,
     ConversationEntity? userChat,
     List<MessageEntity>? messages,
   }) {
@@ -49,6 +53,7 @@ class ChatAIState {
       isImage: isImage ?? this.isImage,
       userChat: userChat ?? this.userChat,
       messages: messages ?? this.messages,
+      isLoaded: isLoaded ?? this.isLoaded,
     );
   }
 
@@ -57,6 +62,7 @@ class ChatAIState {
     double? width,
     bool? isEnabled,
     bool? isImage,
+    bool? isLoaded,
     ConversationEntity? userChat,
     List<MessageEntity>? messages,
   }) async {
@@ -66,5 +72,6 @@ class ChatAIState {
     this.isImage = isImage ?? this.isImage;
     this.userChat = userChat ?? this.userChat;
     this.messages = messages ?? this.messages;
+    this.isLoaded = isLoaded ?? this.isLoaded;
   }
 }
