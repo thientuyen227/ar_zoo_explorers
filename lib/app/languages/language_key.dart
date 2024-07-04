@@ -325,8 +325,12 @@ class LanguageKeys {
   static const String volume = 'volume';
 
   //MODEL
+  static const String msg_download_model_success = 'msg_download_model_success';
+  static const String msg_download_model_failed = 'msg_download_model_failed';
+
   static const String model_in_category_empty = 'model_in_category_empty';
   static const String models_no_has_keyword = 'models_no_has_keyword';
+  static const String model_details = 'model_details';
 
   //CHAT AI
   static const String download_image = 'download_image';

@@ -297,8 +297,12 @@ const Map<String, String> en_us = {
   'volume': 'Volume',
 
   //MODEL
+  'msg_download_model_success': 'Download model successfully',
+  'msg_download_model_failed': 'Model loading failed',
+
   'model_in_category_empty': 'Models in this category is empty',
   'models_no_has_keyword': 'Models does not exist with keyword',
+  'model_details': 'Model details',
 
   //Chat AI
   'download_image': 'Download this image',

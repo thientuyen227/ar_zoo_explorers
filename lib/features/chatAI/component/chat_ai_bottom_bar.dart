@@ -12,15 +12,15 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
-class ChatAIABottomBar extends StatefulWidget {
+class ChatAIBottomBar extends StatefulWidget {
   final ValueChanged<MessageEntity> onSendMassage;
-  const ChatAIABottomBar({super.key, required this.onSendMassage});
+  const ChatAIBottomBar({super.key, required this.onSendMassage});
 
   @override
-  _ChatAIABottomBarState createState() => _ChatAIABottomBarState();
+  _ChatAIBottomBarState createState() => _ChatAIBottomBarState();
 }
 
-class _ChatAIABottomBarState extends State<ChatAIABottomBar> {
+class _ChatAIBottomBarState extends State<ChatAIBottomBar> {
   double width = 0;
   double height = 0;
   late SpeechToText _speech;

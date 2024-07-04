@@ -1,14 +1,15 @@
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
+import 'package:ar_zoo_explorers/features/modeldetail/components/model_detail_loading.dart';
 import 'package:ar_zoo_explorers/features/modeldetail/presentation/modeldetail_cubit.dart';
 import 'package:ar_zoo_explorers/features/modeldetail/presentation/modeldetail_state.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 
 import '../../../app/config/routes.dart';
 import '../../../base/base_state.dart';
-import '../../../core/data/controller/animal_controller.dart';
-import '../../../core/data/controller/animal_detail_controller.dart';
 
 @RoutePage()
 class ModelDetailPage extends StatefulWidget {
@@ -20,49 +21,55 @@ class ModelDetailPage extends StatefulWidget {
 
 class _State
     extends BaseState<ModelDetailState, ModelDetailCubit, ModelDetailPage> {
-  final animalController = AnimalController.findOrInitialize;
-  final detailController = AnimalDetailController.findOrInitialize;
-
   bool download = false;
-
   String valueName = "";
-
   String type = "";
 
   @override
+  void initState() {
+    cubit.init(context);
+    super.initState();
+  }
+
+  @override
   Widget buildByState(BuildContext context, ModelDetailState state) {
-    return Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-            centerTitle: true,
-            title: const Text("Animal Detail",
-                style: TextStyle(fontSize: 20, color: Colors.white)),
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            leading: const Column(
-                mainAxisAlignment: MainAxisAlignment.center, children: []),
-            actions: const []),
-        body: Stack(children: [
-          SizedBox(width: cubit.WIDTH, height: cubit.HEIGHT),
-          backgroundPage(context),
-          backButton()
-        ]));
+    return state.isLoaded
+        ? Scaffold(
+            extendBodyBehindAppBar: true,
+            appBar: AppBar(
+                centerTitle: true,
+                title: Text(LanguageKeys.model_details.tr,
+                    style: const TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold)),
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                leading: const Column(
+                    mainAxisAlignment: MainAxisAlignment.center, children: []),
+                actions: const []),
+            body: Stack(children: [
+              SizedBox(width: state.width, height: state.height),
+              backgroundPage(context),
+              backButton()
+            ]))
+        : ModelDetailLoading(isClosedLoading: cubit.isClosedLoading);
   }
 
   Widget backgroundPage(BuildContext context) {
     return SingleChildScrollView(
         child: Stack(children: [
       Container(
-          constraints: BoxConstraints(minHeight: cubit.HEIGHT),
-          width: cubit.WIDTH,
+          constraints: BoxConstraints(minHeight: state.height),
+          width: state.width,
           decoration: BoxDecoration(
               gradient: LinearGradient(
-                  colors: [cubit.backgroundColor.withOpacity(0.5), Colors.blue],
+                  colors: [state.backgroundColor.withOpacity(0.5), Colors.blue],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter)),
           child: whiteLayoutPage()),
       loadArButton(),
-      modelImage(cubit.imagePath),
+      modelImage(state.imagePath),
     ]));
   }
 
@@ -70,17 +77,17 @@ class _State
     return Positioned(
         left: 0,
         right: 0,
-        top: cubit.HEIGHT * 0.1,
+        top: state.height * 0.1,
         child: Align(alignment: Alignment.center, child: loadImage(url)));
   }
 
   Widget loadImage(String url) {
-    return Image.network(url, width: cubit.WIDTH * 0.45, fit: BoxFit.cover,
+    return Image.network(url, width: state.width * 0.45, fit: BoxFit.cover,
         errorBuilder:
             (BuildContext context, Object error, StackTrace? stackTrace) {
       print("Load image from URL fail: $error");
       return Image.asset(AppImages.imgAppLogo,
-          width: cubit.WIDTH * 0.45, fit: BoxFit.cover);
+          width: state.width * 0.45, fit: BoxFit.cover);
     });
   }
 
@@ -97,7 +104,7 @@ class _State
                   offset: const Offset(0, 3))
             ]),
         margin: EdgeInsets.only(
-            top: cubit.HEIGHT * 0.3, left: 20, right: 20, bottom: 25),
+            top: state.height * 0.3, left: 20, right: 20, bottom: 25),
         padding: const EdgeInsets.only(left: 20, right: 20, bottom: 25),
         child: modelInformation());
   }
@@ -113,32 +120,32 @@ class _State
                 onTap: () => context.router.pop(),
                 child: Stack(alignment: Alignment.center, children: [
                   Container(
-                      width: cubit.WIDTH * 0.11,
-                      height: cubit.WIDTH * 0.11,
+                      width: state.width * 0.11,
+                      height: state.width * 0.11,
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.black.withOpacity(0.6))),
                   ClipRect(
                       child: Image.asset(AppIcons.icX,
-                          width: cubit.WIDTH * 0.1, fit: BoxFit.cover))
+                          width: state.width * 0.1, fit: BoxFit.cover))
                 ]))));
   }
 
   Widget modelInformation() {
     return Column(children: [
-      SizedBox(height: cubit.HEIGHT * 0.07),
+      SizedBox(height: state.height * 0.07),
       Center(
           child: Stack(
               alignment: Alignment.center,
-              children: [modelTitle(cubit.animalTitle), views(cubit.views)])),
+              children: [modelTitle(state.animalTitle), views(state.views)])),
       const SizedBox(height: 15),
       Container(height: 2, width: double.infinity, color: Colors.grey),
       const SizedBox(height: 15),
-      informationRow("Description:", cubit.description),
-      informationRow("Biological Classification:", cubit.classification),
-      informationRow("Conservation:", cubit.conservation),
-      informationRow("Reproduction:", cubit.reproduction),
-      informationRow("Cultural Depiction:", cubit.culturalFigure),
+      informationRow("Description:", state.description),
+      informationRow("Biological Classification:", state.classification),
+      informationRow("Conservation:", state.conservation),
+      informationRow("Reproduction:", state.reproduction),
+      informationRow("Cultural Depiction:", state.culturalFigure),
       const SizedBox(height: 50)
     ]);
   }
@@ -155,37 +162,44 @@ class _State
         child: Column(children: [
           ClipRect(
               child: Image.asset(AppIcons.icEye,
-                  width: cubit.WIDTH * 0.1, fit: BoxFit.cover)),
+                  width: state.width * 0.1, fit: BoxFit.cover)),
           Text(views.toString(),
               style: const TextStyle(fontSize: 15, color: Colors.black))
         ]));
   }
 
   Widget informationRow(String title, String content) {
-    return Column(children: [
-      Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-        Text(title,
-            style: const TextStyle(
-                fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold),
-            softWrap: true),
-        const SizedBox(width: 15)
-      ]),
-      const SizedBox(height: 5),
-      Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-        SizedBox(
-            width: cubit.WIDTH * 0.77,
-            child: Text(content,
-                style: const TextStyle(fontSize: 15, color: Colors.black))),
-        const SizedBox(width: 8)
-      ]),
-      const SizedBox(height: 12)
-    ]);
+    if (content == "") {
+      return Container();
+    } else {
+      return Column(children: [
+        Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          Text(title,
+              style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold),
+              softWrap: true),
+          const SizedBox(width: 15)
+        ]),
+        const SizedBox(height: 5),
+        Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          SizedBox(
+              width: state.width * 0.77,
+              child: Text(content,
+                  style: const TextStyle(fontSize: 15, color: Colors.black))),
+          const SizedBox(width: 8)
+        ]),
+        const SizedBox(height: 12)
+      ]);
+    }
   }
 
   Widget loadArButton() {
     return FutureBuilder(
-        future: cubit.downloadModel(animalController.currentAnimal.value.name,
-            animalController.currentAnimal.value.type),
+        future: cubit.downloadModel(
+            cubit.animalController.currentAnimal.value.name,
+            cubit.animalController.currentAnimal.value.type),
         builder: (context, snapshot) {
           final isDownload = snapshot.data;
           return arButton(isDownload ?? false);
@@ -193,116 +207,82 @@ class _State
   }
 
   Widget arButton(bool isDownload) {
-    if (isDownload == false) {
-      return downloadButton();
+    if (state.isDownloading) {
+      return downloadCircle();
     } else {
-      return cameraButton();
+      if (isDownload == false) {
+        return downloadButton();
+      } else {
+        return cameraButton();
+      }
     }
+  }
+
+  Widget downloadCircle() {
+    return Positioned(
+        top: state.height * 0.15,
+        right: state.width * 0.05,
+        child: SizedBox(
+            width: state.width * 0.11,
+            height: state.width * 0.11,
+            child: const CircularProgressIndicator(
+              backgroundColor: Colors.grey,
+              color: Colors.white,
+              strokeWidth: 6.0,
+              strokeCap: StrokeCap.round,
+            )));
   }
 
   Widget cameraButton() {
     return Positioned(
-        top: cubit.HEIGHT * 0.15,
-        right: cubit.WIDTH * 0.05,
+        top: state.height * 0.15,
+        right: state.width * 0.05,
         child: GestureDetector(
             onTap: () => context.router.pushNamed(Routes.ar),
             child: Stack(alignment: Alignment.center, children: [
               Container(
-                  width: cubit.WIDTH * 0.11,
-                  height: cubit.WIDTH * 0.11,
+                  width: state.width * 0.11,
+                  height: state.width * 0.11,
                   decoration: BoxDecoration(
                       color: Colors.black.withOpacity(0.5),
                       shape: BoxShape.circle)),
               ClipRect(
                   child: Image.asset(AppIcons.icCamera,
-                      width: cubit.WIDTH * 0.08, fit: BoxFit.cover))
+                      width: state.width * 0.08, fit: BoxFit.cover))
             ])));
   }
 
   Widget downloadButton() {
     return Positioned(
-        top: cubit.HEIGHT * 0.15,
-        right: cubit.WIDTH * 0.05,
+        top: state.height * 0.15,
+        right: state.width * 0.05,
         child: GestureDetector(
             onTap: () async {
-              Fluttertoast.showToast(msg: "Downloading animal!");
+              Fluttertoast.showToast(
+                  msg:
+                      "Downloading ${cubit.animalController.currentAnimal.value.name}!");
               await downloadAndUnpack();
             },
             child: Stack(alignment: Alignment.center, children: [
               Container(
-                  width: cubit.WIDTH * 0.11,
-                  height: cubit.WIDTH * 0.11,
+                  width: state.width * 0.11,
+                  height: state.width * 0.11,
                   decoration: BoxDecoration(
                       color: Colors.black.withOpacity(0.5),
                       shape: BoxShape.circle)),
               ClipRect(
                   child: Image.asset(AppIcons.icWhiteDownload,
-                      width: cubit.WIDTH * 0.07, fit: BoxFit.cover))
+                      width: state.width * 0.07, fit: BoxFit.cover))
             ])));
   }
 
   Future<void> downloadAndUnpack() async {
-    await cubit.downloadAndUnpack(animalController.currentAnimal.value.name,
-        animalController.currentAnimal.value.type);
+    await cubit.downloadAndUnpack(
+        cubit.animalController.currentAnimal.value.name,
+        cubit.animalController.currentAnimal.value.type);
     setState(() {
-      valueName = animalController.currentAnimal.value.name;
-      type = animalController.currentAnimal.value.type;
+      valueName = cubit.animalController.currentAnimal.value.name;
+      type = cubit.animalController.currentAnimal.value.type;
     });
-  }
-
-  Future<void> setBackgroundColor(BuildContext context) async {
-    Color newColor = await cubit.getBlendedColorFromImage(cubit.imagePath);
-    setState(() {
-      cubit.backgroundColor = newColor;
-    });
-  }
-
-  Future<void> setLayout(BuildContext context) async {
-    setState(() {
-      cubit.animalTitle = animalController.currentAnimal.value.title;
-      cubit.imagePath = animalController.currentAnimal.value.icon;
-    });
-  }
-
-  Future<void> setInformation(BuildContext context) async {
-    await detailController.getAnimalCategoryModelByModelId(context,
-        modelId: animalController.currentAnimal.value.id);
-    await detailController.updateViewsAnimalModel(context,
-        id: detailController.currentAnimalDetail.value.id,
-        views: (detailController.currentAnimalDetail.value.views + 1));
-    setState(() {
-      cubit.description =
-          detailController.currentAnimalDetail.value.description;
-      cubit.classification = detailController
-          .currentAnimalDetail.value.classification; // Phân loại sinh học
-      cubit.conservation = detailController
-          .currentAnimalDetail.value.conservation; // Tình trạng bảo tồn
-      cubit.reproduction =
-          detailController.currentAnimalDetail.value.reproduction; // Sinh sản
-      cubit.culturalFigure = detailController
-          .currentAnimalDetail.value.culturalFigure; // Hình tượng trong văn hóa
-      cubit.views = detailController.currentAnimalDetail.value.views;
-    });
-  }
-
-  Future<void> setDimension() async {
-    Size mediaSize = MediaQueryData.fromView(
-            WidgetsBinding.instance.platformDispatcher.views.single)
-        .size;
-    setState(() {
-      cubit.WIDTH = mediaSize.width;
-      cubit.HEIGHT = mediaSize.height;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    setLayout(context);
-    setBackgroundColor(context);
-
-    setInformation(context);
-    setDimension();
   }
 }

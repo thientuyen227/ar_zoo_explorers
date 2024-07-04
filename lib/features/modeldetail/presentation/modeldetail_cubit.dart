@@ -1,12 +1,16 @@
 import 'dart:io';
 
-import 'package:ar_zoo_explorers/features/modeldetail/model/image_argb.dart';
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
+import 'package:ar_zoo_explorers/core/data/controller/animal_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/animal_detail_controller.dart';
 import 'package:ar_zoo_explorers/features/modeldetail/presentation/modeldetail_state.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as img;
 import 'package:injectable/injectable.dart';
@@ -18,25 +22,66 @@ import '../../../base/base_cubit.dart';
 class ModelDetailCubit extends BaseCubit<ModelDetailState> {
   ModelDetailCubit() : super(ModelDetailState());
 
-  String description = ""; // Mô tả
-  String classification = ""; // Phân loại sinh học
-  String conservation = ""; // Tình trạng bảo tồn
-  String reproduction = ""; // Sinh sản
-  String culturalFigure = ""; // Hình tượng trong văn hóa
-  int views = 0; // Lượt xem
+  final animalController = AnimalController.findOrInitialize;
+  final detailController = AnimalDetailController.findOrInitialize;
 
-  String imagePath =
-      "https://firebasestorage.googleapis.com/v0/b/ar-zoo-explorers.appspot.com/o/user_images%2Fphoto-1-15951447028491980490713.jpeg?alt=media&token=501bd427-ec2f-4ae9-b4c6-a9bb30cd6a9a";
-  String animalTitle = "default";
-
-  double WIDTH = 0;
-  double HEIGHT = 0;
-  Color backgroundColor = Colors.white;
-  ARGBImage listBlenderColor = ARGBImage();
+  final ValueNotifier<bool> isClosedLoading = ValueNotifier<bool>(false);
 
   FirebaseStorage storage = FirebaseStorage.instance;
 
   HttpClient? httpClient;
+
+  Future<void> init(BuildContext context) async {
+    showLoading();
+    await Future.delayed(const Duration(milliseconds: 1350));
+    Size mediaSize = MediaQueryData.fromView(
+            WidgetsBinding.instance.platformDispatcher.views.single)
+        .size;
+
+    await detailController.getAnimalCategoryModelByModelId(context,
+        modelId: animalController.currentAnimal.value.id);
+    await detailController.updateViewsAnimalModel(context,
+        id: detailController.currentAnimalDetail.value.id,
+        views: (detailController.currentAnimalDetail.value.views + 1));
+    emit(state.copyWith(
+      height: mediaSize.height,
+      width: mediaSize.width,
+      animalTitle: animalController.currentAnimal.value.title,
+      imagePath: animalController.currentAnimal.value.icon,
+      views: detailController.currentAnimalDetail.value.views,
+    ));
+    await _setBackgroundColor();
+
+    emit(state.copyWith(
+      //INFORMATION OF ANIMAL MODEL
+      description: detailController.currentAnimalDetail.value.description,
+      classification: detailController.currentAnimalDetail.value.classification,
+      conservation: detailController.currentAnimalDetail.value.conservation,
+      reproduction: detailController.currentAnimalDetail.value.reproduction,
+      culturalFigure: detailController.currentAnimalDetail.value.culturalFigure,
+      //INFORMATION OF ANIMAL MODEL
+      isDownloading: false,
+      isLoaded: true,
+    ));
+
+    print("Cubit.Init() : Get data");
+
+    isClosedLoading.value = !isClosedLoading.value;
+    hideLoading();
+  }
+
+  Future<void> onChangeBackgroundColor(Color newColor) async {
+    emit(state.copyWith(backgroundColor: newColor));
+  }
+
+  Future<void> onChangeDownloadStatus(bool status) async {
+    emit(state.copyWith(isDownloading: status));
+  }
+
+  Future<void> _setBackgroundColor() async {
+    Color newColor = await getBlendedColorFromImage(state.imagePath);
+    await onChangeBackgroundColor(newColor);
+  }
 
   Future<img.Image> getImageFromNetwork(String imageUrl) async {
     final response = await http.get(Uri.parse(imageUrl));
@@ -65,10 +110,10 @@ class ModelDetailCubit extends BaseCubit<ModelDetailState> {
 
     getColorPoint(image);
 
-    int blendedR = listBlenderColor.blendedRed();
-    int blendedG = listBlenderColor.blendedGreen();
-    int blendedB = listBlenderColor.blendedBlue();
-    int blendedA = listBlenderColor.weightSum().round();
+    int blendedR = state.listBlenderColor.blendedRed();
+    int blendedG = state.listBlenderColor.blendedGreen();
+    int blendedB = state.listBlenderColor.blendedBlue();
+    int blendedA = state.listBlenderColor.weightSum().round();
 
     return Color.fromARGB(blendedA, blendedR, blendedG, blendedB);
   }
@@ -78,7 +123,7 @@ class ModelDetailCubit extends BaseCubit<ModelDetailState> {
     int dHeight = (image.height / 5).round();
     for (int i = 0; i < 3; i++) {
       for (int j = 0; j < 3; j++) {
-        listBlenderColor.add(image.getPixel(dWidth * i, dHeight * j));
+        state.listBlenderColor.add(image.getPixel(dWidth * i, dHeight * j));
       }
     }
   }
@@ -95,25 +140,37 @@ class ModelDetailCubit extends BaseCubit<ModelDetailState> {
   }
 
   Future<void> downloadAndUnpack(String filename, String type) async {
-    Map<String, dynamic> filePathInfo = await getFilePath(filename, type);
-    File file = filePathInfo['file'];
-    bool filePath = await checkFileExits(file.path);
-    //get link download
-    String modelUrl = await storage
-        .ref()
-        .child("animal_models/" '$filename.$type')
-        .getDownloadURL();
-    //Fluttertoast.showToast(msg: modelUrl);
-    httpClient = HttpClient();
+    try {
+      await onChangeDownloadStatus(true);
+      Map<String, dynamic> filePathInfo = await getFilePath(filename, type);
+      File file = filePathInfo['file'];
+      bool filePath = await checkFileExits(file.path);
+      //get link download
+      String modelUrl = await storage
+          .ref()
+          .child("animal_models/" '$filename.$type')
+          .getDownloadURL();
+      //Fluttertoast.showToast(msg: modelUrl);
+      httpClient = HttpClient();
 
-    if (!filePath) {
-      var request = await httpClient!.getUrl(Uri.parse(modelUrl));
-      var response = await request.close();
-      var bytes = await consolidateHttpClientResponseBytes(response);
-      await file.writeAsBytes(bytes);
+      if (!filePath) {
+        var request = await httpClient!.getUrl(Uri.parse(modelUrl));
+        var response = await request.close();
+        var bytes = await consolidateHttpClientResponseBytes(response);
+        await file.writeAsBytes(bytes);
+      }
+      await onChangeDownloadStatus(false);
+      print("TTTT model: ${file.path}");
+      Fluttertoast.showToast(
+          msg: "${(LanguageKeys.msg_download_model_success.tr)}!");
+    } catch (e, stackTrace) {
+      print('[Download model Failed: $e]');
+      FirebaseCrashlytics.instance.recordError(e, stackTrace);
+      Fluttertoast.showToast(
+          msg: "${(LanguageKeys.msg_download_model_failed.tr)}!");
+      await Future.delayed(const Duration(milliseconds: 2000));
+      await onChangeDownloadStatus(false);
     }
-    print("TTTT model: ${file.path}");
-    Fluttertoast.showToast(msg: "Download thành công!");
   }
 
   Future<bool> downloadModel(String name, String type) async {

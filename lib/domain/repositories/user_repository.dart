@@ -38,6 +38,11 @@ abstract class AuthRepository {
       required String role,
       required bool status});
 
+  Future<Either<Failure, Success<UserEntity>>> updateAvatar({
+    required String id,
+    required String avatarUrl,
+  });
+
   Future<Either<Failure, Success<String>>> uploadImageToFirebase(
       String imagePath, String imageName);
 }

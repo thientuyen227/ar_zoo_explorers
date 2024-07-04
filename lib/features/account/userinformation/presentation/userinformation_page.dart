@@ -21,7 +21,6 @@ import 'package:intl/intl.dart';
 
 import '../../../../app/theme/icons.dart';
 import '../../../../base/base_state.dart';
-import '../../../../core/data/controller/auth_controller.dart';
 
 @RoutePage()
 class UserInformationPage extends StatefulWidget {
@@ -33,9 +32,22 @@ class UserInformationPage extends StatefulWidget {
 
 class _State extends BaseState<UserInformationState, UserInformationCubit,
     UserInformationPage> {
-  final controller = AuthController.findOrInitialize;
+  @override
+  void initState() {
+    cubit.init();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        _formKey.currentState?.patchValue({'provincial': state.provincial});
+        _formKey.currentState?.patchValue({'address': state.address});
+        usernameController.text = cubit.controller.currentUser.value.fullname;
+      });
+    });
+    super.initState();
+  }
+
   final _formKey = GlobalKey<FormBuilderState>();
   final ImagePicker _picker = ImagePicker();
+  TextEditingController usernameController = TextEditingController();
   File? _selectedImage;
 
   @override
@@ -64,21 +76,22 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
                     Container(
                         padding: const EdgeInsets.only(left: 30, right: 30),
                         child: Column(children: [
-                          textForm(LanguageKeys.fullname.tr, 0,
-                              controller.currentUser.value.fullname),
+                          // textForm(LanguageKeys.fullname.tr, 0,
+                          //     cubit.controller.currentUser.value.fullname),
+                          usernameForm(),
                           textForm(LanguageKeys.emailAddress.tr, 1,
-                              controller.currentUser.value.email),
+                              cubit.controller.currentUser.value.email),
                           dateForm(),
                           radioForm(LanguageKeys.gender.tr),
                           textForm(LanguageKeys.phone.tr, 2,
-                              controller.currentUser.value.phone),
+                              cubit.controller.currentUser.value.phone),
                           dropdownForm(
                               "${LanguageKeys.province.tr} / ${LanguageKeys.city.tr}"),
-                          textForm(LanguageKeys.address.tr, 3, cubit.address)
+                          textForm(LanguageKeys.address.tr, 3, state.address)
                         ])),
-                    const Divider(),
+                    const SizedBox(height: 20),
                     FutureBuilder(
-                        future: controller.getCurrentUser(context),
+                        future: cubit.controller.getCurrentUser(context),
                         builder: (context, snapshot) =>
                             Align(child: submitButton(context, snapshot))),
                     const SizedBox(height: 40),
@@ -109,12 +122,12 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
 
   Widget bodyForm(int index, String? content) {
     return FormBuilderTextField(
-      name: cubit.ListFormItem[index].name,
+      name: state.ListFormItem[index].name,
       initialValue: content,
-      enabled: (cubit.ListFormItem[index].name == 'email') ? false : true,
+      enabled: (state.ListFormItem[index].name == 'email') ? false : true,
       decoration: InputDecoration(
-          hintText: cubit.ListFormItem[index].hint_text,
-          prefixIcon: Image.asset(cubit.ListFormItem[index].icon_prefix,
+          hintText: state.ListFormItem[index].hint_text,
+          prefixIcon: Image.asset(state.ListFormItem[index].icon_prefix,
               height: 20, width: 20),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
           contentPadding: const EdgeInsets.all(10)),
@@ -133,6 +146,33 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
         }
       ]),
     );
+  }
+
+  Widget usernameForm() {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      titleForm(LanguageKeys.fullname.tr),
+      const SizedBox(height: 10),
+      TextFormField(
+        controller: usernameController,
+        // initialValue: cubit.controller.currentUser.value.fullname,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+          hintText: state.ListFormItem[0].hint_text,
+          contentPadding: const EdgeInsets.all(10),
+          prefixIcon: Image.asset(state.ListFormItem[0].icon_prefix,
+              height: 20, width: 20),
+        ),
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        validator: FormBuilderValidators.compose([
+          FormBuilderValidators.required(
+              errorText: LanguageKeys.requiredField.tr),
+          (value) {
+            return _onHandleValidator(0, value);
+          }
+        ]),
+      ),
+      const SizedBox(height: 12)
+    ]);
   }
 
   Widget dropdownForm(String title) {
@@ -168,7 +208,6 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
                 return '${LanguageKeys.msg_invalidProvinceCity.tr}!';
               }
               return null;
-              //return null;
             }
           ])),
       const SizedBox(height: 12)
@@ -177,12 +216,12 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
 
   Widget profileHeader() {
     return Stack(children: [
-      SizedBox(width: cubit.WIDTH, height: cubit.HEIGHT * 0.3),
+      SizedBox(width: state.width, height: state.height * 0.3),
       profileBackground(),
       Positioned(
           left: 0,
           right: 0,
-          bottom: cubit.HEIGHT * 0.04,
+          bottom: state.height * 0.04,
           child: Center(child: userAvatar())),
     ]);
   }
@@ -195,9 +234,9 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
                 bottomLeft: Radius.circular(5.0),
                 bottomRight: Radius.circular(5.0))),
         child: Column(children: [
-          gradientBackground(cubit.HEIGHT * 0.13, cubit.WIDTH, 0,
+          gradientBackground(state.height * 0.13, state.width, 0,
               AppColor.appBarColor, Colors.blue.shade200),
-          gradientBackground(cubit.HEIGHT * 0.07, cubit.WIDTH, 5,
+          gradientBackground(state.height * 0.07, state.width, 5,
               Colors.blue.shade200, Colors.blue.shade800)
         ]));
   }
@@ -222,38 +261,48 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
 
   Widget userAvatar() {
     return Stack(children: [
-      SizedBox(width: cubit.HEIGHT * 0.155, height: cubit.HEIGHT * 0.155),
+      SizedBox(width: state.height * 0.155, height: state.height * 0.155),
       Container(
-          width: cubit.HEIGHT * 0.155,
-          height: cubit.HEIGHT * 0.155,
+          width: state.height * 0.155,
+          height: state.height * 0.155,
           decoration: BoxDecoration(
               border: Border.all(color: Colors.white, width: 5),
               shape: BoxShape.circle),
           child: ClipOval(
-            child: (cubit.userAvatar == "")
+            child: (state.userAvatar == "")
                 ? Image.asset(AppImages.imgProfile128x128, fit: BoxFit.cover)
-                : Image.network(cubit.userAvatar, fit: BoxFit.cover),
+                : Image.network(state.userAvatar, fit: BoxFit.cover),
           )),
       updateAvatarButton()
     ]);
   }
 
   Widget submitButton(BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-    return TextButton(
-        onPressed: snapshot.connectionState != ConnectionState.waiting
-            ? () => _onUpdatePressed(context)
-            : () => {
-                  Fluttertoast.showToast(msg: "${LanguageKeys.updating.tr}!"),
-                  _onUpdatePressed(context)
-                },
-        // style: ButtonStyle(
-        //     fixedSize: WidgetStateProperty.all(const Size(140, 43)),
-        //     backgroundColor: WidgetStateProperty.all(Colors.blue),
-        //     elevation: WidgetStateProperty.all(5),
-        //     shape: WidgetStateProperty.all(RoundedRectangleBorder(
-        //         borderRadius: BorderRadius.circular(20)))),
-        child: Text(LanguageKeys.update.tr,
-            style: const TextStyle(fontSize: 16, color: Colors.white)));
+    return GestureDetector(
+        onTap: () async => {await _onUpdatePressed(context)},
+        child: Container(
+          padding: EdgeInsets.fromLTRB(
+            state.width * 0.055,
+            state.width * 0.025,
+            state.width * 0.055,
+            state.width * 0.025,
+          ),
+          decoration: BoxDecoration(
+              color: AppColor.activeBlue,
+              borderRadius: BorderRadius.circular(state.width * 0.07),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 2,
+                    blurRadius: 7,
+                    offset: const Offset(0, 3)),
+              ]),
+          child: Text(LanguageKeys.update.tr,
+              style: const TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold)),
+        ));
   }
 
   Widget dateForm() {
@@ -266,7 +315,7 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
           },
           readOnly: true,
           controller: TextEditingController(
-              text: DateFormat('dd/MM/yyyy').format(cubit.dtBirthday)),
+              text: DateFormat('dd/MM/yyyy').format(state.dtBirthday)),
           decoration: InputDecoration(
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
@@ -284,7 +333,7 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
       FormBuilderRadioGroup(
           name: 'gender',
           wrapAlignment: WrapAlignment.spaceEvenly,
-          initialValue: cubit.gender,
+          initialValue: state.gender,
           decoration: InputDecoration(
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
@@ -318,26 +367,26 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
             },
             child: Stack(alignment: Alignment.center, children: [
               Container(
-                  width: cubit.WIDTH * 0.1,
-                  height: cubit.WIDTH * 0.1,
+                  width: state.width * 0.1,
+                  height: state.width * 0.1,
                   decoration: BoxDecoration(
                       color: Colors.black.withOpacity(0.5),
                       shape: BoxShape.circle)),
               ClipRect(
                   child: Image.asset(AppIcons.icCamera,
-                      width: cubit.WIDTH * 0.08, fit: BoxFit.cover))
+                      width: state.width * 0.08, fit: BoxFit.cover))
             ])));
   }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
         context: context,
-        initialDate: cubit.dtBirthday,
+        initialDate: state.dtBirthday,
         firstDate: DateTime(1900),
         lastDate: DateTime(2101));
-    if (picked != null && picked != cubit.dtBirthday) {
+    if (picked != null && picked != state.dtBirthday) {
       setState(() {
-        cubit.dtBirthday = picked;
+        cubit.changeDtBirthday(picked);
       });
     }
   }
@@ -350,45 +399,54 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
 
   Future<void> _onUpdatePressed(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
+      cubit.showLoading();
+      Fluttertoast.showToast(msg: "${LanguageKeys.updating.tr}!");
       // ignore: use_build_context_synchronously
       await _uploadInformation(context);
       context.router.popAndPush(const UserProfileRoute());
+      cubit.hideLoading();
     }
   }
 
   Future<void> _uploadInformation(BuildContext context) async {
-    await controller.updateUserProfile(context,
-        id: controller.currentUser.value.id,
-        fullname: _formKey.currentState!.fields['fullname']!.value,
+    await cubit.controller.updateUserProfile(context,
+        id: cubit.controller.currentUser.value.id,
+        fullname: usernameController.value.text,
         phone: _formKey.currentState!.fields['phone']!.value,
-        avatarUrl: cubit.userAvatar,
+        avatarUrl: state.userAvatar,
         address: _getAddress(),
         birth: cubit.getBirthday(),
-        provider: cubit.provider,
+        provider: state.provider,
         gender: _formKey.currentState!.fields['gender']!.value,
-        role: controller.currentUser.value.role,
-        status: controller.currentUser.value.status);
+        role: cubit.controller.currentUser.value.role,
+        status: cubit.controller.currentUser.value.status);
+    // print(usernameController.value.text);
   }
 
-  void setValueAddress(String address) {
-    cubit.setAddress(address);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _formKey.currentState?.patchValue({'provincial': cubit.provincial});
-    });
+  Future<void> _updateAvatar(BuildContext context, String url) async {
+    await cubit.controller.updateUserAvatar(
+      context,
+      id: cubit.controller.currentUser.value.id,
+      avatarUrl: url,
+    );
   }
 
   Future<void> updateAvatar(BuildContext context) async {
     XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    String imageName = cubit.avatarName(controller.currentUser.value.fullname);
+    String imageName =
+        cubit.avatarName(cubit.controller.currentUser.value.fullname);
     if (image != null) {
+      cubit.showLoading();
       String? downloadURL =
           // ignore: use_build_context_synchronously
-          await controller.uploadAvatar(context, image.path, imageName);
-      await _uploadInformation(context);
+          await cubit.controller.uploadAvatar(context, image.path, imageName);
+      await _updateAvatar(context, downloadURL);
       setState(() {
-        cubit.userAvatar = downloadURL;
+        state.userAvatar = downloadURL;
       });
+      cubit.hideLoading();
     } else {
+      cubit.hideLoading();
       await cubit.showToast(LanguageKeys.get_img_failed.tr);
     }
   }
@@ -399,28 +457,8 @@ class _State extends BaseState<UserInformationState, UserInformationCubit,
         return cubit.onCheckFullname(value);
       case 2:
         return cubit.onCheckPhoneNumber(value);
-
       default:
         return null;
     }
-  }
-
-  void setDimension() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      cubit.WIDTH = MediaQuery.of(context).size.width;
-      cubit.HEIGHT = MediaQuery.of(context).size.height;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    setDimension();
-
-    cubit.setBirthday(controller.currentUser.value.birth);
-    cubit.setUserAvatar(controller.currentUser.value.avatarUrl);
-    cubit.setProvider(controller.currentUser.value.provider);
-    cubit.setGender(controller.currentUser.value.gender);
-    setValueAddress(controller.currentUser.value.address);
   }
 }

@@ -137,6 +137,7 @@ class AppImages {
   static const String imgArBaby = "assets/images/img_ar_baby.png";
   static const String imgArBaby_WhiteBG =
       "assets/images/img_ar_baby_white_bg.png";
+  static const String imgBGStarrySky = "assets/images/img_bg_starry_sky.png";
 
   //FLAGS
   static const String flagUK = "assets/images/flags/img_greatbritain.png";
@@ -262,16 +263,27 @@ class AppLotties {
   static const String xl = "assets/lotties/xl.json";
   static const String plane = "assets/lotties/plane.json";
   static const String earth = "assets/lotties/earth.json";
+  static const String earthSwing = "assets/lotties/earth_swing.json";
   static const String snow = "assets/lotties/snow.json";
   static const String puzzle = "assets/lotties/puzzle.json";
   static const String vocabulary = "assets/lotties/vocabulary.json";
   static const String complete = "assets/lotties/complete.json";
   static const String practiceWrite = "assets/lotties/write_practice.json";
   static const String loading = "assets/lotties/loading_elephant.json";
+<<<<<<< HEAD
   static const String summer = "assets/lotties/summer.json";
   static const String fruits = "assets/lotties/fruits.json";
   static const String family = "assets/lotties/family.json";
   static const String animals = "assets/lotties/animals.json";
   static const String spring = "assets/lotties/spring.json";
   static const String toys = "assets/lotties/toys.json";
+=======
+  static const String searchingModel = "assets/lotties/searching_model.json";
+  static const String bgModelDetail = "assets/lotties/bg_model_detail.json";
+  static const String scientistPanda = "assets/lotties/scientist_panda.json";
+}
+
+class AppSound {
+  static const String mindset = "audio/mindset.mp3";
+>>>>>>> origin/develop_minhtien
 }

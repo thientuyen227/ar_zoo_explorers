@@ -297,8 +297,12 @@ const Map<String, String> vi_vn = {
   'volume': 'Âm lượng',
 
   //MODEL
+  'msg_download_model_success': 'Tải model thành công',
+  'msg_download_model_failed': 'Tải model thất bại',
+
   'model_in_category_empty': 'Danh mục hiện không có model',
   'models_no_has_keyword': 'Model không tồn tại với từ khóa',
+  'model_details': 'Thông tin chí tiết Model',
 
   //Chat AI
   'download_image': 'Tải hình ảnh',

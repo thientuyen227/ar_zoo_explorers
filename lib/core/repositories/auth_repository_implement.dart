@@ -186,6 +186,31 @@ class AuthRepositoryImplement implements AuthRepository {
   }
 
   @override
+  Future<Either<Failure, Success<UserEntity>>> updateAvatar({
+    required String id,
+    required String avatarUrl,
+  }) {
+    return ResponseHandler.processResponse(() async {
+      return Success(
+        data:
+            await _firestoreSource.updateAvatar(id: id, avatarUrl: avatarUrl) ??
+                UserEntity(
+                    id: '',
+                    avatarUrl: '',
+                    fullname: '',
+                    email: '',
+                    provider: '',
+                    phone: '',
+                    address: '',
+                    birth: '',
+                    gender: '',
+                    role: '',
+                    status: true),
+      );
+    });
+  }
+
+  @override
   Future<Either<Failure, Success>> changePassword(
       String oldPassword, String newPassword) {
     return ResponseHandler.processResponse(() async {
