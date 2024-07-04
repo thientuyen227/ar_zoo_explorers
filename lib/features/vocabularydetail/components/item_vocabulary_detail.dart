@@ -47,11 +47,15 @@ class _ItemVocabularyDetailState extends State<ItemVocabularyDetail> {
           children: [
             ImageSvgUrlCustom(
               imagePath: widget.vocabularyEntity.thumbnail,
-              height: 100,
+              height: 110,
               width: 100,
             ),
             languageCode != 'vi'
-                ? Text(widget.vocabularyEntity.phoneticTranscription ?? "")
+                ? Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                        widget.vocabularyEntity.phoneticTranscription ?? ""),
+                  )
                 : Container(
                     height: 0,
                   ),

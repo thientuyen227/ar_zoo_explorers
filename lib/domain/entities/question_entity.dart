@@ -87,10 +87,12 @@ class WordFindChar {
   String? currentValue;
   int? currentIndex;
   String? correctValue;
+  bool? isChose;
   bool hintShow;
 
   WordFindChar({
     this.hintShow = false,
+    this.isChose = false,
     this.correctValue,
     this.currentIndex,
     this.currentValue,
@@ -115,6 +117,7 @@ class WordFindChar {
       'currentIndex': currentIndex,
       'correctValue': correctValue,
       'hintShow': hintShow,
+      'isChose': isChose
     };
   }
 }

@@ -6,10 +6,10 @@ import 'package:ar_zoo_explorers/domain/entities/learning_category_entity.dart';
 import 'package:ar_zoo_explorers/features/puzzleword/presentation/puzzle_word_cubit.dart';
 import 'package:ar_zoo_explorers/features/puzzleword/presentation/puzzle_word_state.dart';
 import 'package:ar_zoo_explorers/utils/widget/custom_back_button.dart';
-import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 @RoutePage()
 class PuzzleWordPage extends StatefulWidget {
@@ -114,11 +114,7 @@ class _State
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ImageSvgUrlCustom(
-                imagePath: image,
-                height: 95,
-                width: 95,
-              ),
+              Lottie.asset(image, height: 95, width: 95),
               Text(
                 title,
                 style:

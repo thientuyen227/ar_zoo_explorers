@@ -130,24 +130,24 @@ class _DialogExitState extends State<DialogExit> {
                     setState(() {
                       isSaving = true;
                     });
-                    var x = charsController.currentChars.value;
+                    var currentChars = charsController.currentChars.value;
                     Uint8List? imageBytes =
                         await captureImageFromPainter(widget.painterController);
 
                     if (imageBytes != null) {
-                      x.imagePaths[languageCode] =
+                      currentChars.imagePaths[languageCode] =
                           await writingPracticeController.uploadPractice(
                               context,
                               imageBytes,
-                              '${authController.currentUser.value.id}_${languageCode}_${x.char}');
+                              '${authController.currentUser.value.id}_${currentChars.char}');
                     } else {
                       print('Failed to capture image');
                     }
 
                     writingPracticeUser = writingPracticeUser.copyWith(
-                      practicedImagePaths: x.imagePaths,
+                      practicedImagePaths: currentChars.imagePaths,
                       userId: authController.currentUser.value.id,
-                      writingPracticeId: x.id,
+                      writingPracticeId: currentChars.id,
                     );
                     var writingPracticeUserEntity =
                         await writingPracticeController

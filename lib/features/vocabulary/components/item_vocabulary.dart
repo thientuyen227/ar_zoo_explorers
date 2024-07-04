@@ -3,10 +3,10 @@ import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/domain/entities/learning_category_entity.dart';
 import 'package:ar_zoo_explorers/features/vocabulary/presentation/vocabulary_state.dart';
-import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 class ItemVocabulary extends StatefulWidget {
   final LearningCategoryEntity learningCategoryEntity;
@@ -28,7 +28,7 @@ class _ItemVocabularyState extends State<ItemVocabulary> {
             VocabularyDetailRoute(category: widget.learningCategoryEntity));
       },
       child: Container(
-        padding: const EdgeInsets.only(top: 19, bottom: 9),
+        padding: const EdgeInsets.only(top: 10, bottom: 9),
         decoration: BoxDecoration(
           border: Border.all(color: AppColor.vibrantYellow),
           borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -37,11 +37,9 @@ class _ItemVocabularyState extends State<ItemVocabulary> {
         child: Center(
           child: Column(
             children: [
-              ImageSvgUrlCustom(
-                imagePath: widget.learningCategoryEntity.imagePath,
-                height: widget.state.height * 0.2,
-                width: widget.state.width * 0.2,
-              ),
+              Lottie.asset(widget.learningCategoryEntity.imagePath,
+                  height: widget.state.height * 0.118,
+                  width: widget.state.width * 0.2),
               Text(
                 widget.learningCategoryEntity.nameLocalize,
                 style:

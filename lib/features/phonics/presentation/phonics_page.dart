@@ -72,7 +72,7 @@ class _State extends BaseState<PhonicsState, PhonicsCubit, PhonicsPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 renderMotionAndTitle(
-                    LanguageKeys.uppercaseLetters, AppLotties.earth),
+                    LanguageKeys.uppercaseLetters, AppLotties.summer),
                 renderMotionAndTitle(
                     LanguageKeys.lowercaseLetters, AppLotties.plane),
                 renderMotionAndTitle(

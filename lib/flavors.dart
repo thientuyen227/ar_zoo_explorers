@@ -12,11 +12,11 @@ class F {
   static String get title {
     switch (appFlavor) {
       case Flavor.DEVELOP:
-        return 'AR Zoo Explorers';
+        return 'AR PreShcool Education';
       case Flavor.PRODUCTION:
-        return 'AR Zoo Explorers';
+        return 'AR PreShcool Education';
       case Flavor.STAGGING:
-        return 'AR Zoo Explorers';
+        return 'AR PreShcool Education';
       default:
         return 'title';
     }

@@ -15,7 +15,6 @@ import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 
 @RoutePage()
@@ -32,10 +31,11 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
   final questionController = QuestionController.findOrInitialize;
   AudioPlayer audioPlayer = AudioPlayer();
   List<String>? arrayBtns;
-  int indexQues = 0; // current index question
+  int indexQues = 0;
   int hintCount = 0;
   bool isFull = false;
   bool isDone = false;
+  bool isChose = false;
   QuestionEntity? currentQues;
 
   @override
@@ -62,13 +62,9 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
     }
 
     return PopScope(
-      canPop: false,
+      canPop: true,
       onPopInvoked: (didPop) {
-        SchedulerBinding.instance.addPostFrameCallback((_) {
-          if (Navigator.canPop(context)) {
-            Navigator.pop(context);
-          }
-        });
+        context.router.pop();
       },
       child: Scaffold(
         appBar: AppBar(
@@ -205,6 +201,7 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
     if (currentIndexEmpty >= 0 && arrayBtns!.isNotEmpty) {
       currentQues.puzzles![currentIndexEmpty].currentIndex = index;
       currentQues.puzzles![currentIndexEmpty].currentValue = arrayBtns![index];
+      currentQues.puzzles![currentIndexEmpty].isChose = true;
 
       setState(() {});
 
@@ -262,10 +259,14 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
         itemCount: arrayBtns!.length,
         shrinkWrap: true,
         itemBuilder: (context, index) {
-          bool statusBtn = currentQues.puzzles!
-                  .indexWhere((puzzle) => puzzle.currentIndex == index) >=
-              0;
-          Color color = statusBtn ? Colors.white70 : const Color(0xff7EE7FD);
+          int puzzleIndex = currentQues.puzzles!
+              .indexWhere((puzzle) => puzzle.currentIndex == index);
+          bool statusBtn = puzzleIndex >= 0;
+
+          if (statusBtn) {
+            currentQues.puzzles![puzzleIndex].isChose = true;
+          }
+          Color color = statusBtn ? Colors.black : const Color(0xff7EE7FD);
           return Container(
             decoration: BoxDecoration(
               color: color,
@@ -277,12 +278,12 @@ class _State extends BaseState<PuzzleWordDetailState, PuzzleWordDetailCubit,
                 backgroundColor: MaterialStateProperty.resolveWith<Color>(
                   (Set<MaterialState> states) {
                     if (states.contains(MaterialState.pressed)) {
-                      return Theme.of(context)
-                          .colorScheme
-                          .primary
-                          .withOpacity(0.5);
+                      return Colors.red;
                     }
-                    return const Color(0xff7EE7FD);
+                    return currentQues.puzzles!.any((puzzle) =>
+                            puzzle.currentIndex == index && puzzle.isChose!)
+                        ? Colors.grey
+                        : const Color(0xff7EE7FD);
                   },
                 ),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(

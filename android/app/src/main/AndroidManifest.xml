@@ -10,10 +10,10 @@
 
 
     <application
-        android:label="ar_zoo_explorers"
+        android:label="AR Preshcool Education"
         android:name="${applicationName}"
         android:enableOnBackInvokedCallback="true"
-        android:icon="@mipmap/ic_avatar">
+        android:icon="@mipmap/logo_png">
         <activity
             android:name=".MainActivity"
             android:exported="true"
