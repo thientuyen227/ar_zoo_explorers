@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
@@ -108,20 +109,33 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
   }
 
   Widget aiAvatar() {
-    return Container(
-      height: state.height * 0.055,
-      width: state.height * 0.055,
-      padding: const EdgeInsets.all(3),
-      margin: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-          border: Border.all(width: 2, color: AppColor.primaryColor),
-          shape: BoxShape.circle,
-          color: Colors.white),
-      child: ClipOval(
-          child: Image.asset(
-        AppImages.imgArBaby,
-        fit: BoxFit.cover,
-      )),
+    return Stack(
+      children: [
+        SizedBox(height: state.height * 0.075, width: state.height * 0.075),
+        Container(
+          height: state.height * 0.055,
+          width: state.height * 0.055,
+          padding: const EdgeInsets.all(3),
+          margin: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+              border: Border.all(width: 2, color: AppColor.primaryColor),
+              shape: BoxShape.circle,
+              color: Colors.white),
+        ),
+        Positioned(
+            bottom: state.height * 0.01,
+            right: 0,
+            child: Center(
+              child: SizedBox(
+                  height: state.height * 0.075,
+                  width: state.height * 0.075,
+                  child: Transform(
+                      transform: Matrix4.rotationY(pi),
+                      alignment: Alignment.center,
+                      child: Lottie.asset(AppLotties.logoElephant,
+                          fit: BoxFit.cover))),
+            ))
+      ],
     );
   }
 

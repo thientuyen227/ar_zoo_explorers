@@ -276,6 +276,7 @@ class AppLotties {
   static const String bgModelDetail = "assets/lotties/bg_model_detail.json";
   static const String scientistPanda = "assets/lotties/scientist_panda.json";
   static const String bgForest = "assets/lotties/bg_forest.json";
+  static const String logoElephant = "assets/lotties/logo_elephant.json";
 }
 
 class AppSound {
