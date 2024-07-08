@@ -1,8 +1,11 @@
-import 'package:ar_zoo_explorers/app/config/routes.dart';
+import 'package:ar_zoo_explorers/app/config/app_router.gr.dart';
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
+import 'package:ar_zoo_explorers/core/data/controller/auth_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/scoreboard_controller.dart';
 import 'package:ar_zoo_explorers/core/data/controller/vocabulary_controller.dart';
+import 'package:ar_zoo_explorers/domain/entities/scoreboard_entity.dart';
 import 'package:ar_zoo_explorers/domain/entities/vocabulary_entity.dart';
 import 'package:ar_zoo_explorers/features/vocabulary/presentation/vocabulary_cubit.dart';
 import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
@@ -23,6 +26,8 @@ class DialogAnimal extends StatefulWidget {
 class _DialogAnimalState extends State<DialogAnimal> {
   final languageCode = Get.locale?.languageCode;
   final vocabularyController = VocabularyController.findOrInitialize;
+  final scoreboardController = ScoreboardController.findOrInitialize;
+  AuthController authController = AuthController.findOrInitialize;
   late int currentIndex;
   VocabularyCubit cubit = VocabularyCubit();
   AudioPlayer audioPlayer = AudioPlayer();
@@ -30,6 +35,14 @@ class _DialogAnimalState extends State<DialogAnimal> {
   VocabularyEntity? vocabularyEntity;
   double? height;
   double? width;
+  ScoreboardEntity scoreboardEntity = ScoreboardEntity(
+    id: '',
+    userId: '',
+    learningId: '',
+    vocabularyId: '',
+    isAudio: false,
+    isQuestion: false,
+  );
 
   @override
   void initState() {
@@ -239,9 +252,19 @@ class _DialogAnimalState extends State<DialogAnimal> {
                     ),
                   ),
                   IconButton(
-                    onPressed: () {
+                    onPressed: () async {
                       audioPlayer
                           .play(UrlSource(vocabularyEntity!.audiosLocalize));
+                      scoreboardEntity = scoreboardEntity.copyWith(
+                          userId: authController.currentUser.value.id,
+                          learningId: vocabularyEntity!.categoryId,
+                          isAudio: true,
+                          vocabularyId: vocabularyEntity!.id);
+                      var scoreboardUserEntity = await scoreboardController
+                          .createOrGetScoreboardByUserByUser(
+                              context, scoreboardEntity);
+                      await scoreboardController.updateScoreboardByUser(
+                          context, scoreboardUserEntity!);
                     },
                     icon: SvgPicture.asset(
                       AppIcons.icSound,
@@ -291,7 +314,7 @@ class _DialogAnimalState extends State<DialogAnimal> {
                       alignment: Alignment.topRight,
                       child: GestureDetector(
                           onTap: () {
-                            Navigator.pop(context);
+                            Navigator.of(context).pop(true);
                           },
                           child: SvgPicture.asset(AppIcons.icCloseBtn)),
                     ),
@@ -332,7 +355,8 @@ class _DialogAnimalState extends State<DialogAnimal> {
                   style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF49B0AB)),
                   onPressed: () {
-                    context.router.pushNamed(Routes.puzzle);
+                    context.router.push(
+                        PuzzleWordRoute(vocabularyId: vocabularyEntity!.id));
                   },
                   child: Text(
                     LanguageKeys.take_the_quiz.tr,

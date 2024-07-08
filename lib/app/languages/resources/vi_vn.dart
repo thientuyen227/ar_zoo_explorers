@@ -117,7 +117,9 @@ const Map<String, String> vi_vn = {
   'uppercaseLetters': 'Chữ in hoa',
   'lowercaseLetters': 'Chữ thường',
   'cardinalNumbers': 'Số đếm',
-  'practiceWrite': 'Luyện viết',
+  'writingPractice': 'Luyện viết',
+  'savingImage': 'Lưu ảnh?',
+  'savingQuestion': 'Lưu câu hỏi hiện tại?',
 
   // Auth
   'auth_enterEmail': "Nhập email của bạn",

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 abstract class LearningCategoryRepository {
   Future<Either<Failure, Success<LearningCategoryEntity?>>> getLearningCategory(
-      BuildContext context, String learningCategoryId);
+      BuildContext context, String learninglearningId);
   Future<Either<Failure, Success<List<LearningCategoryEntity>?>>>
       getAllLearningCategory(
     BuildContext context,

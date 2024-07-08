@@ -1,6 +1,9 @@
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
+import 'package:ar_zoo_explorers/core/data/controller/auth_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/scoreboard_controller.dart';
 import 'package:ar_zoo_explorers/core/data/controller/vocabulary_controller.dart';
+import 'package:ar_zoo_explorers/domain/entities/scoreboard_entity.dart';
 import 'package:ar_zoo_explorers/domain/entities/vocabulary_entity.dart';
 import 'package:ar_zoo_explorers/features/vocabularydetail/components/dialog_animal.dart';
 import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
@@ -18,13 +21,37 @@ class ItemVocabularyDetail extends StatefulWidget {
 }
 
 class _ItemVocabularyDetailState extends State<ItemVocabularyDetail> {
-  var isComplete = false;
+  bool isCompleted = false;
   final languageCode = Get.locale?.languageCode;
   AudioPlayer audioPlayer = AudioPlayer();
+  final scoreboardController = ScoreboardController.findOrInitialize;
+  final AuthController authController = AuthController.findOrInitialize;
+  ScoreboardEntity scoreboardEntity = ScoreboardEntity(
+    id: '',
+    userId: '',
+    learningId: '',
+    vocabularyId: '',
+    isAudio: false,
+    isQuestion: false,
+  );
+
   @override
   void initState() {
     super.initState();
     audioPlayer = AudioPlayer();
+    fetchComplete();
+  }
+
+  Future<void> fetchComplete() async {
+    var scoreboard = await scoreboardController.getScoreboardByUser(context,
+        authController.currentUser.value.id, widget.vocabularyEntity.id);
+    if (scoreboard != null &&
+        scoreboard.isAudio == true &&
+        scoreboard.isQuestion == true) {
+      setState(() {
+        isCompleted = true;
+      });
+    }
   }
 
   @override
@@ -43,63 +70,92 @@ class _ItemVocabularyDetailState extends State<ItemVocabularyDetail> {
         color: AppColor.tinintIce,
       ),
       child: Center(
-        child: Column(
+        child: Stack(
           children: [
-            ImageSvgUrlCustom(
-              imagePath: widget.vocabularyEntity.thumbnail,
-              height: 110,
-              width: 100,
+            Positioned(
+              top: 0,
+              right: 2,
+              child: isCompleted
+                  ? const ImageSvgUrlCustom(
+                      imagePath: AppIcons.icTick,
+                      height: 24,
+                      width: 24,
+                    )
+                  : Container(),
             ),
-            languageCode != 'vi'
-                ? Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Text(
-                        widget.vocabularyEntity.phoneticTranscription ?? ""),
-                  )
-                : Container(
-                    height: 0,
+            Column(
+              children: [
+                ImageSvgUrlCustom(
+                  imagePath: widget.vocabularyEntity.thumbnail,
+                  height: 110,
+                  width: 100,
+                ),
+                languageCode != 'vi'
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text(
+                            widget.vocabularyEntity.phoneticTranscription ??
+                                ""),
+                      )
+                    : Container(
+                        height: 0,
+                      ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10, right: 8.0, left: 8),
+                  child: Text(
+                    widget.vocabularyEntity.wordLocalize,
+                    style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        overflow: TextOverflow.ellipsis),
                   ),
-            Padding(
-              padding: const EdgeInsets.only(top: 10, right: 8.0, left: 8),
-              child: Text(
-                widget.vocabularyEntity.wordLocalize,
-                style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    overflow: TextOverflow.ellipsis),
-              ),
+                ),
+                const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(right: 8, left: 8),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          _showDialogAndBottomSheet(
+                              context, widget.vocabularyEntity);
+                        },
+                        icon: Image.asset(
+                          AppIcons.icSnail,
+                          height: 41,
+                          width: 41,
+                        ),
+                      ),
+                      const Spacer(),
+                      IconButton(
+                        onPressed: () async {
+                          audioPlayer.play(UrlSource(
+                              widget.vocabularyEntity.audiosLocalize));
+                          scoreboardEntity = scoreboardEntity.copyWith(
+                              userId: authController.currentUser.value.id,
+                              learningId: widget.vocabularyEntity.categoryId,
+                              isAudio: true,
+                              vocabularyId: widget.vocabularyEntity.id);
+                          var scoreboardUserEntity = await scoreboardController
+                              .createOrGetScoreboardByUserByUser(
+                                  context, scoreboardEntity);
+                          await scoreboardController.updateScoreboardByUser(
+                              context, scoreboardUserEntity!);
+                          setState(() {
+                            fetchComplete();
+                          });
+                        },
+                        icon: SvgPicture.asset(
+                          AppIcons.icSound,
+                          height: 40,
+                          width: 40,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
             ),
-            const Spacer(),
-            Padding(
-              padding: const EdgeInsets.only(right: 8, left: 8),
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      _showDialogAndBottomSheet(
-                          context, widget.vocabularyEntity);
-                    },
-                    icon: Image.asset(
-                      AppIcons.icSnail,
-                      height: 41,
-                      width: 41,
-                    ),
-                  ),
-                  const Spacer(),
-                  IconButton(
-                    onPressed: () {
-                      audioPlayer.play(
-                          UrlSource(widget.vocabularyEntity.audiosLocalize));
-                    },
-                    icon: SvgPicture.asset(
-                      AppIcons.icSound,
-                      height: 40,
-                      width: 40,
-                    ),
-                  ),
-                ],
-              ),
-            )
           ],
         ),
       ),

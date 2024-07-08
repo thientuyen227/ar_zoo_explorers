@@ -6,6 +6,8 @@ import 'package:ar_zoo_explorers/core/data/models/user_story_model.dart';
 import 'package:ar_zoo_explorers/domain/entities/chars_entity.dart';
 import 'package:ar_zoo_explorers/domain/entities/learning_category_entity.dart';
 import 'package:ar_zoo_explorers/domain/entities/question_entity.dart';
+import 'package:ar_zoo_explorers/domain/entities/scoreboard_entity.dart';
+import 'package:ar_zoo_explorers/domain/entities/user_question_entity.dart';
 import 'package:ar_zoo_explorers/domain/entities/vocabulary_entity.dart';
 import 'package:ar_zoo_explorers/domain/entities/writing_practice_user_entity.dart';
 import 'package:ar_zoo_explorers/utils/connectivity_utils.dart';
@@ -54,11 +56,19 @@ class FirebaseFirestoreSource {
   final CollectionReference<Map<String, dynamic>>
       _writingPracticeUserColectionRef =
       FirebaseFirestore.instance.collection('writing_practice_user');
+  final CollectionReference<Map<String, dynamic>> _scoreboardColectionRef =
+      FirebaseFirestore.instance.collection('scoreboard');
+  final CollectionReference<Map<String, dynamic>> _userQuestionColectionRef =
+      FirebaseFirestore.instance.collection('user_question');
 
   Future<String> get generateUniqueAnimalModelId async =>
       _animalModelCollectionRef.add({}).then((value) => value.id);
   Future<String> get generateUniqueWritingPracticeUserEntityId async =>
       _writingPracticeUserColectionRef.add({}).then((value) => value.id);
+  Future<String> get generateUniqueScoreboardEntityId async =>
+      _scoreboardColectionRef.add({}).then((value) => value.id);
+  Future<String> get generateUniqueUserQuestionId async =>
+      _userQuestionColectionRef.add({}).then((value) => value.id);
 
   //User
   Future<UserModel?> getUser(String id) async {
@@ -1069,6 +1079,244 @@ class FirebaseFirestoreSource {
       });
       return getWritingPracticeUser(context, practiceWriteUserEntity.userId,
           practiceWriteUserEntity.writingPracticeId);
+    } else {
+      return showDialog(
+          context: context,
+          builder: (context) {
+            return const InternetDialog();
+          });
+    }
+  }
+
+  //Scoreboard
+  Future<ScoreboardEntity?> getScoreboard(
+      BuildContext context, String userId, String vocabularyId) async {
+    bool isConnected = await ConnectivityUtils.checkInternetConnection();
+    if (isConnected) {
+      var querySnapshot = await _scoreboardColectionRef
+          .where('userId', isEqualTo: userId)
+          .where('vocabularyId', isEqualTo: vocabularyId)
+          .get();
+      if (querySnapshot.docs.isNotEmpty) {
+        ScoreboardEntity scoreboardEntity = querySnapshot.docs
+            .map((doc) => ScoreboardEntity.fromMap(doc.data()))
+            .toList()
+            .first;
+        return scoreboardEntity;
+      } else {
+        return null;
+      }
+    } else {
+      return showDialog(
+          context: context,
+          builder: (context) {
+            return const InternetDialog();
+          });
+    }
+  }
+
+  Future<List<ScoreboardEntity>?> getAllScoreboard(
+      BuildContext context, String userId, String learningId) async {
+    try {
+      bool isConnected = await ConnectivityUtils.checkInternetConnection();
+      if (isConnected) {
+        var querySnapshot = await _scoreboardColectionRef
+            .where('userId', isEqualTo: userId)
+            .where('learningId', isEqualTo: learningId)
+            .get();
+        List<ScoreboardEntity> scoreboardEntity = querySnapshot.docs
+            .map((doc) => ScoreboardEntity.fromMap(doc.data()))
+            .toList();
+        return scoreboardEntity;
+      } else {
+        return showDialog(
+            context: context,
+            builder: (context) {
+              return const InternetDialog();
+            });
+      }
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
+  Future<ScoreboardEntity?> createOrGetScoreboard(
+      BuildContext context, ScoreboardEntity scoreboardEntity) async {
+    try {
+      bool isConnected = await ConnectivityUtils.checkInternetConnection();
+      if (isConnected) {
+        ScoreboardEntity? checker = await getScoreboard(
+            context, scoreboardEntity.userId, scoreboardEntity.vocabularyId);
+        if (checker == null) {
+          DocumentReference documentReference =
+              await _scoreboardColectionRef.add({
+            'id': '',
+            'userId': scoreboardEntity.userId,
+            'learningId': scoreboardEntity.learningId,
+            'vocabularyId': scoreboardEntity.vocabularyId,
+            'isAudio': scoreboardEntity.isAudio,
+            'isQuestion': scoreboardEntity.isQuestion,
+          });
+          ScoreboardEntity updatedScoreboardEntity = scoreboardEntity.copyWith(
+            id: documentReference.id,
+          );
+          await updateScoreboard(context, updatedScoreboardEntity);
+          return scoreboardEntity;
+        } else {
+          bool needsUpdate = false;
+          if (scoreboardEntity.isAudio == true &&
+              checker.isAudio != scoreboardEntity.isAudio) {
+            checker = checker.copyWith(isAudio: scoreboardEntity.isAudio);
+            needsUpdate = true;
+          }
+          if (scoreboardEntity.isQuestion == true &&
+              checker.isQuestion != scoreboardEntity.isQuestion) {
+            checker = checker.copyWith(isQuestion: scoreboardEntity.isQuestion);
+            needsUpdate = true;
+          }
+          if (needsUpdate) {
+            await updateScoreboard(context, checker);
+          }
+          return checker;
+        }
+      } else {
+        return showDialog(
+            context: context,
+            builder: (context) {
+              return const InternetDialog();
+            });
+      }
+    } catch (e, stackTrace) {
+      print('Create User Story Failed: $e');
+      FirebaseCrashlytics.instance.recordError(e, stackTrace);
+    }
+    return null;
+  }
+
+  Future<ScoreboardEntity?> updateScoreboard(
+      BuildContext context, ScoreboardEntity scoreboardEntity) async {
+    bool isConnected = await ConnectivityUtils.checkInternetConnection();
+    if (isConnected) {
+      await _scoreboardColectionRef.doc(scoreboardEntity.id).update({
+        'id': scoreboardEntity.id,
+        'userId': scoreboardEntity.userId,
+        'learningId': scoreboardEntity.learningId,
+        'vocabularyId': scoreboardEntity.vocabularyId,
+        'isAudio': scoreboardEntity.isAudio,
+        'isQuestion': scoreboardEntity.isQuestion,
+      });
+      return getScoreboard(
+          context, scoreboardEntity.userId, scoreboardEntity.id);
+    } else {
+      return showDialog(
+          context: context,
+          builder: (context) {
+            return const InternetDialog();
+          });
+    }
+  }
+
+  //UserQuestion
+  Future<UserQuestionEntity?> getQuestionByUser(
+      BuildContext context, String userId, String learningId) async {
+    bool isConnected = await ConnectivityUtils.checkInternetConnection();
+    if (isConnected) {
+      var querySnapshot = await _userQuestionColectionRef
+          .where('userId', isEqualTo: userId)
+          .where('learningId', isEqualTo: learningId)
+          .get();
+      if (querySnapshot.docs.isNotEmpty) {
+        UserQuestionEntity userQuestionEntity = querySnapshot.docs
+            .map((doc) => UserQuestionEntity.fromMap(doc.data()))
+            .toList()
+            .first;
+        return userQuestionEntity;
+      } else {
+        return null;
+      }
+    } else {
+      return showDialog(
+          context: context,
+          builder: (context) {
+            return const InternetDialog();
+          });
+    }
+  }
+
+  Future<List<UserQuestionEntity>?> getAllQuestionByUser(
+      BuildContext context) async {
+    try {
+      bool isConnected = await ConnectivityUtils.checkInternetConnection();
+      if (isConnected) {
+        var querySnapshot = await _userQuestionColectionRef.get();
+        List<UserQuestionEntity> userQuestionEntity = querySnapshot.docs
+            .map((doc) => UserQuestionEntity.fromMap(doc.data()))
+            .toList();
+        return userQuestionEntity;
+      } else {
+        return showDialog(
+            context: context,
+            builder: (context) {
+              return const InternetDialog();
+            });
+      }
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
+  Future<UserQuestionEntity?> createOrGetQuestionByUser(
+      BuildContext context, UserQuestionEntity userQuestionEntity) async {
+    try {
+      bool isConnected = await ConnectivityUtils.checkInternetConnection();
+      if (isConnected) {
+        UserQuestionEntity? checker = await getQuestionByUser(
+            context, userQuestionEntity.userId, userQuestionEntity.learningId);
+        if (checker == null) {
+          DocumentReference documentReference =
+              await _userQuestionColectionRef.add({
+            'id': '',
+            'userId': userQuestionEntity.userId,
+            'learningId': userQuestionEntity.learningId,
+            'indexQuestion': userQuestionEntity.indexQuestion
+          });
+          UserQuestionEntity updatedUserQuestionEntity =
+              userQuestionEntity.copyWith(
+            id: documentReference.id,
+          );
+          await updateQuestionByUser(context, updatedUserQuestionEntity);
+          return userQuestionEntity;
+        } else {
+          return checker;
+        }
+      } else {
+        return showDialog(
+            context: context,
+            builder: (context) {
+              return const InternetDialog();
+            });
+      }
+    } catch (e, stackTrace) {
+      print('Create User Story Failed: $e');
+      FirebaseCrashlytics.instance.recordError(e, stackTrace);
+    }
+    return null;
+  }
+
+  Future<UserQuestionEntity?> updateQuestionByUser(
+      BuildContext context, UserQuestionEntity userQuestionEntity) async {
+    bool isConnected = await ConnectivityUtils.checkInternetConnection();
+    if (isConnected) {
+      await _userQuestionColectionRef.doc(userQuestionEntity.id).update({
+        'id': userQuestionEntity.id,
+        'userId': userQuestionEntity.userId,
+        'learningId': userQuestionEntity.learningId,
+        'indexQuestion': userQuestionEntity.indexQuestion
+      });
+      return getQuestionByUser(
+          context, userQuestionEntity.userId, userQuestionEntity.learningId);
     } else {
       return showDialog(
           context: context,

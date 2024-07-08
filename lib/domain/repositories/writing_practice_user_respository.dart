@@ -15,7 +15,7 @@ abstract class WritingPracticeUserRepository {
       updateWritingPracticeUser(BuildContext context,
           WritingPracticeUserEntity writingPracticeUserEntity);
   Future<Either<Failure, Success<WritingPracticeUserEntity?>>>
-      createOrGetWritingPractice(BuildContext context, String userId,
+      createOrGetWritingPractice(BuildContext context,
           WritingPracticeUserEntity writingPracticeUserEntity);
   Future<Either<Failure, Success<String>>> uploadImageToFirebase(
       BuildContext context, Uint8List imageBytes, String imageName);

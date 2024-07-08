@@ -1,7 +1,12 @@
 import 'package:ar_zoo_explorers/app/config/app_router.gr.dart';
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
+import 'package:ar_zoo_explorers/core/data/controller/auth_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/scoreboard_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/vocabulary_controller.dart';
 import 'package:ar_zoo_explorers/domain/entities/learning_category_entity.dart';
+import 'package:ar_zoo_explorers/domain/entities/scoreboard_entity.dart';
+import 'package:ar_zoo_explorers/domain/entities/vocabulary_entity.dart';
 import 'package:ar_zoo_explorers/features/vocabulary/presentation/vocabulary_state.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +24,36 @@ class ItemVocabulary extends StatefulWidget {
 }
 
 class _ItemVocabularyState extends State<ItemVocabulary> {
+  AuthController authController = AuthController.findOrInitialize;
+  final scoreboardController = ScoreboardController.findOrInitialize;
+  final vocabularyController = VocabularyController.findOrInitialize;
   var isComplete = false;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    List<VocabularyEntity>? vocabularyEntities =
+        await vocabularyController.getAllVocabularys(context);
+    List<ScoreboardEntity>? scoreboards =
+        await scoreboardController.getAllScoreboardByUser(
+            context,
+            authController.currentUser.value.id,
+            widget.learningCategoryEntity.id);
+    scoreboards = scoreboards!
+        .where(
+            (element) => element.isAudio == true && element.isQuestion == true)
+        .toList();
+    if (vocabularyEntities!.length == scoreboards.length) {
+      setState(() {
+        isComplete = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

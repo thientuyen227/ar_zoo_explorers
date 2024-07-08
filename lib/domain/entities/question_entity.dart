@@ -8,6 +8,7 @@ class QuestionEntity {
   Map<String, String> question;
   List<Map<String, String>>? options;
   String categoryId;
+  final String vocabularyId;
   String? image;
   String answer;
   List<WordFindChar>? puzzles;
@@ -17,6 +18,7 @@ class QuestionEntity {
     required this.question,
     this.options,
     required this.categoryId,
+    required this.vocabularyId,
     required this.image,
     required this.answer,
     this.puzzles,
@@ -28,6 +30,7 @@ class QuestionEntity {
       'question': question,
       'options': options,
       'categoryId': categoryId,
+      'vocabularyId': vocabularyId,
       'image': image,
       'answer': answer,
     };
@@ -43,6 +46,7 @@ class QuestionEntity {
               .toList()
           : null,
       categoryId: map['categoryId'] as String,
+      vocabularyId: map['vocabularyId'] as String,
       image: map['image'] as String?,
       answer: map['answer'] as String,
     );
@@ -58,6 +62,7 @@ class QuestionEntity {
     required Map<String, String> question,
     List<Map<String, String>>? options,
     String? categoryId,
+    String? vocabularyId,
     String? image,
     required String answer,
   }) {
@@ -66,6 +71,7 @@ class QuestionEntity {
       question: question,
       options: options ?? this.options,
       categoryId: categoryId ?? this.categoryId,
+      vocabularyId: vocabularyId ?? this.vocabularyId,
       image: image ?? this.image,
       answer: answer,
     );

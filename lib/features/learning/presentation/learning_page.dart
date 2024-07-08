@@ -62,10 +62,10 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
                   lotties: AppLotties.vocabulary),
               _renderTitleAndIcon(
                   title: LanguageKeys.puzzle,
-                  router: Routes.puzzleword,
+                  router: Routes.puzzle,
                   lotties: AppLotties.puzzle),
               _renderTitleAndIcon(
-                  title: LanguageKeys.practiceWrite,
+                  title: LanguageKeys.writingPractice,
                   router: Routes.writingpractice,
                   lotties: AppLotties.practiceWrite),
             ],

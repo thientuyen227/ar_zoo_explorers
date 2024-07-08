@@ -1,57 +1,40 @@
-import 'dart:ui' as ui;
-
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/core/data/controller/auth_controller.dart';
-import 'package:ar_zoo_explorers/core/data/controller/chars_controller.dart';
-import 'package:ar_zoo_explorers/core/data/controller/writing_practice_controller.dart';
-import 'package:ar_zoo_explorers/domain/entities/writing_practice_user_entity.dart';
-import 'package:ar_zoo_explorers/features/writingpracticedetail/presentation/writing_practice_detail_cubit.dart';
-import 'package:ar_zoo_explorers/features/writingpracticedetail/presentation/writing_practice_detail_state.dart';
+import 'package:ar_zoo_explorers/core/data/controller/user_question_controller.dart';
+import 'package:ar_zoo_explorers/domain/entities/user_question_entity.dart';
+import 'package:ar_zoo_explorers/features/puzzledetail/presentation/puzzle_detail_cubit.dart';
+import 'package:ar_zoo_explorers/features/puzzledetail/presentation/puzzle_detail_state.dart';
 import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:finger_painter/finger_painter.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 
-class DialogExit extends StatefulWidget {
-  final GlobalKey<State<StatefulWidget>> globalKey;
-  const DialogExit({
-    super.key,
-    required this.state,
-    required this.painterController,
-    required this.globalKey,
-  });
-
-  final WritingPracticeDetailState state;
-  final PainterController painterController;
+class DialogSaving extends StatefulWidget {
+  const DialogSaving(
+      {super.key,
+      required this.state,
+      required this.indexQuestion,
+      required this.learningId});
+  final PuzzleDetailState state;
+  final int indexQuestion;
+  final String learningId;
 
   @override
-  _DialogExitState createState() => _DialogExitState();
+  State<DialogSaving> createState() => _DialogSavingState();
 }
 
-class _DialogExitState extends State<DialogExit> {
+class _DialogSavingState extends State<DialogSaving> {
   final languageCode = Get.locale?.languageCode;
   AuthController authController = AuthController.findOrInitialize;
-  WritingPracticeController writingPracticeController =
-      WritingPracticeController.findOrInitialize;
-  CharsController charsController = CharsController.findOrInitialize;
-  WritingPracticeDetailCubit cubit = WritingPracticeDetailCubit();
-  WritingPracticeUserEntity writingPracticeUser = WritingPracticeUserEntity(
-      id: '', userId: '', writingPracticeId: '', practicedImagePaths: {});
-  bool isSaving = false;
+  UserQuestionController userQuestionController =
+      UserQuestionController.findOrInitialize;
 
-  Future<Uint8List?> captureImageFromPainter(
-      PainterController controller) async {
-    RenderRepaintBoundary boundary = widget.globalKey.currentContext!
-        .findRenderObject() as RenderRepaintBoundary;
-    ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-    return byteData?.buffer.asUint8List();
-  }
+  PuzzleDetailCubit cubit = PuzzleDetailCubit();
+  UserQuestionEntity userQuestionEntity =
+      UserQuestionEntity(id: '', userId: '', learningId: '', indexQuestion: {});
+  bool isSaving = false;
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +43,8 @@ class _DialogExitState extends State<DialogExit> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: Container(
-        height: widget.state.width * 0.4,
-        width: widget.state.height * 0.9,
+        height: widget.state.height * 0.4,
+        width: widget.state.width * 0.9,
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(10)),
           border: Border.all(width: 8, color: AppColor.vibrantYellow),
@@ -93,18 +76,18 @@ class _DialogExitState extends State<DialogExit> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Center(
+          const Center(
             child: ImageSvgUrlCustom(
               imagePath: AppImages.imgDialogSave,
-              height: (widget.state.width - widget.state.height) / 2.8,
-              width: (widget.state.width - widget.state.height) / 2.8,
+              height: 150,
+              width: 150,
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Text(
-              LanguageKeys.savingImage.tr,
-              style: const TextStyle(fontSize: 30, fontFamily: 'Coiny-Regular'),
+              LanguageKeys.savingQuestion.tr,
+              style: const TextStyle(fontSize: 20, fontFamily: 'Coiny-Regular'),
             ),
           ),
           if (!isSaving) ...{
@@ -131,31 +114,21 @@ class _DialogExitState extends State<DialogExit> {
                     setState(() {
                       isSaving = true;
                     });
-                    var currentChars = charsController.currentChars.value;
-                    Uint8List? imageBytes =
-                        await captureImageFromPainter(widget.painterController);
+                    var currentUserQuestion =
+                        userQuestionController.currentUserQuestionUser.value;
 
-                    if (imageBytes != null) {
-                      currentChars.imagePaths[languageCode] =
-                          await writingPracticeController.uploadPractice(
-                              context,
-                              imageBytes,
-                              '${authController.currentUser.value.id}_${currentChars.char}');
-                    } else {
-                      print('Failed to capture image');
-                    }
-
-                    writingPracticeUser = writingPracticeUser.copyWith(
-                      practicedImagePaths: currentChars.imagePaths,
+                    currentUserQuestion.indexQuestion[languageCode!] =
+                        widget.indexQuestion;
+                    userQuestionEntity = userQuestionEntity.copyWith(
                       userId: authController.currentUser.value.id,
-                      writingPracticeId: currentChars.id,
+                      learningId: widget.learningId,
+                      indexQuestion: currentUserQuestion.indexQuestion,
                     );
-                    var writingPracticeUserEntity =
-                        await writingPracticeController
-                            .createOrGetWritingPracticeByUser(
-                                context, writingPracticeUser);
-                    await writingPracticeController.updateWritingPracticeByUser(
-                        context, writingPracticeUserEntity!);
+                    var userQuestionEntityUpdate = await userQuestionController
+                        .createOrGetUserQuestionByUserByUser(
+                            context, userQuestionEntity);
+                    await userQuestionController.updateUserQuestionByUser(
+                        context, userQuestionEntityUpdate!);
                     setState(() {
                       isSaving = false;
                     });

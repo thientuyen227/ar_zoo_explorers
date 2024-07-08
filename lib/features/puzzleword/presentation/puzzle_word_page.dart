@@ -1,19 +1,28 @@
-import 'package:ar_zoo_explorers/app/config/app_router.gr.dart';
+import 'dart:async';
+import 'dart:math';
+
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
-import 'package:ar_zoo_explorers/domain/entities/learning_category_entity.dart';
+import 'package:ar_zoo_explorers/core/data/controller/auth_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/question_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/scoreboard_controller.dart';
+import 'package:ar_zoo_explorers/domain/entities/question_entity.dart';
+import 'package:ar_zoo_explorers/domain/entities/scoreboard_entity.dart';
 import 'package:ar_zoo_explorers/features/puzzleword/presentation/puzzle_word_cubit.dart';
 import 'package:ar_zoo_explorers/features/puzzleword/presentation/puzzle_word_state.dart';
+import 'package:ar_zoo_explorers/utils/widget/congratulation_widget.dart';
 import 'package:ar_zoo_explorers/utils/widget/custom_back_button.dart';
+import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 
 @RoutePage()
 class PuzzleWordPage extends StatefulWidget {
-  const PuzzleWordPage({super.key});
+  const PuzzleWordPage({super.key, required this.vocabularyId});
+  final String vocabularyId;
 
   @override
   State createState() => _State();
@@ -21,137 +30,375 @@ class PuzzleWordPage extends StatefulWidget {
 
 class _State
     extends BaseState<PuzzleWordState, PuzzleWordCubit, PuzzleWordPage> {
-  int? selectedAnswerIndex;
-  int questionIndex = 0;
-  void pickAnswer(int value) {
-    selectedAnswerIndex = value;
-
-    setState(() {});
-  }
+  final questionController = QuestionController.findOrInitialize;
+  AuthController authController = AuthController.findOrInitialize;
+  final scoreboardController = ScoreboardController.findOrInitialize;
+  AudioPlayer audioPlayer = AudioPlayer();
+  List<String>? arrayBtns;
+  int indexQues = 0;
+  int hintCount = 0;
+  bool isFull = false;
+  bool isDone = false;
+  bool isChose = false;
+  QuestionEntity? currentQues;
+  ScoreboardEntity scoreboardEntity = ScoreboardEntity(
+    id: '',
+    userId: '',
+    learningId: '',
+    vocabularyId: '',
+    isAudio: false,
+    isQuestion: false,
+  );
 
   @override
   void initState() {
-    cubit.init(context);
+    cubit.init(context: context, vocabularyId: widget.vocabularyId);
     super.initState();
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    audioPlayer.dispose();
+  }
+
+  @override
   Widget buildByState(BuildContext context, PuzzleWordState state) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(LanguageKeys.puzzle.tr,
-            style: const TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-                fontWeight: FontWeight.bold)),
-        backgroundColor: const Color.fromARGB(255, 109, 189, 255),
-        elevation: 1,
-        leading: const Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [CustomBackButton()]),
+    if (state.questionEntities != null && state.questionEntities!.isNotEmpty) {
+      currentQues = state.questionEntities![indexQues];
+      if (arrayBtns == null) {
+        int totalKeywords = 16;
+        arrayBtns = cubit.generateKeywords(currentQues!.answer, totalKeywords);
+        generateHint(answer: currentQues!.answer);
+      }
+    }
+
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (didPop) {
+        context.router.pop();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(LanguageKeys.puzzle.tr,
+              style: const TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold)),
+          backgroundColor: const Color.fromARGB(255, 109, 189, 255),
+          elevation: 1,
+          leading: const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [CustomBackButton()]),
+        ),
+        body: currentQues != null &&
+                state.questionEntities != null &&
+                state.questionEntities!.isNotEmpty
+            ? Stack(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Center(
+                                child: Column(
+                                  children: [
+                                    const SizedBox(
+                                      height: 30,
+                                    ),
+                                    _renderQuestion(
+                                        question: state
+                                            .questionEntities![indexQues]
+                                            .questionLocalize),
+                                    _renderImage(
+                                        image: state
+                                            .questionEntities![indexQues]
+                                            .image!),
+                                    const SizedBox(
+                                      height: 30,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: SizedBox(
+                                        width: 500,
+                                        child: Wrap(
+                                            spacing: 10,
+                                            alignment: WrapAlignment.center,
+                                            children: [
+                                              _renderAnswer(
+                                                  currentQues: currentQues!),
+                                            ]),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 30,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      _renderKeyword(currentQues: currentQues!),
+                    ],
+                  ),
+                  if (isDone)
+                    const Positioned(
+                        bottom: 100, child: CongratulationWidget()),
+                ],
+              )
+            : Container(),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Level 1",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+    );
+  }
+
+  generateHint({required String answer}) async {
+    QuestionEntity currentQues = state.questionEntities![indexQues];
+    final List<String> wl = [answer];
+    currentQues.puzzles = List.generate(wl[0].split("").length, (index) {
+      return WordFindChar(
+          correctValue: currentQues.answer.split("")[index].toUpperCase());
+    });
+
+    List<WordFindChar> puzzleNoHints = currentQues.puzzles!
+        .where((puzzle) => !puzzle.hintShow && puzzle.currentIndex == null)
+        .toList();
+
+    if (puzzleNoHints.isNotEmpty) {
+      hintCount++;
+      int indexHint = Random().nextInt(puzzleNoHints.length);
+      int countTemp = 0;
+
+      currentQues.puzzles = currentQues.puzzles!.map((puzzle) {
+        if (!puzzle.hintShow && puzzle.currentIndex == null) countTemp++;
+
+        if (indexHint == countTemp - 1) {
+          puzzle.hintShow = true;
+          puzzle.currentValue = puzzle.correctValue?.toUpperCase();
+          puzzle.currentIndex = arrayBtns!
+              .indexWhere((btn) => btn == puzzle.correctValue?.toUpperCase());
+        }
+
+        return puzzle;
+      }).toList();
+
+      setState(() {});
+    }
+  }
+
+  Future<void> setBtnClick(int index) async {
+    QuestionEntity currentQues = state.questionEntities![indexQues];
+
+    int currentIndexEmpty = currentQues.puzzles!
+        .indexWhere((puzzle) => puzzle.currentValue == null);
+
+    if (currentIndexEmpty >= 0 && arrayBtns!.isNotEmpty) {
+      currentQues.puzzles![currentIndexEmpty].currentIndex = index;
+      currentQues.puzzles![currentIndexEmpty].currentValue = arrayBtns![index];
+      currentQues.puzzles![currentIndexEmpty].isChose = true;
+
+      setState(() {});
+
+      if (fieldCompleteCorrect(currentQues: currentQues)) {
+        isDone = true;
+        setState(() {
+          Timer(const Duration(seconds: 3), () {
+            audioPlayer.stop();
+            setState(() {
+              Navigator.of(context).pop(true);
+            });
+          });
+        });
+        scoreboardEntity = scoreboardEntity.copyWith(
+            userId: authController.currentUser.value.id,
+            learningId: currentQues.categoryId,
+            isQuestion: true,
+            vocabularyId: currentQues.vocabularyId);
+        var scoreboardUserEntity = await scoreboardController
+            .createOrGetScoreboardByUserByUser(context, scoreboardEntity);
+        await scoreboardController.updateScoreboardByUser(
+            context, scoreboardUserEntity!);
+
+        await Future.delayed(const Duration(seconds: 1));
+      }
+    }
+  }
+
+  bool fieldCompleteCorrect({required QuestionEntity currentQues}) {
+    bool complete = currentQues.puzzles!
+        .where((puzzle) => puzzle.currentValue == null)
+        .isEmpty;
+
+    if (!complete) {
+      isFull = false;
+      return complete;
+    }
+    isFull = true;
+    String answeredString =
+        currentQues.puzzles!.map((puzzle) => puzzle.currentValue).join("");
+    if (answeredString == currentQues.answer.toUpperCase()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Widget _renderKeyword({required QuestionEntity currentQues}) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      alignment: Alignment.center,
+      child: GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          childAspectRatio: state.height / (state.width * 2.2),
+          crossAxisCount: 8,
+          crossAxisSpacing: 4,
+          mainAxisSpacing: 4,
+        ),
+        itemCount: arrayBtns!.length,
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          int puzzleIndex = currentQues.puzzles!
+              .indexWhere((puzzle) => puzzle.currentIndex == index);
+          bool statusBtn = puzzleIndex >= 0;
+
+          if (statusBtn) {
+            currentQues.puzzles![puzzleIndex].isChose = true;
+          }
+          Color color = statusBtn ? Colors.black : const Color(0xff7EE7FD);
+          return Container(
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.circular(10),
             ),
-            Text(
-              LanguageKeys.choose_topic.tr,
-              style: const TextStyle(fontSize: 14),
+            alignment: Alignment.center,
+            child: TextButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                  (Set<MaterialState> states) {
+                    if (states.contains(MaterialState.pressed)) {
+                      return Colors.red;
+                    }
+                    return currentQues.puzzles!.any((puzzle) =>
+                            puzzle.currentIndex == index && puzzle.isChose!)
+                        ? Colors.grey
+                        : const Color(0xff7EE7FD);
+                  },
+                ),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+              ),
+              onPressed: () {
+                if (!statusBtn) {
+                  setBtnClick(index);
+                }
+              },
+              child: Text(
+                arrayBtns![index],
+                style: const TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
-            state.height != 0
-                ? Padding(
-                    padding: const EdgeInsets.only(top: 16.0),
-                    child: GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: state.width * 1.8 / state.height,
-                          crossAxisSpacing: 20),
-                      itemCount: state.learningcategories!.length,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            context.router.push(PuzzleWordDetailRoute(
-                                categoryId:
-                                    state.learningcategories![index].id));
-                          },
-                          child: _renderTopic(
-                              title:
-                                  state.learningcategories![index].nameLocalize,
-                              image: state.learningcategories![index].imagePath,
-                              level: "level1"),
-                        );
-                      },
-                    ),
-                  )
-                : Container()
-          ],
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _renderImage({required String image}) {
+    return Container(
+      decoration: BoxDecoration(
+          border: Border.all(),
+          borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(5), bottomRight: Radius.circular(5))),
+      height: 336,
+      width: 287,
+      child: Padding(
+        padding: const EdgeInsets.all(21.0),
+        child: ImageSvgUrlCustom(
+          imagePath: image,
+          height: 244,
+          width: 244,
         ),
       ),
     );
   }
 
-  Widget _renderTopic(
-      {required String title, required String image, required String level}) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 13.0),
-      child: Container(
-        height: 300,
-        decoration: BoxDecoration(
-          border: Border.all(),
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
+  Widget _renderQuestion({required String question}) {
+    return Container(
+      padding: const EdgeInsets.only(top: 14, bottom: 14, left: 43, right: 43),
+      decoration: BoxDecoration(
           color: AppColor.tinintIce,
+          border: Border.all(),
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+      width: 287,
+      child: Center(
+        child: Text(
+          question,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Lottie.asset(image, height: 95, width: 95),
-              Text(
-                title,
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  Widget _renderAnswer({required QuestionEntity currentQues}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+      alignment: Alignment.center,
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        spacing: 2.5,
+        runSpacing: 3,
+        children: currentQues.puzzles!.map((puzzle) {
+          Color color;
+
+          if (isDone) {
+            color = AppColor.green;
+          } else if (puzzle.hintShow) {
+            color = AppColor.vibrantYellow;
+          } else if (isFull) {
+            color = Colors.red;
+          } else {
+            color = const Color(0xff7EE7FD);
+          }
+
+          return InkWell(
+            onTap: () {
+              if (isDone) return;
+
+              isFull = false;
+              puzzle.clearValue();
+              setState(() {});
+            },
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius: BorderRadius.circular(10),
               ),
-              Container(
-                padding: const EdgeInsets.only(top: 10, bottom: 10),
-                width: 100,
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      childAspectRatio: 10,
-                      crossAxisSpacing: 3),
-                  itemCount: 3,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          color: AppColor.white),
-                    );
-                  },
+              width: 50,
+              height: 50,
+              child: Text(
+                (puzzle.currentValue ?? '').toUpperCase(),
+                style: const TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(level),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
+            ),
+          );
+        }).toList(),
       ),
     );
   }

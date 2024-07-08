@@ -46,7 +46,7 @@ class WritingPracticeUserRepositoryImplement
 
   @override
   Future<Either<Failure, Success<WritingPracticeUserEntity?>>>
-      createOrGetWritingPractice(BuildContext context, String userId,
+      createOrGetWritingPractice(BuildContext context,
           WritingPracticeUserEntity writingPracticeUserEntity) {
     return ResponseHandler.processResponse(() async {
       return Success(

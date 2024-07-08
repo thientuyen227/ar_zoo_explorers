@@ -12,11 +12,11 @@ class LearningCategoryRepositoryImplement
   final FirebaseFirestoreSource _firestoreSource = FirebaseFirestoreSource();
   @override
   Future<Either<Failure, Success<LearningCategoryEntity?>>> getLearningCategory(
-      BuildContext context, String learningCategoryId) {
+      BuildContext context, String learninglearningId) {
     return ResponseHandler.processResponse(() async {
       return Success(
           data: await _firestoreSource.getLearningCategory(
-              context, learningCategoryId));
+              context, learninglearningId));
     });
   }
 

@@ -22,10 +22,10 @@ class LearningCategoryController extends ControllerHelper {
   Rx<String> searchValue = Rx("");
 
   Future<LearningCategoryEntity?> getLearningCategory(
-      BuildContext context, String learningCategoryId) {
+      BuildContext context, String learninglearningId) {
     return processRequest<LearningCategoryEntity?>(
         request: () => _learningCategoryRepository.getLearningCategory(
-            context, learningCategoryId),
+            context, learninglearningId),
         onSuccess: (success) =>
             {_setCurrentLearningCategory(context, success.data!)},
         onFailure: (failure) =>

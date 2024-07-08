@@ -270,14 +270,12 @@ class AppLotties {
   static const String complete = "assets/lotties/complete.json";
   static const String practiceWrite = "assets/lotties/write_practice.json";
   static const String loading = "assets/lotties/loading_elephant.json";
-<<<<<<< HEAD
   static const String summer = "assets/lotties/summer.json";
   static const String fruits = "assets/lotties/fruits.json";
   static const String family = "assets/lotties/family.json";
   static const String animals = "assets/lotties/animals.json";
   static const String spring = "assets/lotties/spring.json";
   static const String toys = "assets/lotties/toys.json";
-=======
   static const String searchingModel = "assets/lotties/searching_model.json";
   static const String bgModelDetail = "assets/lotties/bg_model_detail.json";
   static const String scientistPanda = "assets/lotties/scientist_panda.json";
@@ -285,5 +283,4 @@ class AppLotties {
 
 class AppSound {
   static const String mindset = "audio/mindset.mp3";
->>>>>>> origin/develop_minhtien
 }

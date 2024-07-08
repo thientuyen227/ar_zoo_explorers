@@ -11,8 +11,8 @@ import 'package:get/get.dart';
 
 @RoutePage()
 class VocabularyDetailPage extends StatefulWidget {
-  VocabularyDetailPage({super.key, required this.category});
-  LearningCategoryEntity category;
+  const VocabularyDetailPage({super.key, required this.category});
+  final LearningCategoryEntity category;
 
   @override
   State createState() => _State();

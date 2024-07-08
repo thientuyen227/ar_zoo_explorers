@@ -46,9 +46,8 @@ import '../features/phonics/presentation/phonics_cubit.dart' as _i18;
 import '../features/phonicsdetail/presentation/phonics_detail_cubit.dart'
     as _i19;
 import '../features/puzzle/presentation/puzzle_cubit.dart' as _i20;
-import '../features/puzzleword/presentation/puzzle_word_cubit.dart' as _i21;
-import '../features/puzzleworddetail/presentation/puzzle_word_detail_cubit.dart'
-    as _i22;
+import '../features/puzzledetail/presentation/puzzle_detail_cubit.dart' as _i21;
+import '../features/puzzleword/presentation/puzzle_word_cubit.dart' as _i22;
 import '../features/searchmodel/presentation/searchmodel_cubit.dart' as _i26;
 import '../features/setting/presentation/setting_cubit.dart' as _i27;
 import '../features/story/presentation/story_cubit.dart' as _i28;
@@ -101,8 +100,8 @@ _i1.GetIt $initGetit(
   gh.factory<_i18.PhonicsCubit>(() => _i18.PhonicsCubit());
   gh.factory<_i19.PhonicsDetailCubit>(() => _i19.PhonicsDetailCubit());
   gh.factory<_i20.PuzzleCubit>(() => _i20.PuzzleCubit());
-  gh.factory<_i21.PuzzleWordCubit>(() => _i21.PuzzleWordCubit());
-  gh.factory<_i22.PuzzleWordDetailCubit>(() => _i22.PuzzleWordDetailCubit());
+  gh.factory<_i21.PuzzleDetailCubit>(() => _i21.PuzzleDetailCubit());
+  gh.factory<_i22.PuzzleWordCubit>(() => _i22.PuzzleWordCubit());
   gh.singleton<_i23.RecognizeVoiceManager>(() => _i23.RecognizeVoiceManager());
   gh.factory<_i24.RegisterCubit>(() => _i24.RegisterCubit());
   gh.factory<_i25.ResetPasswordCubit>(() => _i25.ResetPasswordCubit());

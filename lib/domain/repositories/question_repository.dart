@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 abstract class QuestionRepository {
   Future<Either<Failure, Success<QuestionEntity?>>> getQuestion(
-      BuildContext context, String learningCategoryId);
+      BuildContext context, String learninglearningId);
   Future<Either<Failure, Success<List<QuestionEntity>?>>> getAllQuestion(
     BuildContext context,
   );
