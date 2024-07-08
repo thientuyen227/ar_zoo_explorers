@@ -138,6 +138,7 @@ class AppImages {
   static const String imgArBaby_WhiteBG =
       "assets/images/img_ar_baby_white_bg.png";
   static const String imgBGStarrySky = "assets/images/img_bg_starry_sky.png";
+  static const String imgBGJungle = "assets/images/img_bg_jungle.png";
 
   //FLAGS
   static const String flagUK = "assets/images/flags/img_greatbritain.png";
@@ -257,6 +258,7 @@ class AppImages {
 }
 
 class AppLotties {
+  static const String arBaby = "assets/lotties/ar_baby.json";
   static const String typingAnimation = "assets/lotties/typing.json";
   static const String animationanimal = "assets/lotties/animationanimal.json";
   static const String congratulation = "assets/lotties/congratulation.json";
@@ -279,6 +281,8 @@ class AppLotties {
   static const String searchingModel = "assets/lotties/searching_model.json";
   static const String bgModelDetail = "assets/lotties/bg_model_detail.json";
   static const String scientistPanda = "assets/lotties/scientist_panda.json";
+  static const String bgForest = "assets/lotties/bg_forest.json";
+  static const String logoElephant = "assets/lotties/logo_elephant.json";
 }
 
 class AppSound {

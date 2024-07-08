@@ -44,6 +44,8 @@ class LanguageKeys {
   static const String change = "change";
   static const String update = "update";
   static const String birthday = "birthday";
+  static const String camera = "camera";
+  static const String gallery = "gallery";
 
   static const String goToLogin = "goToLogin";
   static const String rememberPass = "rememberPass";

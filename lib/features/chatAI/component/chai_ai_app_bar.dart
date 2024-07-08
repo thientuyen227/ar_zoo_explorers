@@ -23,6 +23,7 @@ class _ChatAIAppBarState extends State<ChatAIAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+
         // centerTitle: true,
         title: Row(
           children: [
@@ -31,16 +32,12 @@ class _ChatAIAppBarState extends State<ChatAIAppBar> {
             const Text("Ar Baby",
                 style: TextStyle(
                     fontSize: 22,
-                    color: AppColor.primaryColor,
+                    color: AppColor.white,
                     fontWeight: FontWeight.w800))
           ],
         ),
         toolbarHeight: height * 0.1,
-        backgroundColor: Colors.white,
-        shadowColor: Colors.grey,
-        surfaceTintColor: Colors.white,
-        elevation: 2,
-        // leadingWidth: height * 0.075,
+        backgroundColor: Colors.grey.shade300.withOpacity(0.1),
         leading: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [turnBack()]),
@@ -55,7 +52,7 @@ class _ChatAIAppBarState extends State<ChatAIAppBar> {
       icon: Icon(
         Icons.keyboard_arrow_left,
         size: height * 0.05,
-        color: AppColor.primaryColor,
+        color: AppColor.white,
       ),
     );
   }

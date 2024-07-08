@@ -14,6 +14,8 @@ class ChatAICubit extends BaseCubit<ChatAIState> {
 
   AuthController controller = AuthController.findOrInitialize;
 
+  final ValueNotifier<bool> isClosedLoading = ValueNotifier<bool>(false);
+
   final Dio _dio = Dio();
 
   Future<void> init() async {
@@ -26,6 +28,8 @@ class ChatAICubit extends BaseCubit<ChatAIState> {
         width: mediaSize.width,
         isImage: false,
         isEnabled: true));
+    await Future.delayed(const Duration(milliseconds: 2200));
+    emit(state.copyWith(isLoaded: true));
     hideLoading();
   }
 

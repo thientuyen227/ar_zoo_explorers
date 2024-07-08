@@ -23,12 +23,14 @@ class ChatAIBottomBar extends StatefulWidget {
 class _ChatAIBottomBarState extends State<ChatAIBottomBar> {
   double width = 0;
   double height = 0;
+  bool _isExpand = false;
   late SpeechToText _speech;
   bool _isListening = false;
 
   final _formKey = GlobalKey<FormBuilderState>();
 
   TextEditingController editingController = TextEditingController();
+
   final ImagePicker _picker = ImagePicker();
   bool isImage = false;
   XFile? image;
@@ -64,39 +66,75 @@ class _ChatAIBottomBarState extends State<ChatAIBottomBar> {
     }
   }
 
+  void onExpand() {
+    setState(() {
+      _isExpand = !_isExpand;
+      print(_isExpand);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return FormBuilder(
         key: _formKey,
         child: SingleChildScrollView(
-            reverse: true, // Scroll up when keyboard appears
+            reverse: true,
             child: Padding(
                 padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context)
-                        .viewInsets
-                        .bottom), // Adjust padding when keyboard is displayed
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
                 child: GestureDetector(
-                    onTap: () =>
-                        FocusScope.of(context).requestFocus(FocusNode()),
+                    onTap: () => {
+                          FocusScope.of(context).requestFocus(FocusNode()),
+                          onExpand(),
+                        },
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       width: width,
-                      // height: height * 0.1,
-                      color: Colors.transparent,
+                      color: Colors.grey.shade300.withOpacity(0.08),
                       child: Row(children: [
-                        isImage
-                            ? selectedImage(File(image!.path))
-                            : btnCamera(),
-                        FloatingActionButton(
-                          onPressed:
-                              _isListening ? _stopListening : _startListening,
-                          child:
-                              Icon(_isListening ? Icons.mic : Icons.mic_none),
-                        ),
+                        expandAction(),
                         Expanded(child: boxChat()),
                         btnSend()
                       ]),
                     )))));
+  }
+
+  Widget expandAction() {
+    return AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        width: _isExpand ? width * 0.3 : height * 0.05 + 15,
+        child: _isExpand
+            ? SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(children: [
+                  isImage ? selectedImage(File(image!.path)) : btnCamera(),
+                  GestureDetector(
+                      onTap: _isListening ? _stopListening : _startListening,
+                      child: Container(
+                        height: height * 0.055,
+                        width: height * 0.055,
+                        padding: const EdgeInsets.all(5),
+                        margin: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                        decoration: BoxDecoration(
+                            color: Colors.amber.shade600.withOpacity(0.9),
+                            shape: BoxShape.circle),
+                        child: Icon(_isListening ? Icons.mic : Icons.mic_none,
+                            size: height * 0.04, color: Colors.white),
+                      ))
+                ]))
+            : btnMore());
+  }
+
+  Widget btnMore() {
+    return Container(
+      height: height * 0.05,
+      width: height * 0.05,
+      // margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+      decoration: BoxDecoration(
+          color: Colors.amber.shade600.withOpacity(0.9),
+          shape: BoxShape.circle),
+      child: Icon(Icons.more_horiz, size: height * 0.04, color: Colors.white),
+    );
   }
 
   Widget btnSend() {
@@ -104,8 +142,9 @@ class _ChatAIBottomBarState extends State<ChatAIBottomBar> {
       icon: Container(
           height: height * 0.055,
           width: height * 0.055,
-          decoration: const BoxDecoration(
-              color: AppColor.primaryColor, shape: BoxShape.circle),
+          decoration: BoxDecoration(
+              color: Colors.amber.shade600.withOpacity(0.9),
+              shape: BoxShape.circle),
           padding: const EdgeInsets.all(0),
           child: Icon(
             Icons.send,
@@ -138,21 +177,22 @@ class _ChatAIBottomBarState extends State<ChatAIBottomBar> {
   }
 
   Widget btnCamera() {
-    return IconButton(
-      icon: Container(
-        height: height * 0.055,
-        width: height * 0.055,
-        decoration:
-            const BoxDecoration(color: Colors.grey, shape: BoxShape.circle),
+    return GestureDetector(
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.amber.shade600.withOpacity(0.9),
+            shape: BoxShape.circle),
         padding: const EdgeInsets.all(5),
-        // child: Icon(Icons.send, size: height * 0.035, color: Colors.white),
+        margin: const EdgeInsets.fromLTRB(5, 0, 5, 0),
         child: ClipOval(
             child: Image.asset(
+          height: height * 0.045,
+          width: height * 0.045,
           AppIcons.icCamera,
           fit: BoxFit.cover,
         )),
       ),
-      onPressed: () async {
+      onTap: () async {
         await _showPhotoSheet();
       },
     );
@@ -171,9 +211,9 @@ class _ChatAIBottomBarState extends State<ChatAIBottomBar> {
           children: [
             ClipRRect(child: Image.asset(AppIcons.icCamera, fit: BoxFit.cover)),
             const SizedBox(width: 5),
-            const SizedBox(
-                child: Text("Camera",
-                    style: TextStyle(fontSize: 18, color: Colors.white)))
+            SizedBox(
+                child: Text(LanguageKeys.camera.tr,
+                    style: const TextStyle(fontSize: 18, color: Colors.white)))
           ],
         ),
       ),
@@ -198,9 +238,9 @@ class _ChatAIBottomBarState extends State<ChatAIBottomBar> {
             ClipRRect(
                 child: Image.asset(AppIcons.icWhiteGallery, fit: BoxFit.cover)),
             const SizedBox(width: 5),
-            const SizedBox(
-                child: Text("Gallery",
-                    style: TextStyle(fontSize: 18, color: Colors.white)))
+            SizedBox(
+                child: Text(LanguageKeys.gallery.tr,
+                    style: const TextStyle(fontSize: 18, color: Colors.white)))
           ],
         ),
       ),
@@ -219,7 +259,8 @@ class _ChatAIBottomBarState extends State<ChatAIBottomBar> {
         height: height * 0.07,
         width: height * 0.07,
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
-        padding: const EdgeInsets.all(5),
+        margin: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+        // padding: const EdgeInsets.all(5),
         child: ClipRRect(
             borderRadius: BorderRadius.circular(15),
             child: Image.file(imgFile, fit: BoxFit.cover)),
@@ -230,11 +271,42 @@ class _ChatAIBottomBarState extends State<ChatAIBottomBar> {
   Widget boxChat() {
     return TextFormField(
       controller: editingController,
+      maxLines: 5,
+      minLines: 1,
       decoration: InputDecoration(
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-          hintText: LanguageKeys.write_message.tr,
-          // prefixIcon: Image.asset(AppIcons.icCalendar),
-          contentPadding: const EdgeInsets.all(10)),
+        fillColor: Colors.white,
+        filled: true,
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.blue, width: 2.0),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+        hintText: LanguageKeys.write_message.tr,
+        contentPadding: const EdgeInsets.all(10),
+        suffixIcon: editingController.text.isNotEmpty
+            ? IconButton(
+                icon: Container(
+                  decoration: const BoxDecoration(
+                      shape: BoxShape.circle, color: Colors.grey),
+                  padding: const EdgeInsets.all(3),
+                  child: Icon(
+                    Icons.clear,
+                    size: width * 0.055,
+                    color: Colors.white,
+                  ),
+                ),
+                onPressed: () {
+                  editingController.clear();
+                  setState(() {});
+                },
+              )
+            : null,
+      ),
+      onChanged: (text) {
+        setState(() {
+          _isExpand = false;
+        });
+      },
     );
   }
 
