@@ -48,9 +48,9 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              _renderPoints(),
+              // _renderPoints(),
               const SizedBox(
-                height: 24,
+                height: 14,
               ),
               _renderTitleAndIcon(
                   title: LanguageKeys.phonics.tr,

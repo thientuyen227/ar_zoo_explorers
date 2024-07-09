@@ -187,6 +187,8 @@ class AppImages {
       "assets/images/learning_image/write/background_dialog.jpg";
   static const String imgDialogSave =
       "assets/images/learning_image/write/image_dialog.png";
+  static const String imgDialogContinue =
+      "assets/images/learning_image/puzzle/img_dialog_continue.png";
 
   static const String imgNoInternet = "assets/images/img_no_internet.png";
 

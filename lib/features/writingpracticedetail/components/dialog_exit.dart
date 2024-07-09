@@ -87,8 +87,9 @@ class _DialogExitState extends State<DialogExit> {
     return Container(
       alignment: Alignment.center,
       padding: const EdgeInsets.all(8),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
+      decoration: BoxDecoration(
+        border: Border.all(width: 2, color: Colors.white),
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -101,7 +102,7 @@ class _DialogExitState extends State<DialogExit> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(8.0),
             child: Text(
               LanguageKeys.savingImage.tr,
               style: const TextStyle(fontSize: 30, fontFamily: 'Coiny-Regular'),
@@ -116,15 +117,19 @@ class _DialogExitState extends State<DialogExit> {
                     context.router.pop(false);
                   },
                   style: const ButtonStyle(
-                      alignment: Alignment.center,
                       backgroundColor: MaterialStatePropertyAll(Colors.red)),
-                  child: const ImageSvgUrlCustom(
-                    imagePath: AppIcons.icClose,
-                    color: Colors.white,
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: ImageSvgUrlCustom(
+                      imagePath: AppIcons.icClose,
+                      height: 35,
+                      width: 35,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
                 const SizedBox(
-                  width: 100,
+                  width: 98,
                 ),
                 ElevatedButton(
                   onPressed: () async {

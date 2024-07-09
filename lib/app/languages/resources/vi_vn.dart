@@ -98,8 +98,7 @@ const Map<String, String> vi_vn = {
   "kidsActivities": "Hoạt Động Cho Bé",
 
   //model
-  'description': 'Mô tả:',
-  'location': 'Nơi sống:',
+  'meaning': 'Mang ý nghĩa:',
 
   // Avatar
   'avatar_viewAvatar': 'Xem Avatar',
@@ -122,6 +121,9 @@ const Map<String, String> vi_vn = {
   'writingPractice': 'Luyện viết',
   'savingImage': 'Lưu ảnh?',
   'savingQuestion': 'Lưu câu hỏi hiện tại?',
+  'continueQuestion': 'Tiếp tục với câu hỏi trước?',
+  'letter': 'Chữ cái',
+  'number': 'Chữ số',
 
   // Auth
   'auth_enterEmail': "Nhập email của bạn",

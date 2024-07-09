@@ -9,12 +9,17 @@ class WritingPracticeState {
   double height;
   Uint8List? backgroundImageBytes;
   List<CharsEntity> charsEntities;
+  List<CharsEntity> numbersEntities;
+  List<CharsEntity> currentEntities;
+
   WritingPracticeState(
       {this.pageStatus = PageStatus.loading,
       this.height = 0,
       this.width = 0,
       this.backgroundImageBytes,
-      this.charsEntities = const []});
+      this.charsEntities = const [],
+      this.numbersEntities = const [],
+      this.currentEntities = const []});
 
   WritingPracticeState copyWith({
     PageStatus? pageStatus,
@@ -22,12 +27,16 @@ class WritingPracticeState {
     double? width,
     Uint8List? backgroundImageBytes,
     List<CharsEntity>? charsEntities,
+    List<CharsEntity>? numbersEntities,
+    List<CharsEntity>? currentEntities,
   }) {
     return WritingPracticeState(
         pageStatus: pageStatus ?? this.pageStatus,
         height: height ?? this.height,
         width: width ?? this.width,
         backgroundImageBytes: backgroundImageBytes ?? this.backgroundImageBytes,
-        charsEntities: charsEntities ?? this.charsEntities);
+        charsEntities: charsEntities ?? this.charsEntities,
+        numbersEntities: numbersEntities ?? this.numbersEntities,
+        currentEntities: currentEntities ?? this.currentEntities);
   }
 }

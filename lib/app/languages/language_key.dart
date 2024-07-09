@@ -79,8 +79,7 @@ class LanguageKeys {
   static const String kidsActivities = "kidsActivities";
 
   //Model
-  static const String description = 'description';
-  static const String location = 'location';
+  static const String meaning = 'meaning';
 
   // Authentication Pages
   static const String auth_enterEmail = 'auth_enterEmail';
@@ -117,6 +116,9 @@ class LanguageKeys {
   static const String writingPractice = 'writingPractice';
   static const String savingImage = 'savingImage';
   static const String savingQuestion = 'savingQuestion';
+  static const String continueQuestion = 'continueQuestion';
+  static const String letter = 'letter';
+  static const String number = 'number';
 
   // Setting Page
   static const String accountManager = 'accountManager';

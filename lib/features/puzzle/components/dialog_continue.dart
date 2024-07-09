@@ -61,15 +61,16 @@ class _DialogContinueState extends State<DialogContinue> {
     return Container(
       alignment: Alignment.center,
       padding: const EdgeInsets.all(8),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
+      decoration: BoxDecoration(
+        border: Border.all(width: 2, color: Colors.white),
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           const Center(
             child: ImageSvgUrlCustom(
-              imagePath: AppImages.imgDialogSave,
+              imagePath: AppImages.imgDialogContinue,
               height: 150,
               width: 150,
             ),
@@ -77,8 +78,8 @@ class _DialogContinueState extends State<DialogContinue> {
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Text(
-              LanguageKeys.savingQuestion.tr,
-              style: const TextStyle(fontSize: 20, fontFamily: 'Coiny-Regular'),
+              LanguageKeys.continueQuestion.tr,
+              style: const TextStyle(fontSize: 18, fontFamily: 'Coiny-Regular'),
             ),
           ),
           Row(
@@ -89,15 +90,19 @@ class _DialogContinueState extends State<DialogContinue> {
                   context.router.pop(false);
                 },
                 style: const ButtonStyle(
-                    alignment: Alignment.center,
                     backgroundColor: MaterialStatePropertyAll(Colors.red)),
-                child: const ImageSvgUrlCustom(
-                  imagePath: AppIcons.icClose,
-                  color: Colors.white,
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: ImageSvgUrlCustom(
+                    imagePath: AppIcons.icClose,
+                    height: 35,
+                    width: 35,
+                    color: Colors.white,
+                  ),
                 ),
               ),
               const SizedBox(
-                width: 100,
+                width: 90,
               ),
               ElevatedButton(
                 onPressed: () async {

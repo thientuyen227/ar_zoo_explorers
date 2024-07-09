@@ -174,7 +174,7 @@ class _DialogAnimalState extends State<DialogAnimal> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    LanguageKeys.description.tr,
+                    LanguageKeys.meaning.tr,
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w600),
                   ),
@@ -193,7 +193,7 @@ class _DialogAnimalState extends State<DialogAnimal> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    LanguageKeys.location.tr,
+                    LanguageKeys.example.tr,
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w600),
                   ),
@@ -221,7 +221,7 @@ class _DialogAnimalState extends State<DialogAnimal> {
           Center(
               child: ImageSvgUrlCustom(
             imagePath: vocabularyEntity!.thumbnail,
-            height: height! * 0.18,
+            height: height! * 0.16,
             width: width! * 0.4,
           )),
           Column(

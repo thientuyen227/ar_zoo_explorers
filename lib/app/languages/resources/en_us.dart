@@ -95,8 +95,7 @@ const Map<String, String> en_us = {
   "kidsActivities": "Kids's Activities",
 
   //Model
-  'description': 'Description:',
-  'location': 'Location:',
+  'meaning': 'Meaning:',
 
   // Avatar
   'avatar_viewAvatar': 'View Avatar',
@@ -130,6 +129,9 @@ const Map<String, String> en_us = {
   'writingPractice': 'Writing practice',
   'savingImage': 'Saving image?',
   'savingQuestion': 'Saving question?',
+  'continueQuestion': 'Continuing with the previous question?',
+  'letter': 'Letter',
+  'number': 'Number',
 
   // Setting Pages
   'accountManager': 'Account Manager',

@@ -12,15 +12,29 @@ import 'package:injectable/injectable.dart';
 @injectable
 class WritingPracticeCubit extends BaseCubit<WritingPracticeState> {
   WritingPracticeCubit() : super(WritingPracticeState());
-  Future<void> init({String? type, required BuildContext context}) async {
+  Future<void> init({required BuildContext context}) async {
+    Size mediaSize = MediaQueryData.fromView(
+            WidgetsBinding.instance.platformDispatcher.views.single)
+        .size;
+    List<CharsEntity> charsEntities =
+        await getListChar(type: 'letter', context: context);
+    List<CharsEntity> numbersEntities =
+        await getListChar(type: 'number', context: context);
+    emit(state.copyWith(
+        height: mediaSize.height,
+        width: mediaSize.width,
+        charsEntities: charsEntities,
+        numbersEntities: numbersEntities,
+        currentEntities: charsEntities));
+  }
+
+  Future<List<CharsEntity>> getListChar(
+      {String? type, required BuildContext context}) async {
     final languageCode = Get.locale?.languageCode;
     String vietnameseAlphabet = 'aăâbcdđeêghiklmnoôơpqrstuưvxy';
     String englishAlphabet = 'abcdefghijklmnopqrstuvwxyz';
     String numbers = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20';
     List<String>? alphabetChars;
-    Size mediaSize = MediaQueryData.fromView(
-            WidgetsBinding.instance.platformDispatcher.views.single)
-        .size;
     WritingPracticeController writingPracticeController =
         WritingPracticeController.findOrInitialize;
     CharsController charsController = CharsController.findOrInitialize;
@@ -58,9 +72,14 @@ class WritingPracticeCubit extends BaseCubit<WritingPracticeState> {
           .indexOf(aChar)
           .compareTo(alphabetChars.indexOf(bChar));
     });
-    emit(state.copyWith(
-        height: mediaSize.height,
-        width: mediaSize.width,
-        charsEntities: filteredEntities));
+    return filteredEntities;
+  }
+
+  void updateCurrentEntities(String type) {
+    if (type == 'letter') {
+      emit(state.copyWith(currentEntities: state.charsEntities));
+    } else {
+      emit(state.copyWith(currentEntities: state.numbersEntities));
+    }
   }
 }

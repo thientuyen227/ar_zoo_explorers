@@ -6,7 +6,7 @@ import 'package:ar_zoo_explorers/core/data/controller/auth_controller.dart';
 import 'package:ar_zoo_explorers/core/data/controller/user_question_controller.dart';
 import 'package:ar_zoo_explorers/domain/entities/learning_category_entity.dart';
 import 'package:ar_zoo_explorers/domain/entities/user_question_entity.dart';
-import 'package:ar_zoo_explorers/features/puzzle/presentation/components/dialog_continue.dart';
+import 'package:ar_zoo_explorers/features/puzzle/components/dialog_continue.dart';
 import 'package:ar_zoo_explorers/features/puzzle/presentation/puzzle_cubit.dart';
 import 'package:ar_zoo_explorers/features/puzzle/presentation/puzzle_state.dart';
 import 'package:ar_zoo_explorers/utils/widget/custom_back_button.dart';
@@ -60,13 +60,9 @@ class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "Level 1",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
             Text(
               LanguageKeys.choose_topic.tr,
-              style: const TextStyle(fontSize: 14),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             state.height != 0
                 ? Padding(
@@ -178,15 +174,15 @@ class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
                   },
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(level),
-                  ],
-                ),
-              )
+              // Padding(
+              //   padding: const EdgeInsets.only(left: 20.0),
+              //   child: Row(
+              //     crossAxisAlignment: CrossAxisAlignment.start,
+              //     children: [
+              //       Text(level),
+              //     ],
+              //   ),
+              // )
             ],
           ),
         ),
