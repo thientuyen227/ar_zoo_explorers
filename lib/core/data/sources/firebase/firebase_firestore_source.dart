@@ -22,11 +22,11 @@ import '../../models/animal_model.dart';
 import '../../models/user_animal_model.dart';
 
 class FirebaseFirestoreSource {
-  final CollectionReference<Map<String, dynamic>> _userModelCollectionRef =
+  final CollectionReference<Map<String, dynamic>> _usersCollectionRef =
       FirebaseFirestore.instance.collection('users');
 
   final CollectionReference<Map<String, dynamic>> _animalModelCollectionRef =
-      FirebaseFirestore.instance.collection('animal_models');
+      FirebaseFirestore.instance.collection('3D_models');
 
   final CollectionReference<Map<String, dynamic>> _animalCategoryCollectionRef =
       FirebaseFirestore.instance.collection('model_categories');
@@ -34,8 +34,8 @@ class FirebaseFirestoreSource {
   final CollectionReference<Map<String, dynamic>> _animalDetailCollectionRef =
       FirebaseFirestore.instance.collection('model_details');
 
-  final CollectionReference<Map<String, dynamic>> _userAnimalCollectionRef =
-      FirebaseFirestore.instance.collection('user_animal');
+  final CollectionReference<Map<String, dynamic>> _userModelsCollectionRef =
+      FirebaseFirestore.instance.collection('user_models');
 
   final CollectionReference<Map<String, dynamic>> _storyTopicCollectionRef =
       FirebaseFirestore.instance.collection('story_topics');
@@ -72,7 +72,7 @@ class FirebaseFirestoreSource {
 
   //User
   Future<UserModel?> getUser(String id) async {
-    var document = await _userModelCollectionRef.doc(id).get();
+    var document = await _usersCollectionRef.doc(id).get();
     if (document.exists && document.data() != null) {
       return UserModel.fromMap(document.data()!);
     } else {
@@ -81,7 +81,7 @@ class FirebaseFirestoreSource {
   }
 
   Future<UserModel> createUser(UserModel user) async {
-    await _userModelCollectionRef.doc(user.id).set(user.toMap());
+    await _usersCollectionRef.doc(user.id).set(user.toMap());
     return user;
   }
 
@@ -96,7 +96,7 @@ class FirebaseFirestoreSource {
       required String gender,
       required String role,
       required bool status}) async {
-    await _userModelCollectionRef.doc(id).update({
+    await _usersCollectionRef.doc(id).update({
       'fullname': fullname,
       'phone': phone,
       'address': address,
@@ -112,7 +112,7 @@ class FirebaseFirestoreSource {
 
   Future<UserModel?> updateAvatar(
       {required String id, required String avatarUrl}) async {
-    await _userModelCollectionRef.doc(id).update({'avatarUrl': avatarUrl});
+    await _usersCollectionRef.doc(id).update({'avatarUrl': avatarUrl});
     return getUser(id);
   }
 
@@ -262,7 +262,7 @@ class FirebaseFirestoreSource {
   // USER_ANIMAL
   Future<UserAnimalModel?> createUserAnimal(UserAnimalModel userAnimal) async {
     try {
-      DocumentReference documentReference = await _userAnimalCollectionRef.add({
+      DocumentReference documentReference = await _userModelsCollectionRef.add({
         'userId': userAnimal.userId,
         'modelId': userAnimal.modelId,
         'isLoved': userAnimal.isLoved,
@@ -286,7 +286,7 @@ class FirebaseFirestoreSource {
 
   Future<UserAnimalModel?> getUserAnimal(String id) async {
     try {
-      var document = await _userModelCollectionRef.doc(id).get();
+      var document = await _userModelsCollectionRef.doc(id).get();
       if (document.exists && document.data() != null) {
         return UserAnimalModel.fromMap(document.data()!);
       } else {
@@ -305,7 +305,7 @@ class FirebaseFirestoreSource {
       required String modelId,
       required bool isLoved}) async {
     try {
-      await _userAnimalCollectionRef.doc(id).update(
+      await _userModelsCollectionRef.doc(id).update(
           {'id': id, 'userId': userId, 'modelId': modelId, 'isLoved': isLoved});
       return getUserAnimal(id);
     } catch (e, stackTrace) {
@@ -318,7 +318,7 @@ class FirebaseFirestoreSource {
   Future<UserAnimalModel?> getUserAnimalByUserIdAndModelId(
       String userId, String modelId) async {
     try {
-      var querySnapshot = await _userAnimalCollectionRef
+      var querySnapshot = await _userModelsCollectionRef
           .where('userId', isEqualTo: userId)
           .where('modelId', isEqualTo: modelId)
           .get();
