@@ -174,7 +174,7 @@ class _State extends BaseState<
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(AppImages.backgroundPhonics),
+                image: AssetImage(AppImages.backgroundWriting),
                 fit: BoxFit.cover,
               ),
             ),
@@ -376,6 +376,7 @@ class _State extends BaseState<
           GestureDetector(
               onTap: () {
                 showDialog(
+                    barrierDismissible: false,
                     context: context,
                     builder: (context) {
                       return SizedBox(

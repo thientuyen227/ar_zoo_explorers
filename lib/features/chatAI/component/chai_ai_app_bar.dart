@@ -23,7 +23,7 @@ class _ChatAIAppBarState extends State<ChatAIAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-
+        elevation: 1,
         // centerTitle: true,
         title: Row(
           children: [

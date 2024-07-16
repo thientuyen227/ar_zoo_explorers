@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/dimens.dart';
@@ -9,6 +11,7 @@ import 'package:ar_zoo_explorers/features/home/component/home_activity_button.da
 import 'package:ar_zoo_explorers/features/home/component/home_category_button.dart';
 import 'package:ar_zoo_explorers/features/home/presentation/home_state.dart';
 import 'package:ar_zoo_explorers/utils/widget/button_widget.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -33,13 +36,30 @@ class HomePage extends StatefulWidget {
 class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   final PageController advertisementController = PageController();
   final detailController = AnimalDetailController.findOrInitialize;
+  AudioPlayer audioPlayer = AudioPlayer();
 
   final _formKey = GlobalKey<FormBuilderState>();
 
   List<Widget> imageSliders = [];
+  @override
+  void initState() {
+    super.initState();
+    audioPlayer = AudioPlayer();
+    _initCubit();
+  }
+
+  @override
+  void dispose() {
+    audioPlayer.stop();
+    audioPlayer.dispose();
+    super.dispose();
+  }
 
   @override
   Widget buildByState(BuildContext context, HomeState state) {
+    Timer(const Duration(seconds: 2), () {
+      audioPlayer.play(AssetSource("audio/vietnamesealphabet.mp3"));
+    });
     return Obx(() => GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         child: PageLoadingIndicator(
@@ -106,6 +126,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
       BuildContext context, String imageUrl, String content, String routePage) {
     return GestureDetector(
         onTap: () async {
+          audioPlayer.dispose();
           await _onTapActivityButton(context, routePage);
         },
         child: HomeActivityButton(imageUrl: imageUrl, content: content));
@@ -342,11 +363,5 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
     await cubit.init(context);
     await _buildSlider();
     await _addAdvertiseImage().then((value) => setState(() {}));
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _initCubit();
   }
 }

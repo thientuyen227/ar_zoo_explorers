@@ -124,6 +124,8 @@ const Map<String, String> vi_vn = {
   'continueQuestion': 'Tiếp tục với câu hỏi trước?',
   'letter': 'Chữ cái',
   'number': 'Chữ số',
+  'msg_question': 'Hiện tại chưa có câu hỏi liên quan đến từ vựng này',
+  'msg_model3D': 'Hiện tại chưa có model 3D',
 
   // Auth
   'auth_enterEmail': "Nhập email của bạn",

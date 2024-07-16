@@ -183,14 +183,23 @@ class AppImages {
       "assets/images/learning_image/puzzle/family.png";
   static const String imgPhonics = "assets/images/learning_image/phonics.jpeg";
   static const String backgroundPhonics = "assets/images/backgroundphonics.jpg";
+  static const String backgroundPhonicsDetail =
+      "assets/images/backgroundphonicsdetail.jpg";
   static const String backgroundDialog =
       "assets/images/learning_image/write/background_dialog.jpg";
   static const String imgDialogSave =
       "assets/images/learning_image/write/image_dialog.png";
   static const String imgDialogContinue =
       "assets/images/learning_image/puzzle/img_dialog_continue.png";
+  static const String backgroundWriting = "assets/images/backgroundwriting.jpg";
 
   static const String imgNoInternet = "assets/images/img_no_internet.png";
+  static const String imgReadVi = "assets/images/learning_image/read_vi.png";
+  static const String imgStopVi = "assets/images/learning_image/stop_vi.png";
+  static const String imgSingVi = "assets/images/learning_image/sing_vi.png";
+  static const String imgReadEn = "assets/images/learning_image/read_en.png";
+  static const String imgStopEn = "assets/images/learning_image/stop_en.png";
+  static const String imgSingEn = "assets/images/learning_image/sing_en.png";
 
   //MODELS BUTTONS
   static const String imgAmphibians =
@@ -289,4 +298,7 @@ class AppLotties {
 
 class AppSound {
   static const String mindset = "audio/mindset.mp3";
+  static const String audioFailed = "audio/failed_sound.mp3";
+  static const String audioCorrect = "audio/correct_sound.mp3";
+  static const String audioHome = "audio/fairy_glitter.mp3";
 }

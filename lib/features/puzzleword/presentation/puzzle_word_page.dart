@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
+import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/core/data/controller/auth_controller.dart';
 import 'package:ar_zoo_explorers/core/data/controller/question_controller.dart';
@@ -13,6 +14,7 @@ import 'package:ar_zoo_explorers/features/puzzleword/presentation/puzzle_word_cu
 import 'package:ar_zoo_explorers/features/puzzleword/presentation/puzzle_word_state.dart';
 import 'package:ar_zoo_explorers/utils/widget/congratulation_widget.dart';
 import 'package:ar_zoo_explorers/utils/widget/custom_back_button.dart';
+import 'package:ar_zoo_explorers/utils/widget/failures_widget.dart';
 import 'package:ar_zoo_explorers/utils/widget/image_svg_url_custom.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:auto_route/auto_route.dart';
@@ -33,6 +35,7 @@ class _State
   final questionController = QuestionController.findOrInitialize;
   AuthController authController = AuthController.findOrInitialize;
   final scoreboardController = ScoreboardController.findOrInitialize;
+  String? modelId;
   AudioPlayer audioPlayer = AudioPlayer();
   List<String>? arrayBtns;
   int indexQues = 0;
@@ -52,7 +55,9 @@ class _State
 
   @override
   void initState() {
+    cubit.showLoading();
     cubit.init(context: context, vocabularyId: widget.vocabularyId);
+    cubit.hideLoading();
     super.initState();
   }
 
@@ -145,6 +150,23 @@ class _State
                           ),
                         ),
                       ),
+                      isFull && isDone == false
+                          ? Column(
+                              children: [
+                                const FailuresWidget(),
+                                IconButton(
+                                  icon: const ImageSvgUrlCustom(
+                                    imagePath: AppIcons.icReload,
+                                    size: 20,
+                                  ),
+                                  iconSize: 40,
+                                  onPressed: () {
+                                    resetQuestionState();
+                                  },
+                                ),
+                              ],
+                            )
+                          : Container(),
                       _renderKeyword(currentQues: currentQues!),
                     ],
                   ),
@@ -401,5 +423,19 @@ class _State
         }).toList(),
       ),
     );
+  }
+
+  void resetQuestionState() {
+    setState(() {
+      arrayBtns = cubit.generateKeywords(currentQues!.answer, 16);
+
+      isFull = false;
+      isDone = false;
+      for (var puzzle in currentQues!.puzzles!) {
+        puzzle.clearValue();
+        puzzle.hintShow = false;
+      }
+      generateHint(answer: currentQues!.answer);
+    });
   }
 }

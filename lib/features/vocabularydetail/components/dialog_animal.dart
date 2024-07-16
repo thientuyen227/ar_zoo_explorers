@@ -1,8 +1,11 @@
 import 'package:ar_zoo_explorers/app/config/app_router.gr.dart';
+import 'package:ar_zoo_explorers/app/config/routes.dart';
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
+import 'package:ar_zoo_explorers/core/data/controller/animal_controller.dart';
 import 'package:ar_zoo_explorers/core/data/controller/auth_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/question_controller.dart';
 import 'package:ar_zoo_explorers/core/data/controller/scoreboard_controller.dart';
 import 'package:ar_zoo_explorers/core/data/controller/vocabulary_controller.dart';
 import 'package:ar_zoo_explorers/domain/entities/scoreboard_entity.dart';
@@ -13,6 +16,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 class DialogAnimal extends StatefulWidget {
@@ -27,6 +31,8 @@ class _DialogAnimalState extends State<DialogAnimal> {
   final languageCode = Get.locale?.languageCode;
   final vocabularyController = VocabularyController.findOrInitialize;
   final scoreboardController = ScoreboardController.findOrInitialize;
+  final animalController = AnimalController.findOrInitialize;
+  final questionController = QuestionController.findOrInitialize;
   AuthController authController = AuthController.findOrInitialize;
   late int currentIndex;
   VocabularyCubit cubit = VocabularyCubit();
@@ -163,7 +169,7 @@ class _DialogAnimalState extends State<DialogAnimal> {
 
   Widget renderContent() {
     return SizedBox(
-      height: height! * 0.32,
+      height: height! * 0.34,
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,10 +179,28 @@ class _DialogAnimalState extends State<DialogAnimal> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    LanguageKeys.meaning.tr,
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w600),
+                  Row(
+                    children: [
+                      Text(
+                        LanguageKeys.meaning.tr,
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                      const Spacer(),
+                      SizedBox(
+                        width: 30,
+                        height: 30,
+                        child: IconButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: () {},
+                          icon: SvgPicture.asset(
+                            AppIcons.icSound,
+                            height: 30,
+                            width: 30,
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                   const SizedBox(
                     height: 6,
@@ -192,10 +216,28 @@ class _DialogAnimalState extends State<DialogAnimal> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    LanguageKeys.example.tr,
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w600),
+                  Row(
+                    children: [
+                      Text(
+                        LanguageKeys.example.tr,
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                      const Spacer(),
+                      SizedBox(
+                        width: 30,
+                        height: 30,
+                        child: IconButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: () {},
+                          icon: SvgPicture.asset(
+                            AppIcons.icSound,
+                            height: 30,
+                            width: 30,
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                   const SizedBox(
                     height: 6,
@@ -230,7 +272,14 @@ class _DialogAnimalState extends State<DialogAnimal> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      if (vocabularyEntity!.modelId != null) {
+                        navigatorToModel(vocabularyEntity!.modelId ?? "");
+                      } else {
+                        Fluttertoast.showToast(
+                            msg: LanguageKeys.msg_model3D.tr);
+                      }
+                    },
                     icon: Image.asset(
                       AppIcons.icSnail,
                       height: 40,
@@ -354,7 +403,18 @@ class _DialogAnimalState extends State<DialogAnimal> {
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF49B0AB)),
-                  onPressed: () {
+                  onPressed: () async {
+                    vocabularyController.currentVocabulary(vocabularyEntity);
+                    var questionEntities =
+                        await questionController.getAllQuestions(context);
+                    questionEntities!
+                        .firstWhere(
+                          (element) =>
+                              element.vocabularyId == vocabularyEntity!.id,
+                          orElse: () => throw Fluttertoast.showToast(
+                              msg: LanguageKeys.msg_question.tr),
+                        )
+                        .id;
                     context.router.push(
                         PuzzleWordRoute(vocabularyId: vocabularyEntity!.id));
                   },
@@ -367,5 +427,10 @@ class _DialogAnimalState extends State<DialogAnimal> {
         ),
       ],
     );
+  }
+
+  Future<void> navigatorToModel(String modelId) async {
+    await animalController.updateCurrentAnimal(context, modelId);
+    context.router.pushNamed(Routes.modeldetail);
   }
 }

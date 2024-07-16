@@ -150,10 +150,12 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
           shape: BoxShape.circle,
           color: Colors.white),
       child: ClipOval(
-          child: Image.network(
-        cubit.controller.currentUser.value.avatarUrl,
-        fit: BoxFit.cover,
-      )),
+          child: cubit.controller.currentUser.value.avatarUrl != ''
+              ? Image.network(
+                  cubit.controller.currentUser.value.avatarUrl,
+                  fit: BoxFit.cover,
+                )
+              : Image.asset(AppImages.imgProfile128x128, fit: BoxFit.cover)),
     );
   }
 

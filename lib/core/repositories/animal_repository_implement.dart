@@ -34,33 +34,10 @@ class AnimalRepositoryImplement implements AnimalRepository {
   }
 
   @override
-  Future<Either<Failure, Success<AnimalEntity>>> getAnimal(
+  Future<Either<Failure, Success<AnimalEntity?>>> getAnimal(
       String animalModelId) {
     return ResponseHandler.processResponse(() async {
       return Success(data: await _firestoreSource.getAnimal(animalModelId));
-    });
-  }
-
-  @override
-  Future<Either<Failure, Success<AnimalEntity>>> updateAnimal({
-    required String id,
-    required String title,
-    required String icon,
-    required String type,
-    required String name,
-    required String categoryId,
-    required bool status,
-  }) {
-    return ResponseHandler.processResponse(() async {
-      return Success(
-          data: await _firestoreSource.updateAnimal(
-              id: id,
-              title: title,
-              icon: icon,
-              type: type,
-              name: name,
-              categoryId: categoryId,
-              status: status));
     });
   }
 

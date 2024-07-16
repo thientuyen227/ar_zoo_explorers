@@ -119,6 +119,8 @@ class LanguageKeys {
   static const String continueQuestion = 'continueQuestion';
   static const String letter = 'letter';
   static const String number = 'number';
+  static const String msg_question = 'msg_question';
+  static const String msg_model3D = 'msg_model3D';
 
   // Setting Page
   static const String accountManager = 'accountManager';

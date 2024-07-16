@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 class ApiService {
   final String apiUrl =
-      'https://imagechatv4.chooch.ai/predict?api_key=3f9d4e54-0194-4130-aa68-5e68852263bb';
+      'https://imagechatv4.chooch.ai/predict?api_key=d7f84f82-d245-41e4-979c-1ad044406d96';
 
   Future<ChatBoxEntity> getTextToImageResponse(
       String text, String detectedLanguage, File imageFile) async {
@@ -14,7 +14,7 @@ class ApiService {
 
     if (detectedLanguage == 'vi') {
       request.fields['data'] =
-          '{"parameters":{"prompt":"hình ảnh $text","lang":"vi","stream":true},"model_id":"chooch-image-chat-4"}';
+          '{"parameters":{"prompt":"$text","lang":"vi","stream":true},"model_id":"chooch-image-chat-4"}';
     } else {
       request.fields['data'] =
           '{"parameters":{"prompt":"$text","lang":"en","stream":true},"model_id":"chooch-image-chat-4"}';

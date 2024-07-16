@@ -1,17 +1,17 @@
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 
-class CongratulationWidget extends StatefulWidget {
-  const CongratulationWidget({super.key});
+class FailuresWidget extends StatefulWidget {
+  const FailuresWidget({super.key});
 
   @override
-  State<CongratulationWidget> createState() => _CongratulationWidgetState();
+  State<FailuresWidget> createState() => _FailuresWidgetState();
 }
 
-class _CongratulationWidgetState extends State<CongratulationWidget> {
+class _FailuresWidgetState extends State<FailuresWidget> {
   AudioPlayer audioPlayer = AudioPlayer();
+
   @override
   void initState() {
     super.initState();
@@ -19,21 +19,21 @@ class _CongratulationWidgetState extends State<CongratulationWidget> {
   }
 
   Future<void> stopAudio() async => await audioPlayer.dispose();
+
   @override
-  Future<void> dispose() async {
+  void dispose() {
+    stopAudio();
     super.dispose();
-    await stopAudio();
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: Future.delayed(const Duration(milliseconds: 10)),
+      future: Future.delayed(const Duration(microseconds: 1)),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          audioPlayer.play(AssetSource(AppSound.audioCorrect));
-          return Lottie.asset(AppLotties.congratulation,
-              height: 400, width: 400);
+          audioPlayer.play(AssetSource(AppSound.audioFailed));
+          return Container();
         } else {
           return Container();
         }

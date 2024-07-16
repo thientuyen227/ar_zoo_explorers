@@ -26,7 +26,7 @@ class FirebaseFirestoreSource {
       FirebaseFirestore.instance.collection('users');
 
   final CollectionReference<Map<String, dynamic>> _animalModelCollectionRef =
-      FirebaseFirestore.instance.collection('animal_models');
+      FirebaseFirestore.instance.collection('3D_models');
 
   final CollectionReference<Map<String, dynamic>> _animalCategoryCollectionRef =
       FirebaseFirestore.instance.collection('model_categories');
@@ -35,7 +35,7 @@ class FirebaseFirestoreSource {
       FirebaseFirestore.instance.collection('model_details');
 
   final CollectionReference<Map<String, dynamic>> _userAnimalCollectionRef =
-      FirebaseFirestore.instance.collection('user_animal');
+      FirebaseFirestore.instance.collection('user_models');
 
   final CollectionReference<Map<String, dynamic>> _storyTopicCollectionRef =
       FirebaseFirestore.instance.collection('story_topics');
@@ -125,9 +125,19 @@ class FirebaseFirestoreSource {
   }
 
   //lấy thông tin về một động vật
-  Future<AnimalModel> getAnimal(String animalId) async {
-    var document = await _animalModelCollectionRef.doc(animalId).get();
-    return AnimalModel.fromMap(document.data()!);
+  Future<AnimalModel?> getAnimal(String animalId) async {
+    try {
+      var document = await _animalModelCollectionRef.doc(animalId).get();
+      if (document.exists && document.data() != null) {
+        return AnimalModel.fromMap(document.data()!);
+      } else {
+        return null;
+      }
+    } catch (e, stackTrace) {
+      print('Get Story Model By Id = "$animalId" Failed: $e');
+      FirebaseCrashlytics.instance.recordError(e, stackTrace);
+    }
+    return null;
   }
 
   // tạo một tài liệu mới trong Firestore
@@ -136,26 +146,6 @@ class FirebaseFirestoreSource {
         .doc(animalModel.id)
         .set(animalModel.toMap());
     return animalModel;
-  }
-
-  Future<AnimalModel> updateAnimal({
-    required String id,
-    required String title,
-    required String icon,
-    required String type,
-    required String name,
-    required String categoryId,
-    required bool status,
-  }) async {
-    await _animalModelCollectionRef.doc(id).update({
-      "title": title,
-      "icon": icon,
-      "type": type,
-      "name": name,
-      "categoryId": categoryId,
-      "status": status
-    });
-    return getAnimal(id);
   }
 
   Future<List<AnimalModel>?> getAllAnimals() async {
@@ -1289,6 +1279,10 @@ class FirebaseFirestoreSource {
           await updateQuestionByUser(context, updatedUserQuestionEntity);
           return userQuestionEntity;
         } else {
+          if (checker.indexQuestion != userQuestionEntity.indexQuestion) {
+            checker = checker.copyWith(
+                indexQuestion: userQuestionEntity.indexQuestion);
+          }
           return checker;
         }
       } else {

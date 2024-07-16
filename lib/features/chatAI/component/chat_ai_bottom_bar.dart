@@ -164,6 +164,8 @@ class _ChatAIBottomBarState extends State<ChatAIBottomBar> {
                 contentType: MsgType.text.typeString);
           }
           widget.onSendMassage(newEntity);
+          _isListening = true;
+          _stopListening();
           editingController.clear();
           isImage = false;
           FocusScope.of(context).requestFocus(FocusNode());
