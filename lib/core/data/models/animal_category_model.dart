@@ -1,7 +1,7 @@
-import '../../../domain/entities/animal_category_entity.dart';
+import '../../../domain/entities/model_category_entity.dart';
 
-class AnimalCategoryModel extends AnimalCategoryEntity {
-  AnimalCategoryModel(
+class ModelCategoryModel extends ModelCategoryEntity {
+  ModelCategoryModel(
       {required super.id,
       required super.name,
       required super.title,
@@ -18,10 +18,14 @@ class AnimalCategoryModel extends AnimalCategoryEntity {
     };
   }
 
-  factory AnimalCategoryModel.fromMap(Map<String, dynamic> map) {
-    return AnimalCategoryModel(
+  factory ModelCategoryModel.fromMap(Map<String, dynamic> map) {
+    return ModelCategoryModel(
       id: map['id'] ?? '',
-      title: map['title'] ?? '',
+      title: map['title'] ??
+          {
+            'en': '',
+            'vi': '',
+          },
       name: map['name'] ?? '',
       imageUrl: map['imageUrl'] ?? '',
       status: map['status'] ?? true,

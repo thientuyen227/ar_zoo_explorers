@@ -2,14 +2,14 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 
-class StoryTopicEntity {
+class ModelCategoryEntity {
   String id;
   String name;
   Map<String, String> title;
   String imageUrl;
   bool status;
 
-  StoryTopicEntity(
+  ModelCategoryEntity(
       {required this.id,
       required this.name,
       required this.title,
@@ -25,8 +25,8 @@ class StoryTopicEntity {
     };
   }
 
-  factory StoryTopicEntity.fromMap(Map<String, dynamic> map) {
-    return StoryTopicEntity(
+  factory ModelCategoryEntity.fromMap(Map<String, dynamic> map) {
+    return ModelCategoryEntity(
       id: map['id'] as String,
       name: map['name'] as String,
       imageUrl: map['imageUrl'] as String,
@@ -40,11 +40,11 @@ class StoryTopicEntity {
 
   String toJson() => json.encode(toMap());
 
-  factory StoryTopicEntity.fromJson(String source) =>
-      StoryTopicEntity.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory ModelCategoryEntity.fromJson(String source) =>
+      ModelCategoryEntity.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
-extension StoryTopicEntityExt on StoryTopicEntity {
+extension StoryTopicEntityExt on ModelCategoryEntity {
   String _getLocalizedValue(Map<String, String> data) {
     final languageCode = Get.locale?.languageCode;
     return data.containsKey(languageCode)

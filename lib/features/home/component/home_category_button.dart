@@ -2,12 +2,13 @@ import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/features/base-model/button_object.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class HomeCategoryButton extends StatefulWidget {
   const HomeCategoryButton({
-    Key? key,
+    super.key,
     required this.item,
-  }) : super(key: key);
+  });
   final ButtonObject item;
 
   @override
@@ -17,7 +18,7 @@ class HomeCategoryButton extends StatefulWidget {
 class _HomeCategoryButtonState extends State<HomeCategoryButton> {
   double width = 0;
   double height = 0;
-
+  final languageCode = Get.locale?.languageCode;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -38,7 +39,7 @@ class _HomeCategoryButtonState extends State<HomeCategoryButton> {
           buttonImage(widget.item.icon),
           Padding(
               padding: const EdgeInsets.only(top: 5),
-              child: buttonTitle(widget.item.title)),
+              child: buttonTitle(widget.item.title[languageCode]!)),
         ]));
   }
 

@@ -104,7 +104,7 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
     return Container(
         margin: const EdgeInsets.only(right: 35),
         child: Transform.scale(
-          scale: 1.9,
+          scale: 1,
           child: Image.asset(AppImages.imgAppLogo, height: 40, width: 40),
         ));
   }
@@ -250,10 +250,10 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
             ? _onSignUpPressed
             : null,
         style: ButtonStyle(
-            fixedSize: MaterialStateProperty.all(Size(cubit.WIDTH * 0.6, 50)),
-            backgroundColor: MaterialStateProperty.all(Colors.blue),
-            elevation: MaterialStateProperty.all(5),
-            shape: MaterialStateProperty.all(RoundedRectangleBorder(
+            fixedSize: WidgetStateProperty.all(Size(cubit.WIDTH * 0.6, 50)),
+            backgroundColor: WidgetStateProperty.all(Colors.blue),
+            elevation: WidgetStateProperty.all(5),
+            shape: WidgetStateProperty.all(RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20)))),
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Image.asset(AppIcons.icWhiteSubmit),
@@ -311,7 +311,7 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
   Future<void> _onOthersLogin(index) async {
     switch (index) {
       case 0:
-        await controller.loginWithFacebook(context);
+        // await controller.loginWithFacebook(context);
         break;
       case 1:
         await controller.loginWithGoogle(context);

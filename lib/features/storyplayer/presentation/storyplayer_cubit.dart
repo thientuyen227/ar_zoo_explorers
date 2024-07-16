@@ -1,7 +1,7 @@
 import 'package:ar_zoo_explorers/base/base_cubit.dart';
-import 'package:ar_zoo_explorers/core/data/controller/animal_category_controller.dart';
 import 'package:ar_zoo_explorers/core/data/controller/animal_controller.dart';
 import 'package:ar_zoo_explorers/core/data/controller/auth_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/model_category_controller.dart';
 import 'package:ar_zoo_explorers/core/data/controller/story_controller.dart';
 import 'package:ar_zoo_explorers/core/data/controller/story_topic_controller.dart';
 import 'package:ar_zoo_explorers/core/data/controller/user_story_controller.dart';
@@ -18,7 +18,7 @@ class StoryPlayerCubit extends BaseCubit<StoryPlayerState> {
   final storyTopicController = StoryTopicController.findOrInitialize;
   final userStoryController = UserStoryController.findOrInitialize;
   final storyController = StoryController.findOrInitialize;
-  final aniCateController = AnimalCategoryController.findOrInitialize;
+  final aniCateController = ModelCategoryController.findOrInitialize;
   final animalController = AnimalController.findOrInitialize;
 
   void init(BuildContext context) {

@@ -13,7 +13,7 @@ class StoryTopicController extends ControllerHelper {
   Rx<StoryTopicEntity> currentStoryTopic = Rx(StoryTopicModel(
     id: '',
     name: '',
-    title: '',
+    title: {},
     imageUrl: '',
     status: true,
   ));
@@ -65,7 +65,7 @@ class StoryTopicController extends ControllerHelper {
     currentStoryTopic.value = StoryTopicModel(
       id: '',
       name: '',
-      title: '',
+      title: {},
       imageUrl: '',
       status: true,
     );

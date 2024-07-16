@@ -30,7 +30,7 @@ class _State extends BaseState<StoryOverviewState, StoryOverviewCubit,
   final storyTopicController = StoryTopicController.findOrInitialize;
   final userStoryController = UserStoryController.findOrInitialize;
   final storyController = StoryController.findOrInitialize;
-
+  final languageCode = Get.locale?.languageCode;
   // @override
   // final loadingController = AppLoadingController();
 
@@ -286,7 +286,7 @@ class _State extends BaseState<StoryOverviewState, StoryOverviewCubit,
     for (var itemA in lstTopicId) {
       for (var itemB in storyTopicController.listStoryTopic.value) {
         if (itemA == itemB.id) {
-          lstTopicName.add(itemB.title);
+          lstTopicName.add(itemB.title[languageCode]!);
         }
       }
     }

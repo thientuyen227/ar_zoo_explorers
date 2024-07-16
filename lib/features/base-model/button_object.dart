@@ -1,6 +1,6 @@
 class ButtonObject {
   String? id;
-  final String title;
+  Map<String, String> title;
   String icon;
   int? views;
   bool isLoved;

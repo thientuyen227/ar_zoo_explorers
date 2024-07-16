@@ -214,7 +214,7 @@ class AuthController extends ControllerHelper {
     await _authRepository.logout();
     _resetCurrentUser();
     update();
-    //Navigator.of(context).popUntil((route) => route.isFirst);
+    Navigator.of(context).popUntil((route) => false);
     context.router.pushNamed(Routes.welcome);
   }
 

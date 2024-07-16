@@ -40,8 +40,9 @@ class _State extends BaseState<LanguageSelectionState, LanguageSelectionCubit,
                   BoxConstraints(minHeight: MediaQuery.of(context).size.height),
               padding: const EdgeInsets.only(left: 35, right: 35, bottom: 50),
               child: Column(children: [
-                const SizedBox(height: 12),
+                SizedBox(height: cubit.HEIGHT * 0.07),
                 appLogo(),
+                SizedBox(height: cubit.HEIGHT * 0.07),
                 bodyHeader(),
                 const SizedBox(height: 12),
                 languageSelection(),
@@ -61,7 +62,7 @@ class _State extends BaseState<LanguageSelectionState, LanguageSelectionCubit,
         scale: 2,
         child: Image.asset(
           AppImages.imgAppLogo,
-          height: cubit.HEIGHT * 0.25,
+          height: cubit.HEIGHT * 0.12,
           width: cubit.WIDTH,
         ),
       ),
@@ -140,10 +141,10 @@ class _State extends BaseState<LanguageSelectionState, LanguageSelectionCubit,
           context.router.pushNamed(Routes.login);
         },
         style: ButtonStyle(
-            fixedSize: MaterialStateProperty.all(Size(cubit.WIDTH * 0.6, 50)),
-            backgroundColor: MaterialStateProperty.all(Colors.blue[600]),
-            elevation: MaterialStateProperty.all(5),
-            shape: MaterialStateProperty.all(RoundedRectangleBorder(
+            fixedSize: WidgetStateProperty.all(Size(cubit.WIDTH * 0.6, 50)),
+            backgroundColor: WidgetStateProperty.all(Colors.blue[600]),
+            elevation: WidgetStateProperty.all(5),
+            shape: WidgetStateProperty.all(RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20)))),
         child: Text(LanguageKeys.goToLogin.tr,
             style: const TextStyle(fontSize: 20, color: Colors.white)));

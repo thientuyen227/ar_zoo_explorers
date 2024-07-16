@@ -44,10 +44,14 @@ class AnimalModelsCubit extends BaseCubit<AnimalModelsState> {
     if (list.isNotEmpty) {
       for (int i = 0; i < list.length; i++) {
         if (list[i].categoryId == cateId) {
-          listFullAnimal.add(ButtonObject(
-              title: list[i].title, icon: list[i].icon, id: list[i].id));
-          listSearchAnimal.add(ButtonObject(
-              title: list[i].title, icon: list[i].icon, id: list[i].id));
+          listFullAnimal.add(ButtonObject(title: {
+            'vi': list[i].title,
+            'en': list[i].title,
+          }, icon: list[i].icon, id: list[i].id));
+          listSearchAnimal.add(ButtonObject(title: {
+            'vi': list[i].title,
+            'en': list[i].title,
+          }, icon: list[i].icon, id: list[i].id));
         }
       }
     }
@@ -57,9 +61,13 @@ class AnimalModelsCubit extends BaseCubit<AnimalModelsState> {
     listSearchAnimal = [];
     for (int i = 0; i < listFullAnimal.length; i++) {
       if (listFullAnimal[i]
-          .title
-          .toLowerCase()
-          .contains(searchValue.trim().toLowerCase())) {
+              .title['vi']!
+              .toLowerCase()
+              .contains(searchValue.trim().toLowerCase()) ||
+          listFullAnimal[i]
+              .title['en']!
+              .toLowerCase()
+              .contains(searchValue.trim().toLowerCase())) {
         listSearchAnimal.add(ButtonObject(
             title: listFullAnimal[i].title,
             icon: listFullAnimal[i].icon,

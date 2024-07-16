@@ -27,7 +27,7 @@ class _TextMessageState extends State<TextMessage> {
         padding: EdgeInsets.fromLTRB(height * 0.01, 5, height * 0.01, 5),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
-            color: Colors.amber.shade600.withOpacity(0.95)),
+            color: const Color.fromARGB(255, 233, 155, 9).withOpacity(0.95)),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           Text(
             widget.entity.content,

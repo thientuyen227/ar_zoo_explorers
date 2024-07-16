@@ -8,6 +8,7 @@ import 'package:ar_zoo_explorers/domain/entities/story_topic_entity.dart';
 import 'package:ar_zoo_explorers/features/story/model/storybuttonobject.dart';
 import 'package:ar_zoo_explorers/features/storysearching/presentation/storysearching_state.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:injectable/injectable.dart';
 import 'package:remove_diacritic/remove_diacritic.dart';
 
@@ -19,7 +20,7 @@ class StorySearchingCubit extends BaseCubit<StorySearchingState> {
   final storyTopicController = StoryTopicController.findOrInitialize;
   final userStoryController = UserStoryController.findOrInitialize;
   final storyController = StoryController.findOrInitialize;
-
+  final languageCode = Get.locale?.languageCode;
   Future<void> init(BuildContext context) async {
     showLoading();
     await storyController.getAllStories(context);
@@ -120,7 +121,7 @@ class StorySearchingCubit extends BaseCubit<StorySearchingState> {
       for (var topicId in story.topic) {
         var topic = topicMap[topicId];
         if (topic != null) {
-          topicNames.add(topic.title);
+          topicNames.add(topic.title[languageCode]!);
         }
       }
       story.topic = [getTopics(topicNames)];

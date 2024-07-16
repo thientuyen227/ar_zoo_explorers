@@ -37,7 +37,7 @@ class _ChatAIAppBarState extends State<ChatAIAppBar> {
           ],
         ),
         toolbarHeight: height * 0.1,
-        backgroundColor: Colors.grey.shade300.withOpacity(0.1),
+        backgroundColor: Colors.grey.shade400.withOpacity(0.1),
         leading: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [turnBack()]),

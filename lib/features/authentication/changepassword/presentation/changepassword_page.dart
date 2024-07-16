@@ -60,7 +60,9 @@ class _State extends BaseState<ChangePasswordState, ChangePasswordCubit,
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
+                                const SizedBox(height: 50),
                                 appLogo(),
+                                const SizedBox(height: 60),
                                 //NHẬP MẬT KHẨU CŨ
                                 passwordForm(cubit.ListFormItem[0], 0),
                                 // NHẬP MẬT KHẨU MỚI
@@ -122,10 +124,10 @@ class _State extends BaseState<ChangePasswordState, ChangePasswordCubit,
                   _onUpdatePassword(context)
                 },
         style: ButtonStyle(
-            fixedSize: MaterialStateProperty.all(const Size(160, 50)),
-            backgroundColor: MaterialStateProperty.all(Colors.blue),
-            elevation: MaterialStateProperty.all(5),
-            shape: MaterialStateProperty.all(RoundedRectangleBorder(
+            fixedSize: WidgetStateProperty.all(const Size(160, 50)),
+            backgroundColor: WidgetStateProperty.all(Colors.blue),
+            elevation: WidgetStateProperty.all(5),
+            shape: WidgetStateProperty.all(RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20)))),
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Image.asset(AppIcons.icWhiteSubmit),
@@ -136,13 +138,13 @@ class _State extends BaseState<ChangePasswordState, ChangePasswordCubit,
 
   Widget appLogo() {
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      const SizedBox(height: 48),
+      const SizedBox(height: 30),
       Transform.scale(
         scale: 2,
         child: Image.asset(
           AppImages.imgAppLogo,
-          height: cubit.HEIGHT * 0.25,
-          width: cubit.WIDTH,
+          height: cubit.HEIGHT * 0.12,
+          width: cubit.HEIGHT * 0.12,
         ),
       ),
       const SizedBox(height: 10),
