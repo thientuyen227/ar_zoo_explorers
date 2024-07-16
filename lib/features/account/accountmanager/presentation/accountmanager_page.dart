@@ -28,23 +28,36 @@ class _State extends BaseState<AccountManagerState, AccountManagerCubit,
 
   @override
   Widget buildByState(BuildContext context, AccountManagerState state) {
-    return Scaffold(
-        appBar: AppBar(
-            centerTitle: true,
-            backgroundColor: AppColor.appBarColor,
-            title: Text(LanguageKeys.settings.tr.toUpperCase(),
-                style: const TextStyle(
-                    fontSize: 20,
-                    color: AppColor.white,
-                    fontWeight: FontWeight.bold)),
-            actions: const [SizedBox(width: 45)],
-            leading: turnBack()),
-        body: SingleChildScrollView(
-            child: Container(
-                child: Column(children: [
-          accountManagerTitle(),
-          accountManagerBody(context)
-        ]))));
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool didPop) async {
+        if (didPop) {
+          return;
+        }
+
+        if (context.mounted) {
+          Navigator.pop(context);
+          context.router.pushNamed(Routes.home);
+        }
+      },
+      child: Scaffold(
+          appBar: AppBar(
+              centerTitle: true,
+              backgroundColor: AppColor.appBarColor,
+              title: Text(LanguageKeys.settings.tr.toUpperCase(),
+                  style: const TextStyle(
+                      fontSize: 20,
+                      color: AppColor.white,
+                      fontWeight: FontWeight.bold)),
+              actions: const [SizedBox(width: 45)],
+              leading: turnBack()),
+          body: SingleChildScrollView(
+              child: Container(
+                  child: Column(children: [
+            accountManagerTitle(),
+            accountManagerBody(context)
+          ])))),
+    );
   }
 
   Widget accountManagerTitle() {
@@ -136,8 +149,8 @@ class _State extends BaseState<AccountManagerState, AccountManagerCubit,
                 _onTapSettings(context, type);
               },
               style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(AppColor.white),
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                  backgroundColor: WidgetStateProperty.all(AppColor.white),
+                  shape: WidgetStateProperty.all(RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)))),
               child: Row(children: [
                 Expanded(
@@ -163,6 +176,7 @@ class _State extends BaseState<AccountManagerState, AccountManagerCubit,
 
   Widget turnBack() {
     return CustomBackButton(onPressed: () {
+      context.router.pushNamed(Routes.home);
       Navigator.of(context).pop(true);
     });
   }

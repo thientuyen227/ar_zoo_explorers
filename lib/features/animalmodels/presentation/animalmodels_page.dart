@@ -1,7 +1,7 @@
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
-import 'package:ar_zoo_explorers/core/data/controller/animal_category_controller.dart';
 import 'package:ar_zoo_explorers/core/data/controller/animal_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/model_category_controller.dart';
 import 'package:ar_zoo_explorers/features/animalmodels/presentation/animalmodels_cubit.dart';
 import 'package:ar_zoo_explorers/features/animalmodels/presentation/animalmodels_state.dart';
 import 'package:ar_zoo_explorers/utils/widget/custom_back_button.dart';
@@ -37,13 +37,13 @@ class _State
   final userAnimalController = UserAnimalController.findOrInitialize;
   final detailController = AnimalDetailController.findOrInitialize;
   final controller = AuthController.findOrInitialize;
-  final cateController = AnimalCategoryController.findOrInitialize;
+  final cateController = ModelCategoryController.findOrInitialize;
   final animalController = AnimalController.findOrInitialize;
 
   final _formKey = GlobalKey<FormBuilderState>();
 
   String urlAvatarUser = AppIcons.icDefaultUser;
-
+  final languageCode = Get.locale?.languageCode;
   @override
   Widget buildByState(BuildContext context, AnimalModelsState state) {
     return Obx(() => GestureDetector(
@@ -55,7 +55,8 @@ class _State
                     centerTitle: true,
                     backgroundColor: AppColor.appBarColor,
                     title: Text(
-                        cateController.currentAnimalCategory.value.title
+                        cateController
+                            .currentModelCategory.value.title[languageCode]!
                             .toUpperCase(),
                         style: const TextStyle(
                             fontSize: 20,
@@ -151,8 +152,8 @@ class _State
                     views(index),
                     const SizedBox(width: 5),
                     Expanded(
-                        child:
-                            buttonTitle(cubit.listSearchAnimal[index].title)),
+                        child: buttonTitle(cubit
+                            .listSearchAnimal[index].title[languageCode]!)),
                     loveButton(index),
                   ]))
             ])));
@@ -276,7 +277,7 @@ class _State
       await animalController.getAllAnimals(context);
       setState(() {
         cubit.setListAnimal(animalController.listAnimal.value,
-            cateController.currentAnimalCategory.value.id);
+            cateController.currentModelCategory.value.id);
         for (int i = 0; i < cubit.listFullAnimal.length; i++) {
           _getIsLoved(controller.currentUser.value.id, i);
           _getViews(detailController.listAnimalDetail.value, i);

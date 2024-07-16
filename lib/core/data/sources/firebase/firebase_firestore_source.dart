@@ -1,12 +1,12 @@
-import 'package:ar_zoo_explorers/core/data/models/animal_category_model.dart';
 import 'package:ar_zoo_explorers/core/data/models/story_model.dart';
-import 'package:ar_zoo_explorers/core/data/models/story_topic_model.dart';
 import 'package:ar_zoo_explorers/core/data/models/user_model.dart';
 import 'package:ar_zoo_explorers/core/data/models/user_story_model.dart';
 import 'package:ar_zoo_explorers/domain/entities/chars_entity.dart';
 import 'package:ar_zoo_explorers/domain/entities/learning_category_entity.dart';
+import 'package:ar_zoo_explorers/domain/entities/model_category_entity.dart';
 import 'package:ar_zoo_explorers/domain/entities/question_entity.dart';
 import 'package:ar_zoo_explorers/domain/entities/scoreboard_entity.dart';
+import 'package:ar_zoo_explorers/domain/entities/story_topic_entity.dart';
 import 'package:ar_zoo_explorers/domain/entities/user_question_entity.dart';
 import 'package:ar_zoo_explorers/domain/entities/vocabulary_entity.dart';
 import 'package:ar_zoo_explorers/domain/entities/writing_practice_user_entity.dart';
@@ -167,11 +167,11 @@ class FirebaseFirestoreSource {
   }
 
   //MODEL CATEGORY
-  Future<AnimalCategoryModel?> getAnimalCategoryModel(String id) async {
+  Future<ModelCategoryEntity?> getModelCategory(String id) async {
     try {
       var document = await _animalCategoryCollectionRef.doc(id).get();
       if (document.exists && document.data() != null) {
-        return AnimalCategoryModel.fromMap(document.data()!);
+        return ModelCategoryEntity.fromMap(document.data()!);
       } else {
         return null;
       }
@@ -182,11 +182,11 @@ class FirebaseFirestoreSource {
     return null;
   }
 
-  Future<List<AnimalCategoryModel>?> getAllAnimalCategories() async {
+  Future<List<ModelCategoryEntity>?> getAllModelCategories() async {
     try {
       var querySnapshot = await _animalCategoryCollectionRef.get();
-      List<AnimalCategoryModel> categories = querySnapshot.docs
-          .map((doc) => AnimalCategoryModel.fromMap(doc.data()))
+      List<ModelCategoryEntity> categories = querySnapshot.docs
+          .map((doc) => ModelCategoryEntity.fromMap(doc.data()))
           .toList();
       return categories;
     } catch (e, stackTrace) {
@@ -357,11 +357,12 @@ class FirebaseFirestoreSource {
   }
 
   //Story Topics
-  Future<StoryTopicModel?> getStoryTopicModel(String id) async {
+
+  Future<StoryTopicEntity?> getStoryTopicModel(String id) async {
     try {
       var document = await _storyTopicCollectionRef.doc(id).get();
       if (document.exists && document.data() != null) {
-        return StoryTopicModel.fromMap(document.data()!);
+        return StoryTopicEntity.fromMap(document.data()!);
       } else {
         return null;
       }
@@ -372,11 +373,11 @@ class FirebaseFirestoreSource {
     return null;
   }
 
-  Future<List<StoryTopicModel>?> getAllStoryTopicModels() async {
+  Future<List<StoryTopicEntity>?> getAllStoryTopicModels() async {
     try {
       var querySnapshot = await _storyTopicCollectionRef.get();
-      List<StoryTopicModel> topics = querySnapshot.docs
-          .map((doc) => StoryTopicModel.fromMap(doc.data()))
+      List<StoryTopicEntity> topics = querySnapshot.docs
+          .map((doc) => StoryTopicEntity.fromMap(doc.data()))
           .toList();
       return topics;
     } catch (e, stackTrace) {

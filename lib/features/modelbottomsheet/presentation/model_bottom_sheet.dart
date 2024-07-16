@@ -1,7 +1,7 @@
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
-import 'package:ar_zoo_explorers/core/data/controller/animal_category_controller.dart';
 import 'package:ar_zoo_explorers/core/data/controller/animal_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/model_category_controller.dart';
 import 'package:ar_zoo_explorers/features/base-model/button_object.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,14 +20,14 @@ class ModelBottomSheet extends StatefulWidget {
 }
 
 class _ModelBottomSheetState extends State<ModelBottomSheet> {
-  final aniCateController = AnimalCategoryController.findOrInitialize;
+  final aniCateController = ModelCategoryController.findOrInitialize;
   final animalController = AnimalController.findOrInitialize;
 
   List<ButtonObject> lstButton = [];
 
   double width = 0;
   double height = 0;
-
+  final languageCode = Get.locale?.languageCode;
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
@@ -124,7 +124,9 @@ class _ModelBottomSheetState extends State<ModelBottomSheet> {
                   padding: const EdgeInsets.only(top: 5),
                   child: buttonImage(lstButton[index].icon)),
               Expanded(
-                  child: Center(child: buttonTitle(lstButton[index].title)))
+                  child: Center(
+                      child:
+                          buttonTitle(lstButton[index].title[languageCode]!)))
             ])));
   }
 
@@ -154,11 +156,10 @@ class _ModelBottomSheetState extends State<ModelBottomSheet> {
     for (var itemA in widget.lstModelId) {
       for (var itemB in animalController.listAnimal.value) {
         if (itemA == itemB.id) {
-          lstButton.add(ButtonObject(
-              title: itemB.title,
-              icon: itemB.icon,
-              id: itemB.id,
-              cateId: itemB.categoryId));
+          lstButton.add(ButtonObject(title: {
+            'vi': itemB.title,
+            'en': itemB.title,
+          }, icon: itemB.icon, id: itemB.id, cateId: itemB.categoryId));
         }
       }
     }

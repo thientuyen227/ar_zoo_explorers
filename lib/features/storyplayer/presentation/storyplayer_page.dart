@@ -565,7 +565,7 @@ class _State
   Future<void> _showModelBottomSheet(BuildContext context) async {
     if (cubit.storyController.currentStory.value.modelId.isNotEmpty) {
       // print(cubit.storyController.currentStory.value.modelId);
-      await cubit.aniCateController.getAllAnimalCategories(context);
+      await cubit.aniCateController.getAllModelCategories(context);
       await cubit.animalController.getAllAnimals(context);
       await showModalBottomSheet(
         context: context,

@@ -23,7 +23,7 @@ class StoryTopicRepositoryImplement implements StoryTopicRepository {
       return Success(
         data: await _firestoreSource.getStoryTopicModel(id) ??
             StoryTopicEntity(
-                id: '', name: '', title: '', imageUrl: '', status: true),
+                id: '', name: '', title: {}, imageUrl: '', status: true),
       );
     });
   }

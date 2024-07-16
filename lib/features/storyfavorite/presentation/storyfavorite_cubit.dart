@@ -9,6 +9,7 @@ import 'package:ar_zoo_explorers/domain/entities/user_story_entity.dart';
 import 'package:ar_zoo_explorers/features/story/model/storybuttonobject.dart';
 import 'package:ar_zoo_explorers/features/storyfavorite/presentation/storyfavorite_state.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
@@ -21,7 +22,7 @@ class StoryFavoriteCubit extends BaseCubit<StoryFavoriteState> {
   final storyController = StoryController.findOrInitialize;
 
   // List<StoryButtonObject> listStory = [];
-
+  final languageCode = Get.locale?.languageCode;
   Future<void> init(BuildContext context) async {
     showLoading();
     await _getUserStory(context);
@@ -72,7 +73,7 @@ class StoryFavoriteCubit extends BaseCubit<StoryFavoriteState> {
       for (var topicId in story.topic) {
         var topic = topicMap[topicId];
         if (topic != null) {
-          topicNames.add(topic.title);
+          topicNames.add(topic.title[languageCode]!);
         }
       }
 

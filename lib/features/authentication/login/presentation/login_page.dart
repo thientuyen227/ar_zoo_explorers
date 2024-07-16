@@ -57,8 +57,9 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
                           padding: const EdgeInsets.only(
                               left: 35, right: 35, bottom: 50),
                           child: Column(children: [
-                            const SizedBox(height: 12),
+                            const SizedBox(height: 50),
                             appLogo(),
+                            const SizedBox(height: 50),
                             loginHeader(),
                             emailForm(cubit.listFormItem[0]),
                             passwordForm(cubit.listFormItem[1]),
@@ -88,8 +89,8 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
         scale: 2,
         child: Image.asset(
           AppImages.imgAppLogo,
-          height: cubit.HEIGHT * 0.25,
-          width: cubit.WIDTH,
+          height: cubit.HEIGHT * 0.15,
+          width: cubit.HEIGHT * 0.15,
         ),
       ),
       const SizedBox(height: 10),
@@ -204,10 +205,10 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
             ? () => _onLoginPressed(context)
             : null,
         style: ButtonStyle(
-            fixedSize: MaterialStateProperty.all(Size(cubit.WIDTH * 0.6, 50)),
-            backgroundColor: MaterialStateProperty.all(Colors.blue[600]),
-            elevation: MaterialStateProperty.all(5),
-            shape: MaterialStateProperty.all(RoundedRectangleBorder(
+            fixedSize: WidgetStateProperty.all(Size(cubit.WIDTH * 0.6, 50)),
+            backgroundColor: WidgetStateProperty.all(Colors.blue[600]),
+            elevation: WidgetStateProperty.all(5),
+            shape: WidgetStateProperty.all(RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20)))),
         child: Text(LanguageKeys.login.tr,
             style: const TextStyle(fontSize: 20, color: Colors.white)));
@@ -351,7 +352,7 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
   Future<void> _onLoginWithOtherOptions(BuildContext context, int index) async {
     switch (index) {
       case 0:
-        controller.loginWithFacebook(context);
+        // controller.loginWithFacebook(context);
         break;
       case 1:
         controller.loginWithGoogle(context);

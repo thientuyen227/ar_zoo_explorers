@@ -14,10 +14,10 @@ import '../../../app/config/routes.dart';
 import '../../../app/theme/icons.dart';
 import '../../../base/base_state.dart';
 import '../../../base/widgets/page_loading_indicator.dart';
-import '../../../core/data/controller/animal_category_controller.dart';
 import '../../../core/data/controller/animal_controller.dart';
 import '../../../core/data/controller/animal_detail_controller.dart';
 import '../../../core/data/controller/auth_controller.dart';
+import '../../../core/data/controller/model_category_controller.dart';
 import '../../../domain/entities/animal_detail_entity.dart';
 import '../../base-model/button_object.dart';
 import '../../base-model/form_builder_text_field_model.dart';
@@ -34,12 +34,12 @@ class _State
     extends BaseState<SearchModelState, SearchModelCubit, SearchModelPage> {
   final controller = AuthController.findOrInitialize;
   final detailController = AnimalDetailController.findOrInitialize;
-  final cateController = AnimalCategoryController.findOrInitialize;
+  final cateController = ModelCategoryController.findOrInitialize;
   final animalController = AnimalController.findOrInitialize;
   final userAnimalController = UserAnimalController.findOrInitialize;
 
   final _formKey = GlobalKey<FormBuilderState>();
-
+  final languageCode = Get.locale?.languageCode;
   @override
   Widget buildByState(BuildContext context, SearchModelState state) {
     return Obx(() => GestureDetector(
@@ -171,8 +171,8 @@ class _State
                     views(index),
                     const SizedBox(width: 5),
                     Expanded(
-                        child:
-                            buttonTitle(cubit.listSearchAnimal[index].title)),
+                        child: buttonTitle(cubit
+                            .listSearchAnimal[index].title[languageCode]!)),
                     loveButton(index),
                   ]))
             ])));

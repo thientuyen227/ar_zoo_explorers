@@ -9,6 +9,7 @@ import 'package:ar_zoo_explorers/features/story/model/storybuttonobject.dart';
 import 'package:ar_zoo_explorers/features/storyhome/model/topic_button_object.dart';
 import 'package:ar_zoo_explorers/features/storyhome/presentation/storyhome_state.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
@@ -19,7 +20,7 @@ class StoryHomeCubit extends BaseCubit<StoryHomeState> {
   final storyTopicController = StoryTopicController.findOrInitialize;
   final userStoryController = UserStoryController.findOrInitialize;
   final storyController = StoryController.findOrInitialize;
-
+  final languageCode = Get.locale?.languageCode;
   Future<void> init(BuildContext context) async {
     showLoading();
     Size mediaSize = MediaQueryData.fromView(
@@ -71,13 +72,13 @@ class StoryHomeCubit extends BaseCubit<StoryHomeState> {
       List<StoryTopicEntity> topics) async {
     List<TopicButtonObject> items = [];
     StoryTopicEntity tmp = StoryTopicEntity(
-        id: '', title: '', name: ',', imageUrl: '', status: true);
+        id: '', title: {}, name: ',', imageUrl: '', status: true);
     for (var item in topics) {
       if (item.name != 'otherstories') {
         items.add(TopicButtonObject(
             id: item.id,
             name: item.name,
-            title: item.title,
+            title: item.title[languageCode]!,
             imageUrl: item.imageUrl));
       } else {
         tmp = item;
@@ -87,7 +88,7 @@ class StoryHomeCubit extends BaseCubit<StoryHomeState> {
       items.add(TopicButtonObject(
           id: tmp.id,
           name: tmp.name,
-          title: tmp.title,
+          title: tmp.title[languageCode]!,
           imageUrl: tmp.imageUrl));
     }
     return items;

@@ -28,14 +28,15 @@ class _State
   final storyTopicController = StoryTopicController.findOrInitialize;
   final userStoryController = UserStoryController.findOrInitialize;
   final storyController = StoryController.findOrInitialize;
-
+  final languageCode = Get.locale?.languageCode;
   @override
   Widget buildByState(BuildContext context, StoryTopicState state) {
     return Scaffold(
         // extendBodyBehindAppBar: true,
         appBar: AppBar(
           centerTitle: true,
-          title: Text(storyTopicController.currentStoryTopic.value.title,
+          title: Text(
+              storyTopicController.currentStoryTopic.value.title[languageCode]!,
               style: const TextStyle(
                   fontSize: 20,
                   color: Colors.white,

@@ -1,4 +1,5 @@
 import 'package:ar_zoo_explorers/features/searchmodel/presentation/searchmodel_state.dart';
+import 'package:get/get.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../app/theme/icons.dart';
@@ -16,7 +17,7 @@ class SearchModelCubit extends BaseCubit<SearchModelState> {
 
   List<ButtonObject> listSearchAnimal = [];
   List<ButtonObject> listFullAnimal = [];
-
+  final languageCode = Get.locale?.languageCode;
   void isLoved(int index) {
     listSearchAnimal[index].isLoved = !listSearchAnimal[index].isLoved;
     listFullAnimal[index].isLoved = !listFullAnimal[index].isLoved;
@@ -25,11 +26,15 @@ class SearchModelCubit extends BaseCubit<SearchModelState> {
   void setListAnimal(List<AnimalEntity> list, String searchValue) {
     if (list.isNotEmpty) {
       for (int i = 0; i < list.length; i++) {
-        listFullAnimal.add(ButtonObject(
-            title: list[i].title, icon: list[i].icon, id: list[i].id));
+        listFullAnimal.add(ButtonObject(title: {
+          'vi': list[i].title,
+          'en': list[i].title,
+        }, icon: list[i].icon, id: list[i].id));
         if (list[i].title.toLowerCase().contains(searchValue.toLowerCase())) {
-          listSearchAnimal.add(ButtonObject(
-              title: list[i].title, icon: list[i].icon, id: list[i].id));
+          listSearchAnimal.add(ButtonObject(title: {
+            'vi': list[i].title,
+            'en': list[i].title,
+          }, icon: list[i].icon, id: list[i].id));
         }
       }
     }
@@ -39,9 +44,13 @@ class SearchModelCubit extends BaseCubit<SearchModelState> {
     listSearchAnimal = [];
     for (int i = 0; i < listFullAnimal.length; i++) {
       if (listFullAnimal[i]
-          .title
-          .toLowerCase()
-          .contains(searchValue.trim().toLowerCase())) {
+              .title['vi']!
+              .toLowerCase()
+              .contains(searchValue.trim().toLowerCase()) ||
+          listFullAnimal[i]
+              .title['en']!
+              .toLowerCase()
+              .contains(searchValue.trim().toLowerCase())) {
         listSearchAnimal.add(ButtonObject(
             title: listFullAnimal[i].title,
             icon: listFullAnimal[i].icon,

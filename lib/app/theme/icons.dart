@@ -139,6 +139,7 @@ class AppImages {
       "assets/images/img_ar_baby_white_bg.png";
   static const String imgBGStarrySky = "assets/images/img_bg_starry_sky.png";
   static const String imgBGJungle = "assets/images/img_bg_jungle.png";
+  static const String imgBGWelcome = "assets/images/img_bg_welcome.png";
 
   //FLAGS
   static const String flagUK = "assets/images/flags/img_greatbritain.png";
