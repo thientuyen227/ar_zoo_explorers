@@ -47,7 +47,7 @@ class _DetailModelState extends State<DetailModel> {
       SizedBox(height: height * 0.07),
       Center(
           child: Stack(alignment: Alignment.center, children: [
-        modelTitle(animalController.currentAnimal.value.title),
+        modelTitle(animalController.currentAnimal.value.titles[languageCode]!),
         views(detailController.currentModelDetail.value.views)
       ])),
       const SizedBox(height: 15),

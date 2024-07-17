@@ -3,16 +3,17 @@ import 'package:ar_zoo_explorers/domain/entities/animal_entity.dart';
 class AnimalModel extends AnimalEntity {
   AnimalModel(
       {required super.id,
-      required super.title,
+      required super.titles,
       required super.icon,
       required super.type,
       required super.name,
       required super.categoryId,
       required super.status});
+  @override
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'title': title,
+      'title': titles,
       'icon': icon,
       'type': type,
       'name': name,
@@ -24,7 +25,7 @@ class AnimalModel extends AnimalEntity {
   factory AnimalModel.fromMap(Map<String, dynamic> map) {
     return AnimalModel(
       id: map['id'] ?? '',
-      title: map['title'] ?? '',
+      titles: map['titles'] ?? '',
       icon: map['icon'] ?? '',
       type: map['type'] ?? '',
       name: map['name'] ?? '',

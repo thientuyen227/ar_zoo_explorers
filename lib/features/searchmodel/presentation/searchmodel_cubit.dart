@@ -27,13 +27,20 @@ class SearchModelCubit extends BaseCubit<SearchModelState> {
     if (list.isNotEmpty) {
       for (int i = 0; i < list.length; i++) {
         listFullAnimal.add(ButtonObject(title: {
-          'vi': list[i].title,
-          'en': list[i].title,
+          'vi': list[i].titles['vi']!,
+          'en': list[i].titles['en']!,
         }, icon: list[i].icon, id: list[i].id));
-        if (list[i].title.toLowerCase().contains(searchValue.toLowerCase())) {
+        if (list[i]
+                .titles['vi']!
+                .toLowerCase()
+                .contains(searchValue.toLowerCase()) ||
+            list[i]
+                .titles['en']!
+                .toLowerCase()
+                .contains(searchValue.toLowerCase())) {
           listSearchAnimal.add(ButtonObject(title: {
-            'vi': list[i].title,
-            'en': list[i].title,
+            'vi': list[i].titles['vi']!,
+            'en': list[i].titles['en']!,
           }, icon: list[i].icon, id: list[i].id));
         }
       }

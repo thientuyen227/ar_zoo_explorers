@@ -43,7 +43,9 @@ class _State
         canPop: false,
         onPopInvoked: (didPop) async {
           await _updatePausedTime(context);
-          Navigator.of(context).pop();
+          if (mounted) {
+            Navigator.of(context).pop();
+          }
         },
         child: Scaffold(
             extendBodyBehindAppBar: true,

@@ -194,6 +194,7 @@ class _State
   // TÊN MODEL
   Widget buttonTitle(String title) {
     return Text(title,
+        overflow: TextOverflow.ellipsis,
         style: const TextStyle(
             color: Colors.black, fontSize: 11, fontWeight: FontWeight.bold),
         softWrap: true,

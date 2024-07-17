@@ -188,6 +188,7 @@ class _State
     return SizedBox(
         width: 80,
         child: Text(title,
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(
                 color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
             softWrap: true,

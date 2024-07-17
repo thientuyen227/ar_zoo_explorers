@@ -1,4 +1,3 @@
-import 'package:ar_zoo_explorers/core/data/models/animal_model.dart';
 import 'package:ar_zoo_explorers/core/failures.dart';
 import 'package:ar_zoo_explorers/core/helpers/exception_handler.dart';
 import 'package:ar_zoo_explorers/core/success.dart';
@@ -13,7 +12,7 @@ class AnimalRepositoryImplement implements AnimalRepository {
 
   @override
   Future<Either<Failure, Success<AnimalEntity>>> createAnimal({
-    required String title,
+    required Map<String, String> titles,
     required String icon,
     required String type,
     required String name,
@@ -22,9 +21,9 @@ class AnimalRepositoryImplement implements AnimalRepository {
   }) {
     return ResponseHandler.processResponse(() async {
       return Success(
-          data: await _firestoreSource.createAnimal(AnimalModel(
+          data: await _firestoreSource.createAnimal(AnimalEntity(
               id: await _firestoreSource.generateUniqueAnimalModelId,
-              title: title,
+              titles: titles,
               icon: icon,
               type: type,
               name: name,
@@ -44,7 +43,7 @@ class AnimalRepositoryImplement implements AnimalRepository {
   @override
   Future<Either<Failure, Success<AnimalEntity>>> updateAnimal({
     required String id,
-    required String title,
+    required Map<String, String> titles,
     required String icon,
     required String type,
     required String name,
@@ -55,7 +54,7 @@ class AnimalRepositoryImplement implements AnimalRepository {
       return Success(
           data: await _firestoreSource.updateAnimal(
               id: id,
-              title: title,
+              titles: titles,
               icon: icon,
               type: type,
               name: name,

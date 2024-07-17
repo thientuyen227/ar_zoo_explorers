@@ -48,7 +48,7 @@ class ModelDetailCubit extends BaseCubit<ModelDetailState> {
     emit(state.copyWith(
       height: mediaSize.height,
       width: mediaSize.width,
-      animalTitle: animalController.currentAnimal.value.title,
+      animalTitle: animalController.currentAnimal.value.titles[languageCode],
       imagePath: animalController.currentAnimal.value.icon,
       views: detailController.currentModelDetail.value.views,
     ));
