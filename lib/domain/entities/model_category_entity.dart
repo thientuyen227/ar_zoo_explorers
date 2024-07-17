@@ -44,7 +44,7 @@ class ModelCategoryEntity {
       ModelCategoryEntity.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
-extension StoryTopicEntityExt on ModelCategoryEntity {
+extension ModelCategoryEntityExt on ModelCategoryEntity {
   String _getLocalizedValue(Map<String, String> data) {
     final languageCode = Get.locale?.languageCode;
     return data.containsKey(languageCode)

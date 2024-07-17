@@ -342,4 +342,16 @@ class LanguageKeys {
   static const String download_image = 'download_image';
   static const String send_message_failed = 'send_message_failed';
   static const String write_message = 'write_message';
+
+  //MODEL DETAIL
+  static const String description = 'description';
+  static const String classification = 'classification';
+  static const String conservation = 'conservation';
+  static const String reproduction = 'reproduction';
+  static const String culturalFigure = 'culturalFigure';
+  static const String preservation = 'preservation';
+  static const String culturalSignificance = 'culturalSignificance';
+  static const String maintenance = 'maintenance';
+  static const String manufacturing = 'manufacturing';
+  static const String educationalValue = 'educationalValue';
 }

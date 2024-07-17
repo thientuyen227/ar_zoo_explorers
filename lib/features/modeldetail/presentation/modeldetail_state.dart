@@ -1,3 +1,4 @@
+import 'package:ar_zoo_explorers/domain/entities/model_detail_entity.dart';
 import 'package:ar_zoo_explorers/features/modeldetail/model/image_argb.dart';
 import 'package:flutter/material.dart';
 
@@ -19,12 +20,7 @@ class ModelDetailState {
   Color backgroundColor;
   ARGBImage listBlenderColor;
 
-  //INFORMATIONs OF MODEL
-  String description = ""; // Mô tả
-  String classification = ""; // Phân loại sinh học
-  String conservation = ""; // Tình trạng bảo tồn
-  String reproduction = ""; // Sinh sản
-  String culturalFigure = ""; // Hình tượng trong văn hóa
+  ModelDetailEntity detail;
 
   ModelDetailState({
     this.pageStatus = PageStatus.loading,
@@ -36,15 +32,55 @@ class ModelDetailState {
     this.imagePath = defaultImgPath,
     this.animalTitle = "",
     this.backgroundColor = Colors.white,
-    //INFORMATION OF ANIMAL MODEL
-    this.description = "",
-    this.classification = "",
-    this.conservation = "",
-    this.reproduction = "",
-    this.culturalFigure = "",
+    //INFORMATION OF MODEL
+    ModelDetailEntity? detail,
     //INFORMATION OF ANIMAL MODEL
     ARGBImage? listBlenderColor,
-  }) : listBlenderColor = ARGBImage();
+  })  : listBlenderColor = ARGBImage(),
+        detail = ModelDetailEntity(
+            id: '',
+            modelId: '',
+            description: {
+              'vi': '',
+              'en': '',
+            },
+            classification: {
+              'vi': '',
+              'en': '',
+            },
+            conservation: {
+              'vi': '',
+              'en': '',
+            },
+            reproduction: {
+              'vi': '',
+              'en': '',
+            },
+            culturalFigure: {
+              'vi': '',
+              'en': '',
+            },
+            preservation: {
+              'vi': '',
+              'en': '',
+            },
+            culturalSignificance: {
+              'vi': '',
+              'en': '',
+            },
+            maintenance: {
+              'vi': '',
+              'en': '',
+            },
+            manufacturing: {
+              'vi': '',
+              'en': '',
+            },
+            educationalValue: {
+              'vi': '',
+              'en': '',
+            },
+            views: 0);
 
   ModelDetailState copyWith({
     PageStatus? pageStatus,
@@ -57,11 +93,7 @@ class ModelDetailState {
     String? animalTitle,
     Color? backgroundColor,
     //INFORMATION OF ANIMAL MODEL
-    String? description,
-    String? classification,
-    String? conservation,
-    String? reproduction,
-    String? culturalFigure,
+    ModelDetailEntity? detail,
     //INFORMATION OF ANIMAL MODEL
     ARGBImage? listBlenderColor,
   }) {
@@ -76,11 +108,7 @@ class ModelDetailState {
       animalTitle: animalTitle ?? this.animalTitle,
       backgroundColor: backgroundColor ?? this.backgroundColor,
       //INFORMATION OF ANIMAL MODEL
-      description: description ?? this.description,
-      classification: classification ?? this.classification,
-      conservation: conservation ?? this.conservation,
-      reproduction: reproduction ?? this.reproduction,
-      culturalFigure: culturalFigure ?? this.culturalFigure,
+      detail: detail ?? this.detail,
       //INFORMATION OF ANIMAL MODEL
       listBlenderColor: listBlenderColor ?? this.listBlenderColor,
     );
@@ -97,11 +125,7 @@ class ModelDetailState {
     String? animalTitle,
     Color? backgroundColor,
     //INFORMATION OF ANIMAL MODEL
-    String? description,
-    String? classification,
-    String? conservation,
-    String? reproduction,
-    String? culturalFigure,
+    ModelDetailEntity? detail,
     //INFORMATION OF ANIMAL MODEL
     ARGBImage? listBlenderColor,
   }) async {
@@ -114,13 +138,9 @@ class ModelDetailState {
     this.imagePath = imagePath ?? this.imagePath;
     this.animalTitle = animalTitle ?? this.animalTitle;
     this.backgroundColor = backgroundColor ?? this.backgroundColor;
-    //INFORMATION OF ANIMAL MODEL
-    this.description = description ?? this.description;
-    this.classification = classification ?? this.classification;
-    this.conservation = conservation ?? this.conservation;
-    this.reproduction = reproduction ?? this.reproduction;
-    this.culturalFigure = culturalFigure ?? this.culturalFigure;
-    //INFORMATION OF ANIMAL MODEL
+    //INFORMATION OF MODEL
+    this.detail = detail ?? this.detail;
+    //INFORMATION OF MODEL
     this.listBlenderColor = listBlenderColor ?? this.listBlenderColor;
   }
 }

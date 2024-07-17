@@ -314,4 +314,16 @@ const Map<String, String> en_us = {
   'download_image': 'Download this image',
   'write_message': 'Write your message',
   'send_message_failed': 'Failed to send text to image. Please try again later',
+
+  //MODEL DETAIL
+  'description': 'Description',
+  'classification': 'Classification',
+  'conservation': 'Conservation',
+  'reproduction': 'Reproduction',
+  'culturalFigure': 'Cultural Figure',
+  'preservation': 'Preservation',
+  'culturalSignificance': 'Cultural Significance',
+  'maintenance': 'Maintenance',
+  'manufacturing': 'Manufacturing',
+  'educationalValue': 'Educational Value',
 };

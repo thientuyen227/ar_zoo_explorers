@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/core/data/controller/animal_controller.dart';
-import 'package:ar_zoo_explorers/core/data/controller/animal_detail_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/model_detail_controller.dart';
 import 'package:ar_zoo_explorers/features/modeldetail/presentation/modeldetail_state.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -23,13 +23,15 @@ class ModelDetailCubit extends BaseCubit<ModelDetailState> {
   ModelDetailCubit() : super(ModelDetailState());
 
   final animalController = AnimalController.findOrInitialize;
-  final detailController = AnimalDetailController.findOrInitialize;
+  final detailController = ModelDetailController.findOrInitialize;
 
   final ValueNotifier<bool> isClosedLoading = ValueNotifier<bool>(false);
 
   FirebaseStorage storage = FirebaseStorage.instance;
 
   HttpClient? httpClient;
+
+  final languageCode = Get.locale?.languageCode;
 
   Future<void> init(BuildContext context) async {
     showLoading();
@@ -38,28 +40,22 @@ class ModelDetailCubit extends BaseCubit<ModelDetailState> {
             WidgetsBinding.instance.platformDispatcher.views.single)
         .size;
 
-    await detailController.getAnimalCategoryModelByModelId(context,
+    await detailController.getModelDetailByModelId(context,
         modelId: animalController.currentAnimal.value.id);
-    await detailController.updateViewsAnimalModel(context,
-        id: detailController.currentAnimalDetail.value.id,
-        views: (detailController.currentAnimalDetail.value.views + 1));
+    await detailController.updateViewsModelModel(context,
+        id: detailController.currentModelDetail.value.id,
+        views: (detailController.currentModelDetail.value.views + 1));
     emit(state.copyWith(
       height: mediaSize.height,
       width: mediaSize.width,
       animalTitle: animalController.currentAnimal.value.title,
       imagePath: animalController.currentAnimal.value.icon,
-      views: detailController.currentAnimalDetail.value.views,
+      views: detailController.currentModelDetail.value.views,
     ));
     await _setBackgroundColor();
 
     emit(state.copyWith(
-      //INFORMATION OF ANIMAL MODEL
-      description: detailController.currentAnimalDetail.value.description,
-      classification: detailController.currentAnimalDetail.value.classification,
-      conservation: detailController.currentAnimalDetail.value.conservation,
-      reproduction: detailController.currentAnimalDetail.value.reproduction,
-      culturalFigure: detailController.currentAnimalDetail.value.culturalFigure,
-      //INFORMATION OF ANIMAL MODEL
+      detail: await detailController.getDetail(),
       isDownloading: false,
       isLoaded: true,
     ));
