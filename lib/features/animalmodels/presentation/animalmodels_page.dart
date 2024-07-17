@@ -164,7 +164,7 @@ class _State
       await cubit.showLoading();
       await animalController.resetCurrentValue(context);
       context.router.pop();
-      context.router.pushNamed(Routes.home);
+      // context.router.pushNamed(Routes.home);
       await cubit.hideLoading();
     });
   }

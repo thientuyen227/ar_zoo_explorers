@@ -39,7 +39,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   AudioPlayer audioPlayer = AudioPlayer();
   final _formKey = GlobalKey<FormBuilderState>();
   late StreamSubscription<PlayerState> _audioPlayerStateSubscription;
-  AudioPlayer audioPlayer = AudioPlayer();
+
   List<Widget> imageSliders = [];
   @override
   void initState() {
