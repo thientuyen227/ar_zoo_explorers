@@ -132,6 +132,8 @@ const Map<String, String> en_us = {
   'continueQuestion': 'Continuing with the previous question?',
   'letter': 'Letter',
   'number': 'Number',
+  'msg_question': 'There are currently no questions related to this vocabulary',
+  'msg_model3D': 'Currently there is no 3D model',
 
   // Setting Pages
   'accountManager': 'Account Manager',
@@ -312,6 +314,7 @@ const Map<String, String> en_us = {
 
   //Chat AI
   'download_image': 'Download this image',
+  'download_image_success': 'There was an error loading the image',
   'write_message': 'Write your message',
   'send_message_failed': 'Failed to send text to image. Please try again later',
 

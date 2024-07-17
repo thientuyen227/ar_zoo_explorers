@@ -14,7 +14,8 @@ class QuestionController extends ControllerHelper {
       answer: '',
       categoryId: '',
       vocabularyId: '',
-      question: {},
+      answers: {},
+      questions: {},
       image: '',
       options: [],
       puzzles: []));
@@ -58,10 +59,10 @@ class QuestionController extends ControllerHelper {
   Future<void> resetCurrentValue(BuildContext context) async {
     currentQuestion.value = QuestionEntity(
         id: '',
-        answer: '',
         categoryId: '',
         vocabularyId: '',
-        question: {},
+        questions: {},
+        answers: {},
         image: '',
         options: [],
         puzzles: []);

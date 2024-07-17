@@ -5,7 +5,8 @@ import '../../core/success.dart';
 import '../entities/animal_entity.dart';
 
 abstract class AnimalRepository {
-  Future<Either<Failure, Success<AnimalEntity>>> getAnimal(String animalId);
+  Future<Either<Failure, Success<AnimalEntity?>>> getAnimal(String animalId);
+
   Future<Either<Failure, Success<AnimalEntity>>> createAnimal({
     required Map<String, String> titles,
     required String icon,
@@ -14,6 +15,7 @@ abstract class AnimalRepository {
     required String categoryId,
     required bool status,
   });
+
   Future<Either<Failure, Success<AnimalEntity>>> updateAnimal({
     required String id,
     required Map<String, String> titles,

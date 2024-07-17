@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/dimens.dart';
@@ -9,6 +11,7 @@ import 'package:ar_zoo_explorers/features/home/component/home_activity_button.da
 import 'package:ar_zoo_explorers/features/home/component/home_category_button.dart';
 import 'package:ar_zoo_explorers/features/home/presentation/home_state.dart';
 import 'package:ar_zoo_explorers/utils/widget/button_widget.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -35,8 +38,62 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   final detailController = ModelDetailController.findOrInitialize;
 
   final _formKey = GlobalKey<FormBuilderState>();
-
+  late StreamSubscription<PlayerState> _audioPlayerStateSubscription;
+  AudioPlayer audioPlayer = AudioPlayer();
   List<Widget> imageSliders = [];
+  @override
+  void initState() {
+    super.initState();
+    audioPlayer = AudioPlayer();
+    _playAudioWithDelay();
+    _onPlayerStateChanged();
+    _initCubit();
+  }
+
+  void _playAudioWithDelay() {
+    Timer(const Duration(seconds: 2), () {
+      if (!mounted) return;
+      audioPlayer.play(AssetSource(AppSound.audioHome));
+    });
+  }
+
+  Future<void> _onPlayerStateChanged() async {
+    _audioPlayerStateSubscription =
+        audioPlayer.onPlayerStateChanged.listen((PlayerState state) async {
+      if (!mounted) return;
+      switch (state) {
+        case PlayerState.playing:
+          _playAudioWithDelay();
+          break;
+        case PlayerState.completed:
+          _onChangeCompleted();
+          break;
+        default:
+          audioPlayer.stop();
+          return;
+      }
+      if (mounted) setState(() {});
+    }, onError: (msg) async {
+      if (!mounted) return;
+      await audioPlayer.stop();
+      if (mounted) setState(() {});
+    });
+  }
+
+  Future<void> _onChangeCompleted() async {
+    await audioPlayer.play(UrlSource(AppSound.audioHome),
+        position: Duration.zero);
+  }
+
+  @override
+  void dispose() {
+    _audioPlayerStateSubscription.cancel();
+    audioPlayer.stop();
+    Timer(const Duration(seconds: 2), () {
+      audioPlayer.dispose();
+    });
+    super.dispose();
+  }
 
   @override
   Widget buildByState(BuildContext context, HomeState state) {
@@ -106,6 +163,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
       BuildContext context, String imageUrl, String content, String routePage) {
     return GestureDetector(
         onTap: () async {
+          await audioPlayer.stop();
           await _onTapActivityButton(context, routePage);
         },
         child: HomeActivityButton(imageUrl: imageUrl, content: content));
@@ -297,7 +355,11 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   Future<void> _onTapActivityButton(
       BuildContext context, String routePage) async {
     await cubit.showLoading();
-    context.router.pushNamed(routePage);
+    context.router.pushNamed(routePage).then((value) {
+      if (value == true) {
+        return _playAudioWithDelay();
+      }
+    });
     if (routePage == Routes.story) {
       await _getAllTopics(context);
       await _getStoriesByReleaseDate(context);
@@ -342,11 +404,5 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
     await cubit.init(context);
     await _buildSlider();
     await _addAdvertiseImage().then((value) => setState(() {}));
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _initCubit();
   }
 }

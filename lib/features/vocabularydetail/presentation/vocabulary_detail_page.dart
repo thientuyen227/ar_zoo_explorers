@@ -1,4 +1,3 @@
-import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/domain/entities/learning_category_entity.dart';
 import 'package:ar_zoo_explorers/features/vocabularydetail/components/item_vocabulary_detail.dart';
@@ -45,23 +44,12 @@ class _State extends BaseState<VocabularyDetailState, VocabularyDetailCubit,
         child: Center(
           child: Column(
             children: [
-              const Text(
-                "Easy",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
-              ),
+              // const Text(
+              //   "Easy",
+              //   style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+              // ),
               const SizedBox(
                 height: 14,
-              ),
-              Container(
-                padding: const EdgeInsets.all(4),
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  color: Color(0xFF49B0AB),
-                ),
-                child: const Text(
-                  "150 pts",
-                  style: TextStyle(color: AppColor.white, fontSize: 8),
-                ),
               ),
               if (state.vocabularies.isNotEmpty)
                 GridView.builder(

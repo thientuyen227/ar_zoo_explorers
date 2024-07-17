@@ -1,8 +1,6 @@
 import 'package:ar_zoo_explorers/app/config/routes.dart';
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
-import 'package:ar_zoo_explorers/core/data/api/api_service.dart';
-import 'package:ar_zoo_explorers/domain/entities/chatbox_entity.dart';
 import 'package:ar_zoo_explorers/features/learning/presentation/learning_cubit.dart';
 import 'package:ar_zoo_explorers/features/learning/presentation/learning_state.dart';
 import 'package:auto_route/auto_route.dart';
@@ -23,10 +21,6 @@ class LearningPage extends StatefulWidget {
 }
 
 class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
-  ApiService apiService = ApiService();
-  TextEditingController textTest = TextEditingController();
-  ChatBoxEntity? chatBoxEntity;
-
   @override
   Widget buildByState(BuildContext context, LearningState state) {
     return Scaffold(
@@ -121,7 +115,7 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
 
   Widget backButton() {
     return AppIconButton(
-      onPressed: () => context.router.maybePop(),
+      onPressed: () => context.router.pushNamed(Routes.home),
       icon: Container(
           margin: const EdgeInsets.only(left: 0),
           child: Transform.scale(

@@ -51,10 +51,10 @@ class _State extends BaseState<WelcomeState, WelcomeCubit, WelcomePage>
           context.router.pushNamed(Routes.languageselection);
         },
         style: ButtonStyle(
-            fixedSize: WidgetStateProperty.all(Size(cubit.WIDTH * 0.6, 50)),
-            backgroundColor: WidgetStateProperty.all(Colors.white),
-            elevation: WidgetStateProperty.all(5),
-            shape: WidgetStateProperty.all(RoundedRectangleBorder(
+            fixedSize: MaterialStateProperty.all(Size(cubit.WIDTH * 0.6, 50)),
+            backgroundColor: MaterialStateProperty.all(Colors.white),
+            elevation: MaterialStateProperty.all(5),
+            shape: MaterialStateProperty.all(RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20)))),
         child: Text("Start",
             style: TextStyle(fontSize: 20, color: Colors.blue[600])));

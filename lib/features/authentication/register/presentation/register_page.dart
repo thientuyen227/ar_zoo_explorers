@@ -250,10 +250,10 @@ class _State extends BaseState<RegisterState, RegisterCubit, RegisterPage> {
             ? _onSignUpPressed
             : null,
         style: ButtonStyle(
-            fixedSize: WidgetStateProperty.all(Size(cubit.WIDTH * 0.6, 50)),
-            backgroundColor: WidgetStateProperty.all(Colors.blue),
-            elevation: WidgetStateProperty.all(5),
-            shape: WidgetStateProperty.all(RoundedRectangleBorder(
+            fixedSize: MaterialStateProperty.all(Size(cubit.WIDTH * 0.6, 50)),
+            backgroundColor: MaterialStateProperty.all(Colors.blue),
+            elevation: MaterialStateProperty.all(5),
+            shape: MaterialStateProperty.all(RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20)))),
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Image.asset(AppIcons.icWhiteSubmit),

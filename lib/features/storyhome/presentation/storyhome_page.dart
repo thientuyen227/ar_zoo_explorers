@@ -85,6 +85,7 @@ class _State extends BaseState<StoryHomeState, StoryHomeCubit, StoryHomePage> {
     return CustomBackButton(onPressed: () async {
       await cubit.showLoading();
       Navigator.of(context).pop(true);
+      context.router.pushNamed(Routes.home);
       await cubit.hideLoading();
     });
   }

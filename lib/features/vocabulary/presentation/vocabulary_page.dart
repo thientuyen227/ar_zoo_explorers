@@ -23,7 +23,9 @@ class _State
   @override
   void initState() {
     super.initState();
+    cubit.showLoading();
     cubit.init(context);
+    cubit.hideLoading();
   }
 
   @override

@@ -1,5 +1,4 @@
-import 'dart:async';
-
+import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/domain/entities/chars_entity.dart';
@@ -12,100 +11,83 @@ import 'package:flutter/material.dart';
 
 @RoutePage()
 class PhonicsDetailPage extends StatefulWidget {
-  PhonicsDetailPage({super.key, required this.type});
-  String type;
+  const PhonicsDetailPage({super.key, required this.type});
+  final String type;
   @override
   State createState() => _State();
 }
 
 class _State extends BaseState<PhonicsDetailState, PhonicsDetailCubit,
     PhonicsDetailPage> {
-  AudioPlayer audioPlayer = AudioPlayer();
-  StreamSubscription<PlayerState>? _playerStateSubscription;
-  StreamSubscription<PlayerState>? _completeAudioSubscription;
-  StreamSubscription<Duration>? _durationSubscription;
-  // bool _isOrientationLocked = true;
+  final AudioPlayer audioPlayer = AudioPlayer();
+  bool isReading = false;
+  bool isSinging = false;
+  int selectedIndex = -1;
 
   @override
   void initState() {
     cubit.init(context: context, type: widget.type);
     super.initState();
-    onPlayerStateChanged();
+    // onPlayerStateChanged();
     setVolume();
-    completeAudio();
+    // completeAudio();
   }
 
-  void onPlayerStateChanged() {
-    _playerStateSubscription =
-        audioPlayer.onPlayerStateChanged.listen((PlayerState state) {
-      if (!mounted) return;
+  // void onPlayerStateChanged() {
+  //   audioPlayer.onPlayerStateChanged.listen((PlayerState state) {
+  //     if (!mounted) return;
 
-      if (state == PlayerState.playing) {
-        setState(() {
-          cubit.audioState = PlayerState.playing;
-          cubit.isPlaying = true;
-        });
-      } else {
-        cubit.isPlaying = false;
-        if (state == PlayerState.paused) {
-          setState(() {
-            cubit.audioState = PlayerState.paused;
-          });
-        } else if (state == PlayerState.stopped) {
-          setState(() {
-            cubit.audioState = PlayerState.stopped;
-          });
-        }
-      }
-    }, onError: (msg) {
-      if (!mounted) return;
-      setState(() {
-        cubit.audioState = PlayerState.stopped;
-        print("audio error: ${msg.toString()}");
-      });
-    });
-  }
+  //     if (state == PlayerState.playing) {
+  //       setState(() {
+  //         cubit.audioState = PlayerState.playing;
+  //         cubit.isPlaying = true;
+  //       });
+  //     } else {
+  //       cubit.isPlaying = false;
+  //       if (state == PlayerState.paused) {
+  //         setState(() {
+  //           cubit.audioState = PlayerState.paused;
+  //         });
+  //       } else if (state == PlayerState.stopped) {
+  //         setState(() {
+  //           cubit.audioState = PlayerState.stopped;
+  //         });
+  //       }
+  //     }
+  //   }, onError: (msg) {
+  //     if (!mounted) return;
+  //     setState(() {
+  //       cubit.audioState = PlayerState.stopped;
+  //       print("audio error: ${msg.toString()}");
+  //     });
+  //   });
+  // }
 
-  Future<void> completeAudio() async {
-    _completeAudioSubscription =
-        audioPlayer.onPlayerStateChanged.listen((PlayerState state) async {
-      if (!mounted) return;
-
-      if (state == PlayerState.completed) {
-        if (cubit.isLoop) {
-          await audioPlayer.play(UrlSource(cubit.audioUrl),
-              position: Duration.zero);
-        } else {
-          setState(() {
-            cubit.audioState = PlayerState.stopped;
-          });
-        }
-      }
-    });
-  }
+  // Future<void> completeAudio() async {
+  //   audioPlayer.onPlayerStateChanged.listen((PlayerState state) async {
+  //     if (!mounted) return;
+  //     if (state == PlayerState.completed) {
+  //       if (cubit.isLoop) {
+  //         await audioPlayer.play(UrlSource(cubit.audioUrl[cubit.languageCode]!),
+  //             position: Duration.zero);
+  //       } else {
+  //         setState(() {
+  //           cubit.audioState = PlayerState.stopped;
+  //         });
+  //       }
+  //     }
+  //   });
+  // }
 
   void setVolume() {
     if (!mounted) return;
     setState(() {
-      cubit.volumeValue = 0.9;
-      audioPlayer.setVolume(0.9);
-    });
-  }
-
-  void onDurationChanged() {
-    _durationSubscription = audioPlayer.onDurationChanged.listen((Duration d) {
-      if (!mounted) return;
-      setState(() {
-        cubit.position = d;
-      });
+      audioPlayer.setVolume(1);
     });
   }
 
   @override
   void dispose() {
-    _playerStateSubscription?.cancel();
-    _completeAudioSubscription?.cancel();
-    _durationSubscription?.cancel();
     audioPlayer.dispose();
     super.dispose();
   }
@@ -128,7 +110,7 @@ class _State extends BaseState<PhonicsDetailState, PhonicsDetailCubit,
             Container(
               decoration: const BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage(AppImages.backgroundPhonics),
+                  image: AssetImage(AppImages.backgroundPhonicsDetail),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -149,9 +131,12 @@ class _State extends BaseState<PhonicsDetailState, PhonicsDetailCubit,
                                   },
                                   child: const ImageSvgUrlCustom(
                                       imagePath: AppIcons.icBackPng)),
+                              const Spacer(),
+                              btnReadAndSing(),
+                              const Spacer(),
                               const SizedBox(
-                                width: 10,
-                              ),
+                                width: 40,
+                              )
                             ],
                           ),
                           GridView.builder(
@@ -160,43 +145,53 @@ class _State extends BaseState<PhonicsDetailState, PhonicsDetailCubit,
                             padding: EdgeInsets.zero,
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: cubit.isNumber == true ? 7 : 8,
-                              childAspectRatio:
-                                  state.height * 1.97 / state.width,
+                              crossAxisCount: cubit.isNumber == true ? 6 : 8,
+                              crossAxisSpacing: 4,
+                              mainAxisSpacing: 4,
+                              childAspectRatio: cubit.isNumber == true
+                                  ? state.height * 2.3 / state.width
+                                  : state.height * 1.6 / state.width,
                             ),
                             itemCount: state.charsEntities.length,
                             itemBuilder: (context, index) {
-                              return Column(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      audioPlayer.play(UrlSource(state
-                                          .charsEntities[index]
-                                          .audiosLocalize));
-                                    },
-                                    child: Text(
-                                      state.isUpperCase == true
-                                          ? state.charsEntities[index].char
-                                              .toUpperCase()
-                                          : state.charsEntities[index].char
-                                              .toLowerCase(),
-                                      style: TextStyle(
-                                        fontSize: 80,
-                                        color: Colors.red,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: "Coiny-Regular",
-                                        shadows: <Shadow>[
-                                          Shadow(
-                                            offset: const Offset(2.0, 2.0),
-                                            blurRadius: 3.0,
-                                            color:
-                                                Colors.black.withOpacity(0.5),
-                                          ),
-                                        ],
-                                      ),
+                              return Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10)),
+                                  color: selectedIndex == index
+                                      ? AppColor.vibrantYellow.withOpacity(0.5)
+                                      : Colors.transparent,
+                                ),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    audioPlayer.play(UrlSource(state
+                                        .charsEntities[index].audiosLocalize));
+                                    setState(() {
+                                      selectedIndex = index;
+                                    });
+                                  },
+                                  child: Text(
+                                    state.isUpperCase == true
+                                        ? state.charsEntities[index].char
+                                            .toUpperCase()
+                                        : state.charsEntities[index].char
+                                            .toLowerCase(),
+                                    style: TextStyle(
+                                      fontSize: 90,
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: "Coiny-Regular",
+                                      shadows: <Shadow>[
+                                        Shadow(
+                                          offset: const Offset(2.0, 2.0),
+                                          blurRadius: 3.0,
+                                          color: Colors.black.withOpacity(0.5),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ],
+                                ),
                               );
                             },
                           ),
@@ -210,5 +205,94 @@ class _State extends BaseState<PhonicsDetailState, PhonicsDetailCubit,
                 : Container(),
           ],
         )));
+  }
+
+  void toggleRead() {
+    setState(() {
+      isReading = !isReading;
+      if (isReading) {
+        audioPlayer.stop();
+        audioPlayer.play(AssetSource(widget.type == 'number'
+            ? cubit.audioUrlReadNumbers[cubit.languageCode]!
+            : cubit.audioUrlRead[cubit.languageCode]!));
+        isSinging = false;
+      } else {
+        audioPlayer.stop();
+      }
+    });
+  }
+
+  void toggleSing() {
+    setState(() {
+      isSinging = !isSinging;
+      if (isSinging) {
+        audioPlayer.stop();
+        audioPlayer.play(AssetSource(widget.type == 'number'
+            ? cubit.audioUrlSingNumbers[cubit.languageCode]!
+            : cubit.audioUrlSing[cubit.languageCode]!));
+        isReading = false;
+      } else {
+        audioPlayer.stop();
+      }
+    });
+  }
+
+  Widget btnReadAndSing() {
+    return cubit.languageCode == 'en'
+        ? Row(
+            children: [
+              renderButton(
+                  AppImages.imgReadEn,
+                  isReading ? AppImages.imgStopEn : AppImages.imgReadEn,
+                  toggleRead),
+              const SizedBox(width: 8),
+              renderButton(
+                  AppImages.imgSingEn,
+                  isSinging ? AppImages.imgStopEn : AppImages.imgSingEn,
+                  toggleSing),
+            ],
+          )
+        : Row(
+            children: [
+              renderButton(
+                  AppImages.imgReadVi,
+                  isReading ? AppImages.imgStopVi : AppImages.imgReadVi,
+                  toggleRead),
+              const SizedBox(width: 8),
+              renderButton(
+                  AppImages.imgSingVi,
+                  isSinging ? AppImages.imgStopVi : AppImages.imgSingVi,
+                  toggleSing),
+            ],
+          );
+  }
+
+  Widget renderButton(String image, String stopImage, VoidCallback onPressed) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+          width: 50,
+          height: 50,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            image: DecorationImage(
+              image: AssetImage(isReading || isSinging ? stopImage : image),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        ElevatedButton(
+          onPressed: onPressed,
+          style: ElevatedButton.styleFrom(
+            shape: const CircleBorder(),
+            backgroundColor: Colors.transparent,
+            minimumSize: const Size(50, 50),
+            shadowColor: Colors.transparent,
+          ),
+          child: const Text(""),
+        ),
+      ],
+    );
   }
 }

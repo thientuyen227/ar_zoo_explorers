@@ -15,9 +15,12 @@ class VocabularyController extends ControllerHelper {
     example: {},
     meaning: {},
     categoryId: '',
+    modelId: '',
     phoneticTranscription: '',
     status: '',
     thumbnail: '',
+    audioExamples: {},
+    audioMeanings: {},
     words: {},
     audios: {},
   ));
@@ -74,12 +77,15 @@ class VocabularyController extends ControllerHelper {
   Future<void> resetCurrentValue(BuildContext context) async {
     currentVocabulary.value = VocabularyEntity(
       id: '',
+      modelId: '',
       example: {},
       meaning: {},
       categoryId: '',
       phoneticTranscription: '',
       status: '',
       thumbnail: '',
+      audioExamples: {},
+      audioMeanings: {},
       words: {},
       audios: {},
     );

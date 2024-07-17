@@ -1290,6 +1290,10 @@ class FirebaseFirestoreSource {
           await updateQuestionByUser(context, updatedUserQuestionEntity);
           return userQuestionEntity;
         } else {
+          if (checker.indexQuestion != userQuestionEntity.indexQuestion) {
+            checker = checker.copyWith(
+                indexQuestion: userQuestionEntity.indexQuestion);
+          }
           return checker;
         }
       } else {

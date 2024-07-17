@@ -35,8 +35,10 @@ class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
 
   @override
   void initState() {
-    cubit.init(context);
     super.initState();
+    cubit.showLoading();
+    cubit.init(context);
+    cubit.hideLoading();
   }
 
   @override
@@ -88,6 +90,7 @@ class _State extends BaseState<PuzzleState, PuzzleCubit, PuzzlePage> {
                               indexQuestion = userQuestionEntity!
                                   .indexQuestion[languageCode]!;
                               showDialog(
+                                  barrierDismissible: false,
                                   context: context,
                                   builder: (context) {
                                     return SizedBox(

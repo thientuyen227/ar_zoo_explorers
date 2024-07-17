@@ -14,6 +14,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 @RoutePage()
@@ -41,7 +42,25 @@ class _State
   void initState() {
     cubit.init(context: context, categoryId: widget.categoryId);
     questionIndex = widget.continueQuestion;
+
     super.initState();
+  }
+
+  @override
+  onStateChanged(PuzzleDetailState previous, PuzzleDetailState current) {
+    if (previous.questionEntities != current.questionEntities) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        cubit.updateAudioAndModel(context, questionIndex);
+      });
+    }
+    return super.onStateChanged(previous, current);
+  }
+
+  void setVolume() {
+    if (!mounted) return;
+    setState(() {
+      audioPlayer.setVolume(1);
+    });
   }
 
   @override
@@ -51,12 +70,136 @@ class _State
     super.dispose();
   }
 
+  // void pickAnswer({String? value, int? index}) {
+  //   selectedAnswer = value;
+  //   selectedAnswerIndex = index;
+  //   setState(() {
+  //     isCorrectAnswer =
+  //         selectedAnswer == cubit.state.questionEntities![questionIndex].answer;
+
+  //     if (isCorrectAnswer!) {
+  //       _timer = Timer(const Duration(seconds: 3), () {
+  //         audioPlayer.stop();
+  //         setState(() {
+  //           isCorrectAnswer = null;
+  //           selectedAnswer = null;
+  //           selectedAnswerIndex = null;
+  //           isWrongAnswer = null;
+  //           questionIndex++;
+  //           if (questionIndex >= cubit.state.questionEntities!.length) {
+  //             questionIndex = 0;
+  //           }
+  //         });
+  //       });
+  //     }
+  //   });
+  // }
+
+  @override
+  Widget buildByState(BuildContext context, PuzzleDetailState state) {
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) async {
+        isCorrectAnswer = null;
+        if (didPop) {
+          return;
+        }
+        await _showExitConfirmationDialog(context);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(LanguageKeys.puzzle.tr,
+              style: const TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold)),
+          backgroundColor: const Color.fromARGB(255, 109, 189, 255),
+          elevation: 1,
+          leading:
+              Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            GestureDetector(
+                onTap: () {
+                  _showExitConfirmationDialog(context);
+                },
+                child: const ImageSvgUrlCustom(imagePath: AppIcons.icBackPng)),
+          ]),
+        ),
+        body: state.questionEntities != null &&
+                state.questionEntities!.isNotEmpty
+            ? Stack(
+                children: [
+                  Column(
+                    children: [
+                      const SizedBox(
+                        height: 50,
+                      ),
+                      renderImage(),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 2.3,
+                        ),
+                        itemCount: 4,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: selectedAnswerIndex == null
+                                ? () => pickAnswer(
+                                    value: state
+                                        .answersList[questionIndex]![index],
+                                    index: index)
+                                : null,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  renderAnswer(
+                                    option: state
+                                        .answersList[questionIndex]![index],
+                                    question: state
+                                        .questionEntities![questionIndex]
+                                        .questionLocalize,
+                                    isSelected: selectedAnswerIndex == index,
+                                    selectedAnswerIndex: selectedAnswer,
+                                    correctAnswer: state
+                                        .questionEntities![questionIndex]
+                                        .answerLocalize,
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      )
+                    ],
+                  ),
+                  if (isCorrectAnswer != null && isCorrectAnswer == true) ...{
+                    Positioned(
+                        left: 20,
+                        right: 20,
+                        bottom: state.height * 0.17,
+                        child: const CongratulationWidget())
+                  }
+                ],
+              )
+            : Container(),
+      ),
+    );
+  }
+
   void pickAnswer({String? value, int? index}) {
     selectedAnswer = value;
     selectedAnswerIndex = index;
     setState(() {
-      isCorrectAnswer =
-          selectedAnswer == cubit.state.questionEntities![questionIndex].answer;
+      isCorrectAnswer = selectedAnswer ==
+          cubit.state.questionEntities![questionIndex].answerLocalize;
+      isWrongAnswer = !isCorrectAnswer! && selectedAnswer != null;
 
       if (isCorrectAnswer!) {
         _timer = Timer(const Duration(seconds: 3), () {
@@ -67,116 +210,36 @@ class _State
             selectedAnswerIndex = null;
             isWrongAnswer = null;
             questionIndex++;
+            cubit.updateAudioAndModel(context, questionIndex);
             if (questionIndex >= cubit.state.questionEntities!.length) {
               questionIndex = 0;
             }
           });
         });
       }
+
+      if (isWrongAnswer!) {
+        audioPlayer.play(AssetSource(AppSound.audioFailed));
+        _timer = Timer(const Duration(seconds: 2), () {
+          audioPlayer.stop();
+          setState(() {
+            isCorrectAnswer = null;
+            selectedAnswer = null;
+            selectedAnswerIndex = null;
+            isWrongAnswer = null;
+            _shuffleAnswers();
+          });
+        });
+      }
     });
   }
 
-  @override
-  Widget buildByState(BuildContext context, PuzzleDetailState state) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(LanguageKeys.puzzle.tr,
-            style: const TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-                fontWeight: FontWeight.bold)),
-        backgroundColor: const Color.fromARGB(255, 109, 189, 255),
-        elevation: 1,
-        leading: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          GestureDetector(
-              onTap: () {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return SizedBox(
-                          height: 110,
-                          width: 80,
-                          child: DialogSaving(
-                            state: state,
-                            indexQuestion: questionIndex,
-                            learningId: widget.categoryId,
-                          ));
-                    }).then((value) async {
-                  if (value == true) {
-                    return Navigator.pop(context, true);
-                  } else {
-                    return Navigator.pop(context, false);
-                  }
-                });
-              },
-              child: const ImageSvgUrlCustom(imagePath: AppIcons.icBackPng)),
-        ]),
-      ),
-      body: state.questionEntities != null && state.questionEntities!.isNotEmpty
-          ? Stack(
-              children: [
-                Column(
-                  children: [
-                    const SizedBox(
-                      height: 50,
-                    ),
-                    renderImage(),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 2.3,
-                        crossAxisSpacing: 4.5,
-                      ),
-                      itemCount: 4,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: selectedAnswerIndex == null
-                              ? () => pickAnswer(
-                                  value:
-                                      state.answersList[questionIndex]![index],
-                                  index: index)
-                              : null,
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              children: [
-                                renderAnswer(
-                                  option:
-                                      state.answersList[questionIndex]![index],
-                                  question: state
-                                      .questionEntities![questionIndex]
-                                      .questionLocalize,
-                                  isSelected: selectedAnswerIndex == index,
-                                  selectedAnswerIndex: selectedAnswer,
-                                  correctAnswer: state
-                                      .questionEntities![questionIndex].answer,
-                                )
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    )
-                  ],
-                ),
-                if (isCorrectAnswer != null && isCorrectAnswer == true) ...{
-                  Positioned(
-                      left: 20,
-                      right: 20,
-                      bottom: state.height * 0.17,
-                      child: const CongratulationWidget())
-                }
-              ],
-            )
-          : Container(),
-    );
+  void _shuffleAnswers() {
+    List<String> currentAnswers = cubit.state.answersList[questionIndex]!;
+    currentAnswers.shuffle();
+    setState(() {
+      cubit.state.answersList[questionIndex] = currentAnswers;
+    });
   }
 
   Widget renderAnswer({
@@ -186,54 +249,43 @@ class _State
     required String correctAnswer,
     required String? selectedAnswerIndex,
   }) {
-    isCorrectAnswer = option == correctAnswer;
-    isWrongAnswer = !isCorrectAnswer! && isSelected;
+    bool isAnswerCorrect = option == correctAnswer;
+    bool isAnswerSelected = selectedAnswerIndex != null;
 
-    return selectedAnswerIndex != null
-        ? Container(
-            decoration: BoxDecoration(
-                color: isCorrectAnswer!
-                    ? AppColor.completed
-                    : isWrongAnswer!
-                        ? AppColor.isFalse
-                        : AppColor.vibrantYellow,
-                border: Border.all(),
-                borderRadius: const BorderRadius.all(Radius.circular(10))),
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  right: 30, left: 30, top: 15, bottom: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    option,
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
-                ],
-              ),
+    Color backgroundColor;
+
+    if (isAnswerSelected) {
+      if (isAnswerCorrect) {
+        backgroundColor = AppColor.completed;
+      } else if (isSelected) {
+        backgroundColor = AppColor.isFalse;
+      } else {
+        backgroundColor = AppColor.vibrantYellow;
+      }
+    } else {
+      backgroundColor = AppColor.vibrantYellow;
+    }
+
+    return Container(
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        border: Border.all(),
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
+      ),
+      child: Padding(
+        padding:
+            const EdgeInsets.only(right: 15, left: 15, top: 15, bottom: 15),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              option,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
-          )
-        : Container(
-            decoration: BoxDecoration(
-                color: AppColor.vibrantYellow,
-                border: Border.all(),
-                borderRadius: const BorderRadius.all(Radius.circular(10))),
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  right: 30, left: 30, top: 15, bottom: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    option,
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
-                ],
-              ),
-            ),
-          );
+          ],
+        ),
+      ),
+    );
   }
 
   Widget renderImage() {
@@ -299,7 +351,13 @@ class _State
           child: Row(
             children: [
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  if (state.modelId != '') {
+                    cubit.navigatorToModel(context, state.modelId);
+                  } else {
+                    Fluttertoast.showToast(msg: "Hiện tại chưa có model 3D");
+                  }
+                },
                 icon: Image.asset(
                   AppIcons.icSnail,
                   height: 45,
@@ -308,7 +366,9 @@ class _State
               ),
               const Spacer(),
               IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    audioPlayer.play(UrlSource(cubit.state.audio));
+                  },
                   icon: SvgPicture.asset(
                     AppIcons.icSound,
                     height: 45,
@@ -319,5 +379,34 @@ class _State
         ),
       ],
     );
+  }
+
+  void resetQuestion() {}
+
+  Future<void> _showExitConfirmationDialog(BuildContext context) async {
+    return showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (context) {
+          return SizedBox(
+              height: 110,
+              width: 80,
+              child: DialogSaving(
+                state: state,
+                indexQuestion:
+                    isWrongAnswer == true ? questionIndex = 0 : questionIndex,
+                learningId: widget.categoryId,
+              ));
+        }).then((value) {
+      if (value == true) {
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          Navigator.pop(context, true);
+        });
+      } else {
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          Navigator.pop(context, false);
+        });
+      }
+    });
   }
 }

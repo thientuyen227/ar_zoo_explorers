@@ -124,10 +124,10 @@ class _State extends BaseState<ChangePasswordState, ChangePasswordCubit,
                   _onUpdatePassword(context)
                 },
         style: ButtonStyle(
-            fixedSize: WidgetStateProperty.all(const Size(160, 50)),
-            backgroundColor: WidgetStateProperty.all(Colors.blue),
-            elevation: WidgetStateProperty.all(5),
-            shape: WidgetStateProperty.all(RoundedRectangleBorder(
+            fixedSize: MaterialStateProperty.all(const Size(160, 50)),
+            backgroundColor: MaterialStateProperty.all(Colors.blue),
+            elevation: MaterialStateProperty.all(5),
+            shape: MaterialStateProperty.all(RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20)))),
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Image.asset(AppIcons.icWhiteSubmit),

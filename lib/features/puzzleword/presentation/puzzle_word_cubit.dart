@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:ar_zoo_explorers/base/base_cubit.dart';
 import 'package:ar_zoo_explorers/core/data/controller/question_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/vocabulary_controller.dart';
 import 'package:ar_zoo_explorers/domain/entities/question_entity.dart';
 import 'package:ar_zoo_explorers/features/puzzleword/presentation/puzzle_word_state.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -16,16 +17,21 @@ class PuzzleWordCubit extends BaseCubit<PuzzleWordState> {
 
   Future<void> init(
       {required BuildContext context, required String vocabularyId}) async {
+    final languageCode = Get.locale?.languageCode;
     final questionController = QuestionController.findOrInitialize;
+    final vocabularyController = VocabularyController.findOrInitialize;
     Size mediaSize = MediaQueryData.fromView(
             WidgetsBinding.instance.platformDispatcher.views.single)
         .size;
+    vocabularyController.getAllVocabularys(context);
     showLoading();
     List<QuestionEntity>? questionEntities =
         await questionController.getAllQuestions(context);
     emit(state.copyWith(
         height: mediaSize.height,
         width: mediaSize.width,
+        audio:
+            vocabularyController.currentVocabulary.value.audios[languageCode],
         questionEntities: questionEntities?.where((element) {
           return element.vocabularyId == vocabularyId;
         }).toList()));
@@ -34,17 +40,19 @@ class PuzzleWordCubit extends BaseCubit<PuzzleWordState> {
 
   String audioUrl =
       "https://firebasestorage.googleapis.com/v0/b/ar-zoo-explorers.appspot.com/o/effects%2Fsounds%2Fcongratulation.mp3?alt=media&token=b594bde8-46e7-408d-b158-90a172a968c0";
-  Duration duration = const Duration(seconds: 20, minutes: 1);
+  Duration duration = const Duration(seconds: 2, minutes: 1);
   Duration position = const Duration(seconds: 5, minutes: 0);
   bool isPlaying = false;
 
   PlayerState audioState = PlayerState.stopped;
-  double volumeValue = 0.5;
+  double volumeValue = 1;
   bool isLoop = false;
   final languageCode = Get.locale?.languageCode;
 
   List<String> generateKeywords(String answer, int totalKeywords) {
-    List<String> keywords = removeDiacritics(answer).toUpperCase().split('');
+    List<String> keywords =
+        removeDiacritics(answer).toUpperCase().replaceAll(' ', '').split('');
+
     List<String> alphabetChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
     int missingKeywordsCount = totalKeywords - keywords.length;
     if (missingKeywordsCount > 0) {

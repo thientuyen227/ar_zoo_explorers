@@ -124,6 +124,8 @@ const Map<String, String> vi_vn = {
   'continueQuestion': 'Tiếp tục với câu hỏi trước?',
   'letter': 'Chữ cái',
   'number': 'Chữ số',
+  'msg_question': 'Hiện tại chưa có câu hỏi liên quan đến từ vựng này',
+  'msg_model3D': 'Hiện tại chưa có model 3D',
 
   // Auth
   'auth_enterEmail': "Nhập email của bạn",
@@ -312,6 +314,8 @@ const Map<String, String> vi_vn = {
 
   //Chat AI
   'download_image': 'Tải hình ảnh',
+  'download_image_success': 'Tải hình ảnh thành công',
+  'download_image_failures': 'Đã có lỗi trong quá trình tải hình ảnh',
   'write_message': 'Viết tin nhắn của bạn',
   'send_message_failed':
       'Không thể gửi văn bản tới hình ảnh. Vui lòng thử lại sau',

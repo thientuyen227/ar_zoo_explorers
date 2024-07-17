@@ -33,7 +33,7 @@ class AnimalRepositoryImplement implements AnimalRepository {
   }
 
   @override
-  Future<Either<Failure, Success<AnimalEntity>>> getAnimal(
+  Future<Either<Failure, Success<AnimalEntity?>>> getAnimal(
       String animalModelId) {
     return ResponseHandler.processResponse(() async {
       return Success(data: await _firestoreSource.getAnimal(animalModelId));

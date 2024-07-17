@@ -79,7 +79,7 @@ class _ItemVocabularyState extends State<ItemVocabulary> {
                 style:
                     const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
               ),
-              const Text("1000pts"),
+              // const Text("1000pts"),
               const SizedBox(
                 height: 5,
               ),

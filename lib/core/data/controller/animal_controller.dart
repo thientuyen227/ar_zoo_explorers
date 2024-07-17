@@ -27,10 +27,10 @@ class AnimalController extends ControllerHelper {
 
   Rx<String> searchValue = Rx("");
 
-  Future<AnimalEntity> getAnimal(BuildContext context, {required String id}) {
-    return processRequest<AnimalEntity>(
+  Future<AnimalEntity?> getAnimal(BuildContext context, {required String id}) {
+    return processRequest<AnimalEntity?>(
         request: () => _animalRepository.getAnimal(id),
-        onSuccess: (success) => {_setCurrentAnimal(context, success.data)},
+        onSuccess: (success) => {_setCurrentAnimal(context, success.data!)},
         onFailure: (failure) =>
             Fluttertoast.showToast(msg: "Truy cập thông tin thất bại!"));
   }
@@ -54,9 +54,9 @@ class AnimalController extends ControllerHelper {
   }
 
   Future<void> updateCurrentAnimal(BuildContext context, String id) async {
-    await processRequest<AnimalEntity>(
+    await processRequest<AnimalEntity?>(
         request: () => _animalRepository.getAnimal(id),
-        onSuccess: (success) => {_setCurrentAnimal(context, success.data)},
+        onSuccess: (success) => {_setCurrentAnimal(context, success.data!)},
         onFailure: (failure) =>
             Fluttertoast.showToast(msg: "Truy cập thông tin thất bại!"));
   }

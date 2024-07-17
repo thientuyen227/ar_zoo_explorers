@@ -150,10 +150,12 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
           shape: BoxShape.circle,
           color: Colors.white),
       child: ClipOval(
-          child: Image.network(
-        cubit.controller.currentUser.value.avatarUrl,
-        fit: BoxFit.cover,
-      )),
+          child: cubit.controller.currentUser.value.avatarUrl != ''
+              ? Image.network(
+                  cubit.controller.currentUser.value.avatarUrl,
+                  fit: BoxFit.cover,
+                )
+              : Image.asset(AppImages.imgProfile128x128, fit: BoxFit.cover)),
     );
   }
 
@@ -271,8 +273,12 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
   }
 
   Future<void> _downloadImage(String fileName, String urlPath) async {
-    String response = await cubit.downloadImage(fileName, urlPath);
-    await cubit.showToast(response);
+    bool response = await cubit.downloadImage(fileName, urlPath);
+    if (response) {
+      await cubit.showToast(LanguageKeys.download_image_success);
+    } else {
+      await cubit.showToast(LanguageKeys.download_image_failures);
+    }
     setState(() {});
   }
 

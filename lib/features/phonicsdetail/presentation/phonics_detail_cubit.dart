@@ -58,13 +58,28 @@ class PhonicsDetailCubit extends BaseCubit<PhonicsDetailState> {
         charsEntities: filteredEntities));
   }
 
-  String audioUrl = "audio/vietnamesealphabet.mp3";
+  Map<String, String> audioUrlRead = {
+    'en': "audio/vietnamesealphabet.mp3",
+    'vi': "audio/vietnamesealphabet.mp3"
+  };
 
-  Duration duration = const Duration(seconds: 20, minutes: 1);
-  Duration position = const Duration(seconds: 5, minutes: 0);
+  Map<String, String> audioUrlSing = {
+    'en': "audio/abc_alphabat_song_en.mp3",
+    'vi': "audio/alphabet.mp3"
+  };
+  Map<String, String> audioUrlReadNumbers = {
+    'en': "audio/count_one_to_twenty_en.mp3",
+    'vi': "audio/count_one_to_twenty_vi.mp3"
+  };
+
+  Map<String, String> audioUrlSingNumbers = {
+    'en': "audio/count_one_to_twenty_en.mp3",
+    'vi': "audio/count_one_to_twenty_vi.mp3"
+  };
+
+  Duration duration = const Duration(seconds: 1, minutes: 0);
   bool isPlaying = false;
 
   PlayerState audioState = PlayerState.stopped;
-  double volumeValue = 0.5;
   bool isLoop = false;
 }

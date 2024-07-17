@@ -41,7 +41,7 @@ class ChatAICubit extends BaseCubit<ChatAIState> {
     await state.setAttributes(isEnabled: status);
   }
 
-  Future<String> downloadImage(String fileName, String urlPath) async {
+  Future<bool> downloadImage(String fileName, String urlPath) async {
     try {
       var status = await Permission.storage.status;
       if (!status.isGranted) {
@@ -63,14 +63,14 @@ class ChatAICubit extends BaseCubit<ChatAIState> {
       if (response.statusCode == 200) {
         await ImageGallerySaver.saveFile(filePath);
         print('Download and save completed: $filePath');
-        return filePath;
+        return true;
       } else {
         print('Error downloading file: ${response.statusCode}');
-        return response.statusCode.toString();
+        return false;
       }
     } catch (e) {
       print('Error: $e');
-      return e.toString();
+      return false;
     }
   }
 }

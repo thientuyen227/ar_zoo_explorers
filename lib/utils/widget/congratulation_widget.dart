@@ -18,10 +18,11 @@ class _CongratulationWidgetState extends State<CongratulationWidget> {
     audioPlayer = AudioPlayer();
   }
 
+  Future<void> stopAudio() async => await audioPlayer.dispose();
   @override
-  void dispose() {
-    audioPlayer.dispose();
+  Future<void> dispose() async {
     super.dispose();
+    await stopAudio();
   }
 
   @override
@@ -30,8 +31,7 @@ class _CongratulationWidgetState extends State<CongratulationWidget> {
       future: Future.delayed(const Duration(milliseconds: 10)),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          audioPlayer.play(UrlSource(
-              "https://firebasestorage.googleapis.com/v0/b/ar-zoo-explorers.appspot.com/o/effects%2Fsounds%2Fcongratulation.mp3?alt=media"));
+          audioPlayer.play(AssetSource(AppSound.audioCorrect));
           return Lottie.asset(AppLotties.congratulation,
               height: 400, width: 400);
         } else {
