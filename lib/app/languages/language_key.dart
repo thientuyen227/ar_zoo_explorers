@@ -342,6 +342,8 @@ class LanguageKeys {
 
   //CHAT AI
   static const String download_image = 'download_image';
+  static const String download_image_success = 'download_image_success';
+  static const String download_image_failures = 'download_image_failures';
   static const String send_message_failed = 'send_message_failed';
   static const String write_message = 'write_message';
 }

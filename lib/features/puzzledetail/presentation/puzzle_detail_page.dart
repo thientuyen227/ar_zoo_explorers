@@ -169,7 +169,7 @@ class _State
                                     selectedAnswerIndex: selectedAnswer,
                                     correctAnswer: state
                                         .questionEntities![questionIndex]
-                                        .answer,
+                                        .answerLocalize,
                                   )
                                 ],
                               ),
@@ -197,8 +197,8 @@ class _State
     selectedAnswer = value;
     selectedAnswerIndex = index;
     setState(() {
-      isCorrectAnswer =
-          selectedAnswer == cubit.state.questionEntities![questionIndex].answer;
+      isCorrectAnswer = selectedAnswer ==
+          cubit.state.questionEntities![questionIndex].answerLocalize;
       isWrongAnswer = !isCorrectAnswer! && selectedAnswer != null;
 
       if (isCorrectAnswer!) {
@@ -210,6 +210,7 @@ class _State
             selectedAnswerIndex = null;
             isWrongAnswer = null;
             questionIndex++;
+            cubit.updateAudioAndModel(context, questionIndex);
             if (questionIndex >= cubit.state.questionEntities!.length) {
               questionIndex = 0;
             }

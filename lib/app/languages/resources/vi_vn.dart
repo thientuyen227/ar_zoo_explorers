@@ -314,6 +314,8 @@ const Map<String, String> vi_vn = {
 
   //Chat AI
   'download_image': 'Tải hình ảnh',
+  'download_image_success': 'Tải hình ảnh thành công',
+  'download_image_failures': 'Đã có lỗi trong quá trình tải hình ảnh',
   'write_message': 'Viết tin nhắn của bạn',
   'send_message_failed':
       'Không thể gửi văn bản tới hình ảnh. Vui lòng thử lại sau',

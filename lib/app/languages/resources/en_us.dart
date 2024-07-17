@@ -314,6 +314,7 @@ const Map<String, String> en_us = {
 
   //Chat AI
   'download_image': 'Download this image',
+  'download_image_success': 'There was an error loading the image',
   'write_message': 'Write your message',
   'send_message_failed': 'Failed to send text to image. Please try again later',
 };

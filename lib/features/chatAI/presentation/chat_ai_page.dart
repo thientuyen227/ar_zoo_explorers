@@ -273,8 +273,12 @@ class _State extends BaseState<ChatAIState, ChatAICubit, ChatAIPage> {
   }
 
   Future<void> _downloadImage(String fileName, String urlPath) async {
-    String response = await cubit.downloadImage(fileName, urlPath);
-    await cubit.showToast(response);
+    bool response = await cubit.downloadImage(fileName, urlPath);
+    if (response) {
+      await cubit.showToast(LanguageKeys.download_image_success);
+    } else {
+      await cubit.showToast(LanguageKeys.download_image_failures);
+    }
     setState(() {});
   }
 

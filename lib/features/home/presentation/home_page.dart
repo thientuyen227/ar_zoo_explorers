@@ -48,6 +48,23 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
     _initCubit();
   }
 
+  void _playAudioWithDelay() {
+    Timer(const Duration(seconds: 2), () {
+      audioPlayer.play(AssetSource(AppSound.audioHome));
+    });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // App is resumed, play the audio
+      _playAudioWithDelay();
+    } else if (state == AppLifecycleState.paused) {
+      // App is paused, stop the audio
+      audioPlayer.stop();
+    }
+  }
+
   @override
   void dispose() {
     audioPlayer.stop();
@@ -57,9 +74,6 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
 
   @override
   Widget buildByState(BuildContext context, HomeState state) {
-    Timer(const Duration(seconds: 2), () {
-      audioPlayer.play(AssetSource("audio/vietnamesealphabet.mp3"));
-    });
     return Obx(() => GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         child: PageLoadingIndicator(

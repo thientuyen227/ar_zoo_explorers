@@ -55,7 +55,7 @@ class PuzzleDetailCubit extends BaseCubit<PuzzleDetailState> {
       List<QuestionEntity> questionentities, QuestionEntity question) {
     List<String> otherAnswers =
         _getRandomAnswers(questionentities, question.id, 3);
-    List<String> answers = [question.answer, ...otherAnswers];
+    List<String> answers = [question.answerLocalize, ...otherAnswers];
     answers.shuffle();
     return answers;
   }
@@ -69,7 +69,7 @@ class PuzzleDetailCubit extends BaseCubit<PuzzleDetailState> {
     while (otherAnswers.length < count && otherQuestions.isNotEmpty) {
       QuestionEntity randomQuestion =
           otherQuestions.removeAt(Random().nextInt(otherQuestions.length));
-      otherAnswers.add(randomQuestion.answer);
+      otherAnswers.add(randomQuestion.answerLocalize);
     }
     return otherAnswers;
   }

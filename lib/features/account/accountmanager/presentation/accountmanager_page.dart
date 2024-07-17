@@ -149,8 +149,8 @@ class _State extends BaseState<AccountManagerState, AccountManagerCubit,
                 _onTapSettings(context, type);
               },
               style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all(AppColor.white),
-                  shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                  backgroundColor: MaterialStateProperty.all(AppColor.white),
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)))),
               child: Row(children: [
                 Expanded(

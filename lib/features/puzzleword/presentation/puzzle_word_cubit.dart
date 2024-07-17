@@ -50,7 +50,9 @@ class PuzzleWordCubit extends BaseCubit<PuzzleWordState> {
   final languageCode = Get.locale?.languageCode;
 
   List<String> generateKeywords(String answer, int totalKeywords) {
-    List<String> keywords = removeDiacritics(answer).toUpperCase().split('');
+    List<String> keywords =
+        removeDiacritics(answer).toUpperCase().replaceAll(' ', '').split('');
+
     List<String> alphabetChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
     int missingKeywordsCount = totalKeywords - keywords.length;
     if (missingKeywordsCount > 0) {

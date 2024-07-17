@@ -20,6 +20,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:remove_diacritic/remove_diacritic.dart';
 
 @RoutePage()
 class PuzzleWordPage extends StatefulWidget {
@@ -73,8 +74,16 @@ class _State
       currentQues = state.questionEntities![indexQues];
       if (arrayBtns == null) {
         int totalKeywords = 16;
-        arrayBtns = cubit.generateKeywords(currentQues!.answer, totalKeywords);
-        generateHint(answer: currentQues!.answer);
+        if (removeDiacritics(currentQues!.answerLocalize)
+                .replaceAll(' ', '')
+                .split("")
+                .length >
+            16) {
+          totalKeywords = 24;
+        }
+        arrayBtns =
+            cubit.generateKeywords(currentQues!.answerLocalize, totalKeywords);
+        generateHint(answer: currentQues!.answerLocalize);
       }
     }
 
@@ -170,9 +179,11 @@ class _State
                       _renderKeyword(currentQues: currentQues!),
                     ],
                   ),
-                  if (isDone)
+                  if (isDone) ...[
                     const Positioned(
                         bottom: 100, child: CongratulationWidget()),
+                    _renderCorrectAnswer()
+                  ],
                 ],
               )
             : Container(),
@@ -180,12 +191,37 @@ class _State
     );
   }
 
+  Widget _renderCorrectAnswer() {
+    return Positioned(
+      bottom: 150,
+      left: 0,
+      right: 0,
+      child: Container(
+        color: Colors.white,
+        padding: const EdgeInsets.all(20),
+        child: Text(
+          currentQues?.answerLocalize ?? '',
+          style: const TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Colors.green,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+
   generateHint({required String answer}) async {
     QuestionEntity currentQues = state.questionEntities![indexQues];
     final List<String> wl = [answer];
-    currentQues.puzzles = List.generate(wl[0].split("").length, (index) {
+    currentQues.puzzles = List.generate(
+        removeDiacritics(wl[0]).replaceAll(' ', '').split("").length, (index) {
       return WordFindChar(
-          correctValue: currentQues.answer.split("")[index].toUpperCase());
+          correctValue: removeDiacritics(currentQues.answerLocalize)
+              .replaceAll(' ', '')
+              .split("")[index]
+              .toUpperCase());
     });
 
     List<WordFindChar> puzzleNoHints = currentQues.puzzles!
@@ -264,7 +300,10 @@ class _State
     isFull = true;
     String answeredString =
         currentQues.puzzles!.map((puzzle) => puzzle.currentValue).join("");
-    if (answeredString == currentQues.answer.toUpperCase()) {
+    if (answeredString ==
+        removeDiacritics(currentQues.answerLocalize)
+            .toUpperCase()
+            .replaceAll(' ', '')) {
       return true;
     } else {
       return false;
@@ -427,7 +466,16 @@ class _State
 
   void resetQuestionState() {
     setState(() {
-      arrayBtns = cubit.generateKeywords(currentQues!.answer, 16);
+      int totalKeywords = 16;
+      if (removeDiacritics(currentQues!.answerLocalize)
+              .replaceAll(' ', '')
+              .split("")
+              .length >
+          16) {
+        totalKeywords = 24;
+      }
+      arrayBtns =
+          cubit.generateKeywords(currentQues!.answerLocalize, totalKeywords);
 
       isFull = false;
       isDone = false;
@@ -435,7 +483,7 @@ class _State
         puzzle.clearValue();
         puzzle.hintShow = false;
       }
-      generateHint(answer: currentQues!.answer);
+      generateHint(answer: currentQues!.answerLocalize);
     });
   }
 }

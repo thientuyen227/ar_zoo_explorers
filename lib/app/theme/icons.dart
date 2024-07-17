@@ -301,5 +301,5 @@ class AppSound {
   static const String mindset = "audio/mindset.mp3";
   static const String audioFailed = "audio/failed_sound.mp3";
   static const String audioCorrect = "audio/correct_sound.mp3";
-  static const String audioHome = "audio/fairy_glitter.mp3";
+  static const String audioHome = "audio/audioHome.mp3";
 }

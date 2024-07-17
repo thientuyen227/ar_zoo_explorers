@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
 import 'package:ar_zoo_explorers/base/base_state.dart';
 import 'package:ar_zoo_explorers/core/data/controller/writing_practice_controller.dart';
@@ -14,6 +15,7 @@ import 'package:finger_painter/finger_painter.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
@@ -123,7 +125,8 @@ class _State extends BaseState<
         _addToHistory(resizedImage);
       }
     } catch (e) {
-      print("TTTT $e");
+      throw Fluttertoast.showToast(
+          msg: LanguageKeys.download_image_failures.tr);
     }
   }
 
@@ -133,12 +136,13 @@ class _State extends BaseState<
           FirebaseStorage.instance.refFromURL(imageUrl);
       final imageBytes = await storageReference.getData();
       if (imageBytes == null) {
-        throw Exception('Failed to load image from Firebase Storage');
+        throw Fluttertoast.showToast(
+            msg: LanguageKeys.download_image_failures.tr);
       }
       return imageBytes;
     } catch (e) {
-      print("Error loading image from Firebase Storage: $e");
-      rethrow;
+      throw Fluttertoast.showToast(
+          msg: LanguageKeys.download_image_failures.tr);
     }
   }
 
@@ -405,10 +409,12 @@ class _State extends BaseState<
                     icon: const Icon(Icons.delete_outline, size: 30),
                     color: Colors.white,
                     onPressed: () {
-                      _drawingHistory = [];
+                      setState(() {
+                        _drawingHistory = [];
+                        _currentHistoryIndex = -1;
+                      });
                       isDelete = true;
                       _loadAndSetImage(currentCharsEntity: state.charsEntity);
-                      setState(() {});
                     }),
               ),
               const SizedBox(

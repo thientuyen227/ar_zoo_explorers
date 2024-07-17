@@ -205,10 +205,10 @@ class _State extends BaseState<LoginState, LoginCubit, LoginPage> {
             ? () => _onLoginPressed(context)
             : null,
         style: ButtonStyle(
-            fixedSize: WidgetStateProperty.all(Size(cubit.WIDTH * 0.6, 50)),
-            backgroundColor: WidgetStateProperty.all(Colors.blue[600]),
-            elevation: WidgetStateProperty.all(5),
-            shape: WidgetStateProperty.all(RoundedRectangleBorder(
+            fixedSize: MaterialStateProperty.all(Size(cubit.WIDTH * 0.6, 50)),
+            backgroundColor: MaterialStateProperty.all(Colors.blue[600]),
+            elevation: MaterialStateProperty.all(5),
+            shape: MaterialStateProperty.all(RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20)))),
         child: Text(LanguageKeys.login.tr,
             style: const TextStyle(fontSize: 20, color: Colors.white)));
