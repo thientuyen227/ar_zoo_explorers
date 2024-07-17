@@ -36,7 +36,7 @@ class HomePage extends StatefulWidget {
 class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   final PageController advertisementController = PageController();
   final detailController = ModelDetailController.findOrInitialize;
-
+  AudioPlayer audioPlayer = AudioPlayer();
   final _formKey = GlobalKey<FormBuilderState>();
   late StreamSubscription<PlayerState> _audioPlayerStateSubscription;
 
@@ -89,9 +89,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   void dispose() {
     _audioPlayerStateSubscription.cancel();
     audioPlayer.stop();
-    Timer(const Duration(seconds: 2), () {
-      audioPlayer.dispose();
-    });
+    audioPlayer.dispose();
     super.dispose();
   }
 
@@ -173,6 +171,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
     return AppIconButton(
         onPressed: () async {
           await cubit.showLoading();
+          await audioPlayer.stop();
           context.router.pushNamed(Routes.userprofile);
           await cubit.hideLoading();
         },
@@ -201,6 +200,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
     return AppIconButton(
         onPressed: () async {
           await cubit.showLoading();
+          await audioPlayer.stop();
           _turnSettingPage();
           await cubit.hideLoading();
         },
@@ -355,11 +355,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   Future<void> _onTapActivityButton(
       BuildContext context, String routePage) async {
     await cubit.showLoading();
-    context.router.pushNamed(routePage).then((value) {
-      if (value == true) {
-        return _playAudioWithDelay();
-      }
-    });
+    context.router.pushNamed(routePage);
     if (routePage == Routes.story) {
       await _getAllTopics(context);
       await _getStoriesByReleaseDate(context);
