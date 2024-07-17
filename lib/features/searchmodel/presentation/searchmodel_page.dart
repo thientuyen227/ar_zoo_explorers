@@ -15,10 +15,10 @@ import '../../../app/theme/icons.dart';
 import '../../../base/base_state.dart';
 import '../../../base/widgets/page_loading_indicator.dart';
 import '../../../core/data/controller/animal_controller.dart';
-import '../../../core/data/controller/animal_detail_controller.dart';
 import '../../../core/data/controller/auth_controller.dart';
 import '../../../core/data/controller/model_category_controller.dart';
-import '../../../domain/entities/animal_detail_entity.dart';
+import '../../../core/data/controller/model_detail_controller.dart';
+import '../../../domain/entities/model_detail_entity.dart';
 import '../../base-model/button_object.dart';
 import '../../base-model/form_builder_text_field_model.dart';
 
@@ -33,7 +33,7 @@ class SearchModelPage extends StatefulWidget {
 class _State
     extends BaseState<SearchModelState, SearchModelCubit, SearchModelPage> {
   final controller = AuthController.findOrInitialize;
-  final detailController = AnimalDetailController.findOrInitialize;
+  final detailController = ModelDetailController.findOrInitialize;
   final cateController = ModelCategoryController.findOrInitialize;
   final animalController = AnimalController.findOrInitialize;
   final userAnimalController = UserAnimalController.findOrInitialize;
@@ -241,7 +241,7 @@ class _State
         if (cubit.listFullAnimal.isNotEmpty) {
           for (int i = 0; i < cubit.listFullAnimal.length; i++) {
             _getIsLoved(controller.currentUser.value.id, i);
-            _getViews(detailController.listAnimalDetail.value, i);
+            _getViews(detailController.listModelDetail.value, i);
           }
         }
       });
@@ -277,7 +277,7 @@ class _State
     });
   }
 
-  _getViews(List<AnimalDetailEntity> lst, int index) {
+  _getViews(List<ModelDetailEntity> lst, int index) {
     for (int i = 0; i < lst.length; i++) {
       cubit.listFullAnimal[index].views = 0;
       if (cubit.listSearchAnimal.isNotEmpty) {

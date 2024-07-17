@@ -21,7 +21,7 @@ import 'package:get/get.dart';
 
 import '../../../app/config/routes.dart';
 import '../../../base/widgets/page_loading_indicator.dart';
-import '../../../core/data/controller/animal_detail_controller.dart';
+import '../../../core/data/controller/model_detail_controller.dart';
 import '../../account/accountmanager/presentation/accountmanager_page.dart';
 import 'home_cubit.dart';
 
@@ -35,8 +35,7 @@ class HomePage extends StatefulWidget {
 
 class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   final PageController advertisementController = PageController();
-  final detailController = AnimalDetailController.findOrInitialize;
-  AudioPlayer audioPlayer = AudioPlayer();
+  final detailController = ModelDetailController.findOrInitialize;
 
   final _formKey = GlobalKey<FormBuilderState>();
   late StreamSubscription<PlayerState> _audioPlayerStateSubscription;

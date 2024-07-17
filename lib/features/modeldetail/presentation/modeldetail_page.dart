@@ -1,5 +1,6 @@
 import 'package:ar_zoo_explorers/app/languages/language_key.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
+import 'package:ar_zoo_explorers/features/modeldetail/components/detail_model.dart';
 import 'package:ar_zoo_explorers/features/modeldetail/components/model_detail_loading.dart';
 import 'package:ar_zoo_explorers/features/modeldetail/presentation/modeldetail_cubit.dart';
 import 'package:ar_zoo_explorers/features/modeldetail/presentation/modeldetail_state.dart';
@@ -25,6 +26,7 @@ class _State
   String valueName = "";
   String type = "";
 
+  final languageCode = Get.locale?.languageCode;
   @override
   void initState() {
     cubit.init(context);
@@ -132,22 +134,8 @@ class _State
   }
 
   Widget modelInformation() {
-    return Column(children: [
-      SizedBox(height: state.height * 0.07),
-      Center(
-          child: Stack(
-              alignment: Alignment.center,
-              children: [modelTitle(state.animalTitle), views(state.views)])),
-      const SizedBox(height: 15),
-      Container(height: 2, width: double.infinity, color: Colors.grey),
-      const SizedBox(height: 15),
-      informationRow("Description:", state.description),
-      informationRow("Biological Classification:", state.classification),
-      informationRow("Conservation:", state.conservation),
-      informationRow("Reproduction:", state.reproduction),
-      informationRow("Cultural Depiction:", state.culturalFigure),
-      const SizedBox(height: 50)
-    ]);
+    return DetailModel(
+        modelId: cubit.detailController.currentModelDetail.value.modelId);
   }
 
   Widget modelTitle(String title) {

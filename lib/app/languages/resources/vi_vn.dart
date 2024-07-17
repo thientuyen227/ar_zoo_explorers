@@ -319,4 +319,16 @@ const Map<String, String> vi_vn = {
   'write_message': 'Viết tin nhắn của bạn',
   'send_message_failed':
       'Không thể gửi văn bản tới hình ảnh. Vui lòng thử lại sau',
+
+  //MODEL DETAIL
+  'description': 'Mô Tả',
+  'classification': 'Phân Loại',
+  'conservation': 'Bảo Tồn',
+  'reproduction': 'Sinh Sản',
+  'culturalFigure': 'Hình Tượng Văn Hóa',
+  'preservation': 'Bảo Quản',
+  'culturalSignificance': 'Giá Trị Văn Hóa',
+  'maintenance': 'Cách Bảo Quản',
+  'manufacturing': 'Sản Xuất',
+  'educationalValue': 'Giá Trị Giáo Dục',
 };

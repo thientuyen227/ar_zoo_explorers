@@ -4,6 +4,7 @@ import 'package:ar_zoo_explorers/core/data/models/user_story_model.dart';
 import 'package:ar_zoo_explorers/domain/entities/chars_entity.dart';
 import 'package:ar_zoo_explorers/domain/entities/learning_category_entity.dart';
 import 'package:ar_zoo_explorers/domain/entities/model_category_entity.dart';
+import 'package:ar_zoo_explorers/domain/entities/model_detail_entity.dart';
 import 'package:ar_zoo_explorers/domain/entities/question_entity.dart';
 import 'package:ar_zoo_explorers/domain/entities/scoreboard_entity.dart';
 import 'package:ar_zoo_explorers/domain/entities/story_topic_entity.dart';
@@ -17,7 +18,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../../models/animal_detail_model.dart';
 import '../../models/animal_model.dart';
 import '../../models/user_animal_model.dart';
 
@@ -186,54 +186,54 @@ class FirebaseFirestoreSource {
     return null;
   }
 
-  // ANIMAL DETAILS
-  Future<AnimalDetailModel?> getAnimalDetailModel(String id) async {
+  // MODEL DETAILS
+  Future<ModelDetailEntity?> getModelDetail(String id) async {
     try {
       var document = await _animalDetailCollectionRef.doc(id).get();
       if (document.exists && document.data() != null) {
-        return AnimalDetailModel.fromMap(document.data()!);
+        return ModelDetailEntity.fromMap(document.data()!);
       } else {
         return null;
       }
     } catch (e, stackTrace) {
-      print('Get Animal Detail By Id = "$id" Failed: $e');
+      print('Get Model Detail By Id = "$id" Failed: $e');
       FirebaseCrashlytics.instance.recordError(e, stackTrace);
     }
     return null;
   }
 
-  Future<List<AnimalDetailModel>?> getAllAnimalDetails() async {
+  Future<List<ModelDetailEntity>?> getAllModelDetails() async {
     try {
       var querySnapshot = await _animalDetailCollectionRef.get();
-      List<AnimalDetailModel> modelDetails = querySnapshot.docs
-          .map((doc) => AnimalDetailModel.fromMap(doc.data()))
+      List<ModelDetailEntity> modelDetails = querySnapshot.docs
+          .map((doc) => ModelDetailEntity.fromMap(doc.data()))
           .toList();
       return modelDetails;
     } catch (e, stackTrace) {
-      print('Get Animal Details Failed: $e');
+      print('Get Model Details Failed: $e');
       FirebaseCrashlytics.instance.recordError(e, stackTrace);
     }
     return null;
   }
 
-  Future<AnimalDetailModel?> getAnimalDetailModelByModelId(
+  Future<ModelDetailEntity?> getModelDetailModelByModelId(
       String modelId) async {
     try {
       var querySnapshot = await _animalDetailCollectionRef
           .where('modelId', isEqualTo: modelId)
           .get();
-      List<AnimalDetailModel> modelDetails = querySnapshot.docs
-          .map((doc) => AnimalDetailModel.fromMap(doc.data()))
+      List<ModelDetailEntity> modelDetails = querySnapshot.docs
+          .map((doc) => ModelDetailEntity.fromMap(doc.data()))
           .toList();
       return modelDetails.first;
     } catch (e, stackTrace) {
-      print('Get Animal Detail By And Model Id = "$modelId" Failed: $e');
+      print('Get Model Detail By And Model Id = "$modelId" Failed: $e');
       FirebaseCrashlytics.instance.recordError(e, stackTrace);
     }
     return null;
   }
 
-  Future<AnimalDetailModel?> updateViewsAnimalDetail({
+  Future<ModelDetailEntity?> updateViewsModelDetail({
     required String id,
     required int views,
   }) async {
@@ -241,9 +241,9 @@ class FirebaseFirestoreSource {
       await _animalDetailCollectionRef.doc(id).update({
         "views": views,
       });
-      return getAnimalDetailModel(id);
+      return getModelDetail(id);
     } catch (e, stackTrace) {
-      print('Update Views Of Animal Detail Id = "$id" Failed: $e');
+      print('Update Views Of Model Detail Id = "$id" Failed: $e');
       FirebaseCrashlytics.instance.recordError(e, stackTrace);
     }
     return null;

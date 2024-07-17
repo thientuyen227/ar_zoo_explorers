@@ -1,8 +1,8 @@
 import 'package:ar_zoo_explorers/base/base_cubit.dart';
 import 'package:ar_zoo_explorers/core/data/controller/animal_controller.dart';
-import 'package:ar_zoo_explorers/core/data/controller/animal_detail_controller.dart';
 import 'package:ar_zoo_explorers/core/data/controller/auth_controller.dart';
 import 'package:ar_zoo_explorers/core/data/controller/model_category_controller.dart';
+import 'package:ar_zoo_explorers/core/data/controller/model_detail_controller.dart';
 import 'package:ar_zoo_explorers/core/data/controller/story_controller.dart';
 import 'package:ar_zoo_explorers/core/data/controller/story_topic_controller.dart';
 import 'package:ar_zoo_explorers/features/home/presentation/home_state.dart';
@@ -17,7 +17,7 @@ import '../../base-model/button_object.dart';
 class HomeCubit extends BaseCubit<HomeState> {
   HomeCubit() : super(HomeState());
 
-  final detailController = AnimalDetailController.findOrInitialize;
+  final detailController = ModelDetailController.findOrInitialize;
   final controller = AuthController.findOrInitialize;
   final cateController = ModelCategoryController.findOrInitialize;
   final animalController = AnimalController.findOrInitialize;
@@ -28,7 +28,7 @@ class HomeCubit extends BaseCubit<HomeState> {
     showLoading();
 
     await controller.getCurrentUser(context);
-    await detailController.getAllAnimalDetails(context);
+    await detailController.getAllModelDetails(context);
     await cateController.getAllModelCategories(context);
 
     Size mediaSize = MediaQueryData.fromView(

@@ -16,10 +16,10 @@ import '../../../app/theme/dimens.dart';
 import '../../../app/theme/icons.dart';
 import '../../../base/base_state.dart';
 import '../../../base/widgets/page_loading_indicator.dart';
-import '../../../core/data/controller/animal_detail_controller.dart';
 import '../../../core/data/controller/auth_controller.dart';
+import '../../../core/data/controller/model_detail_controller.dart';
 import '../../../core/data/controller/user_animal_controller.dart';
-import '../../../domain/entities/animal_detail_entity.dart';
+import '../../../domain/entities/model_detail_entity.dart';
 import '../../../utils/widget/button_widget.dart';
 import '../../base-model/button_object.dart';
 import '../../base-model/form_builder_text_field_model.dart';
@@ -35,7 +35,7 @@ class AnimalModelsPage extends StatefulWidget {
 class _State
     extends BaseState<AnimalModelsState, AnimalModelsCubit, AnimalModelsPage> {
   final userAnimalController = UserAnimalController.findOrInitialize;
-  final detailController = AnimalDetailController.findOrInitialize;
+  final detailController = ModelDetailController.findOrInitialize;
   final controller = AuthController.findOrInitialize;
   final cateController = ModelCategoryController.findOrInitialize;
   final animalController = AnimalController.findOrInitialize;
@@ -280,7 +280,7 @@ class _State
             cateController.currentModelCategory.value.id);
         for (int i = 0; i < cubit.listFullAnimal.length; i++) {
           _getIsLoved(controller.currentUser.value.id, i);
-          _getViews(detailController.listAnimalDetail.value, i);
+          _getViews(detailController.listModelDetail.value, i);
         }
       });
     });
@@ -328,7 +328,7 @@ class _State
         isLoved: cubit.listSearchAnimal[index].isLoved);
   }
 
-  _getViews(List<AnimalDetailEntity> lst, int index) {
+  _getViews(List<ModelDetailEntity> lst, int index) {
     for (int i = 0; i < lst.length; i++) {
       cubit.listFullAnimal[index].views = 0;
       cubit.listSearchAnimal[index].views = 0;
