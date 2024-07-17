@@ -1,5 +1,7 @@
+import 'package:ar_zoo_explorers/app/config/routes.dart';
 import 'package:ar_zoo_explorers/app/theme/colors.dart';
 import 'package:ar_zoo_explorers/app/theme/icons.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 class ChatAIAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -48,6 +50,7 @@ class _ChatAIAppBarState extends State<ChatAIAppBar> {
     return IconButton(
       onPressed: () {
         Navigator.of(context).pop(true);
+        context.router.pushNamed(Routes.home);
       },
       icon: Icon(
         Icons.keyboard_arrow_left,

@@ -212,7 +212,9 @@ class _State extends BaseState<PhonicsDetailState, PhonicsDetailCubit,
       isReading = !isReading;
       if (isReading) {
         audioPlayer.stop();
-        audioPlayer.play(AssetSource(cubit.audioUrlRead[cubit.languageCode]!));
+        audioPlayer.play(AssetSource(widget.type == 'number'
+            ? cubit.audioUrlReadNumbers[cubit.languageCode]!
+            : cubit.audioUrlRead[cubit.languageCode]!));
         isSinging = false;
       } else {
         audioPlayer.stop();
@@ -225,7 +227,9 @@ class _State extends BaseState<PhonicsDetailState, PhonicsDetailCubit,
       isSinging = !isSinging;
       if (isSinging) {
         audioPlayer.stop();
-        audioPlayer.play(AssetSource(cubit.audioUrlSing[cubit.languageCode]!));
+        audioPlayer.play(AssetSource(widget.type == 'number'
+            ? cubit.audioUrlSingNumbers[cubit.languageCode]!
+            : cubit.audioUrlSing[cubit.languageCode]!));
         isReading = false;
       } else {
         audioPlayer.stop();

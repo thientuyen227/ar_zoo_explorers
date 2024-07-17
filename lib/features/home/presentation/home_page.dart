@@ -39,36 +39,60 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   AudioPlayer audioPlayer = AudioPlayer();
 
   final _formKey = GlobalKey<FormBuilderState>();
+  late StreamSubscription<PlayerState> _audioPlayerStateSubscription;
 
   List<Widget> imageSliders = [];
   @override
   void initState() {
     super.initState();
     audioPlayer = AudioPlayer();
+    _playAudioWithDelay();
+    _onPlayerStateChanged();
     _initCubit();
   }
 
   void _playAudioWithDelay() {
     Timer(const Duration(seconds: 2), () {
+      if (!mounted) return;
       audioPlayer.play(AssetSource(AppSound.audioHome));
     });
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      // App is resumed, play the audio
-      _playAudioWithDelay();
-    } else if (state == AppLifecycleState.paused) {
-      // App is paused, stop the audio
-      audioPlayer.stop();
-    }
+  Future<void> _onPlayerStateChanged() async {
+    _audioPlayerStateSubscription =
+        audioPlayer.onPlayerStateChanged.listen((PlayerState state) async {
+      if (!mounted) return;
+      switch (state) {
+        case PlayerState.playing:
+          _playAudioWithDelay();
+          break;
+        case PlayerState.completed:
+          _onChangeCompleted();
+          break;
+        default:
+          audioPlayer.stop();
+          return;
+      }
+      if (mounted) setState(() {});
+    }, onError: (msg) async {
+      if (!mounted) return;
+      await audioPlayer.stop();
+      if (mounted) setState(() {});
+    });
+  }
+
+  Future<void> _onChangeCompleted() async {
+    await audioPlayer.play(UrlSource(AppSound.audioHome),
+        position: Duration.zero);
   }
 
   @override
   void dispose() {
+    _audioPlayerStateSubscription.cancel();
     audioPlayer.stop();
-    audioPlayer.dispose();
+    Timer(const Duration(seconds: 2), () {
+      audioPlayer.dispose();
+    });
     super.dispose();
   }
 
@@ -140,7 +164,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
       BuildContext context, String imageUrl, String content, String routePage) {
     return GestureDetector(
         onTap: () async {
-          audioPlayer.dispose();
+          await audioPlayer.stop();
           await _onTapActivityButton(context, routePage);
         },
         child: HomeActivityButton(imageUrl: imageUrl, content: content));
@@ -332,7 +356,11 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
   Future<void> _onTapActivityButton(
       BuildContext context, String routePage) async {
     await cubit.showLoading();
-    context.router.pushNamed(routePage);
+    context.router.pushNamed(routePage).then((value) {
+      if (value == true) {
+        return _playAudioWithDelay();
+      }
+    });
     if (routePage == Routes.story) {
       await _getAllTopics(context);
       await _getStoriesByReleaseDate(context);

@@ -64,8 +64,17 @@ class PhonicsDetailCubit extends BaseCubit<PhonicsDetailState> {
   };
 
   Map<String, String> audioUrlSing = {
-    'en': "audio/vietnamesealphabet.mp3",
+    'en': "audio/abc_alphabat_song_en.mp3",
     'vi': "audio/alphabet.mp3"
+  };
+  Map<String, String> audioUrlReadNumbers = {
+    'en': "audio/count_one_to_twenty_en.mp3",
+    'vi': "audio/count_one_to_twenty_vi.mp3"
+  };
+
+  Map<String, String> audioUrlSingNumbers = {
+    'en': "audio/count_one_to_twenty_en.mp3",
+    'vi': "audio/count_one_to_twenty_vi.mp3"
   };
 
   Duration duration = const Duration(seconds: 1, minutes: 0);
