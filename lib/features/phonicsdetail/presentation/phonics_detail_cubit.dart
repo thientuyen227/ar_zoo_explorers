@@ -59,13 +59,13 @@ class PhonicsDetailCubit extends BaseCubit<PhonicsDetailState> {
   }
 
   Map<String, String> audioUrlRead = {
-    'en': "audio/vietnamesealphabet.mp3",
+    'en': "audio/alphabet.mp3",
     'vi': "audio/vietnamesealphabet.mp3"
   };
 
   Map<String, String> audioUrlSing = {
     'en': "audio/abc_alphabat_song_en.mp3",
-    'vi': "audio/alphabet.mp3"
+    'vi': "audio/alphabet_song_vi.mp3"
   };
   Map<String, String> audioUrlReadNumbers = {
     'en': "audio/count_one_to_twenty_en.mp3",

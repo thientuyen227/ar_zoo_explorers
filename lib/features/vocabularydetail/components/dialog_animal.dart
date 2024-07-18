@@ -169,13 +169,13 @@ class _DialogAnimalState extends State<DialogAnimal> {
 
   Widget renderContent() {
     return SizedBox(
-      height: height! * 0.34,
+      height: height! * 0.32,
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 20, bottom: 15),
+              padding: const EdgeInsets.only(top: 10, bottom: 8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -212,7 +212,7 @@ class _DialogAnimalState extends State<DialogAnimal> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 15),
+              padding: const EdgeInsets.only(bottom: 5),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

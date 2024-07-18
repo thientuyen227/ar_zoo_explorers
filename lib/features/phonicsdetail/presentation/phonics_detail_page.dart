@@ -169,6 +169,10 @@ class _State extends BaseState<PhonicsDetailState, PhonicsDetailCubit,
                                         .charsEntities[index].audiosLocalize));
                                     setState(() {
                                       selectedIndex = index;
+                                      if (isReading || isSinging) {
+                                        isReading = false;
+                                        isSinging = false;
+                                      }
                                     });
                                   },
                                   child: Text(

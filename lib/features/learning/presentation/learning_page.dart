@@ -115,7 +115,10 @@ class _State extends BaseState<LearningState, LearningCubit, LearningPage> {
 
   Widget backButton() {
     return AppIconButton(
-      onPressed: () => context.router.pushNamed(Routes.home),
+      onPressed: () {
+        context.router.pop();
+        context.router.pushNamed(Routes.home);
+      },
       icon: Container(
           margin: const EdgeInsets.only(left: 0),
           child: Transform.scale(
