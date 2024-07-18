@@ -119,7 +119,11 @@ class _State
         child: Align(
             alignment: Alignment.center,
             child: GestureDetector(
-                onTap: () => context.router.pop(),
+                onTap: () {
+                  {
+                    context.router.pop();
+                  }
+                },
                 child: Stack(alignment: Alignment.center, children: [
                   Container(
                       width: state.width * 0.11,

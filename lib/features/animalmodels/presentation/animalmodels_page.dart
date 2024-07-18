@@ -162,6 +162,7 @@ class _State
   Widget turnBack() {
     return CustomBackButton(onPressed: () async {
       await cubit.showLoading();
+      context.router.pushNamed(Routes.home);
       await animalController.resetCurrentValue(context);
       context.router.pop();
       // context.router.pushNamed(Routes.home);

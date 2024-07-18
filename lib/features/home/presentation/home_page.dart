@@ -332,6 +332,7 @@ class _State extends BaseState<HomeState, HomeCubit, HomePage> {
     return GestureDetector(
         onTap: () async => {
               await cubit.showLoading(),
+              await audioPlayer.stop(),
               await _setCurrentCategory(index),
               context.router.pushNamed(Routes.animalmodels),
               await cubit.hideLoading(),
