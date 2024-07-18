@@ -287,6 +287,12 @@ const Map<String, String> vi_vn = {
   'msg_no_story_has': 'Không tìm thấy truyện có từ khóa',
   'msg_stories_updating':
       'Danh sách truyện đang cập nhật, bạn vui lòng quay lại sau nhé',
+  'msg_continue_story': 'Bạn có muốn tiếp tục nghe hay không ?',
+  'msg_story_restart': 'Bắt đầu lại',
+  'msg_story_continue': 'Tiếp tục',
+  'msg_story_no_has_model':
+      'Truyện chưa có model trên hệ thống, bạn hãy quay lại khi khác nhé !',
+  'msg_story_view_models': 'Xem Models',
 
   'minute': 'Phút',
   'minutes': 'Phút',
@@ -312,7 +318,7 @@ const Map<String, String> vi_vn = {
   'models_no_has_keyword': 'Model không tồn tại với từ khóa',
   'model_details': 'Thông tin chí tiết Model',
 
-  //Chat AI
+  //Chatbot AI
   'download_image': 'Tải hình ảnh',
   'download_image_success': 'Tải hình ảnh thành công',
   'download_image_failures': 'Đã có lỗi trong quá trình tải hình ảnh',

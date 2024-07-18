@@ -287,6 +287,12 @@ const Map<String, String> en_us = {
   'msg_no_story_has': 'No stories found with keyword',
   'msg_stories_updating':
       'The list of stories is being updated, please come back later',
+  'msg_continue_story': 'Do you want to continue listening or not ?',
+  'msg_story_restart': 'Restart',
+  'msg_story_continue': 'Continue',
+  'msg_story_no_has_model':
+      'The story does not have a model on the system yet, please come back another time!',
+  'msg_story_view_models': 'View Models',
 
   'minute': 'Minute',
   'minutes': 'Minutes',
