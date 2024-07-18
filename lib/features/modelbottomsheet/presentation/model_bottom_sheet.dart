@@ -157,8 +157,8 @@ class _ModelBottomSheetState extends State<ModelBottomSheet> {
       for (var itemB in animalController.listAnimal.value) {
         if (itemA == itemB.id) {
           lstButton.add(ButtonObject(title: {
-            'vi': itemB.title,
-            'en': itemB.title,
+            'vi': itemB.titles['vi']!,
+            'en': itemB.titles['en']!,
           }, icon: itemB.icon, id: itemB.id, cateId: itemB.categoryId));
         }
       }

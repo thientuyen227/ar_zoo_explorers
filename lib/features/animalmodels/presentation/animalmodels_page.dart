@@ -164,7 +164,7 @@ class _State
       await cubit.showLoading();
       await animalController.resetCurrentValue(context);
       context.router.pop();
-      context.router.pushNamed(Routes.home);
+      // context.router.pushNamed(Routes.home);
       await cubit.hideLoading();
     });
   }
@@ -188,6 +188,7 @@ class _State
     return SizedBox(
         width: 80,
         child: Text(title,
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(
                 color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
             softWrap: true,

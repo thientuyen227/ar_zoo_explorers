@@ -1,6 +1,7 @@
 import 'package:ar_zoo_explorers/core/data/models/story_model.dart';
 import 'package:ar_zoo_explorers/core/data/models/user_model.dart';
 import 'package:ar_zoo_explorers/core/data/models/user_story_model.dart';
+import 'package:ar_zoo_explorers/domain/entities/animal_entity.dart';
 import 'package:ar_zoo_explorers/domain/entities/chars_entity.dart';
 import 'package:ar_zoo_explorers/domain/entities/learning_category_entity.dart';
 import 'package:ar_zoo_explorers/domain/entities/model_category_entity.dart';
@@ -18,7 +19,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../../models/animal_model.dart';
 import '../../models/user_animal_model.dart';
 
 class FirebaseFirestoreSource {
@@ -117,7 +117,7 @@ class FirebaseFirestoreSource {
   }
 
   //đưa danh sách các đối tượng vào firebase
-  Future<bool> importAnimalModelList(List<AnimalModel> list) async {
+  Future<bool> importAnimalModelList(List<AnimalEntity> list) async {
     for (var model in list) {
       _animalModelCollectionRef.doc(model.id).set(model.toMap());
     }
@@ -125,33 +125,43 @@ class FirebaseFirestoreSource {
   }
 
   //lấy thông tin về một động vật
-  Future<AnimalModel?> getAnimal(String animalId) async {
-    try {
-      var document = await _animalModelCollectionRef.doc(animalId).get();
-      if (document.exists && document.data() != null) {
-        return AnimalModel.fromMap(document.data()!);
-      } else {
-        return null;
-      }
-    } catch (e, stackTrace) {
-      print('Get Story Model By Id = "$animalId" Failed: $e');
-      FirebaseCrashlytics.instance.recordError(e, stackTrace);
-    }
-    return null;
+  Future<AnimalEntity> getAnimal(String animalId) async {
+    var document = await _animalModelCollectionRef.doc(animalId).get();
+    return AnimalEntity.fromMap(document.data()!);
   }
 
   // tạo một tài liệu mới trong Firestore
-  Future<AnimalModel> createAnimal(AnimalModel animalModel) async {
+  Future<AnimalEntity> createAnimal(AnimalEntity animalModel) async {
     await _animalModelCollectionRef
         .doc(animalModel.id)
         .set(animalModel.toMap());
     return animalModel;
   }
 
-  Future<List<AnimalModel>?> getAllAnimals() async {
+  Future<AnimalEntity> updateAnimal({
+    required String id,
+    required Map<String, String> titles,
+    required String icon,
+    required String type,
+    required String name,
+    required String categoryId,
+    required bool status,
+  }) async {
+    await _animalModelCollectionRef.doc(id).update({
+      "title": titles,
+      "icon": icon,
+      "type": type,
+      "name": name,
+      "categoryId": categoryId,
+      "status": status
+    });
+    return getAnimal(id);
+  }
+
+  Future<List<AnimalEntity>?> getAllAnimals() async {
     var querySnapshot = await _animalModelCollectionRef.get();
-    List<AnimalModel> animals = querySnapshot.docs
-        .map((doc) => AnimalModel.fromMap(doc.data()))
+    List<AnimalEntity> animals = querySnapshot.docs
+        .map((doc) => AnimalEntity.fromMap(doc.data()))
         .toList();
     return animals;
   }

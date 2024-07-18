@@ -45,12 +45,12 @@ class AnimalModelsCubit extends BaseCubit<AnimalModelsState> {
       for (int i = 0; i < list.length; i++) {
         if (list[i].categoryId == cateId) {
           listFullAnimal.add(ButtonObject(title: {
-            'vi': list[i].title,
-            'en': list[i].title,
+            'vi': list[i].titles['vi']!,
+            'en': list[i].titles['en']!,
           }, icon: list[i].icon, id: list[i].id));
           listSearchAnimal.add(ButtonObject(title: {
-            'vi': list[i].title,
-            'en': list[i].title,
+            'vi': list[i].titles['vi']!,
+            'en': list[i].titles['en']!,
           }, icon: list[i].icon, id: list[i].id));
         }
       }

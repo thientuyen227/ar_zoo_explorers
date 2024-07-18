@@ -13,7 +13,10 @@ class AnimalController extends ControllerHelper {
 
   Rx<AnimalEntity> currentAnimal = Rx(AnimalModel(
       id: '',
-      title: '',
+      titles: {
+        'vi': '',
+        'en': '',
+      },
       icon: '',
       type: '',
       name: '',
@@ -65,7 +68,10 @@ class AnimalController extends ControllerHelper {
   Future<void> resetCurrentValue(BuildContext context) async {
     currentAnimal.value = AnimalModel(
         id: '',
-        title: '',
+        titles: {
+          'en': '',
+          'vi': '',
+        },
         icon: '',
         type: '',
         name: '',
