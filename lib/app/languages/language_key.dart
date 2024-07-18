@@ -315,6 +315,11 @@ class LanguageKeys {
 
   static const String msg_no_story_has = 'msg_no_story_has';
   static const String msg_stories_updating = 'msg_stories_updating';
+  static const String msg_continue_story = 'msg_continue_story';
+  static const String msg_story_restart = 'msg_story_restart';
+  static const String msg_story_view_models = 'msg_story_view_models';
+  static const String msg_story_continue = 'msg_story_continue';
+  static const String msg_story_no_has_model = 'msg_story_no_has_model';
 
   static const String minute = "minute";
   static const String minutes = "minutes";

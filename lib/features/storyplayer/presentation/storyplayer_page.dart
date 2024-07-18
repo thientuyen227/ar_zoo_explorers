@@ -34,7 +34,47 @@ class _State
     cubit.init(context);
     _onPlayerStateChanged();
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showOptionsDialog();
+    });
     // _initCubit();
+  }
+
+  Future<void> showOptionsDialog() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text(LanguageKeys.msg_continue_story.tr),
+          actions: <Widget>[
+            TextButton(
+              child: Text(LanguageKeys.msg_story_restart.tr),
+              onPressed: () async {
+                await cubit.showLoading();
+                state.position = Duration.zero;
+                await _playAudio();
+                // await Future.delayed(const Duration(seconds: 1));
+                Navigator.of(context).pop();
+                await cubit.hideLoading();
+              },
+            ),
+            const Spacer(),
+            TextButton(
+              child: Text(LanguageKeys.msg_story_continue.tr),
+              onPressed: () async {
+                await cubit.showLoading();
+
+                await _playAudio();
+                // await Future.delayed(const Duration(seconds: 1));
+                Navigator.of(context).pop();
+                await cubit.hideLoading();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -99,8 +139,8 @@ class _State
           child: Row(children: [
             SizedBox(width: state.width * 0.02),
             Container(
-                child: const Text("View model",
-                    style: TextStyle(
+                child: Text(LanguageKeys.msg_story_view_models.tr,
+                    style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: AppColor.white))),
@@ -508,6 +548,7 @@ class _State
 
   Future<void> _navigatorToModel(String modelId) async {
     cubit.showLoading();
+    await audioPlayer.pause();
     await cubit.animalController.updateCurrentAnimal(context, modelId);
     context.router.pushNamed(Routes.modeldetail);
     cubit.hideLoading();
@@ -567,6 +608,7 @@ class _State
   Future<void> _showModelBottomSheet(BuildContext context) async {
     if (cubit.storyController.currentStory.value.modelId.isNotEmpty) {
       // print(cubit.storyController.currentStory.value.modelId);
+      await cubit.showLoading();
       await cubit.aniCateController.getAllModelCategories(context);
       await cubit.animalController.getAllAnimals(context);
       await showModalBottomSheet(
@@ -582,8 +624,10 @@ class _State
               onTapped: _navigatorToModel);
         },
       );
+      await cubit.hideLoading();
     } else {
-      cubit.showToast(LanguageKeys.msg_stories_updating.tr);
+      await cubit.hideLoading();
+      cubit.showToast(LanguageKeys.msg_story_no_has_model.tr);
     }
   }
 
